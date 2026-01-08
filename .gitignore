@@ -1,0 +1,20 @@
+
+.codegpt
+# Loại trừ các thư mục và file không cần thiết
+Temp/
+Library/
+.vscode/
+.vs/
+.utmp/
+obj/
+out/
+output/
+Logs/
+UserSettings/
+
+# File backup và file lớn
+*.zip
+*.sln
+*.csproj
+*.slnx
+*.htm
