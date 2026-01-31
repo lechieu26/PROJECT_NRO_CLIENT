@@ -140,14 +140,14 @@ public class Res
 
     public static void outchieu(string s)
     {
-         Debug.Log(s);
+        Debug.Log("chieu.lq " + s);
     }
 
     public static void outz(string s)
 	{
 		if (mSystem.isTest)
 		{
-			Debug.Log(s);
+			Debug.Log("chieu.lq " + s);
 		}
 	}
 

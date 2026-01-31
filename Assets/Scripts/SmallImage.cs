@@ -91,12 +91,21 @@ public class SmallImage
 	{
 		if (mGraphics.zoomLevel == 1)
 		{
+			// Thử load từ file local trước
 			Image image = GameCanvas.loadImage("/SmallImage/Small" + id + ".png");
 			if (image != null)
 			{
 				imgNew[id] = new Small(image, id);
 				return;
 			}
+			// Thử load từ RMS (cache lâu dài)
+			Image cachedImg = loadIconFromRMS(id);
+			if (cachedImg != null)
+			{
+				imgNew[id] = new Small(cachedImg, id);
+				return;
+			}
+			// Không có trong cache, yêu cầu từ server
 			imgNew[id] = new Small(imgEmpty, id);
 			Service.gI().requestIcon(id);
 			return;
@@ -123,12 +132,58 @@ public class SmallImage
 		}
 		else
 		{
+			// Thử load từ RMS (cache lâu dài)
+			Image cachedImg = loadIconFromRMS(id);
+			if (cachedImg != null)
+			{
+				imgNew[id] = new Small(cachedImg, id);
+				imageRaw[id] = cachedImg;
+				return;
+			}
 			flag = true;
 		}
 		if (flag)
 		{
 			imgNew[id] = new Small(imgEmpty, id);
 			Service.gI().requestIcon(id);
+		}
+	}
+
+	/// <summary>
+	/// Load icon từ RMS (bộ nhớ cache lâu dài)
+	/// </summary>
+	public static Image loadIconFromRMS(int id)
+	{
+		try
+		{
+			string rmsKey = mGraphics.zoomLevel + "icon" + id;
+			sbyte[] data = Rms.loadRMS(rmsKey);
+			if (data != null && data.Length > 0)
+			{
+				Image img = Image.createImage(data, 0, data.Length);
+				return img;
+			}
+		}
+		catch (System.Exception)
+		{
+			// Không có trong RMS hoặc lỗi
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// Lưu icon vào RMS để cache lâu dài
+	/// </summary>
+	public static void saveIconToRMS(int id, sbyte[] data)
+	{
+		try
+		{
+			string rmsKey = mGraphics.zoomLevel + "icon" + id;
+			Rms.saveRMS(rmsKey, data);
+		}
+		catch (System.Exception ex)
+		{
+			Cout.println("Loi saveIconToRMS: " + ex.Message);
 		}
 	}
 
@@ -144,6 +199,8 @@ public class SmallImage
 			else
 			{
 				g.drawRegion(small, 0, 0, mGraphics.getImageWidth(small.img), mGraphics.getImageHeight(small.img), transform, x, y, anchor);
+				// Cập nhật thời gian sử dụng gần nhất cho LRU
+				small.lastUsedTick = GameCanvas.gameTick;
 			}
 		}
 		else if (smallImg != null)
@@ -254,9 +311,114 @@ public class SmallImage
 				smallCount++;
 			}
 		}
-		if (num > 200 && GameCanvas.lowGraphic)
+		// KHÔNG XÓA CACHE - Dữ liệu từ server sẽ được giữ vĩnh viễn
+		// Chỉ xóa khi user chủ động xóa dữ liệu hoặc server update version
+		// Logic xóa cache cũ đã được loại bỏ để tránh mất icon item
+	}
+
+	/// <summary>
+	/// Lưu version icon hiện tại vào RMS
+	/// </summary>
+	public static void saveIconVersion()
+	{
+		try
 		{
-			imgNew = new Small[maxSmall];
+			if (newSmallVersion != null && newSmallVersion.Length > 0)
+			{
+				// Tạo hash từ version array
+				int versionHash = 0;
+				for (int i = 0; i < newSmallVersion.Length; i++)
+				{
+					versionHash = versionHash * 31 + newSmallVersion[i];
+				}
+				string rmsKey = mGraphics.zoomLevel + "iconVersion";
+				Rms.saveRMSInt(rmsKey, versionHash);
+			}
 		}
+		catch (System.Exception ex)
+		{
+			Cout.println("Loi saveIconVersion: " + ex.Message);
+		}
+	}
+
+	/// <summary>
+	/// Kiểm tra xem version có thay đổi không (chỉ true khi ĐÃ CÓ version cũ VÀ khác version mới)
+	/// </summary>
+	public static bool isVersionChanged()
+	{
+		try
+		{
+			if (newSmallVersion == null || newSmallVersion.Length == 0)
+			{
+				return false;
+			}
+			
+			// Load version đã lưu
+			string rmsKey = mGraphics.zoomLevel + "iconVersion";
+			int savedVersionHash = Rms.loadRMSInt(rmsKey, -1);
+			
+			// Nếu chưa có version cũ (lần đầu chạy), KHÔNG xóa cache
+			if (savedVersionHash == -1)
+			{
+				return false;
+			}
+			
+			// Tính hash từ version array hiện tại
+			int currentVersionHash = 0;
+			for (int i = 0; i < newSmallVersion.Length; i++)
+			{
+				currentVersionHash = currentVersionHash * 31 + newSmallVersion[i];
+			}
+			
+			// Chỉ trả về true nếu version thực sự thay đổi
+			return currentVersionHash != savedVersionHash;
+		}
+		catch (System.Exception)
+		{
+			// Nếu lỗi, KHÔNG xóa cache
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// Xóa toàn bộ cache icon (CHỈ khi user yêu cầu hoặc version thay đổi)
+	/// </summary>
+	public static void clearAllIconCache()
+	{
+		try
+		{
+			// Reset imgNew array
+			if (imgNew != null)
+			{
+				for (int i = 0; i < imgNew.Length; i++)
+				{
+					imgNew[i] = null;
+				}
+			}
+			// Clear imageRaw dictionary
+			imageRaw.Clear();
+			
+			Cout.println("SmallImage: Đã xóa toàn bộ cache icon");
+		}
+		catch (System.Exception ex)
+		{
+			Cout.println("Loi clearAllIconCache: " + ex.Message);
+		}
+	}
+
+	/// <summary>
+	/// Kiểm tra version và xóa cache nếu version thay đổi
+	/// Gọi hàm này sau khi nhận được version từ server (case -77)
+	/// </summary>
+	public static void checkAndClearCacheIfVersionChanged()
+	{
+		// Chỉ xóa cache khi version THỰC SỰ thay đổi (không xóa lần đầu)
+		if (isVersionChanged())
+		{
+			Cout.println("SmallImage: Version thay đổi, xóa cache để tải lại icon mới");
+			clearAllIconCache();
+		}
+		// Lưu version mới
+		saveIconVersion();
 	}
 }

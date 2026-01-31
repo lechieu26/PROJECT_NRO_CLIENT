@@ -408,9 +408,9 @@ public class GameScr : mScreen, IChatable
 
 	public static bool isUseTouch;
 
-	public static Skill[] keySkill = new Skill[10];
+	public static Skill[] keySkill = new Skill[12];
 
-	public static Skill[] onScreenSkill = new Skill[10];
+	public static Skill[] onScreenSkill = new Skill[12];
 
 	public Command cmdMenu;
 
@@ -929,6 +929,7 @@ public class GameScr : mScreen, IChatable
 		{
 			vcItem = array4[0];
 		}
+		Res.outchieu("[CLIENT] Loaded cached versions - vcData=" + vcData + ", vcMap=" + vcMap + ", vcSkill=" + vcSkill + ", vcItem=" + vcItem);
 		imgNut = GameCanvas.loadImage("/mainImage/myTexture2dnut.png");
 		imgNutF = GameCanvas.loadImage("/mainImage/myTexture2dnutF.png");
 		imgCapsule = GameCanvas.loadImage("/mainImage/capsule.png");
@@ -1063,7 +1064,7 @@ public class GameScr : mScreen, IChatable
 	public void onOSkill(sbyte[] oSkillID)
 	{
 		Cout.println("GET onScreenSkill!");
-		onScreenSkill = new Skill[10];
+		onScreenSkill = new Skill[12];
 		if (oSkillID == null)
 		{
 			loadDefaultonScreenSkill();
@@ -1086,7 +1087,7 @@ public class GameScr : mScreen, IChatable
 	public void onKSkill(sbyte[] kSkillID)
 	{
 		Cout.println("GET KEYSKILL!");
-		keySkill = new Skill[10];
+		keySkill = new Skill[12];
 		if (kSkillID == null)
 		{
 			loadDefaultKeySkill();
@@ -3109,7 +3110,7 @@ public class GameScr : mScreen, IChatable
 		}
 		else
 		{
-			if (ModFunc.isEditButton || ModFunc.isShowFilterList || ModFunc.isShowMenuChat || QuayTamBao.isTamBao || QuaNapTuan.isNapTuan || checkClickToCapcha())
+			if (ModFunc.isEditButton || ModFunc.isShowFilterList || ModFunc.isShowMusicList || ModFunc.isShowMenuChat || QuayTamBao.isTamBao || QuaNapTuan.isNapTuan || checkClickToCapcha())
 			{
 				return;
 			}
@@ -3321,7 +3322,7 @@ public class GameScr : mScreen, IChatable
 
 	private void doDoubleClickToObj(IMapObject obj)
 	{
-		if (!ModFunc.isEditButton && !ModFunc.isShowFilterList && !ModFunc.isShowMenuChat && !QuayTamBao.isTamBao && !QuaNapTuan.isNapTuan)
+		if (!ModFunc.isEditButton && !ModFunc.isShowFilterList && !ModFunc.isShowMusicList && !ModFunc.isShowMenuChat && !QuayTamBao.isTamBao && !QuaNapTuan.isNapTuan)
 		{
 			if (obj.Equals(Char.myCharz().mobFocus) && PickMob.tanSat && PickMob.TypeMobsTanSat.Count != 0 && !PickMob.TypeMobsTanSat.Contains(((Mob)obj).templateId))
 			{
@@ -3401,10 +3402,23 @@ public class GameScr : mScreen, IChatable
 
 	private void checkClickMoveTo(int xClick, int yClick, int index)
 	{
-		if (QuaNapTuan.isNapTuan || QuayTamBao.isTamBao || ModFunc.isShowMenuChat || gamePad.disableClickMove() || ChatTextField.gI().isShow || ModFunc.isEditButton || ModFunc.isShowFilterList)
+		if (QuaNapTuan.isNapTuan || QuayTamBao.isTamBao || ModFunc.isShowMenuChat || gamePad.disableClickMove() || ChatTextField.gI().isShow || ModFunc.isEditButton || ModFunc.isShowFilterList || ModFunc.isShowMusicList)
 		{
 			return;
 		}
+		
+		// Cloud Garden - Kiểm tra click vào ô ruộng
+		if (FarmConstants.IsCloudGardenMap(TileMap.mapID))
+		{
+			FarmPlot plot = CloudGarden.GI().GetPlotAt(xClick, yClick);
+			if (plot != null && plot.unlocked)
+			{
+                CloudGarden.GI().OnClick(xClick, yClick);
+				Service.gI().farmPlotInteraction(plot.plotId);
+				return;
+			}
+		}
+		
 		Char.myCharz().cancelAttack();
 		if (xClick < TileMap.pxw && xClick > TileMap.pxw - 32)
 		{
@@ -4048,8 +4062,27 @@ public class GameScr : mScreen, IChatable
 	{
 		if (isNotPaintTouchControl())
 		{
-			return;
+            return;
 		}
+		// FARM CHECK - Click ô ruộng
+		if (FarmConstants.IsCloudGardenMap(TileMap.mapID) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
+		{
+			int worldX = GameCanvas.px + cmx;
+            int worldY = GameCanvas.py + cmy;
+			FarmPlot clickedPlot = CloudGarden.GI().GetPlotAt(worldX, worldY);
+			if (clickedPlot != null)
+			{
+				GameCanvas.isPointerClick = false;
+				GameCanvas.clearAllPointerEvent();
+                
+                CloudGarden.GI().OnClick(worldX, worldY);
+
+                // Luôn gửi request lên Server, Server quyết định action
+    			Service.gI().farmPlotInteraction(clickedPlot.plotId);
+				return;
+			}
+		}
+
 		mScreen.keyTouch = -1;
 		if (ModFunc.GI().showCharsInMap)
 		{
@@ -4200,18 +4233,19 @@ public class GameScr : mScreen, IChatable
 			}
 			keyTouchSkill = -1;
 			bool flag = false;
-			if (onScreenSkill.Length > 5 && (GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, 5 * wSkill, wSkill) || GameCanvas.isPointerHoldIn(xSkill + xS[5] - wSkill / 2 + 12, yS[5] - wSkill / 2 + 12, 5 * wSkill, wSkill)))
+            int rowSize = onScreenSkill.Length > 5 ? onScreenSkill.Length / 2 : onScreenSkill.Length;
+			if (onScreenSkill.Length > 5 && (GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, rowSize * wSkill, wSkill) || GameCanvas.isPointerHoldIn(xSkill + xS[rowSize] - wSkill / 2 + 12, yS[rowSize] - wSkill / 2 + 12, rowSize * wSkill, wSkill)))
 			{
 				flag = true;
 			}
-			if (flag || GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, 5 * wSkill, wSkill) || (!GameCanvas.isTouchControl && GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, wSkill, onScreenSkill.Length * wSkill)))
+			if (flag || GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, rowSize * wSkill, wSkill) || (!GameCanvas.isTouchControl && GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, wSkill, onScreenSkill.Length * wSkill)))
 			{
 				GameCanvas.isPointerJustDown = false;
 				isPointerDowning = false;
 				int num = (GameCanvas.pxLast - (xSkill + xS[0] - wSkill / 2 + 12)) / wSkill;
 				if (flag && GameCanvas.pyLast < yS[0])
 				{
-					num += 5;
+					num += rowSize;
 				}
 				keyTouchSkill = num;
 				if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
@@ -4359,6 +4393,8 @@ public class GameScr : mScreen, IChatable
 			AutoXmap.Update();
 			ModFunc.GI().Update();
 		}
+		// Update CloudGarden logic (auto-harvest icon, etc.)
+		CloudGarden.GI().Update();
 		if (!AutoXmap.IsXmapRunning)
 		{
 			PickMob.Update();
@@ -4800,6 +4836,11 @@ public class GameScr : mScreen, IChatable
 		for (int m = 0; m < vNpc.size(); m++)
 		{
 			((Npc)vNpc.elementAt(m)).paint(g);
+		}
+		// Cloud Garden - Vẽ khu vườn nếu đang ở map farming
+		if (FarmConstants.IsCloudGardenMap(TileMap.mapID))
+		{
+			CloudGarden.GI().Paint(g);
 		}
 		g.translate(0, GameCanvas.transY);
 		GameCanvas.debug("PA7", 1);
@@ -6436,6 +6477,16 @@ public class GameScr : mScreen, IChatable
 		ModFunc.GI().perform(idAction, p);
 		switch (idAction)
 		{
+		case 14000:
+		{
+			int plotId = (p != null) ? (int)p : -1;
+			if (plotId != -1)
+			{
+				GameCanvas.panel.setTypeFarmSeed(plotId);
+                GameCanvas.panel.show();
+			}
+			break;
+		}
 		case 888351:
 			Service.gI().petStatus(5);
 			GameCanvas.endDlg();
@@ -6559,17 +6610,22 @@ public class GameScr : mScreen, IChatable
 			break;
 		case 11057:
 		{
-			Effect2.vEffect2Outside.removeAllElements();
+            Effect2.vEffect2Outside.removeAllElements();
 			Effect2.vEffect2.removeAllElements();
-			Npc npc = (Npc)p;
-			if (npc.idItem == 0)
-			{
-				Service.gI().confirmMenu((short)npc.template.npcTemplateId, (sbyte)GameCanvas.menu.menuSelectedItem);
-			}
-			else if (GameCanvas.menu.menuSelectedItem == 0)
-			{
-				Service.gI().pickItem(npc.idItem);
-			}
+			
+            if (p != null && p is Npc)
+            {
+                Npc npc = (Npc)p;
+                int npcIdToConfirm = -1;
+                if (npc.template != null) {
+                    npcIdToConfirm = npc.template.npcTemplateId;
+                }
+                Service.gI().confirmMenu((short)npcIdToConfirm, (sbyte)GameCanvas.menu.menuSelectedItem);
+            }
+            else
+            {
+                 Service.gI().confirmMenu(-1, (sbyte)GameCanvas.menu.menuSelectedItem);
+            }
 			break;
 		}
 		case 11000:

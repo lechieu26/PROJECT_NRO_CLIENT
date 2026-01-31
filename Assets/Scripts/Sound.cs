@@ -228,7 +228,10 @@ public class Sound
 
 	public static void sTopSoundBG()
 	{
-		SoundBGLoop.GetComponent<AudioSource>().Stop();
+		if (SoundBGLoop != null)
+		{
+			SoundBGLoop.GetComponent<AudioSource>().Stop();
+		}
 		if (ModFunc.isPlayingMusic)
 		{
 			PlayMusic(UnityEngine.Random.Range(0, 3));

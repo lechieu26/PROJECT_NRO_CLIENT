@@ -135,6 +135,8 @@ public class ModFunc : IActionListener
 
     public static bool isShowFilterList = false;
 
+    public static bool isShowMusicList = false; // Hiển thị popup danh sách nhạc
+
     private bool isResizing;
 
     private int lastMouseX;
@@ -258,6 +260,10 @@ public class ModFunc : IActionListener
     public static bool AnPlayer = false;
 
     public bool isHighFps;
+    
+    public bool isBgm;
+    public string currentBgm = "";
+    public float bgmVolume = 0.5f;
 
     public static bool isShowID = false;
 
@@ -342,6 +348,8 @@ public class ModFunc : IActionListener
     public static string strUpdateZones = "Cập Nhật Khu";
 
     public static string strCharsInMap = "Nhân Vật Trong Khu";
+
+    public static string strBgm = "Nhạc Nền";
 
     public static string strInfoMe = "Thông Tin Đệ Tử";
 
@@ -577,6 +585,18 @@ public class ModFunc : IActionListener
         if (autoWakeUp)
         {
             GameScr.info1.addInfo("Tự động hồi sinh [Bật]", 0);
+        }
+        isBgm = Rms.loadRMSInt("isBgm") == 1;
+        currentBgm = Rms.loadRMSString("currentBgm");
+        float savedVol = Rms.loadRMSInt("bgmVolume") / 100f;
+        if (savedVol >= 0) bgmVolume = savedVol;
+        else bgmVolume = 0.5f;
+        int savedMode = Rms.loadRMSInt("bgmMode");
+        if (savedMode != -1) Mod.BgmManager.Instance.currentMode = (Mod.BgmManager.PlayMode)savedMode;
+        
+        if (isBgm && !string.IsNullOrEmpty(currentBgm))
+        {
+            Mod.BgmManager.Instance.PlayMusic(currentBgm);
         }
         LoadButtonPositions();
         QuaNapTuan.isNapTuan = false;
@@ -1579,6 +1599,10 @@ public class ModFunc : IActionListener
         {
             ShowFilterList(g);
         }
+        if (isShowMusicList)
+        {
+            ShowMusicList(g);
+        }
         if (isShowMenuChat && !QuaNapTuan.isNapTuan)
         {
             PaintMenuChat(g);
@@ -1794,7 +1818,6 @@ public class ModFunc : IActionListener
 
     public static void MenuAutoItem()
     {
-        Res.outchieu("chieu,lq MenuAutoItem()");
         if (listItems == null || listItems.Count == 0)
         {
             listItems = new List<string>() { "Bổ Huyết", "Cuồng Nộ", "Giáp Xên", "Bổ Khí",
@@ -1803,11 +1826,50 @@ public class ModFunc : IActionListener
         MyVector autoItems = new MyVector();
         for (int i = 0; i < listItems.Count; i++)
         {
-            Res.outchieu("chieu,lq MenuAutoItem() i = " + i + "\n");
             autoItems.addElement(new Command(listItems[i] + getStatusMenuInfo(useItem[i]), i + 61));
         }
         GameCanvas.menu.startAt(autoItems, 4);
     }
+
+
+
+    public void MenuBgm()
+    {
+        MyVector myVector = new MyVector();
+        
+        // Bật/Tắt nhạc nền
+        myVector.addElement(new Command((isBgm ? "[x] " : "[  ] ") + "Nhạc nền", 900));
+        
+        // Hiển thị chế độ hiện tại
+        string modeStr = "Chế độ: ";
+        if (Mod.BgmManager.Instance != null)
+        {
+            if (Mod.BgmManager.Instance.currentMode == Mod.BgmManager.PlayMode.RepeatOne) modeStr += "Lặp lại bài";
+            else if (Mod.BgmManager.Instance.currentMode == Mod.BgmManager.PlayMode.Sequential) modeStr += "Phát tuần tự";
+            else modeStr += "Phát ngẫu nhiên";
+        }
+        
+        myVector.addElement(new Command(modeStr, 891));
+        myVector.addElement(new Command("Âm lượng: " + (int)(bgmVolume * 100) + "%", 892));
+        myVector.addElement(new Command("[+] Thêm nhạc...", 901));
+        myVector.addElement(new Command("[+] Thêm folder...", 903)); // Thêm folder
+        myVector.addElement(new Command("--- Danh Sách Nhạc ---", -1));
+
+        // Sử dụng playlist từ BgmManager
+        if (Mod.BgmManager.Instance != null && Mod.BgmManager.Instance.playlist != null)
+        {
+            foreach (string filePath in Mod.BgmManager.Instance.playlist)
+            {
+                string displayName = Path.GetFileName(filePath);
+                bool isPlaying = (currentBgm == filePath);
+                string prefix = isPlaying ? "[♪] " : "";
+                myVector.addElement(new Command(prefix + displayName, 888, filePath));
+            }
+        }
+        
+        GameCanvas.menu.startAt(myVector, 0);
+    }
+
     public void perform(int idAction, object p)
     {
         if (idAction <= 60)
@@ -1984,6 +2046,10 @@ public class ModFunc : IActionListener
                         menuOthers.addElement(new Command("Hành trang\nLưới " + (isInventory ? "[Bật]" : "[Tắt]"), 59));
                         menuOthers.addElement(new Command("Load ô\nskill", 57));
                         menuOthers.addElement(new Command("Âm thanh\n" + (GameCanvas.isPlaySound ? "[Bật]" : "[Tắt]"), 18));
+                        if (Main.isPC) // Chỉ hiển thị trên PC
+                        {
+                            menuOthers.addElement(new Command("Nhạc\nnền", 902));
+                        }
                         GameCanvas.menu.startAt(menuOthers, 4);
                         break;
                     }
@@ -2023,7 +2089,6 @@ public class ModFunc : IActionListener
         switch (idAction)
         {
             case 61: // "Bổ Huyết"
-                Res.outchieu("chieu,lq case 61");
                 useItem[0] = !useItem[0];
                 if (useItem[0]) addStatus("Đã auto bổ huyết: " + (TIME_USE_ITEM / 1000) + "s");
                 else addStatus("Đã tắt auto bổ huyết");
@@ -2158,6 +2223,147 @@ public class ModFunc : IActionListener
             case 502:
             case 503:
                 AddOrRemoveFilterItem((Item)p, idAction == 502);
+                break;
+            case 888: // Chọn một bài hát từ danh sách
+                {
+                    string selectedFile = (string)p;
+                    MyVector menuPlay = new MyVector();
+                    menuPlay.addElement(new Command("Phát", 890, selectedFile));
+                    menuPlay.addElement(new Command("Xóa khỏi danh sách", 899, selectedFile));
+                    GameCanvas.menu.startAt(menuPlay, 0);
+                    break;
+                }
+            case 890: // Thực hiện phát bài đã chọn
+                {
+                    string fileToPlay = (string)p;
+                    currentBgm = fileToPlay;
+                    Rms.saveRMSString("currentBgm", currentBgm);
+                    Mod.BgmManager.Instance.PlayMusic(currentBgm);
+                    // Hiển thị tên file thay vì đường dẫn đầy đủ
+                    GameScr.info1.addInfo("Đang phát: " + System.IO.Path.GetFileName(currentBgm), 0);
+                    // Refresh menu để cập nhật tick
+                    Mod.BgmManager.Instance.RefreshMusicTab();
+                    break;
+                }
+            case 899: // Xóa bài khỏi danh sách
+                {
+                    string fileToRemove = (string)p;
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        Mod.BgmManager.Instance.RemoveMusic(fileToRemove);
+                        // Refresh menu
+                        Mod.BgmManager.Instance.RefreshMusicTab();
+                    }
+                    break;
+                }
+            case 889: // Refresh list nhạc
+                MenuBgm();
+                break;
+            case 891: // Đổi chế độ phát
+                {
+                    int nextMode = ((int)Mod.BgmManager.Instance.currentMode + 1) % 3;
+                    Mod.BgmManager.Instance.currentMode = (Mod.BgmManager.PlayMode)nextMode;
+                    Rms.saveRMSInt("bgmMode", nextMode);
+                    MenuBgm(); // Mở lại menu để cập nhật text
+                    break;
+                }
+            case 892: // Menu chọn âm lượng
+                {
+                    MyVector menuVol = new MyVector();
+                    menuVol.addElement(new Command("Tăng âm lượng (+10%)", 893));
+                    menuVol.addElement(new Command("Giảm âm lượng (-10%)", 894));
+                    menuVol.addElement(new Command("Tắt nhạc (0%)", 895));
+                    GameCanvas.menu.startAt(menuVol, 0);
+                    break;
+                }
+            case 893: // Tăng âm lượng
+                {
+                    bgmVolume += 0.1f;
+                    if (bgmVolume > 1f) bgmVolume = 1f;
+                    Rms.saveRMSInt("bgmVolume", (int)(bgmVolume * 100));
+                    GameScr.info1.addInfo("Âm lượng: " + (int)(bgmVolume * 100) + "%", 0);
+                    break;
+                }
+            case 894: // Giảm âm lượng
+                {
+                    bgmVolume -= 0.1f;
+                    if (bgmVolume < 0f) bgmVolume = 0f;
+                    Rms.saveRMSInt("bgmVolume", (int)(bgmVolume * 100));
+                    GameScr.info1.addInfo("Âm lượng: " + (int)(bgmVolume * 100) + "%", 0);
+                    break;
+                }
+            case 895: // Tắt âm lượng
+                {
+                    bgmVolume = 0f;
+                    Rms.saveRMSInt("bgmVolume", 0);
+                    GameScr.info1.addInfo("Đã tắt âm lượng nhạc nền", 0);
+                    break;
+                }
+            case 896: // Chế độ: Lặp lại bài
+                {
+                    Mod.BgmManager.Instance.currentMode = Mod.BgmManager.PlayMode.RepeatOne;
+                    Rms.saveRMSInt("bgmMode", 0);
+                    GameScr.info1.addInfo("Chế độ: Lặp lại bài", 0);
+                    Mod.BgmManager.Instance.RefreshMusicTab();
+                    break;
+                }
+            case 897: // Chế độ: Phát tuần tự
+                {
+                    Mod.BgmManager.Instance.currentMode = Mod.BgmManager.PlayMode.Sequential;
+                    Rms.saveRMSInt("bgmMode", 1);
+                    GameScr.info1.addInfo("Chế độ: Phát tuần tự", 0);
+                    Mod.BgmManager.Instance.RefreshMusicTab();
+                    break;
+                }
+            case 898: // Chế độ: Phát ngẫu nhiên
+                {
+                    Mod.BgmManager.Instance.currentMode = Mod.BgmManager.PlayMode.Shuffle;
+                    Rms.saveRMSInt("bgmMode", 2);
+                    GameScr.info1.addInfo("Chế độ: Phát ngẫu nhiên", 0);
+                    Mod.BgmManager.Instance.RefreshMusicTab();
+                    break;
+                }
+            case 900: // Toggle nhạc nền
+                {
+                    isBgm = !isBgm;
+                    Rms.saveRMSInt("isBgm", isBgm ? 1 : 0);
+                    GameScr.info1.addInfo("Đã " + (isBgm ? "bật" : "tắt") + " nhạc nền", 0);
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        if (isBgm)
+                        {
+                            Mod.BgmManager.Instance.PlayMusic(currentBgm);
+                        }
+                        else
+                        {
+                            Mod.BgmManager.Instance.StopMusic();
+                        }
+                    }
+                    break;
+                }
+            case 901: // Thêm nhạc
+                {
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        Mod.BgmManager.Instance.OpenFileBrowser();
+                    }
+                    break;
+                }
+            case 903: // Thêm folder nhạc
+                {
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        Mod.BgmManager.Instance.OpenFolderBrowser();
+                    }
+                    break;
+                }
+            case 902: // Mở popup quản lý nhạc nền
+                isShowMusicList = !isShowMusicList;
+                if (isShowMusicList)
+                {
+                    scrollY = 0; // Reset scroll khi mở
+                    GameCanvas.menu.showMenu = false; // Đóng menu cũ
+                }
                 break;
         }
     }
@@ -2739,15 +2945,11 @@ public class ModFunc : IActionListener
         {
             isInventory = false;
             Rms.saveRMSInt("inventory", isInventory ? 1 : 0);
-            Res.outchieu("chieu.lq saveRMSInt");
-            //GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
         }
         else
         {
             isInventory = true;
             Rms.saveRMSInt("inventory", isInventory ? 1 : 0);
-            Res.outchieu("chieu.lq saveRMSInt");
-            //GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
         }
     }
 
@@ -3391,6 +3593,328 @@ public class ModFunc : IActionListener
                 scrollY = 0;
                 GameCanvas.clearAllPointerEvent();
             }
+        }
+    }
+
+    /// <summary>
+    /// Hiển thị popup quản lý nhạc nền
+    /// </summary>
+    private void ShowMusicList(mGraphics g)
+    {
+        int itemHeight = 28;
+        int padding = 10;
+        int headerHeight = 30;
+        int controlHeight = 80; // Phần controls ở trên
+        int resizeHandleSize = 40;
+        
+        // Vẽ background
+        g.setColor(0, 0.85f);
+        g.fillRect(panelX, panelY, panelW, panelH, 5);
+        
+        // Viền
+        for (int i = 0; i < 3; i++)
+        {
+            g.setColor(16777215, 0.2f - (float)i * 0.05f);
+            g.drawRect(panelX + i, panelY + i, panelW - i * 2, panelH - i * 2);
+        }
+        
+        // Resize handle
+        int resizeX = panelX + panelW - resizeHandleSize;
+        int resizeY = panelY + panelH - resizeHandleSize;
+        g.setColor(16777215, 0.8f);
+        for (int j = 0; j < 3; j++)
+        {
+            g.drawLine(resizeX + 5, panelY + panelH - 10 - j * 5, panelX + panelW - 5, panelY + panelH - 10 - j * 5);
+        }
+        
+        // Nút X đóng
+        int btnSize = 16;
+        g.setColor(16733525);
+        g.fillRect(panelX + panelW - btnSize - 5, panelY + 5, btnSize, btnSize, 5);
+        mFont.tahoma_7b_white.drawString(g, "X", panelX + panelW - btnSize / 2 - 5, panelY + 7, mFont.CENTER);
+        
+        // Tiêu đề
+        mFont.tahoma_7b_white.drawString(g, "QUẢN LÝ NHẠC NỀN", panelX + panelW / 2, panelY + padding, mFont.CENTER);
+        g.setColor(5987163);
+        g.fillRect(panelX + padding, panelY + 24, panelW - padding * 2, 1, 5);
+        
+        // === CONTROLS ===
+        int ctrlY = panelY + 30;
+        int btnW = 80;
+        int btnH = 22;
+        int btnSpacing = 8;
+        
+        // Nút Bật/Tắt nhạc
+        g.setColor(isBgm ? 65280 : 16711680);
+        g.fillRect(panelX + padding, ctrlY, btnW, btnH, 5);
+        mFont.tahoma_7b_white.drawString(g, isBgm ? "Nhạc: Bật" : "Nhạc: Tắt", panelX + padding + btnW / 2, ctrlY + 6, mFont.CENTER);
+        if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(panelX + padding, ctrlY, btnW, btnH))
+        {
+            perform(900, null);
+            GameCanvas.clearAllPointerEvent();
+        }
+        
+        // Nút Thêm nhạc
+        g.setColor(3381759);
+        g.fillRect(panelX + padding + btnW + btnSpacing, ctrlY, btnW, btnH, 5);
+        mFont.tahoma_7b_white.drawString(g, "[+] Thêm", panelX + padding + btnW + btnSpacing + btnW / 2, ctrlY + 6, mFont.CENTER);
+        if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(panelX + padding + btnW + btnSpacing, ctrlY, btnW, btnH))
+        {
+            perform(901, null);
+            GameCanvas.clearAllPointerEvent();
+        }
+        
+        // Nút Thêm folder
+        g.setColor(16750848);
+        g.fillRect(panelX + padding + (btnW + btnSpacing) * 2, ctrlY, btnW, btnH, 5);
+        mFont.tahoma_7b_white.drawString(g, "[+] Folder", panelX + padding + (btnW + btnSpacing) * 2 + btnW / 2, ctrlY + 6, mFont.CENTER);
+        if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(panelX + padding + (btnW + btnSpacing) * 2, ctrlY, btnW, btnH))
+        {
+            perform(903, null);
+            GameCanvas.clearAllPointerEvent();
+        }
+        
+        // Dòng 2: Chế độ + Âm lượng
+        ctrlY += btnH + 5;
+        
+        // Chế độ phát
+        string modeText = "Chế độ: ";
+        if (Mod.BgmManager.Instance != null)
+        {
+            if (Mod.BgmManager.Instance.currentMode == Mod.BgmManager.PlayMode.RepeatOne) modeText += "Lặp lại";
+            else if (Mod.BgmManager.Instance.currentMode == Mod.BgmManager.PlayMode.Sequential) modeText += "Tuần tự";
+            else modeText += "Ngẫu nhiên";
+        }
+        g.setColor(6737151);
+        g.fillRect(panelX + padding, ctrlY, btnW + 20, btnH, 5);
+        mFont.tahoma_7b_white.drawString(g, modeText, panelX + padding + (btnW + 20) / 2, ctrlY + 6, mFont.CENTER);
+        if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(panelX + padding, ctrlY, btnW + 20, btnH))
+        {
+            perform(891, null);
+            GameCanvas.clearAllPointerEvent();
+        }
+        
+        // Âm lượng
+        string volText = "Vol: " + (int)(bgmVolume * 100) + "%";
+        g.setColor(10066329);
+        g.fillRect(panelX + padding + btnW + 28, ctrlY, 60, btnH, 5);
+        mFont.tahoma_7b_white.drawString(g, volText, panelX + padding + btnW + 58, ctrlY + 6, mFont.CENTER);
+        if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(panelX + padding + btnW + 28, ctrlY, 60, btnH))
+        {
+            perform(892, null);
+            GameCanvas.clearAllPointerEvent();
+        }
+        
+        // === DANH SÁCH NHẠC ===
+        int listY = ctrlY + btnH + 10;
+        mFont.tahoma_7_white.drawString(g, "--- Danh sách nhạc ---", panelX + panelW / 2, listY, mFont.CENTER);
+        listY += 18;
+        
+        g.setClip(panelX, listY, panelW, panelH - (listY - panelY) - 10);
+        
+        int musicCount = 0;
+        if (Mod.BgmManager.Instance != null && Mod.BgmManager.Instance.playlist != null)
+        {
+            musicCount = Mod.BgmManager.Instance.playlist.Count;
+        }
+        
+        int contentHeight = musicCount * itemHeight;
+        int visibleHeight = panelH - (listY - panelY) - 10;
+        int maxScroll = System.Math.Max(0, contentHeight - visibleHeight);
+        
+        // Scroll
+        if (GameCanvas.isPointerDown && !isDragging && !isResizing && GameCanvas.isPointerHoldIn(panelX, listY, panelW, visibleHeight))
+        {
+            GameCanvas.isPointerJustDown = false;
+            if (!isScrolling)
+            {
+                isScrolling = true;
+                lastMouseY = GameCanvas.py;
+                lastScrollY = scrollY;
+            }
+            else
+            {
+                int deltaY3 = lastMouseY - GameCanvas.py;
+                int targetScroll = lastScrollY + deltaY3;
+                scrollY = targetScroll;
+                lastMouseY = GameCanvas.py;
+                lastScrollY = scrollY;
+            }
+            scrollY = System.Math.Max(0, System.Math.Min(maxScroll, scrollY));
+        }
+        else if (!GameCanvas.isPointerDown)
+        {
+            isScrolling = false;
+        }
+        
+        // Vẽ danh sách
+        if (Mod.BgmManager.Instance != null && Mod.BgmManager.Instance.playlist != null)
+        {
+            int startIdx = scrollY / itemHeight;
+            int endIdx = System.Math.Min(startIdx + 15, musicCount);
+            
+            for (int i = startIdx; i < endIdx; i++)
+            {
+                string filePath = Mod.BgmManager.Instance.playlist[i];
+                string displayName = Path.GetFileName(filePath);
+                bool isPlaying = (currentBgm == filePath);
+                
+                int itemY = listY + i * itemHeight - scrollY;
+                
+                // Background
+                if (isPlaying)
+                {
+                    g.setColor(32768, 0.5f);
+                    g.fillRect(panelX + 5, itemY, panelW - 10, itemHeight - 2, 5);
+                }
+                else if (i % 2 == 0)
+                {
+                    g.setColor(2105376, 0.3f);
+                    g.fillRect(panelX + 5, itemY, panelW - 10, itemHeight - 2, 5);
+                }
+                
+                // Tên bài
+                string prefix = isPlaying ? "♪ " : "";
+                mFont.tahoma_7_white.drawString(g, prefix + displayName, panelX + padding, itemY + 5, 0);
+                
+                // Nút Phát
+                int playBtnW = 30;
+                int playBtnH = 18;
+                int playBtnX = panelX + panelW - 80;
+                int playBtnY = itemY + 3;
+                g.setColor(isPlaying ? 16750848 : 32768);
+                g.fillRect(playBtnX, playBtnY, playBtnW, playBtnH, 5);
+                mFont.tahoma_7b_white.drawString(g, isPlaying ? "||" : "▶", playBtnX + playBtnW / 2, playBtnY + 4, mFont.CENTER);
+                if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(playBtnX, playBtnY, playBtnW, playBtnH))
+                {
+                    if (isPlaying)
+                    {
+                        Mod.BgmManager.Instance.StopMusic();
+                    }
+                    else
+                    {
+                        if (isBgm && Mod.BgmManager.Instance != null)
+                        {
+                            Mod.BgmManager.Instance.PlayMusic(filePath);
+                        }
+                    }
+                    GameCanvas.clearAllPointerEvent();
+                }
+                
+                // Nút Xóa
+                int delBtnW = 30;
+                int delBtnH = 18;
+                int delBtnX = panelX + panelW - 45;
+                int delBtnY = itemY + 3;
+                g.setColor(16724787);
+                g.fillRect(delBtnX, delBtnY, delBtnW, delBtnH, 5);
+                mFont.tahoma_7b_white.drawString(g, "X", delBtnX + delBtnW / 2, delBtnY + 4, mFont.CENTER);
+                if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(delBtnX, delBtnY, delBtnW, delBtnH))
+                {
+                    Mod.BgmManager.Instance.RemoveMusic(filePath);
+                    GameCanvas.clearAllPointerEvent();
+                }
+            }
+        }
+        
+        g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+        
+        // Scroll bar
+        int scrollBarX = panelX + panelW - 8;
+        int scrollBarY = listY;
+        int scrollBarH = visibleHeight;
+        int scrollBarW = 4;
+        g.setColor(3355443);
+        g.fillRect(scrollBarX, scrollBarY, scrollBarW, scrollBarH, 5);
+        
+        if (contentHeight > visibleHeight)
+        {
+            float scrollRatio = (float)visibleHeight / (float)contentHeight;
+            int scrollThumbH = (int)((float)scrollBarH * scrollRatio);
+            int scrollThumbY = scrollBarY;
+            if (scrollY > 0)
+            {
+                float scrollPercent = (float)scrollY / (float)maxScroll;
+                scrollThumbY = scrollBarY + (int)((float)(scrollBarH - scrollThumbH) * scrollPercent);
+            }
+            scrollThumbY = System.Math.Max(scrollBarY, System.Math.Min(scrollBarY + scrollBarH - scrollThumbH, scrollThumbY));
+            g.setColor(8947848);
+            g.fillRect(scrollBarX + 1, scrollThumbY, scrollBarW - 2, scrollThumbH, 5);
+        }
+        
+        // Drag panel
+        if (GameCanvas.isPointerDown && GameCanvas.isPointerHoldIn(panelX, panelY, panelW, headerHeight))
+        {
+            GameCanvas.isPointerJustDown = false;
+            if (!isDragging)
+            {
+                isDragging = true;
+                lastMouseX = GameCanvas.px;
+                lastMouseY = GameCanvas.py;
+                lastPanelX = panelX;
+                lastPanelY = panelY;
+            }
+            else
+            {
+                int deltaX = GameCanvas.px - lastMouseX;
+                int deltaY = GameCanvas.py - lastMouseY;
+                panelX = lastPanelX + deltaX;
+                panelY = lastPanelY + deltaY;
+                lastMouseX = GameCanvas.px;
+                lastMouseY = GameCanvas.py;
+                lastPanelX = panelX;
+                lastPanelY = panelY;
+            }
+            panelX = System.Math.Max(0, System.Math.Min(GameCanvas.w - panelW, panelX));
+            panelY = System.Math.Max(0, System.Math.Min(GameCanvas.h - panelH, panelY));
+        }
+        else
+        {
+            isDragging = false;
+        }
+        
+        // Resize
+        if (GameCanvas.isPointerDown && !isDragging)
+        {
+            bool inResizeX = GameCanvas.px >= panelX + panelW - resizeHandleSize && GameCanvas.px <= panelX + panelW;
+            bool inResizeY = GameCanvas.py >= panelY + panelH - resizeHandleSize && GameCanvas.py <= panelY + panelH;
+            if (inResizeX && inResizeY)
+            {
+                GameCanvas.isPointerJustDown = false;
+                if (!isResizing)
+                {
+                    isResizing = true;
+                    lastMouseX = GameCanvas.px;
+                    lastMouseY = GameCanvas.py;
+                    lastPanelW = panelW;
+                    lastPanelH = panelH;
+                }
+                else
+                {
+                    int deltaX = GameCanvas.px - lastMouseX;
+                    int deltaY = GameCanvas.py - lastMouseY;
+                    panelW = lastPanelW + deltaX;
+                    panelH = lastPanelH + deltaY;
+                    lastMouseX = GameCanvas.px;
+                    lastMouseY = GameCanvas.py;
+                    lastPanelW = panelW;
+                    lastPanelH = panelH;
+                    panelW = System.Math.Max(280, System.Math.Min(GameCanvas.w - panelX, panelW));
+                    panelH = System.Math.Max(200, System.Math.Min(GameCanvas.h - panelY, panelH));
+                }
+            }
+        }
+        else if (!GameCanvas.isPointerDown)
+        {
+            isResizing = false;
+        }
+        
+        // Xử lý nút X đóng
+        if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease && GameCanvas.isPointerHoldIn(panelX + panelW - btnSize - 5, panelY + 5, btnSize, btnSize))
+        {
+            isShowMusicList = false;
+            scrollY = 0;
+            GameCanvas.clearAllPointerEvent();
         }
     }
 

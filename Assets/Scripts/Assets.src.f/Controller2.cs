@@ -68,7 +68,7 @@ namespace Assets.src.f
 							sbyte b12 = msg.reader().readByte();
 							if (b12 == 1)
 							{
-								short smallID = msg.reader().readShort();
+                                short smallID = msg.reader().readShort();
 								sbyte b13 = -1;
 								int[] array3 = null;
 								short wimg = 0;
@@ -78,7 +78,7 @@ namespace Assets.src.f
 									b13 = msg.reader().readByte();
 									if (b13 > 0)
 									{
-										sbyte b14 = msg.reader().readByte();
+                                        sbyte b14 = msg.reader().readByte();
 										array3 = new int[b14];
 										for (int m = 0; m < b14; m++)
 										{
@@ -90,11 +90,17 @@ namespace Assets.src.f
 								}
 								catch (Exception)
 								{
-								}
+                                }
 								if (num15 == Char.myCharz().charID)
 								{
 									Char.myCharz().petFollow = new PetFollow();
 									Char.myCharz().petFollow.smallID = smallID;
+									// Khởi tạo vị trí ban đầu tại nhân vật để pet không xuất hiện ở (0,0)
+									int dirOffset = (Char.myCharz().cdir == 1) ? -20 : 20;
+									Char.myCharz().petFollow.cmx = Char.myCharz().cx + dirOffset;
+									Char.myCharz().petFollow.cmy = Char.myCharz().cy - 40;
+									Char.myCharz().petFollow.cmtoX = Char.myCharz().petFollow.cmx;
+									Char.myCharz().petFollow.cmtoY = Char.myCharz().petFollow.cmy;
 									if (b13 > 0)
 									{
 										Char.myCharz().petFollow.SetImg(b13, array3, wimg, himg);
@@ -102,23 +108,38 @@ namespace Assets.src.f
 									break;
 								}
 								Char char3 = GameScr.findCharInMap(num15);
-								char3.petFollow = new PetFollow();
-								char3.petFollow.smallID = smallID;
-								if (b13 > 0)
+								if (char3 != null)
 								{
-									char3.petFollow.SetImg(b13, array3, wimg, himg);
+									char3.petFollow = new PetFollow();
+									char3.petFollow.smallID = smallID;
+									// Khởi tạo vị trí ban đầu tại nhân vật
+									int dirOffset3 = (char3.cdir == 1) ? -20 : 20;
+									char3.petFollow.cmx = char3.cx + dirOffset3;
+									char3.petFollow.cmy = char3.cy - 40;
+									char3.petFollow.cmtoX = char3.petFollow.cmx;
+									char3.petFollow.cmtoY = char3.petFollow.cmy;
+									if (b13 > 0)
+									{
+										char3.petFollow.SetImg(b13, array3, wimg, himg);
+									}
 								}
 							}
 							else if (num15 == Char.myCharz().charID)
 							{
-								Char.myCharz().petFollow.remove();
-								Char.myCharz().petFollow = null;
+								if (Char.myCharz().petFollow != null)
+								{
+									Char.myCharz().petFollow.remove();
+									Char.myCharz().petFollow = null;
+								}
 							}
 							else
 							{
 								Char char4 = GameScr.findCharInMap(num15);
-								char4.petFollow.remove();
-								char4.petFollow = null;
+								if (char4 != null && char4.petFollow != null)
+								{
+									char4.petFollow.remove();
+									char4.petFollow = null;
+								}
 							}
 							break;
 						}

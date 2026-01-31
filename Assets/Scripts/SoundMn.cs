@@ -271,40 +271,49 @@ public class SoundMn
         {
             return;
         }
-        ValueTuple<bool, string>[][] modFuncByTab = new ValueTuple<bool, string>[][]
+        
+        // Tạo danh sách tab động dựa trên platform
+        List<ValueTuple<bool, string>[]> tabList = new List<ValueTuple<bool, string>[]>
         {
-                new ValueTuple<bool, string>[]
-                {
-                    new ValueTuple<bool, string>(ModFunc.GI().isHighFps, ModFunc.strHighFps),
-                    new ValueTuple<bool, string>(ModFunc.GI().isUpdateZones, ModFunc.strUpdateZones),
-                    new ValueTuple<bool, string>(ModFunc.GI().showCharsInMap, ModFunc.strCharsInMap),
-                    new ValueTuple<bool, string>(ModFunc.GI().showInfoMe, ModFunc.strInfoMe),
-                    new ValueTuple<bool, string>(ModFunc.GI().isShowButton, ModFunc.strShowButton)
-                },
-                new ValueTuple<bool, string>[]
-                {
-                    new ValueTuple<bool, string>(ModFunc.GI().isAutoPhaLe, ModFunc.strAutoPhaLe),
-                    new ValueTuple<bool, string>(ModFunc.GI().isAutoVQMM, ModFunc.strAutoVQMM),
-                    new ValueTuple<bool, string>(ModFunc.GI().autoWakeUp, ModFunc.strAutoWakeUp),
-                    new ValueTuple<bool, string>(ModFunc.isAutoLogin, ModFunc.strAutoLogin)
-                },
-                new ValueTuple<bool, string>[]
-                {
-                    new ValueTuple<bool, string>(!ModFunc.ModNotLogo && ModFunc.isLogo, ModFunc.strLogo),
-                    //new ValueTuple<bool, string>(!ModFunc.ModNotLogo && ModFunc.isLogoGif, ModFunc.strLogoGif),
-                    new ValueTuple<bool, string>(ModFunc.AnPlayer, ModFunc.strAnPlayer),
-                    new ValueTuple<bool, string>(ModFunc.isShowID, ModFunc.strShowID),
-                    new ValueTuple<bool, string>(ModFunc.isInventory, ModFunc.strInventoryOFF),
-                    new ValueTuple<bool, string>(ModFunc.isEffectInven, ModFunc.strEffectOff)
-                },
-                new ValueTuple<bool, string>[]
-                {
-                    new ValueTuple<bool, string>(ModFunc.GI().isIntroOff, ModFunc.strIntroOff),
-                    new ValueTuple<bool, string>(ModFunc.GiamDungLuong, ModFunc.strGiamDungLuong),
-                    new ValueTuple<bool, string>(ModFunc.isEditButton, ModFunc.strEditButton),
-                    //new ValueTuple<bool, string>(ModFunc.isFilterItem, "Lọc đồ (auto vứt items)")
-                }
+            new ValueTuple<bool, string>[]
+            {
+                new ValueTuple<bool, string>(ModFunc.GI().isHighFps, ModFunc.strHighFps),
+                new ValueTuple<bool, string>(ModFunc.GI().isUpdateZones, ModFunc.strUpdateZones),
+                new ValueTuple<bool, string>(ModFunc.GI().showCharsInMap, ModFunc.strCharsInMap),
+                new ValueTuple<bool, string>(ModFunc.GI().showInfoMe, ModFunc.strInfoMe),
+                new ValueTuple<bool, string>(ModFunc.GI().isShowButton, ModFunc.strShowButton)
+            },
+            new ValueTuple<bool, string>[]
+            {
+                new ValueTuple<bool, string>(ModFunc.GI().isAutoPhaLe, ModFunc.strAutoPhaLe),
+                new ValueTuple<bool, string>(ModFunc.GI().isAutoVQMM, ModFunc.strAutoVQMM),
+                new ValueTuple<bool, string>(ModFunc.GI().autoWakeUp, ModFunc.strAutoWakeUp),
+                new ValueTuple<bool, string>(ModFunc.isAutoLogin, ModFunc.strAutoLogin)
+            },
+            new ValueTuple<bool, string>[]
+            {
+                new ValueTuple<bool, string>(!ModFunc.ModNotLogo && ModFunc.isLogo, ModFunc.strLogo),
+                new ValueTuple<bool, string>(ModFunc.AnPlayer, ModFunc.strAnPlayer),
+                new ValueTuple<bool, string>(ModFunc.isShowID, ModFunc.strShowID),
+                new ValueTuple<bool, string>(ModFunc.isInventory, ModFunc.strInventoryOFF),
+                new ValueTuple<bool, string>(ModFunc.isEffectInven, ModFunc.strEffectOff)
+            },
+            new ValueTuple<bool, string>[]
+            {
+                new ValueTuple<bool, string>(ModFunc.GI().isIntroOff, ModFunc.strIntroOff),
+                new ValueTuple<bool, string>(ModFunc.GiamDungLuong, ModFunc.strGiamDungLuong),
+                new ValueTuple<bool, string>(ModFunc.isEditButton, ModFunc.strEditButton),
+                new ValueTuple<bool, string>(ModFunc.isFilterItem, "Tính năng lọc đồ (vứt items)")
+            }
         };
+        
+        // Chỉ thêm tab Nhạc nếu đang chạy trên PC
+        if (Main.isPC)
+        {
+            tabList.Add(GetMusicList());
+        }
+        
+        ValueTuple<bool, string>[][] modFuncByTab = tabList.ToArray();
         int currentTab = GameCanvas.panel.currentTabIndex;
         if (currentTab >= 0 && currentTab < modFuncByTab.Length)
         {
@@ -323,6 +332,51 @@ public class SoundMn
             return;
         }
         Panel.strModFunc = new string[0];
+    }
+
+    private ValueTuple<bool, string>[] GetMusicList()
+    {
+        List<ValueTuple<bool, string>> list = new List<ValueTuple<bool, string>>();
+        
+        // Bật/Tắt Nhạc nền (index 0)
+        list.Add(new ValueTuple<bool, string>(ModFunc.GI().isBgm, "Bật/Tắt Nhạc nền"));
+        
+        // Null check để tránh lỗi khi BgmManager chưa sẵn sàng
+        if (Mod.BgmManager.Instance == null)
+        {
+            list.Add(new ValueTuple<bool, string>(false, "Đang tải danh sách nhạc..."));
+            return list.ToArray();
+        }
+        
+        // Chế độ phát (index 1)
+        string modeStr = "Chế độ: ";
+        if (Mod.BgmManager.Instance.currentMode == Mod.BgmManager.PlayMode.RepeatOne) modeStr += "Lặp lại bài";
+        else if (Mod.BgmManager.Instance.currentMode == Mod.BgmManager.PlayMode.Sequential) modeStr += "Phát tuần tự";
+        else modeStr += "Phát ngẫu nhiên";
+        list.Add(new ValueTuple<bool, string>(false, modeStr));
+
+        // Thêm nhạc (index 2)
+        list.Add(new ValueTuple<bool, string>(false, "[+] Thêm nhạc..."));
+        
+        // Thêm folder (index 3)
+        list.Add(new ValueTuple<bool, string>(false, "[+] Thêm folder..."));
+        
+        // Tiêu đề danh sách (index 4)
+        list.Add(new ValueTuple<bool, string>(false, "--- Danh Sách Nhạc ---"));
+        
+        // Danh sách nhạc (index 5+)
+        if (Mod.BgmManager.Instance.playlist != null)
+        {
+            foreach (string filePath in Mod.BgmManager.Instance.playlist)
+            {
+                bool isPlaying = (ModFunc.GI().currentBgm == filePath);
+                // Hiển thị tên file thay vì đường dẫn đầy đủ
+                string displayName = System.IO.Path.GetFileName(filePath);
+                list.Add(new ValueTuple<bool, string>(isPlaying, displayName));
+            }
+        }
+        
+        return list.ToArray();
     }
 
     public void HP_MPup()

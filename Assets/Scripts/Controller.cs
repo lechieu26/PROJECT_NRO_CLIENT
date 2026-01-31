@@ -126,6 +126,9 @@ public class Controller : IMessageHandler
 			Controller2.readMessage(msg);
 			switch (msg.command)
 			{
+			case -33: // Farm Asset
+				FarmMessageHandler.GI().HandleFarmAssetMessage(msg);
+				break;
 			case 70:
 				QuayTamBao.receiveMsg(msg);
 				break;
@@ -135,7 +138,6 @@ public class Controller : IMessageHandler
 				string text = msg.reader().readUTF();
 				Rms.saveRMSString("acc", user);
 				Rms.saveRMSString("pass", pass);
-				Res.outchieu("chieu.lq received msg 105" + text);
 				GameCanvas.startOK(text, 888399, null);
 				break;
 			case 71:
@@ -1092,11 +1094,31 @@ public class Controller : IMessageHandler
 				short num260 = msg.reader().readShort();
 				SmallImage.newSmallVersion = new sbyte[num260];
 				SmallImage.maxSmall = num260;
-				SmallImage.imgNew = new Small[num260];
+				
+				// CHỈ tạo mới mảng khi chưa có hoặc kích thước thay đổi
+				// Giữ lại dữ liệu cache cũ nếu có thể
+				if (SmallImage.imgNew == null || SmallImage.imgNew.Length != num260)
+				{
+					Small[] oldImgNew = SmallImage.imgNew;
+					SmallImage.imgNew = new Small[num260];
+					
+					// Copy dữ liệu cũ sang mảng mới nếu có
+					if (oldImgNew != null)
+					{
+						int copyLength = System.Math.Min(oldImgNew.Length, num260);
+						for (int j = 0; j < copyLength; j++)
+						{
+							SmallImage.imgNew[j] = oldImgNew[j];
+						}
+					}
+				}
+				
 				for (int num261 = 0; num261 < num260; num261++)
 				{
 					SmallImage.newSmallVersion[num261] = msg.reader().readByte();
 				}
+				// Kiểm tra nếu version thay đổi thì xóa cache cũ
+				SmallImage.checkAndClearCacheIfVersionChanged();
 				break;
 			}
 			case -76:
@@ -1246,6 +1268,48 @@ public class Controller : IMessageHandler
 					{
 						ModFunc.musicCount++;
 						Rms.saveRMS("music_" + name, data2);
+					}
+				}
+				// Cloud Garden - Farm assets (sub-type 5)
+				if (b38 == 5)
+				{
+					try
+					{
+						string farmAssetName = msg.reader().readUTF();
+						int length = msg.reader().readInt();
+						sbyte[] farmData = new sbyte[length];
+						msg.reader().read(ref farmData, 0, length);
+						
+						// Lưu vào RMS để cache
+						Rms.saveRMS("farm_" + farmAssetName.Replace("/", "_"), farmData);
+						
+						// Tạo Image và cache vào FarmAssetManager
+						Image img = Image.createImage(farmData, 0, length);
+						if (img != null)
+						{
+							// Parse filename để xác định loại asset
+							if (farmAssetName.Contains("plot_empty"))
+							{
+								FarmAssetManager.GI().SavePlotEmptyImage(img);
+							}
+							else if (farmAssetName.Contains("crop_"))
+							{
+								// Parse crop type và stage từ filename
+								// Format: farm/crop_tomato_seed.png
+								ParseAndSaveCropAsset(farmAssetName, img);
+							}
+							else if (farmAssetName.Contains("icon_"))
+							{
+								// Parse icon name
+								string iconName = farmAssetName.Replace("farm/", "").Replace("icon_", "").Replace(".png", "");
+								FarmAssetManager.GI().SaveFarmIcon(iconName, img);
+							}
+						}
+						Res.outz("Loaded farm asset: " + farmAssetName);
+					}
+					catch (Exception ex)
+					{
+						Res.outz("Error loading farm asset: " + ex.Message);
 					}
 				}
 				break;
@@ -1776,13 +1840,10 @@ public class Controller : IMessageHandler
 			case 2:
 				Char.isLoadingMap = false;
 				LoginScr.isLoggingIn = false;
-                Res.outchieu("chieu.lq case 2");
                 if (!GameScr.isLoadAllData)
 				{
 					GameScr.gI().initSelectChar();
-                    Res.outchieu("chieu.lq initSelectChar()");
                 }
-				Res.outchieu("chieu.lq 2 end");
 				BgItem.clearHashTable();
 				GameCanvas.endDlg();
 				CreateCharScr.isCreateChar = true;
@@ -2636,6 +2697,20 @@ public class Controller : IMessageHandler
 					GameScr.gI().magicTree.isUpdateTree = true;
 					GameScr.gI().magicTree.isPeasEffect = true;
 				}
+				// Cloud Garden Farm Data (sub-type 10)
+				if (b12 == 10)
+				{
+					try
+					{
+						// Reset reader position và gọi FarmMessageHandler
+						msg.reader().reset();
+						FarmMessageHandler.GI().HandleFarmDataMessage(msg);
+					}
+					catch (Exception ex)
+					{
+						Res.outz("Error handling farm data: " + ex.Message);
+					}
+				}
 				break;
 			}
 			case 11:
@@ -2695,6 +2770,8 @@ public class Controller : IMessageHandler
 					{
 						SmallImage.imageRaw.Add(iconId, img);
 					}
+					// Lưu icon vào RMS để cache lâu dài - không cần download lại
+					SmallImage.saveIconToRMS(iconId, data7);
 				}
 				catch (Exception)
 				{
@@ -2833,6 +2910,7 @@ public class Controller : IMessageHandler
             case -25:
             {
                 string msgTb = msg.reader().readUTF();
+                msgTb = msgTb.Replace("\n", " ");
                 GameScr.info1.addInfo(msgTb, 0);
                 if (msgTb.Contains("của bạn đã đạt mức"))
                 {
@@ -3417,7 +3495,7 @@ public class Controller : IMessageHandler
 				{
 					avatar = avatar2
 				};
-				ChatPopup.addBigMessage(chat3, 100000, npc6);
+				ChatPopup.addBigMessage(chat3, 500, npc6);
 				sbyte num188 = msg.reader().readByte();
 				if (num188 == 0)
 				{
@@ -3478,27 +3556,7 @@ public class Controller : IMessageHandler
 			}
 			case 32:
 			{
-				int npcId = msg.reader().readShort();
-				for (int num182 = 0; num182 < GameScr.vNpc.size(); num182++)
-				{
-					Npc npc = (Npc)GameScr.vNpc.elementAt(num182);
-					if (npc.template.npcTemplateId == npcId && npc.Equals(Char.myCharz().npcFocus))
-					{
-						string chat = msg.reader().readUTF();
-						string[] menu = new string[msg.reader().readByte()];
-						for (int num183 = 0; num183 < menu.Length; num183++)
-						{
-							menu[num183] = msg.reader().readUTF();
-						}
-						GameScr.gI().createMenu(menu, npc);
-						ChatPopup.addChatPopup(chat, 100000, npc);
-						if (npcId == 21 && chat.Contains("tối đa"))
-						{
-							ModFunc.GI().maxPhale = ModFunc.GI().currPhale;
-						}
-						return;
-					}
-				}
+                int npcId = msg.reader().readShort();
 				Npc npc2 = new Npc(npcId, 0, -100, 100, npcId, GameScr.info1.charId[Char.myCharz().cgender][2]);
 				string chat2 = msg.reader().readUTF();
 				string[] menu2 = new string[msg.reader().readByte()];
@@ -4492,7 +4550,8 @@ public class Controller : IMessageHandler
         int num = d.readShort();
         for (int j = 0; j < num; j++)
         {
-            ItemTemplate it = new ItemTemplate((short)j, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBool());
+            short itemId = d.readShort(); // ĐỌC ID THỰC TỪ SERVER
+            ItemTemplate it = new ItemTemplate(itemId, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBool());
             ItemTemplates.add(it);
         }
     }
@@ -5376,8 +5435,12 @@ public static int JavaHashCode(string str)
                                 Service.gI().updateSkill();
                             }
                         }
+                        Debug.Log("[CLIENT] Server versions - vsData=" + GameScr.vsData + ", vsMap=" + GameScr.vsMap + ", vsSkill=" + GameScr.vsSkill + ", vsItem=" + GameScr.vsItem);
+                        Debug.Log("[CLIENT] Cached versions - vcData=" + GameScr.vcData + ", vcMap=" + GameScr.vcMap + ", vcSkill=" + GameScr.vcSkill + ", vcItem=" + GameScr.vcItem);
+                        Debug.Log("[CLIENT] Item version check: vsItem(" + GameScr.vsItem + ") != vcItem(" + GameScr.vcItem + ") = " + (GameScr.vsItem != GameScr.vcItem));
                         if (GameScr.vsItem != GameScr.vcItem)
                         {
+                            Debug.Log("[CLIENT] Item version mismatch! Will request new item templates from server.");
                             GameScr.isLoadAllData = false;
                             Service.gI().updateItem();
                         }
@@ -5385,18 +5448,29 @@ public static int JavaHashCode(string str)
                         {
                             try
                             {
+                                // Load item options từ cache cũ (vẫn giữ format cũ)
                                 DataInputStream dataInputStream3 = new DataInputStream(Rms.loadRMS("NRitem0"));
                                 loadItemNew(dataInputStream3.r, 0, false);
-                                DataInputStream dataInputStream4 = new DataInputStream(Rms.loadRMS("NRitem1"));
-                                loadItemNew(dataInputStream4.r, 1, false);
-                                DataInputStream dataInputStream5 = new DataInputStream(Rms.loadRMS("NRitem2"));
-                                loadItemNew(dataInputStream5.r, 2, false);
+                                
+                                // Load item templates từ cache mới (tất cả trong 1 file)
+                                if (!loadItemTemplatesCache())
+                                {
+                                    // Fallback: thử load từ cache cũ (NRitem1, NRitem2)
+                                    Debug.Log("[CLIENT] Trying legacy cache format...");
+                                    DataInputStream dataInputStream4 = new DataInputStream(Rms.loadRMS("NRitem1"));
+                                    loadItemNew(dataInputStream4.r, 1, false);
+                                    DataInputStream dataInputStream5 = new DataInputStream(Rms.loadRMS("NRitem2"));
+                                    loadItemNew(dataInputStream5.r, 2, false);
+                                }
+                                
+                                // Load ArrHead2Frames
                                 DataInputStream dataInputStream6 = new DataInputStream(Rms.loadRMS("NRitem100"));
                                 loadItemNew(dataInputStream6.r, 100, false);
                                 LoginScr.isUpdateItem = false;
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
+                                Debug.LogError("[CLIENT] Error loading item cache: " + ex.Message);
                                 GameScr.vcItem = -1;
                                 Service.gI().updateItem();
                             }
@@ -5717,6 +5791,21 @@ public static int JavaHashCode(string str)
 								continue;
 							}
 							ItemTemplate itemTemplate = ItemTemplates.get(num7);
+							if (itemTemplate == null)
+							{
+								Res.outz("WARNING: ItemTemplate not found for id=" + num7 + ", skipping...");
+								// Đọc hết data của item này để không bị lệch message
+								msg.reader().readInt();    // quantity
+								msg.reader().readUTF();    // info
+								msg.reader().readUTF();    // content
+								int skipOptions = msg.reader().readUnsignedByte();
+								for (int skip = 0; skip < skipOptions; skip++)
+								{
+									msg.reader().readShortOptionTemp();
+									msg.reader().ReadParamDQT();
+								}
+								continue;
+							}
 							int num8 = itemTemplate.type;
 							Char.myCharz().arrItemBody[k] = new Item();
 							Char.myCharz().arrItemBody[k].template = itemTemplate;
@@ -6341,33 +6430,37 @@ public static int JavaHashCode(string str)
 			{
 				ItemTemplates.itemTemplates.clear();
 				int num = d.readShort();
+				bool isLastBatch = d.readBoolean(); // Flag cho biết đây có phải batch cuối không
+				Debug.Log("[CLIENT] Receiving item templates (case 1) - count=" + num + ", isLastBatch=" + isLastBatch);
 				for (int j = 0; j < num; j++)
 				{
-					ItemTemplates.add(new ItemTemplate((short)j, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
+					short itemId = d.readShort(); // ĐỌC ID THỰC TỪ SERVER
+					ItemTemplates.add(new ItemTemplate(itemId, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
 				}
-				if (isSave)
-				{
-					d.reset();
-					sbyte[] data6 = new sbyte[d.available()];
-					d.readFully(ref data6);
-					Rms.saveRMS("NRitem1", data6);
-				}
+				Debug.Log("[CLIENT] Loaded " + ItemTemplates.count() + " item templates (batch 1)");
+				// Không lưu cache ở đây - sẽ lưu khi nhận batch cuối (case 2 với isLastBatch=true)
+				// Nếu đây là batch cuối duy nhất (totalItems <= 500), vẫn sẽ nhận case 2 với isLastBatch=true
 				break;
 			}
 			case 2:
 			{
-				short num2 = d.readShort();
-				int num3 = d.readShort();
-				for (int k = num2; k < num3; k++)
+				// Server gửi số lượng items và flag isLastBatch
+				int itemCount = d.readShort();
+				bool isLastBatch = d.readBoolean();
+				Debug.Log("[CLIENT] Receiving additional item templates (case 2) - count=" + itemCount + ", isLastBatch=" + isLastBatch);
+				for (int k = 0; k < itemCount; k++)
 				{
-					ItemTemplates.add(new ItemTemplate((short)k, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
+					short itemId = d.readShort(); // ĐỌC ID THỰC TỪ SERVER
+					ItemTemplates.add(new ItemTemplate(itemId, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
 				}
-				if (isSave)
+				Debug.Log("[CLIENT] Total item templates loaded: " + ItemTemplates.count());
+				
+				// Chỉ lưu cache khi nhận batch cuối cùng
+				if (isSave && isLastBatch)
 				{
-					d.reset();
-					sbyte[] data7 = new sbyte[d.available()];
-					d.readFully(ref data7);
-					Rms.saveRMS("NRitem2", data7);
+					Debug.Log("[CLIENT] Saving item templates cache - total=" + ItemTemplates.count());
+					// Serialize toàn bộ ItemTemplates và lưu vào cache
+					saveItemTemplatesCache();
 					sbyte[] data8 = new sbyte[1] { GameScr.vcItem };
 					Rms.saveRMS("NRitemVersion", data8);
 					LoginScr.isUpdateItem = false;
@@ -6399,6 +6492,151 @@ public static int JavaHashCode(string str)
 			ex.ToString();
 		}
 	}
+	
+	/// <summary>
+	/// Serialize toàn bộ ItemTemplates và lưu vào cache RMS
+	/// </summary>
+	private void saveItemTemplatesCache()
+	{
+		try
+		{
+			// Collect all items first
+			System.Collections.Generic.List<ItemTemplate> items = new System.Collections.Generic.List<ItemTemplate>();
+			System.Collections.IDictionaryEnumerator enumerator = ItemTemplates.itemTemplates.GetEnumerator();
+			while (enumerator.MoveNext())
+			{
+				ItemTemplate it = (ItemTemplate)enumerator.Value;
+				if (it != null && it.id >= 0)
+				{
+					items.Add(it);
+				}
+			}
+			
+			// Tính toán kích thước buffer cần thiết
+			int totalSize = 4; // 4 bytes cho số lượng items (int)
+			foreach (ItemTemplate it in items)
+			{
+				totalSize += 2 + 1 + 1 + 2 + getUTF8ByteLength(it.name) + 2 + getUTF8ByteLength(it.description) + 1 + 4 + 2 + 2 + 1;
+			}
+			
+			sbyte[] data = new sbyte[totalSize];
+			int pos = 0;
+			
+			// Ghi số lượng items (int)
+			int count = items.Count;
+			data[pos++] = (sbyte)((count >> 24) & 0xFF);
+			data[pos++] = (sbyte)((count >> 16) & 0xFF);
+			data[pos++] = (sbyte)((count >> 8) & 0xFF);
+			data[pos++] = (sbyte)(count & 0xFF);
+			
+			// Ghi từng item
+			foreach (ItemTemplate it in items)
+			{
+				// id (short)
+				data[pos++] = (sbyte)((it.id >> 8) & 0xFF);
+				data[pos++] = (sbyte)(it.id & 0xFF);
+				// type (byte)
+				data[pos++] = it.type;
+				// gender (byte)
+				data[pos++] = it.gender;
+				// name (UTF)
+				pos = writeUTFToBuffer(data, pos, it.name);
+				// description (UTF)
+				pos = writeUTFToBuffer(data, pos, it.description);
+				// level (byte)
+				data[pos++] = it.level;
+				// strRequire (int)
+				data[pos++] = (sbyte)((it.strRequire >> 24) & 0xFF);
+				data[pos++] = (sbyte)((it.strRequire >> 16) & 0xFF);
+				data[pos++] = (sbyte)((it.strRequire >> 8) & 0xFF);
+				data[pos++] = (sbyte)(it.strRequire & 0xFF);
+				// iconID (short)
+				data[pos++] = (sbyte)((it.iconID >> 8) & 0xFF);
+				data[pos++] = (sbyte)(it.iconID & 0xFF);
+				// part (short)
+				data[pos++] = (sbyte)((it.part >> 8) & 0xFF);
+				data[pos++] = (sbyte)(it.part & 0xFF);
+				// isUpToUp (boolean)
+				data[pos++] = it.isUpToUp ? (sbyte)1 : (sbyte)0;
+			}
+			
+			// Resize array to actual size used
+			sbyte[] finalData = new sbyte[pos];
+			Array.Copy(data, finalData, pos);
+			Rms.saveRMS("NRitemCache", finalData);
+			Debug.Log("[CLIENT] Saved " + count + " item templates to cache (" + pos + " bytes)");
+		}
+		catch (Exception ex)
+		{
+			Debug.LogError("[CLIENT] Error saving item templates cache: " + ex.Message);
+		}
+	}
+	
+	/// <summary>
+	/// Load ItemTemplates từ cache RMS
+	/// </summary>
+	private bool loadItemTemplatesCache()
+	{
+		try
+		{
+			sbyte[] data = Rms.loadRMS("NRitemCache");
+			if (data == null || data.Length < 4)
+			{
+				Debug.Log("[CLIENT] No item templates cache found");
+				return false;
+			}
+			
+			myReader reader = new myReader(data);
+			int count = reader.readInt();
+			Debug.Log("[CLIENT] Loading " + count + " item templates from cache");
+			
+			ItemTemplates.itemTemplates.clear();
+			for (int i = 0; i < count; i++)
+			{
+				short id = reader.readShort();
+				sbyte type = reader.readByte();
+				sbyte gender = reader.readByte();
+				string name = reader.readUTF();
+				string description = reader.readUTF();
+				sbyte level = reader.readByte();
+				int strRequire = reader.readInt();
+				short iconId = reader.readShort();
+				short part = reader.readShort();
+				bool isUpToUp = reader.readBoolean();
+				ItemTemplates.add(new ItemTemplate(id, type, gender, name, description, level, strRequire, iconId, part, isUpToUp));
+			}
+			
+			Debug.Log("[CLIENT] Loaded " + ItemTemplates.count() + " item templates from cache");
+			return true;
+		}
+		catch (Exception ex)
+		{
+			Debug.LogError("[CLIENT] Error loading item templates cache: " + ex.Message);
+			return false;
+		}
+	}
+	
+	private int getUTF8ByteLength(string s)
+	{
+		if (s == null) return 0;
+		return System.Text.Encoding.UTF8.GetByteCount(s);
+	}
+	
+	private int writeUTFToBuffer(sbyte[] buffer, int pos, string s)
+	{
+		byte[] utf8Bytes = System.Text.Encoding.UTF8.GetBytes(s ?? "");
+		int len = utf8Bytes.Length;
+		// Ghi length (short)
+		buffer[pos++] = (sbyte)((len >> 8) & 0xFF);
+		buffer[pos++] = (sbyte)(len & 0xFF);
+		// Ghi bytes
+		for (int i = 0; i < len; i++)
+		{
+			buffer[pos++] = (sbyte)utf8Bytes[i];
+		}
+		return pos;
+	}
+	
 	public ItemOption readItemOption(Message msg)
 	{
 		ItemOption result = null;
@@ -6679,6 +6917,86 @@ public static int JavaHashCode(string str)
         }
         catch (Exception)
         {
+        }
+    }
+
+    /// <summary>
+    /// Parse crop asset filename và lưu vào FarmAssetManager
+    /// Format: farm/crop_[cropname]_[stage].png hoặc farm/crop_common_[stage].png
+    /// </summary>
+    private void ParseAndSaveCropAsset(string filename, Image img)
+    {
+        try
+        {
+            // Remove prefix và extension
+            string name = filename.Replace("farm/", "").Replace("crop_", "").Replace(".png", "");
+            
+            // Kiểm tra xem có phải common asset không (seed, sprout1, sprout2)
+            bool isCommon = name.StartsWith("common");
+            
+            sbyte cropType = -1;
+            sbyte stage = -1;
+            string stageName = "";
+            
+            if (isCommon)
+            {
+                // Format: common_seed, common_sprout1, common_sprout2
+                stageName = name.Substring(7); // remove "common_"
+            }
+            else
+            {
+                // Parse crop type
+                if (name.StartsWith("tomato"))
+                {
+                    cropType = FarmConstants.CROP_TOMATO;
+                    stageName = name.Substring(7); // remove "tomato_"
+                }
+                else if (name.StartsWith("starfruit"))
+                {
+                    cropType = FarmConstants.CROP_STARFRUIT;
+                    stageName = name.Substring(10); // remove "starfruit_"
+                }
+                else if (name.StartsWith("corn"))
+                {
+                    cropType = FarmConstants.CROP_CORN;
+                    stageName = name.Substring(5); // remove "corn_"
+                }
+                else if (name.StartsWith("pumpkin"))
+                {
+                    cropType = FarmConstants.CROP_PUMPKIN;
+                    stageName = name.Substring(8); // remove "pumpkin_"
+                }
+            }
+
+            // Parse stage
+            switch (stageName)
+            {
+                case "empty": stage = FarmConstants.STAGE_EMPTY; break;
+                case "seed": stage = FarmConstants.STAGE_SEED; break;
+                case "sprout1": stage = FarmConstants.STAGE_SPROUT_1; break;
+                case "sprout2": stage = FarmConstants.STAGE_SPROUT_2; break;
+                case "young": stage = FarmConstants.STAGE_YOUNG; break;
+                case "mature": stage = FarmConstants.STAGE_MATURE; break;
+                case "withered": stage = FarmConstants.STAGE_WITHERED; break;
+            }
+
+            if (stage >= 0)
+            {
+                if (isCommon)
+                {
+                    // Lưu common asset (seed, sprout1, sprout2)
+                    FarmAssetManager.GI().SaveCommonCropAsset(stage, img);
+                }
+                else if (cropType >= 0)
+                {
+                    // Lưu crop-specific asset (young, mature, withered)
+                    FarmAssetManager.GI().SaveCropAsset(cropType, stage, img, false);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Res.outz("Error parsing crop asset: " + ex.Message);
         }
     }
 }

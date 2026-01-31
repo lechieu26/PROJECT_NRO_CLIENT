@@ -69,6 +69,7 @@ public class mGraphics
 
 	public const int TRANS_ROT90 = 5;
 
+	// Sử dụng Hashtable - KHÔNG XÓA CACHE để giữ texture vĩnh viễn
 	public static Hashtable cachedTextures = new Hashtable();
 
 	public static int addYWhenOpenKeyBoard;
@@ -105,15 +106,19 @@ public class mGraphics
 
 	private float flipSpeed = 5f;
 
+	/// <summary>
+	/// Cache texture - KHÔNG XÓA để giữ vĩnh viễn
+	/// </summary>
 	private void cache(string key, Texture value)
 	{
-		if (cachedTextures.Count > 400)
+		// KHÔNG XÓA CACHE - Giữ texture vĩnh viễn
+		// Chỉ thêm mới nếu chưa có
+		if (!cachedTextures.ContainsKey(key))
 		{
-			cachedTextures.Clear();
-		}
-		if (value.width * value.height < GameCanvas.w * GameCanvas.h)
-		{
-			cachedTextures.Add(key, value);
+			if (value.width * value.height < GameCanvas.w * GameCanvas.h)
+			{
+				cachedTextures.Add(key, value);
+			}
 		}
 	}
 

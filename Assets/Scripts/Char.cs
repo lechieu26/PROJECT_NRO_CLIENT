@@ -748,7 +748,7 @@ public class Char : IMapObject
 		new string[4] { "2", "2", "chiêu 2", "5" }
 	};
 
-	public static int[][] inforSkill = new int[10][]
+	public static int[][] inforSkill = new int[12][]
 	{
 		new int[12]
 		{
@@ -793,6 +793,16 @@ public class Char : IMapObject
 		new int[12]
 		{
 			3, 4, 14, 500, 100, 1, 0, 60, 0, 0,
+			0, 0
+		},
+		new int[12]
+		{
+			3, 5, 14, 500, 100, 1, 0, 60, 0, 0,
+			0, 0
+		},
+		new int[12]
+		{
+			3, 5, 14, 500, 100, 1, 0, 60, 0, 0,
 			0, 0
 		},
 		new int[12]

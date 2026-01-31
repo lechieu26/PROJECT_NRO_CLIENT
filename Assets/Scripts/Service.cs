@@ -1,7 +1,7 @@
 using System;
 using Assets.src.g;
 
-public class Service
+public partial class Service
 {
 	private ISession session = Session_ME.gI();
 
@@ -400,7 +400,6 @@ public class Service
 
 	public void useItem(sbyte type, sbyte where, sbyte index, short template)
 	{
-        Res.outchieu("chieu.lq useItem index = " + index + "\n");
         if (Char.myCharz().statusMe == 14)
 		{
 			return;

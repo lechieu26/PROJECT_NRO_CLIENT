@@ -812,7 +812,6 @@ public class GameCanvas : IActionListener
 			if (ServerListScreen.hasConnected != null)
 			{
 				ServerListScreen.GetServerList(ServerListScreen.linkDefault);
-				Res.outchieu("chieu.lq onConnectionFail " +  ServerListScreen.linkDefault);
 				if (!ServerListScreen.hasConnected[0])
 				{
 					ServerListScreen.hasConnected[0] = true;
@@ -2763,7 +2762,6 @@ public class GameCanvas : IActionListener
 				ServerListScreen.countDieConnect = 0;
 				break;
 			case 888399:
-				Res.outchieu("chieu.lq handle case 888399");
 				endDlg();
 				serverScreen.switchToMe();
 				break;

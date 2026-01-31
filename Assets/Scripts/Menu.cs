@@ -511,9 +511,11 @@ public class Menu
 			}
 			if (menuSelectedItem >= 0)
 			{
+                Res.outz("doCloseMenu: check selected=" + menuSelectedItem);
 				Command command = (Command)menuItems.elementAt(menuSelectedItem);
 				if (command != null)
 				{
+                    Res.outz("doCloseMenu: performing command " + command.caption);
 					SoundMn.gI().buttonClose();
 					command.performAction();
 				}

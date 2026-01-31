@@ -69,7 +69,6 @@ public class AutoItem : IActionListener, IChatable
                     delay.ToString(),
                     " giây"
                 }), 0);
-                //Res.outchieu("chieu.lq2 add to list_0\n");
                 this.list_0.Add(this.gclass6_0);
             }
             catch

@@ -302,6 +302,202 @@ public class Panel : IActionListener, IChatable
         }
         this.selected = (GameCanvas.isTouch ? -1 : 0);
     }
+    public void setTypeFarmSeed(int plotId)
+    {
+        this.type = TYPE_FARM_SEED;
+        this.setType(0);
+        this.currentFarmPlotId = plotId;
+        this.vFarmSeeds.removeAllElements();
+        Item[] bag = Char.myCharz().arrItemBag;
+        for (int i = 0; i < bag.Length; i++)
+        {
+            if (bag[i] != null && bag[i].template.id >= 1872 && bag[i].template.id <= 1875)
+            {
+                this.vFarmSeeds.addElement(bag[i]);
+            }
+        }
+        if (this.vFarmSeeds.size() == 0)
+        {
+            GameScr.info1.addInfo("Bạn không có hạt giống nào!", 0);
+            this.hide();
+            return;
+        }
+        // Tính số hàng: tối thiểu 5 hàng (25 ô), nếu > 25 hạt thì tính động
+        int minRows = 5; // Tối thiểu 5 hàng = 25 ô
+        int calculatedRows = this.vFarmSeeds.size() / 5 + ((this.vFarmSeeds.size() % 5 > 0) ? 1 : 0);
+        this.currentListLength = (calculatedRows > minRows) ? calculatedRows : minRows;
+        this.ITEM_HEIGHT = 36;
+        this.selected = -1;
+        this.currItem = null;
+        this.pointerIsDowning = false;
+        Debug.Log("setTypeFarmSeed: selected reset to -1");
+        if (this.lastSelect != null)
+        {
+            for (int j = 0; j < this.lastSelect.Length; j++)
+            {
+                this.lastSelect[j] = -1;
+            }
+        }
+        this.cmyLim = this.currentListLength * this.ITEM_HEIGHT - this.hScroll;
+        if (this.cmyLim < 0) this.cmyLim = 0;
+        this.cmy = (this.cmtoY = 0);
+    }
+
+    // chieu.lq Kho hạt giống
+    private void paintFarmSeed(mGraphics g)
+    {
+        g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
+
+        int slotW = 34;
+        int slotH = 34;
+
+        int col = 5;
+        // Tính số ô cần vẽ dựa trên số lượng hạt giống thực tế (làm tròn lên để đủ hàng)
+        int rows = this.currentListLength; // Đã được tính trong setTypeFarmSeed()
+        int maxSlot = rows * col; // Số ô động dựa trên số hàng thực tế
+
+        for (int i = 0; i < maxSlot; i++)
+        {
+            int row = i / col;
+            int c = i % col;
+
+            int x = this.xScroll + c * (slotW + 2);
+            int y = this.yScroll + row * (slotH + 2) - this.cmy;
+
+            // ===== Vẽ nền ô =====
+            if (i == this.selected)
+            {
+                g.setColor(16383818);
+                g.fillRect(x - 1, y - 1, slotW + 2, slotH + 2, 5);
+            }
+
+            g.setColor(6047789, 0.3f);
+            g.fillRect(x, y, slotW, slotH, 5);
+
+            // ===== Nếu có item =====
+            if (i < this.vFarmSeeds.size())
+            {
+                Item item = (Item)this.vFarmSeeds.elementAt(i);
+                if (item != null)
+                {
+                    this.paintEffectItem(g, item, x, y);
+
+                    float offset = (i == this.selected) ?
+                        ((float)System.Math.Sin((float)GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+
+                    // ✅ Vẽ icon chính giữa ô
+                    SmallImage.drawSmallImage(g, (int)item.template.iconID,
+                        x + slotW / 2,
+                        y + slotH / 2 + (int)offset,
+                        0, 3);
+
+                    // ===== Vẽ số lượng =====
+                    if (item.quantity > 1)
+                    {
+                        mFont.tahoma_7_yellow.drawString(g, "" + item.quantity,
+                            x + slotW - 1,
+                            y + slotH - mFont.tahoma_7_yellow.getHeight(),
+                            mFont.RIGHT);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    private void updateKeyFarmSeed()
+    {
+        
+        // Xử lý pointer down - bắt đầu kéo
+        if (GameCanvas.isPointerDown && !this.pointerIsDowning)
+        {
+            if (GameCanvas.isPointer(this.xScroll, this.yScroll, this.wScroll, this.hScroll))
+            {
+                this.pointerDownFirstY = GameCanvas.py;
+                this.pointerIsDowning = true;
+            }
+        }
+        
+        // Xử lý pointer release - kiểm tra click
+        if (GameCanvas.isPointerJustRelease && this.pointerIsDowning)
+        {
+            // Nếu không kéo nhiều thì coi như click
+            if (Res.abs(GameCanvas.py - this.pointerDownFirstY) < 20)
+            {
+                int x = GameCanvas.px - this.xScroll;
+                int y = GameCanvas.py - this.yScroll + this.cmy;
+                
+                int slotW = 36; // 34 + 2 spacing
+                int slotH = this.ITEM_HEIGHT; // 35
+                
+                int col = x / slotW;
+                int row = y / slotH;
+                
+                if (col >= 0 && col < 5 && row >= 0)
+                {
+                    int index = row * 5 + col;
+                    // Tính maxSlot dựa trên số hàng thực tế (giống paintFarmSeed)
+                    int maxRows = this.currentListLength;
+                    int maxSlot = maxRows * 5;
+                    // Cho phép chọn bất kỳ ô nào trong grid động, kể cả ô trống
+                    if (index >= 0 && index < maxSlot)
+                    {
+                        this.selected = index;
+                        this.lastSelect[this.currentTabIndex] = this.selected;
+                        Debug.Log("updateKeyFarmSeed CLICK: index=" + index + ", selected=" + this.selected);
+                        SoundMn.gI().buttonClick();
+                        this.waitToPerform = 2;
+                    }
+                }
+            }
+            this.pointerIsDowning = false;
+            GameCanvas.isPointerJustRelease = false;
+        }
+        
+        // Di chuyển camera khi scroll
+        this.moveCamera();
+    }
+    
+    private int pointerDownFirstY; // Thêm field để track vị trí pointer down
+
+    private void doFireFarmSeed()
+    {
+        // Tính maxSlot dựa trên số hàng thực tế
+        int maxRows = this.currentListLength;
+        int maxSlot = maxRows * 5;
+        if (this.selected < 0 || this.selected >= maxSlot) return;
+
+        if (this.selected >= this.vFarmSeeds.size())
+        {
+            this.cp = null;
+            return;
+        }
+
+        Item item = (Item)this.vFarmSeeds.elementAt(this.selected);
+        if (item == null)
+        {
+            this.cp = null;
+            return;
+        }
+
+        this.currItem = item;
+
+        MyVector myVector = new MyVector();
+        myVector.addElement(new Command("Gieo", this, 14001, item));
+        myVector.addElement(new Command("Vứt", this, 2003, item));
+
+        // Tính vị trí menu giống inventory: dựa trên row của item
+        int row = this.selected / 5;
+        int menuY = (row + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll;
+        
+        GameCanvas.menu.startAt(myVector, this.X, menuY);
+        
+        // Hiện info item SAU khi gọi startAt (giống inventory)
+        this.addItemDetail(item);
+    }
+
     public void setTypeKiGuiOnly()
     {
         this.type = 17;
@@ -1386,10 +1582,16 @@ public class Panel : IActionListener, IChatable
 
     public void updateKey()
     {
+        /*// Nếu menu đang hiện thì không xử lý key/pointer ở Panel để tránh đóng menu
+        if (GameCanvas.menu.showMenu)
+        {
+            return;
+        }*/
         if ((this.chatTField != null && this.chatTField.isShow) || !GameCanvas.panel.isDoneCombine || InfoDlg.isShow)
         {
             return;
         }
+        if (this.type == 29) Debug.Log("updateKey type=" + this.type);
         if (this.tabIcon != null && this.tabIcon.isShow)
         {
             this.tabIcon.updateKey();
@@ -1534,6 +1736,10 @@ public class Panel : IActionListener, IChatable
             case 22:
                 this.updateKeyAuto();
                 break;
+            case TYPE_FARM_SEED:
+                this.updateKeyFarmSeed();
+                break;
+
         }
         GameCanvas.clearKeyHold();
         for (int i = 0; i < GameCanvas.keyPressed.Length; i++)
@@ -2598,23 +2804,31 @@ public class Panel : IActionListener, IChatable
                 if (this.pointerDownTime > this.CountBoxInRow && this.pointerDownFirstX == GameCanvas.py && !this.isDownWhenRunning)
                 {
                     this.pointerDownFirstX = -1000;
-                    int row = (this.cmtoY + GameCanvas.py - this.yScroll) / this.ITEM_HEIGHT;
-                    this.selected = row;
-                    if (this.selected >= this.currentListLength)
+                    // Sử dụng hàm mới cho layout inventory mới
+                    if (this.isTabInven() && ModFunc.isInventory)
                     {
-                        this.selected = -1;
+                        this.selected = this.GetInventorySelectedFromPosition(GameCanvas.px, GameCanvas.py);
                     }
-                    else if (this.isTabInven() && this.selected >= this.currentListLength - Char.myCharz().arrItemBag.Length / this.CountBoxInRow - 1)
+                    else
                     {
-                        int row2 = (this.selected - Char.myCharz().arrItemBody.Length) * (this.CountBoxInRow - 1);
-                        int column = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
-                        this.selected = this.selected + row2 + column;
-                    }
-                    else if (this.isTabBox())
-                    {
-                        int row3 = this.selected * (this.CountBoxInRow - 1);
-                        int column2 = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
-                        this.selected = this.selected + row3 + column2;
+                        int row = (this.cmtoY + GameCanvas.py - this.yScroll) / this.ITEM_HEIGHT;
+                        this.selected = row;
+                        if (this.selected >= this.currentListLength)
+                        {
+                            this.selected = -1;
+                        }
+                        else if (this.isTabInven() && this.selected >= this.currentListLength - Char.myCharz().arrItemBag.Length / this.CountBoxInRow - 1)
+                        {
+                            int row2 = (this.selected - Char.myCharz().arrItemBody.Length) * (this.CountBoxInRow - 1);
+                            int column = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
+                            this.selected = this.selected + row2 + column;
+                        }
+                        else if (this.isTabBox())
+                        {
+                            int row3 = this.selected * (this.CountBoxInRow - 1);
+                            int column2 = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
+                            this.selected = this.selected + row3 + column2;
+                        }
                     }
                     this.checkOptionSelect();
                 }
@@ -2669,23 +2883,31 @@ public class Panel : IActionListener, IChatable
             this.cmRun = 0;
             this.cmtoY = this.cmy;
             this.pointerDownFirstX = -1000;
-            int row4 = (this.cmtoY + GameCanvas.py - this.yScroll) / this.ITEM_HEIGHT;
-            this.selected = row4;
-            if (this.selected >= this.currentListLength)
+            // Sử dụng hàm mới cho layout inventory mới
+            if (this.isTabInven() && ModFunc.isInventory)
             {
-                this.selected = -1;
+                this.selected = this.GetInventorySelectedFromPosition(GameCanvas.px, GameCanvas.py);
             }
-            else if (this.isTabInven() && this.selected >= this.currentListLength - Char.myCharz().arrItemBag.Length / this.CountBoxInRow)
+            else
             {
-                int row5 = (this.selected - Char.myCharz().arrItemBody.Length) * (this.CountBoxInRow - 1);
-                int column3 = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
-                this.selected = this.selected + row5 + column3;
-            }
-            else if (this.isTabBox())
-            {
-                int row6 = this.selected * (this.CountBoxInRow - 1);
-                int column4 = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
-                this.selected = this.selected + row6 + column4;
+                int row4 = (this.cmtoY + GameCanvas.py - this.yScroll) / this.ITEM_HEIGHT;
+                this.selected = row4;
+                if (this.selected >= this.currentListLength)
+                {
+                    this.selected = -1;
+                }
+                else if (this.isTabInven() && this.selected >= this.currentListLength - Char.myCharz().arrItemBag.Length / this.CountBoxInRow)
+                {
+                    int row5 = (this.selected - Char.myCharz().arrItemBody.Length) * (this.CountBoxInRow - 1);
+                    int column3 = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
+                    this.selected = this.selected + row5 + column3;
+                }
+                else if (this.isTabBox())
+                {
+                    int row6 = this.selected * (this.CountBoxInRow - 1);
+                    int column4 = (GameCanvas.px - this.xScroll) / (this.WidthBoxNew + 1);
+                    this.selected = this.selected + row6 + column4;
+                }
             }
             this.checkOptionSelect();
             this.pointerDownTime = 0;
@@ -2714,7 +2936,7 @@ public class Panel : IActionListener, IChatable
                 this.cmRun = -num3 * 100;
             }
         }
-        if (this.isTabInven() && GameCanvas.py < this.yScroll + 21)
+        if (this.isTabInven() && GameCanvas.py < this.yScroll + 21 && !ModFunc.isInventory)
         {
             this.selected = 0;
             this.updateKeyInvenTab();
@@ -2730,6 +2952,7 @@ public class Panel : IActionListener, IChatable
         {
             return;
         }
+        if (this.type == 29) Debug.Log("updateKeyInTabBar START: type=" + this.type + " num=" + this.currentTabIndex);
         int num = this.currentTabIndex;
         if (this.isTabInven() && this.isnewInventory)
         {
@@ -3038,6 +3261,9 @@ public class Panel : IActionListener, IChatable
         }
     IL_645:
         this.selected = this.lastSelect[this.currentTabIndex];
+        if (this.type == 29) {
+             Debug.Log("updateKeyInTabBar SET SELECTED: stored=" + this.lastSelect[this.currentTabIndex]);
+        }
     }
 
     private void setTabPetStatus()
@@ -3933,6 +4159,9 @@ public class Panel : IActionListener, IChatable
                 break;
             case 26:
                 this.PaintModFunc(g);
+                break;
+            case TYPE_FARM_SEED:
+                this.paintFarmSeed(g);
                 break;
             case 27:
                 this.paintPlayerInfo(g);
@@ -5991,94 +6220,222 @@ public class Panel : IActionListener, IChatable
         g.setColor(16711680);
         Item[] arrItemBody = Char.myCharz().arrItemBody;
         Item[] arrItemBag = Char.myCharz().arrItemBag;
-        this.currentListLength = this.checkCurrentListLengthNew(arrItemBody.Length + arrItemBag.Length / 5);
+        
+        // === LẤY CHỈ SỐ TRỰC TIẾP TỪ CHAR ===
+        long totalHP = 0;
+        long totalKI = 0;
+        int totalSD = 0;
+        int totalHutHP = 0;
+        int totalHutKI = 0;
+        bool hasKhangChoang = false;
+        bool hasChongLanh = false;
+
+        // Tính HP%, KI% theo công thức thực tế (Hiện tại - Gốc) / Gốc * 100
+        if (Char.myCharz().cHPGoc > 0)
+            totalHP = (long)((Char.myCharz().cHPFull - Char.myCharz().cHPGoc) * 100 / Char.myCharz().cHPGoc);
+             
+        if (Char.myCharz().cMPGoc > 0)
+            totalKI = (long)((Char.myCharz().cMPFull - Char.myCharz().cMPGoc) * 100 / Char.myCharz().cMPGoc);
+        
+        // Tính tổng % Sức đánh và Hút từ item body options
+        for (int idx = 0; idx < arrItemBody.Length; idx++)
+        {
+            Item bodyItem = arrItemBody[idx];
+            if (bodyItem != null && bodyItem.itemOption != null)
+            {
+                for (int opt = 0; opt < bodyItem.itemOption.Length; opt++)
+                {
+                    ItemOption option = bodyItem.itemOption[opt];
+                    if (option != null && option.optionTemplate != null)
+                    {
+                        int optId = option.optionTemplate.id;
+                        int param = option.param;
+                        
+                        // Sức đánh % (77 = %SD)
+                        if (optId == 77) totalSD += param;
+                         // Hút HP % (id: 95)
+                        else if (optId == 95) totalHutHP += param;
+                         // Hút KI % (id: 96)
+                        else if (optId == 96) totalHutKI += param;
+                        // Kháng choáng (id: 116 = Kháng TDHS)
+                        else if (optId == 116) hasKhangChoang = true;
+                        // Chống lạnh (id: 106)
+                        else if (optId == 106) hasChongLanh = true;
+                    }
+                }
+            }
+        }
+        
+        // Đảm bảo hiển thị ít nhất 15 ô body
+        int numBody = 15;
+        if (arrItemBody.Length > 15)
+        {
+            numBody = arrItemBody.Length;
+            if (numBody % 5 != 0)
+            {
+                numBody = (numBody / 5 + 1) * 5;
+            }
+        }
+        
+        int numBagRows = arrItemBag.Length / 5;
+        if (arrItemBag.Length % 5 != 0) numBagRows++;
+        
+        this.currentListLength = this.checkCurrentListLengthNew(6 + numBagRows + 2);
         this.TAB_W_NEW = 1;
         g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
         g.translate(0, -this.cmy);
+        
         try
         {
             int bodyStartY = this.yScroll;
-            int bagStartY = bodyStartY + arrItemBody.Length * this.ITEM_HEIGHT;
-            for (int i = 0; i < arrItemBody.Length; i++)
+            
+            // === VẼ VÙNG TRUNG TÂM (CHỈ NHÂN VẬT VÀ THÔNG TIN TỔNG HỢP) ===
+            int leftColX = this.xScroll + 4;
+            int rightColX = this.xScroll + this.wScroll - 34 - 4;
+            int centerX = leftColX + 34 + 2;
+            int centerW = rightColX - centerX - 2;
+            int centerY = bodyStartY + 2;
+            int centerH = 5 * this.ITEM_HEIGHT - 4;
+            
+            // Kiểm tra có trong vùng hiển thị không
+            int centerScreenY = centerY - this.cmy;
+            bool isCenterVisible = (centerScreenY + centerH > this.yScroll) && (centerScreenY < this.yScroll + this.hScroll);
+            
+            if (isCenterVisible)
             {
-                int x = this.xScroll + 36;
-                int y = bodyStartY + i * this.ITEM_HEIGHT;
-                int num18 = this.xScroll;
-                int num7 = this.xScroll;
-                int num8 = y;
-                int num9 = 34;
-                int num10 = this.ITEM_HEIGHT - 1;
-                if (y - this.cmy <= this.yScroll + this.hScroll && y - this.cmy >= this.yScroll - this.ITEM_HEIGHT)
+                // Vẽ nhân vật ở giữa phần trên (không vẽ tilemap)
+                int charX = centerX + centerW / 2;
+                int charY = centerY + centerH / 2;
+                Char.myCharz().paintCharBody(g, charX, charY, 1, Char.myCharz().cf, false);
+                
+                // === VẼ THÔNG TIN TỔNG HỢP Ở GIỮA ===
+                int infoY = centerY + centerH / 2 + 5;
+                int infoLineHeight = 11;
+                
+                // Nền cho thông tin (semi-transparent)
+                //g.setColor(0x000000, 0.65f);
+                g.setColor(6047789, 0.45f);
+                g.fillRect(centerX, infoY - 2, centerW, infoLineHeight * 5 + 3, 4);
+                
+                // Dòng 1: HP%, KI%
+                string line1 = "HP: " + totalHP + "%, KI: " + totalKI + "%";
+                mFont.tahoma_7_yellow.drawString(g, line1, centerX + 5, infoY, 0);
+                
+                // Dòng 2: Sức Đánh%
+                string line2 = "SĐ: " + totalSD + "%";
+                mFont.tahoma_7_yellow.drawString(g, line2, centerX + 5, infoY + infoLineHeight, 0);
+                
+                // Dòng 3: Hút HP%, Hút KI%
+                string line3 = "Hút HP: " + totalHutHP + "%, Hút KI: " + totalHutKI + "%";
+                mFont.tahoma_7_yellow.drawString(g, line3, centerX + 5, infoY + infoLineHeight * 2, 0);
+                
+                // Dòng 4: Kháng choáng
+                string line4 = "Kháng choáng: " + (hasKhangChoang ? "Có" : "Không");
+                mFont.tahoma_7_white.drawString(g, line4, centerX + 5, infoY + infoLineHeight * 3, 0);
+                
+                // Dòng 5: Chống lạnh
+                string line5 = "Chống lạnh: " + (hasChongLanh ? "Có" : "Không");
+                mFont.tahoma_7_white.drawString(g, line5, centerX + 5, infoY + infoLineHeight * 4, 0);
+            }
+            
+            // === VẼ 15 Ô ITEM BODY ===
+            int bagStartY = bodyStartY + 6 * this.ITEM_HEIGHT + 10;
+            
+            for (int i = 0; i < numBody && i < 15; i++)
+            {
+                int x = 0;
+                int y = 0;
+                int itemWidth = 34; // Width mặc định
+                
+                if (i < 5)
                 {
-                    this.GetInventorySelect_isbody(i, this.newSelected, Char.myCharz().arrItemBody);
-                    g.setColor((i == this.selected) ? 16383818 : 15196114);
-                    g.fillRect(x, y, this.wScroll, this.ITEM_HEIGHT - 1, 5);
-                    g.setColor(6047789, 0.3f);
-                    Item item = arrItemBody[i];
+                    // Cột trái (5 ô dọc)
+                    x = leftColX;
+                    y = bodyStartY + i * this.ITEM_HEIGHT;
+                }
+                else if (i < 10)
+                {
+                    // Cột phải (5 ô dọc)
+                    x = rightColX;
+                    y = bodyStartY + (i - 5) * this.ITEM_HEIGHT;
+                }
+                else
+                {
+                    // Hàng dưới (5 ô ngang): 2 ô bên căn lề, 3 ô giữa width nhỏ hơn
+                    int bottomIdx = i - 10;
+                    int boxWidth = 34;
+                    int middleBoxWidth = 30;  // Width nhỏ hơn cho 3 ô giữa
+                    
+                    if (bottomIdx == 0)
+                    {
+                        // Ô đầu tiên căn lề trái (giống cột trái)
+                        x = leftColX;
+                        itemWidth = boxWidth;
+                    }
+                    else if (bottomIdx == 4)
+                    {
+                        // Ô cuối cùng căn lề phải (giống cột phải)
+                        x = rightColX;
+                        itemWidth = boxWidth;
+                    }
+                    else
+                    {
+                        // 3 ô giữa (bottomIdx = 1, 2, 3) phân bố đều
+                        int startMiddle = leftColX + boxWidth + 4;  // Sau ô trái + gap
+                        int endMiddle = rightColX - 4;  // Trước ô phải - gap
+                        int totalMiddleSpace = endMiddle - startMiddle;
+                        
+                        // Tính khoảng cách giữa các ô giữa
+                        int gapBetweenMiddle = (totalMiddleSpace - 3 * middleBoxWidth) / 2;
+                        if (gapBetweenMiddle < 2) gapBetweenMiddle = 2;
+                        
+                        x = startMiddle + (bottomIdx - 1) * (middleBoxWidth + gapBetweenMiddle);
+                        itemWidth = middleBoxWidth;
+                    }
+                    
+                    y = bodyStartY + 5 * this.ITEM_HEIGHT;
+                }
+                
+                int bx = x;
+                int by = y;
+                int bw = itemWidth;
+                int bh = this.ITEM_HEIGHT - 1;
+                
+                if (by - this.cmy <= this.yScroll + this.hScroll && by - this.cmy >= this.yScroll - this.ITEM_HEIGHT)
+                {
+                    bool isSelected = (this.selected == i && this.selected < arrItemBody.Length);
+                    
+                    // Viền vàng đậm khi được chọn (giống item bag: 16383818)
+                    if (isSelected)
+                    {
+                        g.setColor(16383818); // Viền vàng đậm
+                        g.fillRect(bx - 1, by - 1, bw + 2, bh + 2, 2);
+                    }
+                    
+                    // Nền luôn giữ nguyên màu (giống bag), không đổi màu khi selected
+                    g.setColor(6047789, 0.5f);
+                    g.fillRect(bx, by, bw, bh, 2);
+                    
+                    // Vẽ item nếu có
+                    Item item = (i < arrItemBody.Length) ? arrItemBody[i] : null;
                     if (item != null)
                     {
-                        for (int j = 0; j < item.itemOption.Length; j++)
-                        {
-                            if (item.itemOption[j].optionTemplate.id == 107 && item.itemOption[j].param > 0 && item.itemOption[j].param > 0)
-                            {
-                                this.paintItemStar(g, item.itemOption[j].param.ToString(), x + 125, y);
-                            }
-                        }
-                    }
-                    g.fillRect(num7, num8, num9, num10, 5);
-                    this.paintEffectItem(g, item, num7, num8);
-                    if (item != null && item.isSelect && GameCanvas.panel.type == 12)
-                    {
-                        g.setColor(6047789, 0.3f);
-                        g.fillRect(num7, num8, num9, num10, 5);
-                    }
-                    if (item != null && item != null)
-                    {
-                        string text = string.Empty;
-                        mFont.tahoma_7_green2.drawString(g, string.Concat(new string[]
-                        {
-                            "[",
-                            item.template.id.ToString(),
-                            "] ",
-                            item.template.name,
-                            text
-                        }), x + 5, y + 1, 0);
-                        string text2 = string.Empty;
                         if (item.itemOption != null)
                         {
-                            if (item.itemOption.Length != 0 && item.itemOption[0] != null && item.itemOption[0].IsValidOption())
+                            for (int j = 0; j < item.itemOption.Length; j++)
                             {
-                                text2 += item.itemOption[0].getOptionString();
-                            }
-                            mFont mFont3 = mFont.tahoma_7_blue;
-                            if (item.compare < 0 && item.template.type != 5)
-                            {
-                                mFont3 = mFont.tahoma_7_red;
-                            }
-                            if (item.itemOption.Length > 1)
-                            {
-                                for (int num11 = 1; num11 < Math.min(item.itemOption.Length, 3); num11++)
+                                if (item.itemOption[j].optionTemplate.id == 107 && item.itemOption[j].param > 0)
                                 {
-                                    if (item.itemOption[num11] != null && item.itemOption[num11].IsValidOption())
-                                    {
-                                        text2 = text2 + "| " + item.itemOption[num11].getOptionString();
-                                    }
+                                    this.paintItemStar(g, item.itemOption[j].param.ToString(), bx + 15, by);
                                 }
                             }
-                            mFont3.drawString(g, text2, x + 5, y + 10, mFont.LEFT);
                         }
-                        SmallImage.drawSmallImage(g, (int)item.template.iconID, num7 + num9 / 2, num8 + num10 / 2, 0, 3);
-                        if (item.itemOption != null)
-                        {
-                            for (int k = 0; k < item.itemOption.Length; k++)
-                            {
-                                this.paintOptItemInventory(g, item.itemOption[k].optionTemplate.id, item.itemOption[k].param, num7, num8, num9, num10, item);
-                            }
-                            for (int num12 = 0; num12 < item.itemOption.Length; num12++)
-                            {
-                                this.paintOptSlotItem(g, item.itemOption[num12].optionTemplate.id, item.itemOption[num12].param, num7, num8, num9, num10);
-                            }
-                        }
+                        this.paintEffectItem(g, item, bx, by);
+                        
+                        // Icon dao động khi được chọn
+                        float bodyOffset = (this.selected == i && this.selected < arrItemBody.Length) 
+                            ? (float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f : 0f;
+                        SmallImage.drawSmallImage(g, (int)item.template.iconID, bx + bw / 2, by + bh / 2 + (int)bodyOffset, 0, 3);
                     }
                 }
             }
@@ -6957,6 +7314,11 @@ public class Panel : IActionListener, IChatable
                 return;
             case 25:
                 break;
+
+            case TYPE_FARM_SEED:
+                SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), this.X + 25, 50, 0, 33);
+                this.paintMyInfo(g);
+                return;
             default:
                 return;
         }
@@ -7864,6 +8226,10 @@ public class Panel : IActionListener, IChatable
                     case 26:
                         DoFireModFunc();
                         break;
+                    case TYPE_FARM_SEED:
+                        doFireFarmSeed();
+                        break;
+
                 }
             }
         }
@@ -8907,7 +9273,8 @@ public class Panel : IActionListener, IChatable
         }
         else if (!this.GetInventorySelect_isbody(this.selected, this.newSelected, Char.myCharz().arrItemBody))
         {
-            Item item = Char.myCharz().arrItemBag[this.GetInventorySelect_bag(this.selected, this.newSelected, Char.myCharz().arrItemBody)];
+            int bagIdx = this.GetInventorySelect_bag(this.selected, this.newSelected, Char.myCharz().arrItemBody);
+            Item item = Char.myCharz().arrItemBag[bagIdx];
             if (item != null)
             {
                 this.currItem = item;
@@ -8947,7 +9314,8 @@ public class Panel : IActionListener, IChatable
         }
         else
         {
-            Item item2 = Char.myCharz().arrItemBody[this.GetInventorySelect_body(this.selected, this.newSelected)];
+            int bodyIdx = this.GetInventorySelect_body(this.selected, this.newSelected);
+            Item item2 = Char.myCharz().arrItemBody[bodyIdx];
             if (item2 != null)
             {
                 this.currItem = item2;
@@ -8961,7 +9329,7 @@ public class Panel : IActionListener, IChatable
                 if (this.position == 0)
                 {
                     myVector.addElement(new Command(mResources.THROW, this, 2003, this.currItem));
-                    if (this.currItem.template.type == 29 || this.currItem.template.type == 33 || this.currItem.template.id == 380 || this.currItem.quantity >= 2)
+                    if (this.currItem.template.type == 29 || this.currItem.template.type == 33)
                     {
                         if (ModFunc.GI().listItemAuto.Exists((ItemAuto i) => i.id == (int)this.currItem.template.id))
                         {
@@ -8977,23 +9345,65 @@ public class Panel : IActionListener, IChatable
                 {
                     myVector.addElement(new Command(mResources.SALE, this, 3002, this.currItem));
                 }
-                //if (ModFunc.isFilterItem)
-                //{
-                    if (ModFunc.listFilterItems.Exists((ItemAutoFilter i) => i.id == (int)this.currItem.template.id))
-                    {
-                        myVector.addElement(new Command(ModFunc.strRemoveFilterItem, ModFunc.GI(), 503, this.currItem));
-                    }
-                    else
+                if (ModFunc.listFilterItems.Exists((ItemAutoFilter i) => i.id == (int)this.currItem.template.id))
+                {
+                    myVector.addElement(new Command(ModFunc.strRemoveFilterItem, ModFunc.GI(), 503, this.currItem));
+                }
+                else
+                {
+                    if (ModFunc.isFilterItem)
                     {
                         myVector.addElement(new Command(ModFunc.strAddFilterItem, ModFunc.GI(), 502, this.currItem));
                     }
-                //}
+                }
             }
             Char.myCharz().setPartTemp(this.currItem.headTemp, this.currItem.bodyTemp, this.currItem.legTemp, this.currItem.bagTemp);
-            GameCanvas.menu.startAt(myVector, this.X, (this.selected + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll);
+            // Tính toán vị trí Y menu dựa trên layout mới
+            int menuY;
+            if (ModFunc.isInventory)
+            {
+                Item[] arrItemBody = Char.myCharz().arrItemBody;
+                int numBody = arrItemBody.Length;
+                if (numBody < 15) numBody = 15;
+                else if (numBody % 5 != 0) numBody = (numBody / 5 + 1) * 5;
+                int numBodyRows = 5 + (numBody - 10) / 5;
+                int bodyStartY = this.yScroll;
+                int bagStartY = bodyStartY + numBodyRows * this.ITEM_HEIGHT + 10;
+                
+                if (this.selected < arrItemBody.Length)
+                {
+                    // Item body
+                    if (this.selected < 5)
+                    {
+                        menuY = bodyStartY + (this.selected + 1) * this.ITEM_HEIGHT - this.cmy;
+                    }
+                    else if (this.selected < 10)
+                    {
+                        menuY = bodyStartY + (this.selected - 5 + 1) * this.ITEM_HEIGHT - this.cmy;
+                    }
+                    else
+                    {
+                        int gridRow = (this.selected - 10) / 5;
+                        menuY = bodyStartY + (5 + gridRow + 1) * this.ITEM_HEIGHT - this.cmy;
+                    }
+                }
+                else
+                {
+                    // Item bag
+                    int bagIndex = this.selected - arrItemBody.Length;
+                    int bagRow = bagIndex / 5;
+                    menuY = bagStartY + (bagRow + 1) * this.ITEM_HEIGHT - this.cmy;
+                }
+            }
+            else
+            {
+                menuY = (this.selected + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll;
+            }
+            GameCanvas.menu.startAt(myVector, this.X, menuY);
             this.addItemDetail(this.currItem);
             return;
-        } else
+        } 
+        else
         {
             this.cp = null;
         }
@@ -10415,6 +10825,16 @@ public class Panel : IActionListener, IChatable
 
     public void perform(int idAction, object p)
     {
+        if (idAction == 14001)
+        {
+            Item seedItem = (Item)p;
+            if (seedItem != null)
+            {
+                Service.gI().farmPlantSeed(this.currentFarmPlotId, seedItem.template.id);
+                this.hide();
+                return;
+            }
+        }
         if (idAction != 8010)
         {
             if (idAction == 8011)
@@ -10628,7 +11048,6 @@ public class Panel : IActionListener, IChatable
         }
         if (idAction == 2001)
         {
-            Res.outz("use item");
             Item item7 = (Item)p;
             bool inventorySelect_isbody = this.GetInventorySelect_isbody(this.selected, this.newSelected, Char.myCharz().arrItemBody);
             sbyte b = inventorySelect_isbody ? ((sbyte)this.GetInventorySelect_body(this.selected, this.newSelected)) : ((sbyte)this.GetInventorySelect_bag(this.selected, this.newSelected, Char.myCharz().arrItemBody));
@@ -10665,6 +11084,25 @@ public class Panel : IActionListener, IChatable
         if (idAction == 2003)
         {
             Res.outz("remove item");
+            // Xử lý riêng cho FarmSeed panel: vứt hạt giống
+            if (this.type == TYPE_FARM_SEED && p is Item farmSeedItem)
+            {
+                // Tìm index item trong bag để vứt
+                Item[] bag = Char.myCharz().arrItemBag;
+                for (int i = 0; i < bag.Length; i++)
+                {
+                    if (bag[i] != null && bag[i] == farmSeedItem)
+                    {
+                        Service.gI().useItem(1, 1, (sbyte)i, -1);
+                        Res.outz("FarmSeed: Vứt item ở vị trí bag " + i);
+                        this.hide();
+                        return;
+                    }
+                }
+                Res.outz("FarmSeed: Không tìm thấy item trong bag");
+                return;
+            }
+            // Xử lý bình thường cho inventory
             bool inventorySelect_isbody2 = this.GetInventorySelect_isbody(this.selected, this.newSelected, Char.myCharz().arrItemBody);
             sbyte b2 = inventorySelect_isbody2 ? ((sbyte)this.GetInventorySelect_body(this.selected, this.newSelected)) : ((sbyte)this.GetInventorySelect_bag(this.selected, this.newSelected, Char.myCharz().arrItemBody));
             Service.gI().useItem(1, (!inventorySelect_isbody2) ? ((sbyte)1) : ((sbyte)0), b2, -1);
@@ -12059,14 +12497,82 @@ public class Panel : IActionListener, IChatable
                             GameScr.info1.addInfo("Chỉnh sửa nút không hỗ trợ trên PC", 0);
                         }
                         break;
-                    /*case 3:
+                    case 3:
                         ModFunc.isFilterItem = !ModFunc.isFilterItem;
                         GameScr.info1.addInfo("Đã " + (ModFunc.isFilterItem ? "bật" : "tắt") + " chế độ lọc đồ", 0);
-                        break;*/
+                        break;
+                }
+                break;
+            case 4: // Tab Nhạc
+                if (selectedInTab == 0) // Bật/Tắt Nhạc nền
+                {
+                    ModFunc.GI().isBgm = !ModFunc.GI().isBgm;
+                    Rms.saveRMSInt("isBgm", ModFunc.GI().isBgm ? 1 : 0);
+                    GameScr.info1.addInfo("Đã " + (ModFunc.GI().isBgm ? "bật" : "tắt") + " nhạc nền", 0);
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        if (ModFunc.GI().isBgm)
+                        {
+                            Mod.BgmManager.Instance.PlayMusic(ModFunc.GI().currentBgm);
+                        }
+                        else
+                        {
+                            Mod.BgmManager.Instance.StopMusic();
+                        }
+                    }
+                }
+                else if (selectedInTab == 1) // Chế độ - hiển thị menu 3 button
+                {
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        MyVector menuMode = new MyVector();
+                        menuMode.addElement(new Command("Lặp lại bài", 896));
+                        menuMode.addElement(new Command("Phát tuần tự", 897));
+                        menuMode.addElement(new Command("Phát ngẫu nhiên", 898));
+                        GameCanvas.menu.startAt(menuMode, this.X, (this.selected + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll);
+                    }
+                    else
+                    {
+                        GameScr.info1.addInfo("Trình phát nhạc chưa sẵn sàng", 0);
+                    }
+                }
+                else if (selectedInTab == 2) // Thêm nhạc
+                {
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        Mod.BgmManager.Instance.OpenFileBrowser();
+                    }
+                }
+                else if (selectedInTab == 3) // Thêm folder
+                {
+                    if (Mod.BgmManager.Instance != null)
+                    {
+                        Mod.BgmManager.Instance.OpenFolderBrowser();
+                    }
+                }
+                else if (selectedInTab >= 5) // Danh sách nhạc (index 5+)
+                {
+                    if (Mod.BgmManager.Instance != null && Mod.BgmManager.Instance.playlist != null)
+                    {
+                        int musicIndex = selectedInTab - 5;
+                        if (musicIndex >= 0 && musicIndex < Mod.BgmManager.Instance.playlist.Count)
+                        {
+                            string filePath = Mod.BgmManager.Instance.playlist[musicIndex];
+                            ModFunc.GI().perform(888, filePath); // Mở menu Phát/Xóa
+                        }
+                    }
                 }
                 break;
         }
-        SoundMn.gI().GetStrModFunc();
+        // Refresh danh sách sau khi thay đổi
+        if (this.currentTabIndex == 4 && Main.isPC && Mod.BgmManager.Instance != null)
+        {
+            Mod.BgmManager.Instance.RefreshMusicTab();
+        }
+        else
+        {
+            SoundMn.gI().GetStrModFunc();
+        }
     }
 
     public void setTypeAccount()
@@ -12582,7 +13088,14 @@ public class Panel : IActionListener, IChatable
         if (this.type == 26)
         {
             SoundMn.gI().GetStrModFunc();
-            this.selected = 0;
+            this.currentListLength = Panel.strModFunc.Length;
+            this.ITEM_HEIGHT = 24;
+            this.cmyLim = this.currentListLength * this.ITEM_HEIGHT - this.hScroll;
+            if (this.cmyLim < 0)
+            {
+                this.cmyLim = 0;
+            }
+            this.selected = (GameCanvas.isTouch ? -1 : 0);
         }
     }
 
@@ -12643,6 +13156,111 @@ public class Panel : IActionListener, IChatable
         return select - ((!ModFunc.isInventory) ? 1 : 0) + subSelect * 20 - arrItem.Length;
     }
 
+    private int GetInventorySelectedFromPosition(int px, int py)
+    {
+        if (!ModFunc.isInventory)
+        {
+            return -1; // Fallback, sử dụng logic cũ
+        }
+        
+        Item[] arrItemBody = Char.myCharz().arrItemBody;
+        Item[] arrItemBag = Char.myCharz().arrItemBag;
+        
+        int bodyStartY = this.yScroll;
+        int itemHeight = this.ITEM_HEIGHT;
+        int itemWidth = 34;
+        int leftColumnX = 4;
+        int rightColumnX = this.wScroll - itemWidth - 4;
+        
+        // BagStartY theo layout mới: sau 6 hàng item body + 10px gap
+        int bagStartY = bodyStartY + 6 * itemHeight + 10;
+        
+        int relY = py + this.cmy - bodyStartY;
+        int relX = px - this.xScroll;
+        
+        // Kiểm tra item body bên trái (index 0-4)
+        if (relX >= leftColumnX && relX < leftColumnX + itemWidth && relY >= 0 && relY < 5 * itemHeight)
+        {
+            int row = relY / itemHeight;
+            if (row >= 0 && row < 5 && row < arrItemBody.Length)
+            {
+                return row; // Item body 0-4
+            }
+        }
+        
+        // Kiểm tra item body bên phải (index 5-9)
+        if (relX >= rightColumnX && relX < rightColumnX + itemWidth && relY >= 0 && relY < 5 * itemHeight)
+        {
+            int row = relY / itemHeight;
+            if (row >= 0 && row < 5)
+            {
+                int index = 5 + row;
+                if (index < arrItemBody.Length)
+                {
+                    return index; // Item body 5-9
+                }
+            }
+        }
+        
+        // Kiểm tra hàng dưới (index 10-14) - Layout mới: 2 ô bên căn lề, 3 ô giữa
+        int bottomRowY = 5 * itemHeight;
+        if (relY >= bottomRowY && relY < bottomRowY + itemHeight)
+        {
+            int boxWidth = 34;
+            int middleBoxWidth = 30;
+            int startMiddle = leftColumnX + boxWidth + 4;
+            int endMiddle = rightColumnX - 4;
+            int totalMiddleSpace = endMiddle - startMiddle;
+            int gapBetweenMiddle = (totalMiddleSpace - 3 * middleBoxWidth) / 2;
+            if (gapBetweenMiddle < 2) gapBetweenMiddle = 2;
+            
+            // Ô 10: căn lề trái
+            if (relX >= leftColumnX && relX < leftColumnX + boxWidth)
+            {
+                if (10 < arrItemBody.Length)
+                    return 10;
+            }
+            // Ô 14: căn lề phải
+            else if (relX >= rightColumnX && relX < rightColumnX + boxWidth)
+            {
+                if (14 < arrItemBody.Length)
+                    return 14;
+            }
+            // Ô 11, 12, 13: ở giữa
+            else
+            {
+                for (int midIdx = 0; midIdx < 3; midIdx++)
+                {
+                    int midX = startMiddle + midIdx * (middleBoxWidth + gapBetweenMiddle);
+                    if (relX >= midX && relX < midX + middleBoxWidth)
+                    {
+                        int index = 11 + midIdx;
+                        if (index < arrItemBody.Length)
+                            return index;
+                    }
+                }
+            }
+        }
+        
+        // Kiểm tra item bag
+        int bagRelY = py + this.cmy - bagStartY;
+        if (bagRelY >= 0)
+        {
+            int bagRow = bagRelY / itemHeight;
+            int bagCol = relX / (itemWidth + 2);
+            if (bagCol >= 0 && bagCol < 5)
+            {
+                int bagIndex = bagRow * 5 + bagCol;
+                if (bagIndex >= 0 && bagIndex < arrItemBag.Length)
+                {
+                    return arrItemBody.Length + bagIndex; // Item bag
+                }
+            }
+        }
+        
+        return -1; // Không click vào item nào
+    }
+
     private bool isTabBox()
     {
         return this.type == 2 && this.currentTabIndex == 0;
@@ -12650,7 +13268,9 @@ public class Panel : IActionListener, IChatable
 
     private bool isTabInven()
     {
-        return (this.type == 0 && this.currentTabIndex == 1) || (this.type == 7 && this.currentTabIndex == 0) || (this.type == 13 && this.currentTabIndex == 0);
+        return (this.type == 0 && this.currentTabIndex == 1) || 
+               (this.type == 7 && this.currentTabIndex == 0) || 
+               (this.type == 13 && this.currentTabIndex == 0);
     }
 
     private void updateKeyInvenTab()
@@ -12758,9 +13378,10 @@ public class Panel : IActionListener, IChatable
         return arrLength + 1;
     }
 
-    private int checkCurrentListLengthNew(int arrLength)
+    private int checkCurrentListLengthNew(int length)
     {
-        return arrLength + 1;
+        // Tương tự checkCurrentListLength nhưng cho layout mới
+        return length;
     }
 
     private void setNewSelected(int arrLength, bool resetSelect)
@@ -12834,6 +13455,11 @@ public class Panel : IActionListener, IChatable
     public TabClanIcon tabIcon;
 
     public MyVector vItemCombine = new MyVector();
+
+    public MyVector vFarmSeeds = new MyVector();
+
+    public int currentFarmPlotId;
+
 
     public int moneyGD;
 
@@ -13124,10 +13750,49 @@ public class Panel : IActionListener, IChatable
                     string.Empty
                 }
             },
-            Panel.boxPet
+            Panel.boxPet,
+            new string[][]
+            {
+                new string[]
+                {
+                    "Kho",
+                    "Hạt"
+                }
+            }
     };
 
-    private static readonly string[][] boxMod = new string[][]
+    // boxMod cho PC (có tab Nhạc)
+    private static readonly string[][] boxModPC = new string[][]
+    {
+            new string[]
+            {
+                "Chức",
+                "năng"
+            },
+            new string[]
+            {
+                "Tự",
+                "động"
+            },
+            new string[]
+            {
+                "Hiển",
+                "thị"
+            },
+            new string[]
+            {
+                "Cài",
+                "đặt"
+            },
+            new string[]
+            {
+                "Nhạc",
+                ""
+            }
+    };
+    
+    // boxMod cho Mobile (không có tab Nhạc)
+    private static readonly string[][] boxModMobile = new string[][]
     {
             new string[]
             {
@@ -13150,6 +13815,12 @@ public class Panel : IActionListener, IChatable
                 "đặt"
             }
     };
+    
+    // Property để lấy boxMod phù hợp với platform
+    public static string[][] boxMod
+    {
+        get { return Main.isPC ? boxModPC : boxModMobile; }
+    }
 
     private static readonly sbyte BOX_BAG = 0;
 
@@ -13503,6 +14174,8 @@ public class Panel : IActionListener, IChatable
     public const int TYPE_GAMEINFOSUB = 24;
 
     public const int TYPE_SPEACIALSKILL = 25;
+
+    public const int TYPE_FARM_SEED = 29;
 
     private int pointerDownTime;
 

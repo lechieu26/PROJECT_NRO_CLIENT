@@ -137,10 +137,15 @@ public class Rms
 
 	public static int loadRMSInt(string file)
 	{
+		return loadRMSInt(file, -1);
+	}
+
+	public static int loadRMSInt(string file, int defaultValue)
+	{
 		sbyte[] array = loadRMS(file);
-		if (array == null)
+		if (array == null || array.Length == 0)
 		{
-			return -1;
+			return defaultValue;
 		}
 		return array[0];
 	}
@@ -207,5 +212,21 @@ public class Rms
 		catch (Exception)
 		{
 		}
+	}
+
+	/// <summary>
+	/// Xóa cache item template để buộc client tải lại từ server
+	/// Gọi hàm này khi cần reset item data
+	/// </summary>
+	public static void ClearItemCache()
+	{
+		Cout.LogError3("Clearing item cache...");
+		DeleteStorage("NRitemVersion");
+		DeleteStorage("NRitem0");
+		DeleteStorage("NRitem1");
+		DeleteStorage("NRitem2");
+		// Reset biến vcItem để client biết cần tải lại
+		GameScr.vcItem = 0;
+		Cout.LogError3("Item cache cleared! Please restart the game.");
 	}
 }
