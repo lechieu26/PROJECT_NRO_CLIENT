@@ -555,7 +555,7 @@ public class ModFunc : IActionListener
             InitMusic();
             loadedMusic = true;
         }
-        Time.timeScale = 1.5f;
+        Time.timeScale = 1.2f;
         listSkillsAuto.Clear();
         listItemAuto.Clear();
         isHighFps = Rms.loadRMSInt("isHighFps") != 0;
