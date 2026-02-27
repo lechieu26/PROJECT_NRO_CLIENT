@@ -40,6 +40,10 @@ public class FarmMessageHandler
                     ReadFarmIcon(msg);
                     break;
 
+                case FarmConstants.SUBTYPE_CROP_TEMPLATE: // 13
+                    ReadCropTemplate(msg);
+                    break;
+
                 default:
                     Res.outz("FarmMessageHandler: Unknown sub-type " + subType);
                     break;
@@ -164,6 +168,27 @@ public class FarmMessageHandler
             FarmAssetManager.GI().SaveFarmIcon(iconName, img);
             Res.outz("FarmMessageHandler: Loaded farm icon " + iconName);
         }
+    }
+
+    /// <summary>
+    /// Đọc crop template
+    /// </summary>
+    private void ReadCropTemplate(Message msg)
+    {
+        sbyte count = msg.reader().readByte();
+        for (int i = 0; i < count; i++)
+        {
+            FarmConstants.CropTemplateInfo info = new FarmConstants.CropTemplateInfo();
+            info.id = msg.reader().readByte();
+            info.name = msg.reader().readUTF();
+            info.seedItemId = msg.reader().readShort();
+            info.harvestItemId = msg.reader().readShort();
+            info.imgYoung = msg.reader().readUTF();
+            info.imgMature = msg.reader().readUTF();
+            info.imgWithered = msg.reader().readUTF();
+            FarmConstants.AddCropTemplate(info);
+        }
+        Res.outz("FarmMessageHandler: Loaded " + count + " crop templates");
     }
 
     /// <summary>

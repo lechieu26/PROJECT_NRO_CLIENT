@@ -1,17 +1,33 @@
 using System;
-
+using System.Collections.Generic;
 /// <summary>
 /// Constants cho hệ thống Cloud Garden phía Client
 /// </summary>
 public class FarmConstants
 {
-    // ===================== CROP TYPES =====================
-    public const sbyte CROP_TOMATO = 0;      // Cà chua
-    public const sbyte CROP_STARFRUIT = 1;   // Khế
-    public const sbyte CROP_CORN = 2;        // Ngô
-    public const sbyte CROP_PUMPKIN = 3;     // Bí
-    public const int CROP_TYPE_COUNT = 4;
+    // ===================== CROP TEMPLATES =====================
+    public class CropTemplateInfo
+    {
+        public sbyte id;
+        public string name;
+        public short seedItemId;
+        public short harvestItemId;
+        public string imgYoung;
+        public string imgMature;
+        public string imgWithered;
+    }
 
+    public static Dictionary<sbyte, CropTemplateInfo> cropTemplates = new Dictionary<sbyte, CropTemplateInfo>();
+
+    public static void AddCropTemplate(CropTemplateInfo info)
+    {
+        cropTemplates[info.id] = info;
+    }
+
+    public static int GetCropTypeCount()
+    {
+        return cropTemplates.Count;
+    }
     // ===================== GROWTH STAGES =====================
     public const sbyte STAGE_EMPTY = 0;      // Đất trống
     public const sbyte STAGE_SEED = 1;       // Hạt giống
@@ -40,6 +56,7 @@ public class FarmConstants
     public const sbyte SUBTYPE_FARM_ASSET = 10;
     public const sbyte SUBTYPE_CROP_ASSET = 11;
     public const sbyte SUBTYPE_FARM_ICON = 12;
+    public const sbyte SUBTYPE_CROP_TEMPLATE = 13;
     
     // Sub-types for MSG_FARM_DATA (-34)
     public const sbyte SUBTYPE_PLOT_UPDATE = 10;
@@ -64,14 +81,11 @@ public class FarmConstants
     /// </summary>
     public static string GetCropName(sbyte cropType)
     {
-        switch (cropType)
+        if (cropTemplates.ContainsKey(cropType))
         {
-            case CROP_TOMATO: return "Cà chua";
-            case CROP_STARFRUIT: return "Khế";
-            case CROP_CORN: return "Ngô";
-            case CROP_PUMPKIN: return "Bí";
-            default: return "Không xác định";
+            return cropTemplates[cropType].name;
         }
+        return "Không xác định";
     }
 
     /// <summary>
@@ -92,40 +106,35 @@ public class FarmConstants
         }
     }
 
-    // ===================== SEED ITEM IDs =====================
-    public const short SEED_TOMATO_ID = 1872;
-    public const short SEED_PUMPKIN_ID = 1873;
-    public const short SEED_STARFRUIT_ID = 1874;
-    public const short SEED_CORN_ID = 1875;
+    // ===================== SEED/HARVEST IDs (Removed hardcoded constants) =====================
 
     public static short GetSeedItemId(sbyte cropType)
     {
-        switch (cropType)
+        if (cropTemplates.ContainsKey(cropType))
         {
-            case CROP_TOMATO: return SEED_TOMATO_ID;
-            case CROP_STARFRUIT: return SEED_STARFRUIT_ID;
-            case CROP_CORN: return SEED_CORN_ID;
-            case CROP_PUMPKIN: return SEED_PUMPKIN_ID;
-            default: return -1;
+            return cropTemplates[cropType].seedItemId;
         }
+        return -1;
     }
 
-
-    // ===================== HARVEST ITEM IDs =====================
-    public const short HARVEST_TOMATO_ID = 1876;
-    public const short HARVEST_PUMPKIN_ID = 1877;
-    public const short HARVEST_STARFRUIT_ID = 1878;
-    public const short HARVEST_CORN_ID = 1879;
+    public static bool IsSeedItem(short itemId)
+    {
+        foreach (var crop in cropTemplates.Values)
+        {
+            if (crop.seedItemId == itemId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static short GetHarvestItemId(sbyte cropType)
     {
-        switch (cropType)
+        if (cropTemplates.ContainsKey(cropType))
         {
-            case CROP_TOMATO: return HARVEST_TOMATO_ID;
-            case CROP_STARFRUIT: return HARVEST_STARFRUIT_ID;
-            case CROP_CORN: return HARVEST_CORN_ID;
-            case CROP_PUMPKIN: return HARVEST_PUMPKIN_ID;
-            default: return -1;
+            return cropTemplates[cropType].harvestItemId;
         }
+        return -1;
     }
 }

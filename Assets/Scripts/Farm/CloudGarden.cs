@@ -262,6 +262,16 @@ public class CloudGarden
             g.drawImage(plotEmpty, plot.posX, plot.posY, mGraphics.BOTTOM | mGraphics.HCENTER);
         }
 
+        // 1b. Vẽ highlight nếu ô đang được chọn (dùng ảnh plot_selected.png)
+        if (plot.plotId == focusedPlotId)
+        {
+            Image plotSelected = FarmAssetManager.GI().GetPlotSelectedImage();
+            if (plotSelected != null)
+            {
+                g.drawImage(plotSelected, plot.posX, plot.posY, mGraphics.BOTTOM | mGraphics.HCENTER);
+            }
+        }
+
         // 2. Nếu có cây trồng, vẽ cây lên trên ô đất
         if (!plot.IsEmpty())
         {
@@ -270,9 +280,14 @@ public class CloudGarden
             Image cropImg = FarmAssetManager.GI().GetCropAsset(plot.cropType, visualStage);
             if (cropImg != null)
             {
-                // Vẽ cây ở giữa ô đất
-                // Giảm offset từ -5 xuống -2 để cây đỡ bị "bay" khỏi mặt đất
-                g.drawImage(cropImg, plot.posX, plot.posY - 10, mGraphics.BOTTOM | mGraphics.HCENTER);
+                // Offset Y tùy theo stage: cây trưởng thành lớn hơn nên cần nằm sát đất
+                int cropOffsetY = -10;
+                if (visualStage >= FarmConstants.STAGE_YOUNG)
+                {
+                    cropOffsetY = -5; // Seed/Sprout nhỏ, đẩy lên chút
+                }
+                
+                g.drawImage(cropImg, plot.posX, plot.posY + cropOffsetY, mGraphics.BOTTOM | mGraphics.HCENTER);
             }
             else
             {
@@ -283,8 +298,18 @@ public class CloudGarden
             }
         }
 
-        // 3. Vẽ icon thu hoạch nếu sẵn sàng
-        if (plot.CanHarvest())
+        // 3. Vẽ icon thu hoạch hoặc icon héo
+        if (plot.IsWithered())
+        {
+            // Cây bị héo - vẽ chữ "Héo!" nhấp nháy màu đỏ
+            if (GameCanvas.gameTick % 20 > 5) // Nhấp nháy
+            {
+                mFont.tahoma_7b_white.drawString(g, "Héo!", 
+                    plot.posX, plot.posY - floatingHeight + yOffset, 
+                    mFont.CENTER, mFont.tahoma_7_red);
+            }
+        }
+        else if (plot.CanHarvest())
         {
             Image harvestIcon = FarmAssetManager.GI().GetFarmIcon("harvest");
             if (harvestIcon != null)
@@ -295,9 +320,9 @@ public class CloudGarden
             }
         }
 
-        // 4. Vẽ timer nếu đang phát triển HOẶC đang chín muồi
+        // 4. Vẽ timer nếu đang phát triển HOẶC đang chín muồi (không vẽ khi héo)
         // Chỉ vẽ khi có focus (được bấm vào)
-        if (plot.plotId == focusedPlotId && (plot.IsGrowing() || (plot.currentStage == FarmConstants.STAGE_MATURE && plot.GetRemainingTime() > 0)))
+        if (plot.plotId == focusedPlotId && !plot.IsWithered() && (plot.IsGrowing() || (plot.currentStage == FarmConstants.STAGE_MATURE && plot.GetRemainingTime() > 0)))
         {
             // Vẽ khung rau củ (đưa vào đây theo yêu cầu)
             Image frame = FarmAssetManager.GI().GetFarmIcon("khung_raucu");
@@ -321,18 +346,18 @@ public class CloudGarden
                     mFont.CENTER, mFont.tahoma_7_grey);
             }
 
-             // Vẽ icon hạt giống - đặt ở tâm khung
-            short seedItemId = FarmConstants.GetSeedItemId(plot.cropType);
-            if (seedItemId != -1)
+             // Vẽ icon thu hoạch - đặt ở tâm khung
+            short harvestItemId = FarmConstants.GetHarvestItemId(plot.cropType);
+            if (harvestItemId != -1)
             {
-                    Image seedIcon = FarmAssetManager.GI().GetFarmIcon(seedItemId.ToString());
-                    if (seedIcon != null)
+                    Image harvestIcon = FarmAssetManager.GI().GetFarmIcon(harvestItemId.ToString());
+                    if (harvestIcon != null)
                     {
-                        g.drawImage(seedIcon, centerX, frameCenterY + 23, mGraphics.VCENTER | mGraphics.HCENTER);
+                        g.drawImage(harvestIcon, centerX, frameCenterY + 23, mGraphics.VCENTER | mGraphics.HCENTER);
                     }
                     else
                     {
-                        ItemTemplate temp = ItemTemplates.get(seedItemId);
+                        ItemTemplate temp = ItemTemplates.get(harvestItemId);
                         if (temp != null)
                         {
                             SmallImage.drawSmallImage(g, temp.iconID, centerX, frameCenterY + 23, 0, mGraphics.VCENTER | mGraphics.HCENTER);

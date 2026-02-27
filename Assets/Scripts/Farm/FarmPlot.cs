@@ -96,14 +96,20 @@ public class FarmPlot
 
     /// <summary>
     /// Kiểm tra có thể thu hoạch không
-    /// </summary>
-    /// <summary>
-    /// Kiểm tra có thể thu hoạch không
-    /// Cây phải ở stage MATURE VÀ đã hết thời gian chờ
+    /// Cây phải ở stage MATURE VÀ đã hết thời gian chờ, HOẶC cây bị héo (WITHERED)
     /// </summary>
     public bool CanHarvest()
     {
-        return currentStage == FarmConstants.STAGE_MATURE && GetRemainingTime() <= 0;
+        return (currentStage == FarmConstants.STAGE_MATURE && GetRemainingTime() <= 0)
+               || currentStage == FarmConstants.STAGE_WITHERED;
+    }
+
+    /// <summary>
+    /// Kiểm tra cây có đang bị héo không
+    /// </summary>
+    public bool IsWithered()
+    {
+        return currentStage == FarmConstants.STAGE_WITHERED;
     }
 
     /// <summary>
@@ -122,10 +128,17 @@ public class FarmPlot
     /// <summary>
     /// Lấy stage hiển thị
     /// Fix: Sử dụng trực tiếp currentStage từ Server
+    /// Nếu cây bị héo, trả về STAGE_WITHERED để load asset withered.png
     /// </summary>
     public sbyte GetVisualStage()
     {
         if (IsEmpty()) return FarmConstants.STAGE_EMPTY;
+        
+        // Nếu cây bị héo, hiển thị asset héo
+        if (currentStage == FarmConstants.STAGE_WITHERED)
+        {
+            return FarmConstants.STAGE_WITHERED;
+        }
         
         // Nếu server bảo là mature hoặc client tính toán hết giờ
         if (currentStage == FarmConstants.STAGE_MATURE || GetRemainingTime() <= 0) 
@@ -134,7 +147,6 @@ public class FarmPlot
         }
         
         // Trả về stage hiện tại do server gửi
-        // Bỏ logic tính phần trăm vì thiếu dữ liệu tổng thời gian (totalGrowTime)
         return currentStage;
     }
 
@@ -164,6 +176,7 @@ public class FarmPlot
     {
         if (!unlocked) return "Đã khóa";
         if (IsEmpty()) return "Trống";
+        if (IsWithered()) return "Bị héo!";
         if (CanHarvest()) return "Thu hoạch";
         if (IsGrowing()) return FarmConstants.GetStageName(currentStage);
         

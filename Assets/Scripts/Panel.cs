@@ -311,7 +311,7 @@ public class Panel : IActionListener, IChatable
         Item[] bag = Char.myCharz().arrItemBag;
         for (int i = 0; i < bag.Length; i++)
         {
-            if (bag[i] != null && bag[i].template.id >= 1872 && bag[i].template.id <= 1875)
+            if (bag[i] != null && FarmConstants.IsSeedItem(bag[i].template.id))
             {
                 this.vFarmSeeds.addElement(bag[i]);
             }

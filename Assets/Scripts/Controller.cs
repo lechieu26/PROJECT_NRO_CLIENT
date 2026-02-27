@@ -1292,6 +1292,10 @@ public class Controller : IMessageHandler
 							{
 								FarmAssetManager.GI().SavePlotEmptyImage(img);
 							}
+							else if (farmAssetName.Contains("plot_selected"))
+							{
+								FarmAssetManager.GI().SavePlotSelectedImage(img);
+							}
 							else if (farmAssetName.Contains("crop_"))
 							{
 								// Parse crop type và stage từ filename
@@ -6942,59 +6946,25 @@ public static int JavaHashCode(string str)
             {
                 // Format: common_seed, common_sprout1, common_sprout2
                 stageName = name.Substring(7); // remove "common_"
-            }
-            else
-            {
-                // Parse crop type
-                if (name.StartsWith("tomato"))
+                
+                // Parse stage
+                switch (stageName)
                 {
-                    cropType = FarmConstants.CROP_TOMATO;
-                    stageName = name.Substring(7); // remove "tomato_"
+                    case "empty": stage = FarmConstants.STAGE_EMPTY; break;
+                    case "seed": stage = FarmConstants.STAGE_SEED; break;
+                    case "sprout1": stage = FarmConstants.STAGE_SPROUT_1; break;
+                    case "sprout2": stage = FarmConstants.STAGE_SPROUT_2; break;
                 }
-                else if (name.StartsWith("starfruit"))
+                
+                if (stage >= 0)
                 {
-                    cropType = FarmConstants.CROP_STARFRUIT;
-                    stageName = name.Substring(10); // remove "starfruit_"
-                }
-                else if (name.StartsWith("corn"))
-                {
-                    cropType = FarmConstants.CROP_CORN;
-                    stageName = name.Substring(5); // remove "corn_"
-                }
-                else if (name.StartsWith("pumpkin"))
-                {
-                    cropType = FarmConstants.CROP_PUMPKIN;
-                    stageName = name.Substring(8); // remove "pumpkin_"
-                }
-            }
-
-            // Parse stage
-            switch (stageName)
-            {
-                case "empty": stage = FarmConstants.STAGE_EMPTY; break;
-                case "seed": stage = FarmConstants.STAGE_SEED; break;
-                case "sprout1": stage = FarmConstants.STAGE_SPROUT_1; break;
-                case "sprout2": stage = FarmConstants.STAGE_SPROUT_2; break;
-                case "young": stage = FarmConstants.STAGE_YOUNG; break;
-                case "mature": stage = FarmConstants.STAGE_MATURE; break;
-                case "withered": stage = FarmConstants.STAGE_WITHERED; break;
-            }
-
-            if (stage >= 0)
-            {
-                if (isCommon)
-                {
-                    // Lưu common asset (seed, sprout1, sprout2)
                     FarmAssetManager.GI().SaveCommonCropAsset(stage, img);
                 }
-                else if (cropType >= 0)
-                {
-                    // Lưu crop-specific asset (young, mature, withered)
-                    FarmAssetManager.GI().SaveCropAsset(cropType, stage, img, false);
-                }
             }
-        }
-        catch (Exception ex)
+            // Mọi loại crop khác (young, mature, withered) không dùng hardcode parsing nữa, 
+            // bỏ qua vì đã được nạp qua MSG_FARM_ASSET subtype 11 (gửi trực tiếp với cropType và stage)
+            return;
+        }        catch (Exception ex)
         {
             Res.outz("Error parsing crop asset: " + ex.Message);
         }
