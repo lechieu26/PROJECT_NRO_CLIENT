@@ -2046,10 +2046,10 @@ public class ModFunc : IActionListener
                         menuOthers.addElement(new Command("Hành trang\nLưới " + (isInventory ? "[Bật]" : "[Tắt]"), 59));
                         menuOthers.addElement(new Command("Load ô\nskill", 57));
                         menuOthers.addElement(new Command("Âm thanh\n" + (GameCanvas.isPlaySound ? "[Bật]" : "[Tắt]"), 18));
-                        if (Main.isPC) // Chỉ hiển thị trên PC
+                        /*if (Main.isPC) // Chỉ hiển thị trên PC
                         {
                             menuOthers.addElement(new Command("Nhạc\nnền", 902));
-                        }
+                        }*/
                         GameCanvas.menu.startAt(menuOthers, 4);
                         break;
                     }

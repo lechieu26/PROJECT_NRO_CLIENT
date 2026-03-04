@@ -309,6 +309,8 @@ public class Npc : Char
 						SmallImage.drawSmallImage(g, part2.pi[Char.CharInfo[cf][1][0]].id, cx - Char.CharInfo[cf][1][1] - part2.pi[Char.CharInfo[cf][1][0]].dx, cy - Char.CharInfo[cf][1][2] + part2.pi[Char.CharInfo[cf][1][0]].dy, 2, 24);
 						SmallImage.drawSmallImage(g, part3.pi[Char.CharInfo[cf][2][0]].id, cx - Char.CharInfo[cf][2][1] - part3.pi[Char.CharInfo[cf][2][0]].dx, cy - Char.CharInfo[cf][2][2] + part3.pi[Char.CharInfo[cf][2][0]].dy, 2, 24);
 					}
+					// Tính ch dựa trên vị trí góc trên trái của head sprite
+					ch = Char.CharInfo[0][0][2] - part.pi[Char.CharInfo[0][0][0]].dy;
 					if (TileMap.mapID != 51)
 					{
 						int num2 = 15;
