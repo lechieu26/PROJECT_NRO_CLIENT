@@ -1,0 +1,4 @@
+e:\NRO\SourceCode\PROJECT_NRO_240_mod\Assets\Scripts\obj\Debug\net40\Assembly-CSharp.csproj.AssemblyReference.cache
+e:\NRO\SourceCode\PROJECT_NRO_240_mod\Assets\Scripts\obj\Debug\net40\Assembly-CSharp.GeneratedMSBuildEditorConfig.editorconfig
+e:\NRO\SourceCode\PROJECT_NRO_240_mod\Assets\Scripts\obj\Debug\net40\Assembly-CSharp.csproj.CoreCompileInputs.cache
+e:\NRO\SourceCode\PROJECT_NRO_240_mod\Assets\Scripts\obj\Debug\net40\Assembly-CSharp.sourcelink.json

@@ -7,6 +7,9 @@ using System.Threading;
 using UnityEngine;
 public class Panel : IActionListener, IChatable
 {
+    public const int TYPE_CHE_BIEN = 30;
+    public int selectedIngredient = -1;
+
     public Panel()
     {
         this.init();
@@ -751,6 +754,619 @@ public class Panel : IActionListener, IChatable
             GameCanvas.panel2.show();
         }
     }
+	public static MyVector vRecipe = new MyVector();
+	public static CookingSlot[] cookingSlots;
+    public class FlyItem {
+        public int imgId;
+        public int x, y, dy, life;
+    }
+    public static List<FlyItem> vFlyItems = new List<FlyItem>();
+	public static string serverCookingData = "";
+
+    public static ItemRecipe GetRecipeById(short id)
+    {
+        for (int i = 0; i < vRecipe.size(); i++)
+        {
+            ItemRecipe r = (ItemRecipe)vRecipe.elementAt(i);
+            if (r.id == id) return r;
+        }
+        return null;
+    }
+
+    public static void SaveCookingSlots()
+    {
+        if (cookingSlots == null) return;
+        string data = "";
+        for (int i = 0; i < 5; i++)
+        {
+            CookingSlot slot = cookingSlots[i];
+            data += (slot.isLocked ? "1" : "0") + ",";
+            data += (slot.recipe != null ? slot.recipe.id.ToString() : "-1") + ",";
+            data += slot.finishTime.ToString();
+            if (i < 4) data += "|";
+        }
+        // Gửi lên server
+        try
+        {
+            Message msg = new Message(-114);
+            msg.writer().writeByte(1); // action = 1: save cooking data
+            msg.writer().writeUTF(data);
+            Session_ME.gI().sendMessage(msg);
+            msg.cleanup();
+        }
+        catch (Exception) { }
+    }
+
+    public static void LoadCookingSlots()
+    {
+        if (cookingSlots == null)
+        {
+            cookingSlots = new CookingSlot[5];
+            for (int i = 0; i < 5; i++) cookingSlots[i] = new CookingSlot();
+        }
+        string data = serverCookingData;
+        if (string.IsNullOrEmpty(data))
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                cookingSlots[i] = new CookingSlot();
+                if (i > 0) cookingSlots[i].isLocked = true;
+            }
+            return;
+        }
+        string[] parts = data.Split('|');
+        for (int i = 0; i < 5; i++)
+        {
+            if (i < parts.Length)
+            {
+                string[] vals = parts[i].Split(',');
+                if (vals.Length >= 3)
+                {
+                    cookingSlots[i].isLocked = vals[0] == "1";
+                    short rId = short.Parse(vals[1]);
+                    if (rId != -1)
+                    {
+                        cookingSlots[i].recipe = GetRecipeById(rId);
+                    }
+                    else
+                    {
+                        cookingSlots[i].recipe = null;
+                    }
+                    cookingSlots[i].finishTime = long.Parse(vals[2]);
+                }
+            }
+        }
+    }
+
+    public void setTypeCheBien()
+    {
+        LoadCookingSlots();
+        this.type = TYPE_CHE_BIEN;
+        this.tabName[TYPE_CHE_BIEN] = new string[][]
+        {
+            new string[]
+            {
+                "Chế",
+                "biến"
+            }
+        };
+        this.setType(0);
+        this.ITEM_HEIGHT = 34;
+        this.currentListLength = 12;
+        this.cmyLim = this.currentListLength * this.ITEM_HEIGHT - this.hScroll;
+        if (this.cmyLim < 0) this.cmyLim = 0;
+        this.cmy = (this.cmtoY = 0);
+        this.selected = -1;
+        this.cheBienBtnX = 0;
+        this.cheBienBtnY = 0;
+        this.cheBienBtnW = 0;
+        this.cheBienBtnH = 0;
+    }
+
+    // Tọa độ nút Nấu ăn (tính toán trong paint, dùng trong updateKey)
+    private int cheBienBtnX;
+    private int cheBienBtnY;
+    private int cheBienBtnW;
+    private int cheBienBtnH;
+
+    public void paintCheBien(mGraphics g)
+    {
+        int slotSize = 34;
+        int gap = 2;
+        int rowH = slotSize + gap;
+
+        g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
+        // Không translate cmy - panel này không scroll
+
+        try
+        {
+            int curY = this.yScroll;
+
+            // === HÀNG 1: 5 ô chứa item đang chế biến ===
+            for (int i = 0; i < 5; i++)
+            {
+                int bx = this.xScroll + i * (slotSize + gap);
+                int by = curY;
+
+                // Ô đang được chọn
+                if (this.selected == i)
+                {
+                    g.setColor(16383818);
+                    g.fillRect(bx - 1, by - 1, slotSize + 2, slotSize + 2, 5);
+                }
+
+                // Nền ô
+                g.setColor(6047789, 0.5f);
+                g.fillRect(bx, by, slotSize, slotSize, 5);
+
+                CookingSlot slot = cookingSlots[i];
+                if (slot.isLocked)
+                {
+                    g.setColor(0x8899AA);
+                    int lx = bx + slotSize / 2 - 5;
+                    int ly = by + slotSize / 2 - 7;
+                    g.drawRect(lx + 1, ly, 8, 6);
+                    g.fillRect(lx, ly + 5, 10, 8);
+                }
+                else if (slot.isCooking())
+                {
+                    SmallImage.drawSmallImage(g, slot.recipe.iconID, bx + slotSize / 2, by + slotSize / 2 - 4, 0, 3);
+                    long timeLeft = slot.finishTime - mSystem.currentTimeMillis();
+                    if (timeLeft <= 0)
+                    {
+                        mFont.tahoma_7_green.drawString(g, "done", bx + slotSize / 2, by + slotSize - 12, 2);
+                    }
+                    else
+                    {
+                        int sec = (int)(timeLeft / 1000);
+                        string timeStr = sec / 60 + ":" + (sec % 60).ToString("00");
+                        mFont.tahoma_7_white.drawString(g, timeStr, bx + slotSize / 2, by + slotSize - 12, 2);
+                    }
+                }
+            }
+
+            curY += slotSize + 6;
+
+            // === Đường kẻ phân cách ===
+            /*g.setColor(0x88AACC);
+            g.drawLine(this.xScroll, curY, this.xScroll + this.wScroll, curY);*/
+            curY += 6;
+
+            // === 3 HÀNG: item để lựa chọn chế biến (món ăn) ===
+            for (int row = 0; row < 3; row++)
+            {
+                for (int col = 0; col < 5; col++)
+                {
+                    int idx = 5 + row * 5 + col;
+                    int bx = this.xScroll + col * (slotSize + gap);
+                    int by = curY + row * rowH;
+
+                    if (this.selected == idx)
+                    {
+                        g.setColor(16383818);
+                        g.fillRect(bx - 1, by - 1, slotSize + 2, slotSize + 2, 5);
+                    }
+
+                    g.setColor(6047789, 0.3f);
+                    g.fillRect(bx, by, slotSize, slotSize, 5);
+
+                    int recipeIdx = idx - 5;
+                    if (recipeIdx >= 0 && recipeIdx < Panel.vRecipe.size())
+                    {
+                        ItemRecipe r = (ItemRecipe)Panel.vRecipe.elementAt(recipeIdx);
+                        if (r != null)
+                        {
+                            SmallImage.drawSmallImage(g, r.iconID, bx + slotSize / 2, by + slotSize / 2, 0, 3);
+                        }
+                    }
+                }
+            }
+
+            curY += 3 * rowH + 6;
+
+            // === VÙNG THÔNG TIN ITEM ===
+            ItemRecipe selectedRecipe = null;
+            if (this.selected >= 5 && this.selected < 20)
+            {
+                int rIdx = this.selected - 5;
+                if (rIdx >= 0 && rIdx < Panel.vRecipe.size())
+                {
+                    selectedRecipe = (ItemRecipe)Panel.vRecipe.elementAt(rIdx);
+                }
+            }
+
+            string infoName = "Chọn một món để xem";
+            string infoTime = "Thời gian: ---";
+            string infoGia = "Giá bán: ---";
+            
+            if (selectedRecipe != null)
+            {
+                infoName = selectedRecipe.name;
+                infoTime = "Thời gian: " + selectedRecipe.time + "s";
+                
+                ItemTemplate donGiaItem = ItemTemplates.get(selectedRecipe.donGiaId);
+                string donGiaName = (donGiaItem != null) ? donGiaItem.name : "Vật phẩm";
+                infoGia = "Giá bán: " + selectedRecipe.gia + " " + donGiaName;
+            }
+
+            mFont.tahoma_7b_dark.drawString(g, infoName, this.xScroll + 4, curY, 0);
+            curY += 13;
+            mFont.tahoma_7.drawString(g, infoTime, this.xScroll + 4, curY, 0);
+            curY += 12;
+            mFont.tahoma_7.drawString(g, infoGia, this.xScroll + 4, curY, 0);
+            curY += 14;
+
+            // === LABEL "Nguyên liệu:" ===
+            mFont.tahoma_7b_dark.drawString(g, "Nguyên liệu:", this.xScroll + 4, curY, 0);
+            curY += 14;
+
+            // === HÀNG NGUYÊN LIỆU (7 ô, 2 hàng) ===
+            for (int i = 0; i < 7; i++)
+            {
+                int rowIng = i / 5;
+                int colIng = i % 5;
+                int bx = this.xScroll + colIng * (slotSize + gap);
+                int by = curY + rowIng * rowH;
+
+                if (this.selectedIngredient == i)
+                {
+                    g.setColor(16383818);
+                    g.fillRect(bx - 1, by - 1, slotSize + 2, slotSize + 2, 5);
+                }
+
+                g.setColor(6047789, 0.3f);
+                g.fillRect(bx, by, slotSize, slotSize, 5);
+                
+                if (selectedRecipe != null && selectedRecipe.ingredients != null && i < selectedRecipe.ingredients.Length)
+                {
+                    short ingTemplateId = selectedRecipe.ingredients[i];
+                    ItemTemplate it = ItemTemplates.get(ingTemplateId);
+                    if (it != null)
+                    {
+                         SmallImage.drawSmallImage(g, it.iconID, bx + slotSize / 2, by + slotSize / 2, 0, 3);
+                         if (selectedRecipe.quantities != null && i < selectedRecipe.quantities.Length)
+                         {
+                             int sl = selectedRecipe.quantities[i];
+                             if (sl > 0)
+                             {
+                                 int currQty = 0;
+                                 if (Char.myCharz().arrItemBag != null)
+                                 {
+                                     for (int b = 0; b < Char.myCharz().arrItemBag.Length; b++)
+                                     {
+                                         if (Char.myCharz().arrItemBag[b] != null && Char.myCharz().arrItemBag[b].template.id == ingTemplateId)
+                                         {
+                                             currQty += Char.myCharz().arrItemBag[b].quantity;
+                                         }
+                                     }
+                                 }
+
+                                 if (currQty >= sl)
+                                 {
+                                     mFont.tahoma_7b_white.drawString(g, "x" + sl, bx + slotSize - 2, by + slotSize - 10, 1);
+                                 }
+                                 else
+                                 {
+                                     mFont.tahoma_7b_red.drawString(g, "x" + sl, bx + slotSize - 2, by + slotSize - 10, 1);
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+
+            // === NÚT "Nấu ăn" ===
+            int btnW = 3 * slotSize + 2 * gap;
+            int btnH = slotSize;
+            int btnX = this.xScroll + 2 * (slotSize + gap);
+            int btnY = curY + rowH;
+
+            bool isOver = GameCanvas.px >= btnX && GameCanvas.px <= btnX + btnW && GameCanvas.py >= btnY && GameCanvas.py <= btnY + btnH;
+
+            if (isOver && GameCanvas.isPointerDown)
+            {
+                g.setColor(16776960); // Màu vàng khi ĐANG NHẤN
+            }
+            else if (isOver)
+            {
+                g.setColor(0x32CD32); // Màu xanh Lime khi RÊ CHUỘT (Hover)
+            }
+            else
+            {
+                g.setColor(0x32CD32); // Màu xanh mặc định (0x22AA44)
+            }
+            g.fillRect(btnX, btnY, btnW, btnH, 5);
+            mFont.tahoma_7b_white.drawString(g, "Nấu ăn", btnX + btnW / 2, btnY + btnH / 2 - mFont.tahoma_7b_white.getHeight() / 2, 3);
+            
+            // Render floating items
+            for (int i = vFlyItems.Count - 1; i >= 0; i--)
+            {
+                FlyItem fi = vFlyItems[i];
+                SmallImage.drawSmallImage(g, fi.imgId, fi.x, fi.y, 0, 3);
+                fi.y += fi.dy;
+                fi.life--;
+                if (fi.life <= 0) vFlyItems.RemoveAt(i);
+            }
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    // Tính tọa độ Y các vùng trong panel Chế biến (dùng chung cho paint và updateKey)
+    private void getCheBienLayout(out int cookingRowY, out int recipeRowY, out int ingredientRowY, out int btnY)
+    {
+        int slotSize = 34;
+        int gap = 2;
+        int rowH = slotSize + gap;
+
+        int curY = this.yScroll;
+        cookingRowY = curY;
+        curY += slotSize + 6 + 6; // slot + separator
+
+        recipeRowY = curY;
+        curY += 3 * rowH + 6; // 3 hàng món + gap
+
+        curY += 13 + 12 + 14; // info text
+        curY += 14; // label nguyên liệu
+
+        ingredientRowY = curY;
+        
+        btnY = curY + rowH;
+    }
+
+    public void updateKeyCheBien()
+    {
+        // === Force tắt scroll hoàn toàn ===
+        this.cmy = 0;
+        this.cmtoY = 0;
+        this.cmRun = 0;
+        this.cmyLim = 0;
+
+        if (this.cp != null)
+        {
+            if (this.cp.cmdNextLine != null && this.cp.cmdNextLine.isPointerPressInside())
+            {
+                this.cp.cmdNextLine.performAction();
+                this.cp = null;
+                this.selectedIngredient = -1;
+                return;
+            }
+            else if (GameCanvas.isPointerJustRelease)
+            {
+                this.cp = null;
+                this.selectedIngredient = -1;
+                GameCanvas.clearAllPointerEvent();
+                return;
+            }
+            return;
+        }
+
+        int slotSize = 34;
+        int gap = 2;
+
+        int cookingRowY, recipeRowY, ingredientRowY, btnYPos;
+        getCheBienLayout(out cookingRowY, out recipeRowY, out ingredientRowY, out btnYPos);
+
+        int btnW = 3 * slotSize + 2 * gap;
+        int btnH = slotSize;
+        int btnX = this.xScroll + 2 * (slotSize + gap);
+
+        if (GameCanvas.isPointerJustRelease)
+        {
+            int px = GameCanvas.pxLast;
+            int py = GameCanvas.pyLast;
+
+            // === 5 ô chế biến ===
+            if (py >= cookingRowY && py <= cookingRowY + slotSize)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    int bx = this.xScroll + i * (slotSize + gap);
+                    if (px >= bx && px <= bx + slotSize)
+                    {
+                        GameCanvas.clearAllPointerEvent();
+                        this.selected = i;
+                        doFireCheBien();
+                        return;
+                    }
+                }
+            }
+
+            // === 3 hàng món ăn ===
+            int rowH = slotSize + gap;
+            for (int row = 0; row < 3; row++)
+            {
+                int by = recipeRowY + row * rowH;
+                if (py >= by && py <= by + slotSize)
+                {
+                    for (int col = 0; col < 5; col++)
+                    {
+                        int bx = this.xScroll + col * (slotSize + gap);
+                        if (px >= bx && px <= bx + slotSize)
+                        {
+                            this.selected = 5 + row * 5 + col;
+                            return;
+                        }
+                    }
+                }
+            }
+
+
+            // === 7 Ô NGUYÊN LIỆU ===
+            for (int i = 0; i < 7; i++)
+            {
+                int rowIng = i / 5;
+                int colIng = i % 5;
+                int bx = this.xScroll + colIng * (slotSize + gap);
+                int by = ingredientRowY + rowIng * rowH;
+
+                if (px >= bx && px <= bx + slotSize && py >= by && py <= by + slotSize)
+                {
+                    if (this.selected >= 5 && this.selected < 20)
+                    {
+                        int rIdx = this.selected - 5;
+                        if (rIdx >= 0 && rIdx < Panel.vRecipe.size())
+                        {
+                            ItemRecipe rx = (ItemRecipe)Panel.vRecipe.elementAt(rIdx);
+                            if (rx != null && rx.ingredients != null && i < rx.ingredients.Length)
+                            {
+                                int tid = rx.ingredients[i];
+                                ItemTemplate it = ItemTemplates.get((short)tid);
+                                if (it != null)
+                                {
+                                    Item itm = new Item();
+                                    itm.template = it;
+                                    itm.quantity = 1;
+                                    itm.reason = string.Empty;
+                                    itm.itemOption = new ItemOption[0];
+                                    this.currItem = itm;
+                                    this.selectedIngredient = i;
+                                    this.addItemDetail(itm);
+                                    GameCanvas.clearAllPointerEvent();
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // === Nút Nấu ăn ===
+            if (px >= btnX && px <= btnX + btnW && py >= btnYPos && py <= btnYPos + btnH)
+            {
+                GameCanvas.clearAllPointerEvent();
+                doCook();
+                return;
+            }
+        }
+    }
+
+    public void doFireCheBien()
+    {
+        if (this.selected < 0) return;
+
+        if (this.selected < 5)
+        {
+            CookingSlot slot = cookingSlots[this.selected];
+            if (slot.isLocked)
+            {
+                if (this.selected > 0 && cookingSlots[this.selected - 1].isLocked)
+                {
+                    GameScr.info1.addInfo("Hãy mở khóa ô phía trước trước!", 0);
+                    return;
+                }
+                int cost = 0;
+                switch (this.selected)
+                {
+                    case 1: cost = 1000; break;
+                    case 2: cost = 2000; break;
+                    case 3: cost = 4000; break;
+                    case 4: cost = 8000; break;
+                }
+                if (cost > 0)
+                {
+                    GameCanvas.startYesNoDlg("Mở ô chế biến này với " + cost + " thỏi vàng?", new Command("Mở khóa", this, 8006, this.selected), new Command("Hủy", this, 8002, null));
+                }
+            }
+            else if (!slot.isCooking())
+            {
+                GameScr.info1.addInfo("Ô chế biến trống!", 0);
+            }
+            else
+            {
+                long timeLeft = slot.finishTime - mSystem.currentTimeMillis();
+                if (timeLeft <= 0)
+                {
+                    // Item đã nấu xong → cộng item vào hành trang, xóa khỏi ô
+                    int slotSize = 34; int gap = 2;
+                    int cookingRowY, recipeRowY, ingredientRowY, btnYPos;
+                    getCheBienLayout(out cookingRowY, out recipeRowY, out ingredientRowY, out btnYPos);
+                    int bx = this.xScroll + this.selected * (slotSize + gap);
+                    if (slot.recipe != null)
+                    {
+                        Panel.FlyItem fi = new Panel.FlyItem();
+                        fi.imgId = slot.recipe.iconID;
+                        fi.x = bx + slotSize / 2;
+                        fi.y = cookingRowY + slotSize / 2;
+                        fi.dy = -2;
+                        fi.life = 25;
+                        Panel.vFlyItems.Add(fi);
+                        slot.recipe = null;
+                    }
+
+                    // Gửi request lấy item lên server
+                    try
+                    {
+                        Message msg = new Message(-114);
+                        msg.writer().writeByte(2); // action 2 = claim item
+                        msg.writer().writeByte((sbyte)this.selected);
+                        Session_ME.gI().sendMessage(msg);
+                        msg.cleanup();
+                    }
+                    catch (Exception) { }
+                }
+                else
+                {
+                    // Item đang nấu → hiện menu "Hủy nấu" và "Nấu nhanh"
+                    int slotSize = 34; int gap = 2;
+                    int cookingRowY, recipeRowY2, ingredientRowY2, btnYPos2;
+                    getCheBienLayout(out cookingRowY, out recipeRowY2, out ingredientRowY2, out btnYPos2);
+                    int menuY = cookingRowY + slotSize;
+
+                    MyVector myVector = new MyVector();
+                    myVector.addElement(new Command("Hủy nấu", this, 8003, this.selected));
+                    myVector.addElement(new Command("Nấu nhanh\n(5 vàng/5p)", this, 8004, this.selected));
+                    GameCanvas.menu.startAt(myVector, this.X, menuY);
+                }
+            }
+        }
+        else if (this.selected < 20)
+        {
+            int recipeIdx = this.selected - 5;
+            if (recipeIdx >= 0 && recipeIdx < Panel.vRecipe.size())
+            {
+                ItemRecipe r = (ItemRecipe)Panel.vRecipe.elementAt(recipeIdx);
+                GameScr.info1.addInfo("Đã chọn món " + r.name, 0);
+            }
+        }
+        else if (this.selected < 27)
+        {
+            int matIdx = this.selected - 20;
+            GameScr.info1.addInfo("Nguyên liệu " + (matIdx + 1), 0);
+        }
+    }
+
+    private void doCook()
+    {
+        if (this.selected < 5 || this.selected >= 20)
+        {
+            GameScr.info1.addInfo("Vui lòng chọn một món ăn để nấu!", 0);
+            return;
+        }
+
+        int recipeIdx = this.selected - 5;
+        if (recipeIdx < 0 || recipeIdx >= Panel.vRecipe.size())
+        {
+            GameScr.info1.addInfo("Món ăn không hợp lệ!", 0);
+            return;
+        }
+        
+        ItemRecipe recipe = (ItemRecipe)Panel.vRecipe.elementAt(recipeIdx);
+        if (recipe == null) return;
+        
+        try
+        {
+            // Server sẽ check item, vàng, và xếp ô.
+            Message msg = new Message(-114);
+            msg.writer().writeByte(4); // action 4 = start cooking
+            msg.writer().writeShort(recipe.id);
+            Session_ME.gI().sendMessage(msg);
+            msg.cleanup();
+        }
+        catch (Exception) { }
+    }
+
     public void setTypeCombine()
     {
         this.type = 12;
@@ -1136,6 +1752,20 @@ public class Panel : IActionListener, IChatable
             this.idIcon = (int)item.template.iconID;
             this.partID = null;
             this.charInfo = null;
+            if (this.type == Panel.TYPE_CHE_BIEN)
+            {
+                this.cp.cmdNextLine = new Command(string.Empty, this, 8009, null);
+                this.cp.cmdNextLine.img = Panel.imgX;
+                this.cp.cmdNextLine.cmdClosePanel = true; // Tạo hiệu ứng lóe sáng khi chọn
+                this.cp.cmdNextLine.w = 36; // Chiều rộng vùng nhấn (to)
+                this.cp.cmdNextLine.h = 36; // Chiều cao vùng nhấn (to)
+                // Căn nút ở giữa bên dưới Panel
+                //this.cp.cmdNextLine.x = this.X + (this.W - 36) / 2;
+                //this.cp.cmdNextLine.y = GameCanvas.h - 45;
+                // Căn khung thông tin nằm trọn trong Panel và che phần Danh sách món ăn
+                this.cp.cx = this.X + (this.W - this.cp.sayWidth) / 2;
+                this.cp.cy = 225; // Chiều cao phù hợp để che danh sách món ăn (recipe list)
+            }
         }
         catch (Exception ex)
         {
@@ -1738,6 +2368,9 @@ public class Panel : IActionListener, IChatable
                 break;
             case TYPE_FARM_SEED:
                 this.updateKeyFarmSeed();
+                break;
+            case TYPE_CHE_BIEN:
+                this.updateKeyCheBien();
                 break;
 
         }
@@ -4162,6 +4795,9 @@ public class Panel : IActionListener, IChatable
                 break;
             case TYPE_FARM_SEED:
                 this.paintFarmSeed(g);
+                break;
+            case TYPE_CHE_BIEN:
+                this.paintCheBien(g);
                 break;
             case 27:
                 this.paintPlayerInfo(g);
@@ -7319,6 +7955,10 @@ public class Panel : IActionListener, IChatable
                 SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), this.X + 25, 50, 0, 33);
                 this.paintMyInfo(g);
                 return;
+            case TYPE_CHE_BIEN:
+                SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), this.X + 25, 50, 0, 33);
+                this.paintMyInfo(g);
+                return;
             default:
                 return;
         }
@@ -7862,6 +8502,7 @@ public class Panel : IActionListener, IChatable
         GameCanvas.isFocusPanel2 = false;
         this.pointerDownTime = (this.pointerDownFirstX = 0);
         this.pointerIsDowning = false;
+        this.cp = null;
         if ((Char.myCharz().cHP <= 0L || Char.myCharz().statusMe == 14 || Char.myCharz().statusMe == 5) && Char.myCharz().meDead)
         {
             Command center = new Command(mResources.DIES[0], 11038, GameScr.gI());
@@ -8042,6 +8683,9 @@ public class Panel : IActionListener, IChatable
                         break;
                     case 28:
                         this.DoFirePet2Main();
+                        break;
+                    case TYPE_CHE_BIEN:
+                        this.doFireCheBien();
                         break;
                 }
             }
@@ -8228,6 +8872,9 @@ public class Panel : IActionListener, IChatable
                         break;
                     case TYPE_FARM_SEED:
                         doFireFarmSeed();
+                        break;
+                    case TYPE_CHE_BIEN:
+                        doFireCheBien();
                         break;
 
                 }
@@ -10825,6 +11472,13 @@ public class Panel : IActionListener, IChatable
 
     public void perform(int idAction, object p)
     {
+        if (idAction == 8009)
+        {
+            this.cp = null;
+            this.selectedIngredient = -1;
+            GameCanvas.clearAllPointerEvent();
+            return;
+        }
         if (idAction == 14001)
         {
             Item seedItem = (Item)p;
@@ -10834,6 +11488,78 @@ public class Panel : IActionListener, IChatable
                 this.hide();
                 return;
             }
+        }
+        if (idAction == 8000)
+        {
+            int slotIdx = (int)p;
+            if (slotIdx >= 0 && slotIdx < 5)
+            {
+                // Gửi request hủy nấu ăn lên server
+                try
+                {
+                    Message msg = new Message(-114);
+                    msg.writer().writeByte(3); // action 3 = cancel cooking
+                    msg.writer().writeByte((sbyte)slotIdx);
+                    Session_ME.gI().sendMessage(msg);
+                    msg.cleanup();
+                }
+                catch (Exception) { }
+            }
+            GameCanvas.endDlg();
+            return;
+        }
+        if (idAction == 8002)
+        {
+            GameCanvas.endDlg();
+            return;
+        }
+        if (idAction == 8003)
+        {
+            // Hủy nấu → hiện dialog xác nhận
+            int slotIdx = (int)p;
+            GameCanvas.startYesNoDlg("Hủy nấu hoàn lại 50% nguyên liệu có hay không?", new Command("Có", this, 8000, slotIdx), new Command("Không", this, 8002, null));
+            return;
+        }
+        if (idAction == 8004)
+        {
+            // Nấu nhanh → tốn 5 vàng, giảm 5 phút nấu
+            int slotIdx = (int)p;
+            if (slotIdx >= 0 && slotIdx < 5)
+            {
+                try
+                {
+                    Message msg = new Message(-114);
+                    msg.writer().writeByte(5); // action 5 = speed up cooking
+                    msg.writer().writeByte((sbyte)slotIdx);
+                    Session_ME.gI().sendMessage(msg);
+                    msg.cleanup();
+                }
+                catch (Exception) { }
+            }
+            return;
+        }
+        if (idAction == 8006)
+        {
+            int slotIdx = (int)p;
+            if (slotIdx >= 1 && slotIdx < 5)
+            {
+                try
+                {
+                    Message msg = new Message(-114);
+                    msg.writer().writeByte(6); // action 6 = unlock cooking slot
+                    msg.writer().writeByte((sbyte)slotIdx);
+                    Session_ME.gI().sendMessage(msg);
+                    msg.cleanup();
+                }
+                catch (Exception) { }
+            }
+            GameCanvas.endDlg();
+            return;
+        }
+        if (idAction == 8001)
+        {
+            GameScr.info1.addInfo("Tính năng nấu nhanh đang phát triển!", 0);
+            return;
         }
         if (idAction != 8010)
         {
@@ -13757,6 +14483,15 @@ public class Panel : IActionListener, IChatable
                 {
                     "Kho",
                     "Hạt"
+                }
+            },
+            // TYPE_CHE_BIEN = 30
+            new string[][]
+            {
+                new string[]
+                {
+                    "Chế",
+                    "biến"
                 }
             }
     };

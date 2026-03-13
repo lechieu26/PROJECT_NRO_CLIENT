@@ -129,6 +129,68 @@ public class Controller : IMessageHandler
 			case -33: // Farm Asset
 				FarmMessageHandler.GI().HandleFarmAssetMessage(msg);
 				break;
+			case -114:
+			{
+				sbyte action = msg.reader().readByte();
+				if (action == 0)
+				{
+					int size = msg.reader().readByte();
+					Panel.vRecipe.removeAllElements();
+					for (int i = 0; i < size; i++)
+					{
+						ItemRecipe r = new ItemRecipe();
+						r.id = msg.reader().readShort();
+						short itemId = msg.reader().readShort();
+						ItemTemplate template = ItemTemplates.get(itemId);
+						if (template != null)
+						{
+							r.iconID = template.iconID;
+							r.name = template.name;
+						}
+						else
+						{
+							r.iconID = 0;
+							r.name = "Unknown";
+						}
+						r.time = msg.reader().readInt();
+						r.donGiaId = msg.reader().readShort();
+						r.gia = msg.reader().readInt();
+						int numIngre = msg.reader().readByte();
+						r.ingredients = new short[numIngre];
+						r.quantities = new short[numIngre];
+						for (int j = 0; j < numIngre; j++)
+						{
+							r.ingredients[j] = msg.reader().readShort();
+							r.quantities[j] = msg.reader().readShort();
+						}
+						Panel.vRecipe.addElement(r);
+					}
+					// Đọc data cooking từ server
+					try
+					{
+						Panel.serverCookingData = msg.reader().readUTF();
+					}
+					catch (Exception)
+					{
+						Panel.serverCookingData = "";
+					}
+					GameCanvas.panel.setTypeCheBien();
+					GameCanvas.panel.show();
+				}
+				else if (action == 1) // Cập nhật nhanh, không nháy màn hình
+				{
+					try
+					{
+						Panel.serverCookingData = msg.reader().readUTF();
+					}
+					catch (Exception)
+					{
+						Panel.serverCookingData = "";
+					}
+					Panel.LoadCookingSlots();
+				}
+				break;
+			}
 			case 70:
 				QuayTamBao.receiveMsg(msg);
 				break;
