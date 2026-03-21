@@ -1238,7 +1238,9 @@ namespace Assets.src.f
 					int loop = msg.reader().readByte();
 					short loopCount = msg.reader().readShort();
 					sbyte isStand = msg.reader().readByte();
-					@char?.addEffChar(new Effect(id, @char, layer, loop, loopCount, isStand));
+					Effect effect = new Effect(id, @char, layer, loop, loopCount, isStand);
+					effect.isTitle = true;
+					@char?.addEffChar(effect);
 				}
 				else if (b == 1) // tat
 				{

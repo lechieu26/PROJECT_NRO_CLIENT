@@ -1150,6 +1150,11 @@ public class GameCanvas : IActionListener
 		{
 			g.setColor(0);
 			g.fillRect(0, 0, w, h);
+			if (ModFunc.imgBg != null)
+			{
+				g.drawImageScale(ModFunc.imgBg, 0, 0, w, h, 0);
+			}
+			return;
 		}
 		if (Char.isLoadingMap)
 		{

@@ -103,6 +103,9 @@ public class Effect
 	public int layer;
 
 	public int isStand;
+	public bool isTitle;
+
+	public int speed = 1;
 
 	public static MyVector vEffData = new MyVector();
 
@@ -177,6 +180,10 @@ public class Effect
 		{
 			typeEff = 5;
 		}
+		if (id == 191 || id == 192)
+		{
+			speed = 4;
+		}
 	}
 
 	public Effect(int id, int x, int y, int layer, int loop, int loopCount)
@@ -235,6 +242,10 @@ public class Effect
 		if (!isExistNewEff(effId + string.Empty))
 		{
 			newEff.addElement(effId + string.Empty);
+		}
+		if (id == 191 || id == 192)
+		{
+			speed = 4;
 		}
 	}
 
@@ -340,6 +351,10 @@ public class Effect
 
 	public void paint(mGraphics g)
 	{
+		if (ModFunc.isTitleOff && isTitle)
+		{
+			return;
+		}
 		if (ModFunc.GiamDungLuong || !isPaint || getEffDataById(effId) == null || getEffDataById(effId).img == null)
 		{
 			return;
@@ -365,6 +380,21 @@ public class Effect
 			{
 				if (getEffDataById(effId) == null || getEffDataById(effId).img == null)
 				{
+					return;
+				}
+				if (speed > 1 && GameCanvas.gameTick % speed != 0)
+				{
+					if (typeEff == 4 && c != null)
+					{
+						x = c.cx;
+						y = c.cy;
+					}
+					if (typeEff == 5 && c != null)
+					{
+						trans = ((c.cdir != 1) ? 1 : 0);
+						x = ((c.cdir == 1) ? (c.cx - 15) : (c.cx + 15));
+						y = ((c.isMonkey == 0) ? (c.cy - 25) : (c.cy - 35));
+					}
 					return;
 				}
 				if (typeEff == 5)

@@ -265,6 +265,8 @@ public class ModFunc : IActionListener
     public string currentBgm = "";
     public float bgmVolume = 0.5f;
 
+    public static bool isTitleOff = false;
+
     public static bool isShowID = false;
 
     private static int FrameGif = 15;
@@ -370,6 +372,7 @@ public class ModFunc : IActionListener
     public static string strEffectOff = "Tắt Hiệu Ứng Hành Trang";
 
     public static string strHighFps = "FPS Cao";
+    public static string strTitleOff = "Danh Hiệu";
 
     public static string strClickToChat = " [Ấn để chat]";
 
@@ -564,6 +567,7 @@ public class ModFunc : IActionListener
         isEffectInven = Rms.loadRMSInt("effectinven") == 1;
         GiamDungLuong = Rms.loadRMSInt("background") == 1;
         AnPlayer = Rms.loadRMSInt("anplayer") == 1;
+        isTitleOff = Rms.loadRMSInt("isTitleOff") == 1;
         autoWakeUp = Rms.loadRMSInt("autoWakeUp") == 1;
         if (!ModNotLogo)
         {
@@ -600,6 +604,13 @@ public class ModFunc : IActionListener
         }
         LoadButtonPositions();
         QuaNapTuan.isNapTuan = false;
+        try
+        {
+            imgBg = Image.createImage("nen2");
+        }
+        catch (Exception)
+        {
+        }
     }
 
     public void MoveTo(int x, int y)
@@ -2045,6 +2056,7 @@ public class ModFunc : IActionListener
                         menuOthers.addElement(new Command("Auto\nHồi sinh " + (autoWakeUp ? "[Bật]" : "[Tắt]"), 60));
                         menuOthers.addElement(new Command("Hành trang\nLưới " + (isInventory ? "[Bật]" : "[Tắt]"), 59));
                         menuOthers.addElement(new Command("Load ô\nskill", 57));
+                        menuOthers.addElement(new Command(strTitleOff + (!isTitleOff ? " [Bật]" : " [Tắt]"), 905));
                         menuOthers.addElement(new Command("Âm thanh\n" + (GameCanvas.isPlaySound ? "[Bật]" : "[Tắt]"), 18));
                         /*if (Main.isPC) // Chỉ hiển thị trên PC
                         {
@@ -2341,6 +2353,11 @@ public class ModFunc : IActionListener
                     }
                     break;
                 }
+            case 905:
+                isTitleOff = !isTitleOff;
+                Rms.saveRMSInt("isTitleOff", isTitleOff ? 1 : 0);
+                GameScr.info1.addInfo(strTitleOff + (!isTitleOff ? " [Bật]" : " [Tắt]"), 0);
+                break;
             case 901: // Thêm nhạc
                 {
                     if (Mod.BgmManager.Instance != null)
