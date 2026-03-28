@@ -131,6 +131,7 @@ public class Session_ME2 : ISession
 				{
 					key[j + 1] ^= key[j];
 				}
+				Debug.Log("getKeyComplete 2! Key length: " + key.Length);
 				getKeyComplete = true;
 				GameMidlet.IP2 = message.reader().readUTF();
 				GameMidlet.PORT2 = message.reader().readInt();
@@ -174,7 +175,7 @@ public class Session_ME2 : ISession
 				{
 					b = readKey(b);
 				}
-				if (b == -32 || b == -66 || b == 11 || b == -67 || b == -74 || b == -87)
+				if (b == -32 || b == -66 || b == 11 || b == -67 || b == -74 || b == -87 || b == 66)
 				{
 					return readMessage2(b);
 				}
@@ -189,7 +190,7 @@ public class Session_ME2 : ISession
 				{
 					sbyte num2 = dis.ReadSByte();
 					sbyte b5 = dis.ReadSByte();
-					num = (num2 & 0xFF00) | (b5 & 0xFF);
+					num = ((num2 & 0xFF) << 8) | (b5 & 0xFF);
 				}
 				sbyte[] array = new sbyte[num];
 				Buffer.BlockCopy(dis.ReadBytes(num), 0, array, 0, num);
@@ -207,7 +208,7 @@ public class Session_ME2 : ISession
 			}
 			catch (Exception ex)
 			{
-				Debug.Log(ex.StackTrace.ToString());
+				Debug.Log("readMessage 2 error: " + ex.Message);
 			}
 			return null;
 		}
@@ -379,7 +380,8 @@ public class Session_ME2 : ISession
 				}
 				else
 				{
-					dos.Write((ushort)num);
+					dos.Write((sbyte)(num >> 8));
+					dos.Write((sbyte)(num & 0xFF));
 				}
 				if (getKeyComplete)
 				{
@@ -402,7 +404,8 @@ public class Session_ME2 : ISession
 				}
 				else
 				{
-					dos.Write((ushort)0);
+					dos.Write((sbyte)0);
+					dos.Write((sbyte)0);
 				}
 				sendByteCount += 5;
 			}

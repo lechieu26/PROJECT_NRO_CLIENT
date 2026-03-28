@@ -650,7 +650,7 @@ public partial class Service
 			message.writer().writeInt(GameCanvas.h);
 			message.writer().writeBoolean(TField.isQwerty);
 			message.writer().writeBoolean(GameCanvas.isTouch);
-			message.writer().writeUTF(GameCanvas.getPlatformName() + "|" + GameMidlet.VERSION);
+			message.writer().writeUTF(GameCanvas.getPlatformName() + "|" + GameMidlet.VERSION + "|" + UnityEngine.SystemInfo.deviceUniqueIdentifier);
 			DataInputStream dataInputStream = MyStream.readFile("/info");
 			if (dataInputStream != null)
 			{
@@ -692,7 +692,7 @@ public partial class Service
 			message.writer().writeInt(GameCanvas.h);
 			message.writer().writeBoolean(TField.isQwerty);
 			message.writer().writeBoolean(GameCanvas.isTouch);
-			message.writer().writeUTF(GameCanvas.getPlatformName() + "|" + GameMidlet.VERSION);
+			message.writer().writeUTF(GameCanvas.getPlatformName() + "|" + GameMidlet.VERSION + "|" + UnityEngine.SystemInfo.deviceUniqueIdentifier);
 			DataInputStream dataInputStream = MyStream.readFile("/info");
 			if (dataInputStream != null)
 			{
