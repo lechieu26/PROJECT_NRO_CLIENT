@@ -40,88 +40,108 @@ public class Panel : IActionListener, IChatable
         {
             if (Panel.bgcam[i] == null)
             {
-                Panel.bgcam[i] = GameCanvas.loadEffect("/cam/" + i.ToString());
+                Panel.bgcam[i] = GameCanvas.loadEffect("/cam/bg/" + i.ToString());
+                Panel.effcam[i] = GameCanvas.loadEffect("/cam/eff/" + i.ToString());
             }
             if (Panel.bgdo[i] == null)
             {
-                Panel.bgdo[i] = GameCanvas.loadEffect("/do/" + i.ToString());
+                Panel.bgdo[i] = GameCanvas.loadEffect("/do/bg/" + i.ToString());
+                Panel.effdo[i] = GameCanvas.loadEffect("/do/eff/" + i.ToString());
             }
             if (Panel.bgtim[i] == null)
             {
-                Panel.bgtim[i] = GameCanvas.loadEffect("/tim/" + i.ToString());
+                Panel.bgtim[i] = GameCanvas.loadEffect("/tim/bg/" + i.ToString());
+                Panel.efftim[i] = GameCanvas.loadEffect("/tim/eff/" + i.ToString());
             }
             if (Panel.bgxanhdam[i] == null)
             {
-                Panel.bgxanhdam[i] = GameCanvas.loadEffect("/xanhdam/" + i.ToString());
+                Panel.bgxanhdam[i] = GameCanvas.loadEffect("/xanhdam/bg/" + i.ToString());
+                Panel.effxanhdam[i] = GameCanvas.loadEffect("/xanhdam/eff/" + i.ToString());
             }
             if (Panel.bgxanhla[i] == null)
             {
-                Panel.bgxanhla[i] = GameCanvas.loadEffect("/xanhla/" + i.ToString());
+                Panel.bgxanhla[i] = GameCanvas.loadEffect("/xanhla/bg/" + i.ToString());
+                Panel.effxanhla[i] = GameCanvas.loadEffect("/xanhla/eff/" + i.ToString());
             }
             if (Panel.bgxanhnhat[i] == null)
             {
-                Panel.bgxanhnhat[i] = GameCanvas.loadEffect("/xanhnhat/" + i.ToString());
+                Panel.bgxanhnhat[i] = GameCanvas.loadEffect("/xanhnhat/bg/" + i.ToString());
+                Panel.effxanhnhat[i] = GameCanvas.loadEffect("/xanhnhat/eff/" + i.ToString());
             }
             if (Panel.bghong[i] == null)
             {
-                Panel.bghong[i] = GameCanvas.loadEffect("/hong/" + i.ToString());
+                Panel.bghong[i] = GameCanvas.loadEffect("/hong/bg/" + i.ToString());
+                Panel.effhong[i] = GameCanvas.loadEffect("/hong/eff/" + i.ToString());
             }
             if (Panel.bgxanhduong[i] == null)
             {
-                Panel.bgxanhduong[i] = GameCanvas.loadEffect("/xanhduong/" + i.ToString());
+                Panel.bgxanhduong[i] = GameCanvas.loadEffect("/xanhduong/bg/" + i.ToString());
+                Panel.effxanhduong[i] = GameCanvas.loadEffect("/xanhduong/eff/" + i.ToString());
             }
         }
     }
-    private void paintEffectItem(mGraphics g, Item item, int x, int y)
+    private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
     {
         try
         {
-            Image[] eff = null;
             if (item != null && item.itemOption != null)
             {
                 foreach (ItemOption option in item.itemOption)
                 {
-                    if (option != null && option.optionTemplate.id == 72)
+                    if (option != null && option.optionTemplate.id == 72 && option.param > 0)
                     {
-                        Image[] bg;
+                        Image[] bg = null;
+                        Image[] eff = null;
                         switch (option.param)
                         {
                             case 1:
                                 bg = Panel.bgcam;
+                                eff = Panel.effcam;
                                 break;
                             case 2:
                                 bg = Panel.bgdo;
+                                eff = Panel.effdo;
                                 break;
                             case 3:
                                 bg = Panel.bghong;
+                                eff = Panel.effhong;
                                 break;
                             case 4:
                                 bg = Panel.bgtim;
+                                eff = Panel.efftim;
                                 break;
                             case 5:
                                 bg = Panel.bgxanhdam;
+                                eff = Panel.effxanhdam;
                                 break;
                             case 6:
                                 bg = Panel.bgxanhla;
+                                eff = Panel.effxanhla;
                                 break;
                             case 7:
                                 bg = Panel.bgxanhduong;
+                                eff = Panel.effxanhduong;
                                 break;
                             case 8:
                                 bg = Panel.bgxanhnhat;
+                                eff = Panel.effxanhnhat;
                                 break;
                             default:
                                 bg = Panel.bgdo;
+                                eff = Panel.effdo;
                                 break;
                         }
-                        if (eff != null)
+
+                        if (bg != null && bg[GameCanvas.gameTick / 5 % 8] != null)
                         {
-                            g.drawImage(eff[GameCanvas.gameTick / 6 % 9], x + 2, y + 2);
+                            g.drawImageScale(bg[GameCanvas.gameTick / 5 % 8], x - 1, y - 1, w + 3, h + 2, 0);
                         }
-                        if (bg != null)
+
+                        if (eff != null && eff[GameCanvas.gameTick / 6 % 8] != null)
                         {
-                            g.drawImage(bg[GameCanvas.gameTick / 5 % 8], x - 1, y - 2);
+                            g.drawImageScale(eff[GameCanvas.gameTick / 6 % 8], x + 2, y + 2, w-4, h-4, 0);
                         }
+                        
                     }
                 }
             }
@@ -383,7 +403,7 @@ public class Panel : IActionListener, IChatable
                 Item item = (Item)this.vFarmSeeds.elementAt(i);
                 if (item != null)
                 {
-                    this.paintEffectItem(g, item, x, y);
+                    this.paintEffectItem(g, item, x, y, slotW, slotH);
 
                     float offset = (i == this.selected) ?
                         ((float)System.Math.Sin((float)GameCanvas.gameTick * 0.2f) * 2f) : 0f;
@@ -5321,7 +5341,7 @@ public class Panel : IActionListener, IChatable
                     }
                     g.setColor(6047789, 0.3f);
                     g.fillRect(num5, num6, num7, num8, 5);
-                    this.paintEffectItem(g, item, num5, num6);
+                    this.paintEffectItem(g, item, num5, num6, num7, num8);
                     if (item != null)
                     {
                         string text = string.Empty;
@@ -5925,7 +5945,7 @@ public class Panel : IActionListener, IChatable
                         }
                         g.setColor(6047789, 0.3f);
                         g.fillRect(num5, num6, num7, num8, 5);
-                        this.paintEffectItem(g, item, num5, num6);
+                        this.paintEffectItem(g, item, num5, num6, num7, num8);
                         if (item != null)
                         {
                             string text = string.Empty;
@@ -6060,7 +6080,7 @@ public class Panel : IActionListener, IChatable
                         }
                         g.setColor(6047789, 0.3f);
                         g.fillRect(num4, num5, num6, num7, 5);
-                        this.paintEffectItem(g, item, num4, num5);
+                        this.paintEffectItem(g, item, num4, num5, num6, num7);
                         if (item != null)
                         {
                             string empty = string.Empty;
@@ -6641,7 +6661,7 @@ public class Panel : IActionListener, IChatable
                     g.setColor(6047789, 0.3f);
                     Item item = (Item)this.vItemCombine.elementAt(j);
                     g.fillRect(num5, num6, num7, num8, 5);
-                    this.paintEffectItem(g, item, num5, num6);
+                    this.paintEffectItem(g, item, num5, num6, num7, num8);
                     if (item != null)
                     {
                         string text = string.Empty;
@@ -6776,7 +6796,7 @@ public class Panel : IActionListener, IChatable
                     g.fillRect(num24, num25, num26, num27, 5);
                     if (item3 != null)
                     {
-                        this.paintEffectItem(g, item3, num24, num25);
+                        this.paintEffectItem(g, item3, num24, num25, num26, num27);
                         string text3 = string.Empty;
                         mFont mFont4 = mFont.tahoma_7_green2;
                         if (item3.itemOption != null)
@@ -7068,13 +7088,22 @@ public class Panel : IActionListener, IChatable
                         {
                             for (int j = 0; j < item.itemOption.Length; j++)
                             {
+                                if (item.itemOption[j].optionTemplate.id == 72 && item.itemOption[j].param > 0)
+                                {
+                                    byte idColor = (byte)Panel.GetColor_Item_Upgrade(item.itemOption[j].param);
+                                    if (Panel.GetColor_ItemBg((int)idColor) != -1)
+                                    {
+                                        g.setColor(Panel.GetColor_ItemBg((int)idColor), 0.5f);
+                                        g.fillRect(bx, by, bw, bh, 2);
+                                    }
+                                }
                                 if (item.itemOption[j].optionTemplate.id == 107 && item.itemOption[j].param > 0)
                                 {
                                     this.paintItemStar(g, item.itemOption[j].param.ToString(), bx + 15, by);
                                 }
                             }
                         }
-                        this.paintEffectItem(g, item, bx, by);
+                        this.paintEffectItem(g, item, bx, by, bw, bh);
                         
                         // Icon dao động khi được chọn
                         float bodyOffset = (this.selected == i && this.selected < arrItemBody.Length) 
@@ -7101,7 +7130,9 @@ public class Panel : IActionListener, IChatable
                         g.fillRect(x2 - 1, y2 - 1, num13 + 2, num16 + 2, 5);
                     }
                     Item item2 = arrItemBag[l];
-                    if (item2 != null)
+                    int itemColor = 6047789;
+                    float itemAlpha = 0.2f;
+                    if (item2 != null && item2.itemOption != null)
                     {
                         for (int m = 0; m < item2.itemOption.Length; m++)
                         {
@@ -7110,14 +7141,15 @@ public class Panel : IActionListener, IChatable
                                 byte id = (byte)Panel.GetColor_Item_Upgrade(item2.itemOption[m].param);
                                 if (Panel.GetColor_ItemBg((int)id) != -1)
                                 {
-                                    g.setColor((l != inventorySelect_bag) ? Panel.GetColor_ItemBg((int)id) : Panel.GetColor_ItemBg((int)id));
+                                    itemColor = Panel.GetColor_ItemBg((int)id);
+                                    itemAlpha = 0.3f;
                                 }
                             }
                         }
                     }
-                    g.setColor(6047789, 0.3f);
+                    g.setColor(itemColor, itemAlpha);
                     g.fillRect(x2, y2, num13, num16, 5);
-                    this.paintEffectItem(g, item2, x2, y2);
+                    this.paintEffectItem(g, item2, x2, y2, num13, num16);
                     if (item2 != null && item2.isSelect && GameCanvas.panel.type == 12)
                     {
                         g.setColor((l != inventorySelect_bag) ? 6047789 : 7040779);
@@ -15368,6 +15400,22 @@ public class Panel : IActionListener, IChatable
     private static Image[] bghong = new Image[8];
 
     private static Image[] bgxanhduong = new Image[8];
+
+    private static Image[] effcam = new Image[8];
+
+    private static Image[] effdo = new Image[8];
+
+    private static Image[] effxanhla = new Image[8];
+
+    private static Image[] efftim = new Image[8];
+
+    private static Image[] effxanhnhat = new Image[8];
+
+    private static Image[] effxanhdam = new Image[8];
+
+    private static Image[] effhong = new Image[8];
+
+    private static Image[] effxanhduong = new Image[8];
 
     private int WidthBoxNew = 33;
 
