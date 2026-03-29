@@ -928,7 +928,24 @@ public class mGraphics
 		h *= zoomLevel;
 		if (image != null)
 		{
-			Graphics.DrawTexture(new Rect(x + translateX, y + translateY, (tranform != 0) ? (-w) : w, h), image.texture);
+			int num3 = 0;
+			int num4 = 0;
+			if (isClip)
+			{
+				num3 = clipX;
+				num4 = clipY;
+				if (isTranslate)
+				{
+					num3 += clipTX;
+					num4 += clipTY;
+				}
+				GUI.BeginGroup(new Rect(num3, num4, clipW, clipH));
+			}
+			GUI.DrawTexture(new Rect(x + translateX - num3, y + translateY - num4, (tranform != 0) ? (-w) : w, h), image.texture);
+			if (isClip)
+			{
+				GUI.EndGroup();
+			}
 		}
 	}
 
