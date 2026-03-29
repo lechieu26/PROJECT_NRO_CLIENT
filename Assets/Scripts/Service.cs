@@ -2148,6 +2148,27 @@ public partial class Service
 		}
 	}
 
+	public void sendAutoMercenaryCommand(bool isAttack)
+	{
+		Message message = null;
+		try
+		{
+			message = new Message((sbyte)123); // TODO: Thay sbyte bang ma command cua Server
+			message.writer().writeBoolean(isAttack);
+			session.sendMessage(message);
+		}
+		catch (Exception)
+		{
+		}
+		finally
+		{
+			if (message != null)
+			{
+				message.cleanup();
+			}
+		}
+	}
+
 	public void petStatus(sbyte status)
 	{
 		Message message = null;

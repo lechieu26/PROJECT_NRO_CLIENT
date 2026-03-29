@@ -336,6 +336,14 @@ public class GameScr : mScreen, IChatable
 
 	public static Image imgHP4;
 
+	public static Image imgMercOn;
+
+	public static Image imgMercOff;
+
+	public static bool isAutoMercenary;
+	public static int tickAutoMercenaryMissing;
+	public static long lastTimeClickAutoMercenary;
+
 	public static Image imgFire0;
 
 	public static Image imgFire1;
@@ -890,6 +898,8 @@ public class GameScr : mScreen, IChatable
 			imgAnalog2 = GameCanvas.loadImage("/mainImage/myTexture2danalog2.png");
 			imgHP3 = GameCanvas.loadImage("/mainImage/myTexture2dPea2.png");
 			imgHP4 = GameCanvas.loadImage("/mainImage/myTexture2dPea3.png");
+			imgMercOn = GameCanvas.loadImage("/mainImage/Merc_on.png");
+			imgMercOff = GameCanvas.loadImage("/mainImage/Merc_off.png");
 			imgFire0 = GameCanvas.loadImage("/mainImage/myTexture2dfirebtn0.png");
 			imgFire1 = GameCanvas.loadImage("/mainImage/myTexture2dfirebtn1.png");
 			imgModFunc = GameCanvas.loadImage("/mainImage/imgModFuc.png");
@@ -4180,6 +4190,38 @@ public class GameScr : mScreen, IChatable
 			}
 			if (Main.isPC)
 			{
+				if (GameCanvas.isPointerHoldIn(xHP, yHP - 40, 40, 40) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
+				{
+					if (mSystem.currentTimeMillis() - lastTimeClickAutoMercenary < 5000)
+					{
+						info1.addInfo("Vui lòng đợi 5s để thực hiện tiếp!", 0);
+						GameCanvas.clearAllPointerEvent();
+						return;
+					}
+					lastTimeClickAutoMercenary = mSystem.currentTimeMillis();
+					if (!isAutoMercenary)
+					{
+						if (!isHaveCloneOrMercenary())
+						{
+							info1.addInfo("Không có Lính đánh thuê hoặc Phân thân!", 0);
+							isAutoMercenary = false;
+						}
+						else
+						{
+							isAutoMercenary = true;
+							info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Bật", 0);
+							Service.gI().sendAutoMercenaryCommand(true);
+						}
+					}
+					else
+					{
+						isAutoMercenary = false;
+						info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Tắt", 0);
+						Service.gI().sendAutoMercenaryCommand(false);
+					}
+					GameCanvas.clearAllPointerEvent();
+					return;
+				}
 				checkMouseChat();
 			}
 			if (!TileMap.isOfflineMap() && GameCanvas.isPointerHoldIn(xC, yC, 34, 34))
@@ -4381,8 +4423,60 @@ public class GameScr : mScreen, IChatable
 		}
 	}
 
+	public static bool isHaveCloneOrMercenary()
+	{
+		// 1. Check bằng Icon ItemTime (Cực kỳ ổn định, không phụ thuộc khoảng cách)
+		// Icon phân thân: 31725
+		if (ItemTime.isExistItem(31725))
+		{
+			return true;
+		}
+		// Icon lính đánh thuê: 32456, 32457, 32458
+		if (ItemTime.isExistItem(32456) || ItemTime.isExistItem(32457) || ItemTime.isExistItem(32458))
+		{
+			return true;
+		}
+
+		// 2. Check bằng Nhân vật trong Map (Dự phòng khi icon chưa kịp load)
+		int myId = Char.myCharz().charID;
+		for (int i = 0; i < vCharInMap.size(); i++)
+		{
+			Char c = (Char)vCharInMap.elementAt(i);
+			if (c != null)
+			{
+				if (c.charID == myId - 10000)
+				{
+					return true;
+				}
+				if (c.charID >= (-101000 - myId) && c.charID <= (-100000 - myId))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public override void update()
 	{
+		if (isAutoMercenary && GameCanvas.gameTick % 20 == 0 && !Char.ischangingMap && !Char.isLoadingMap)
+		{
+			if (!isHaveCloneOrMercenary())
+			{
+				tickAutoMercenaryMissing++;
+				if (tickAutoMercenaryMissing > 5)
+				{
+					isAutoMercenary = false;
+					tickAutoMercenaryMissing = 0;
+					Service.gI().sendAutoMercenaryCommand(false);
+					info1.addInfo("Đã dừng tự đánh (hết lính/phân thân)", 0);
+				}
+			}
+			else
+			{
+				tickAutoMercenaryMissing = 0;
+			}
+		}
         //ModFunc.GI().UpdateAutoItems(); // auto item
         if (ModFunc.activeBossNotif.size() > 0 || ModFunc.killedBossNotif.size() > 0)
 		{
@@ -5864,6 +5958,10 @@ public class GameScr : mScreen, IChatable
 					mFont.tahoma_7_green2.drawString(g, string.Empty + hpPotion, xHP + 20, yHP + 11, 2);
 				}
 			}
+			if (Main.isPC && imgMercOn != null && imgMercOff != null)
+			{
+				g.drawImage(isAutoMercenary ? imgMercOn : imgMercOff, xHP + 20, yHP - 30, mGraphics.HCENTER | mGraphics.VCENTER);
+			}
 			if (isHaveSelectSkill)
 			{
 				Skill[] array = (Main.isPC ? keySkill : ((!GameCanvas.isTouch) ? keySkill : onScreenSkill));
@@ -6325,6 +6423,17 @@ public class GameScr : mScreen, IChatable
 		}
 		else if (!text.Equals(string.Empty))
 		{
+			if (text.Equals("tan cong") || text.Equals("attack") || text.Equals("giet") || text.Equals("bao ve"))
+			{
+				if (isHaveCloneOrMercenary())
+				{
+					isAutoMercenary = true;
+				}
+			}
+			else if (text.Equals("dung") || text.Equals("stop") || text.Equals("thoi") || text.Equals("ve nha") || text.Equals("follow") || text.Equals("di theo"))
+			{
+				isAutoMercenary = false;
+			}
 			Service.gI().chat(text);
 		}
 	}

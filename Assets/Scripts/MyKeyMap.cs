@@ -44,6 +44,16 @@ public class MyKeyMap
 		h.Add(KeyCode.Alpha7, 55);
 		h.Add(KeyCode.Alpha8, 56);
 		h.Add(KeyCode.Alpha9, 57);
+		h.Add(KeyCode.Keypad0, 48);
+		h.Add(KeyCode.Keypad1, 49);
+		h.Add(KeyCode.Keypad2, 50);
+		h.Add(KeyCode.Keypad3, 51);
+		h.Add(KeyCode.Keypad4, 52);
+		h.Add(KeyCode.Keypad5, 53);
+		h.Add(KeyCode.Keypad6, 54);
+		h.Add(KeyCode.Keypad7, 55);
+		h.Add(KeyCode.Keypad8, 56);
+		h.Add(KeyCode.Keypad9, 57);
 		h.Add(KeyCode.Space, 32);
 		h.Add(KeyCode.F1, -21);
 		h.Add(KeyCode.F2, -22);

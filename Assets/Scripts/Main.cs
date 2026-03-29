@@ -82,6 +82,10 @@ public class Main : MonoBehaviour
 	public static int a = 1;
 
 	public static bool isCompactDevice = true;
+	
+	private static int lastKeyProcessed;
+
+	private static int lastFrameProcessed;
 
 	private void Start()
 	{
@@ -334,9 +338,13 @@ public class Main : MonoBehaviour
 			lastMousePos.y = mousePosition3.y / (float)mGraphics.zoomLevel + (float)mGraphics.addYWhenOpenKeyBoard;
 			GameMidlet.gameCanvas.pointerReleased((int)(mousePosition3.x / (float)mGraphics.zoomLevel), (int)(((float)Screen.height - mousePosition3.y) / (float)mGraphics.zoomLevel) + mGraphics.addYWhenOpenKeyBoard);
 		}
-		if (Input.anyKeyDown && Event.current.type == EventType.KeyDown)
+		if (Event.current.type == EventType.KeyDown)
 		{
 			int num = MyKeyMap.map(Event.current.keyCode);
+			if (num == 0 && Event.current.character != '\0')
+			{
+				num = (int)Event.current.character;
+			}
 			if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
 			{
 				switch (Event.current.keyCode)
@@ -349,10 +357,13 @@ public class Main : MonoBehaviour
 					break;
 				}
 			}
-			if (num != 0)
+			if (num != 0 && (num != lastKeyProcessed || Time.frameCount != lastFrameProcessed))
 			{
 				GameMidlet.gameCanvas.keyPressedz(num);
+				lastKeyProcessed = num;
+				lastFrameProcessed = Time.frameCount;
 			}
+			Event.current.Use();
 		}
 		if (Event.current.type == EventType.KeyUp)
 		{
