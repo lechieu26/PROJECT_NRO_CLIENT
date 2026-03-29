@@ -1642,6 +1642,7 @@ public class Panel : IActionListener, IChatable
                     }
                 }
             }
+            string itemName = ModFunc.isShowID ? ("[" + item.template.id.ToString() + "] " + item.template.name) : item.template.name;
             bool flag = false;
             if (item.itemOption != null)
             {
@@ -1652,22 +1653,22 @@ public class Panel : IActionListener, IChatable
                         flag = true;
                         if (item.itemOption[j].param >= 1 && item.itemOption[j].param <= 5)
                         {
-                            text = text + "|2|1|" + item.template.name + text2;
+                            text = text + "|2|1|" + itemName + text2;
                         }
                         if (item.itemOption[j].param >= 6 && item.itemOption[j].param <= 7)
                         {
-                            text = text + "|8|1|" + item.template.name + text2;
+                            text = text + "|8|1|" + itemName + text2;
                         }
                         if (item.itemOption[j].param >= 8 && item.itemOption[j].param <= 10)
                         {
-                            text = text + "|7|1|" + item.template.name + text2;
+                            text = text + "|7|1|" + itemName + text2;
                         }
                     }
                 }
             }
             if (!flag)
             {
-                text = text + "|0|1|" + item.template.name + text2;
+                text = text + "|0|1|" + itemName + text2;
             }
             if (item.itemOption != null)
             {
@@ -6788,14 +6789,21 @@ public class Panel : IActionListener, IChatable
                                 }
                             }
                         }
-                        mFont4.drawString(g, string.Concat(new string[]
+                        if (ModFunc.isShowID)
                         {
+                            mFont4.drawString(g, string.Concat(new string[]
+                            {
                                 "[",
                                 item3.template.id.ToString(),
                                 "] ",
                                 item3.template.name,
                                 text3
-                        }), num21 + 5, num22 + 1, 0);
+                            }), num21 + 5, num22 + 1, 0);
+                        }
+                        else
+                        {
+                            mFont4.drawString(g, item3.template.name + text3, num21 + 5, num22 + 1, 0);
+                        }
                         string text4 = string.Empty;
                         if (item3.itemOption != null)
                         {

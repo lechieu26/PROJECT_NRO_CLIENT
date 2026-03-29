@@ -928,6 +928,7 @@ public class ServerListScreen : mScreen, IActionListener
 				switchToMe();
 				return;
 			case 2:
+				Res.outchieu("chieu.lq - start download");
 				stopDownload = false;
 				cmdDownload = new Command(mResources.huy, this, 4, null);
 				cmdDownload.x = GameCanvas.w / 2 - mScreen.cmdW / 2;
