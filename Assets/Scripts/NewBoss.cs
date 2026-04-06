@@ -415,6 +415,7 @@ public class NewBoss : Mob, IMapObject
 		g.fillRect(num4, num5, num7, 2);
 		g.drawRegion(imgHPtem, 0, 0, num2, imageHeight, 0, num4, num5, mGraphics.TOP | mGraphics.LEFT);
 		g.drawRegion(imgHPtem, 0, 0, num3, imageHeight, 0, num4 + imageWidth, num5, mGraphics.TOP | mGraphics.LEFT);
+		mFont.tahoma_7b_white.drawString(g, getTemplate().name, x, y - h - 17, mFont.CENTER);
 	}
 
 	public new int getX()

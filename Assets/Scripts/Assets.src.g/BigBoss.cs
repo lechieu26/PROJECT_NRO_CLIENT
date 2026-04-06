@@ -519,6 +519,7 @@ namespace Assets.src.g
 			g.drawImage(GameScr.imgHP_tm_xam, num3 + imageWidth, num4, mGraphics.TOP | mGraphics.LEFT);
 			g.drawRegion(imgHPtem, 0, 0, num, imageHeight, 0, num3, num4, mGraphics.TOP | mGraphics.LEFT);
 			g.drawRegion(imgHPtem, 0, 0, num2, imageHeight, 0, num3 + imageWidth, num4, mGraphics.TOP | mGraphics.LEFT);
+			mFont.tahoma_7b_white.drawString(g, getTemplate().name, x, y - h - 17, mFont.CENTER);
 			if (shock)
 			{
 				tShock++;

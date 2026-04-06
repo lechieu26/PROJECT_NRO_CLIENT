@@ -1454,6 +1454,12 @@ public class Mob : IMapObject
 			SmallImage.drawSmallImage(g, smallBody, x, y + fy - 9, (dir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER);
 		}
 		g.translate(0, -GameCanvas.transY);
+		if (hp > 0.0 && status != 1 && !changBody)
+		{
+			bool isFocus = Char.myCharz().mobFocus != null && Char.myCharz().mobFocus.Equals(this);
+			int yName = y - h - (isFocus ? 17 : 10);
+			mFont.tahoma_7b_white.drawString(g, getTemplate().name, x, yName, mFont.CENTER);
+		}
 		if (Char.myCharz().mobFocus == null || !Char.myCharz().mobFocus.Equals(this) || status == 1 || hp <= 0.0 || imgHPtem == null)
 		{
 			return;
