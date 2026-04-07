@@ -587,10 +587,11 @@ namespace Assets.src.f
 						mSystem.createAdmob();
 						break;
 					case -124:
-						{
-							sbyte b4 = msg.reader().readByte();
-							sbyte b5 = msg.reader().readByte();
-							if (b5 == 0)
+					{
+						sbyte b4 = msg.reader().readByte();
+						sbyte b5 = msg.reader().readByte();
+						Res.outchieu("[TANG_HINH_DEBUG] Client received Msg -124: toggle=" + b4 + " targetType=" + b5);
+						if (b5 == 0)
 							{
 								if (b4 == 2)
 								{
@@ -736,6 +737,23 @@ namespace Assets.src.f
 									else if (num6 == Char.myCharz().charID)
 									{
 										Char.myCharz().stone = false;
+									}
+								}
+								if (num5 == 43)
+								{
+									Res.outchieu("[TANG_HINH_DEBUG] Effect 43 received: toggle=" + b4 + " charId=" + num6 + " myId=" + Char.myCharz().charID);
+									if (b4 == 1)
+									{
+										if (num6 == Char.myCharz().charID)
+										{
+											Char.myCharz().isTanHinh = true;
+											Res.outchieu("[TANG_HINH_DEBUG] isTanHinh = true");
+										}
+									}
+									else if (num6 == Char.myCharz().charID)
+									{
+										Char.myCharz().isTanHinh = false;
+										Res.outchieu("[TANG_HINH_DEBUG] isTanHinh = false");
 									}
 								}
 							}

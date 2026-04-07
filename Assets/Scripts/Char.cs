@@ -341,6 +341,8 @@ public class Char : IMapObject
 
 	public bool isInvisiblez;
 
+	public bool isTanHinh;
+
 	public bool isShadown = true;
 
 	public const sbyte PK_NORMAL = 0;
@@ -5240,6 +5242,12 @@ public class Char : IMapObject
 			{
 				return;
 			}
+			// Hiệu ứng tàng hình: render mờ cho nhân vật chính
+			Color guiColorBackup = GUI.color;
+			if (me && isTanHinh)
+			{
+				GUI.color = new Color(1f, 1f, 1f, 0.4f);
+			}
 			if (petFollow != null)
 			{
 				petFollow.paint(g);
@@ -5247,6 +5255,10 @@ public class Char : IMapObject
 			paintMount1(g);
 			if ((TileMap.isInAirMap() && cy >= TileMap.pxh - 48) || isTeleport)
 			{
+				if (me && isTanHinh)
+				{
+					GUI.color = guiColorBackup;
+				}
 				return;
 			}
 			if (holder && GameCanvas.gameTick % 2 == 0)
@@ -5313,6 +5325,11 @@ public class Char : IMapObject
 				paintAuraFront(g);
 				paintEffFront(g);
 				paint_map_line(g);
+			}
+			// Khôi phục GUI.color sau khi render xong
+			if (me && isTanHinh)
+			{
+				GUI.color = guiColorBackup;
 			}
 		}
 	}
@@ -5811,7 +5828,11 @@ public class Char : IMapObject
 				paintCharBody(g, xMFB, yMFB, cdir, cf, isPaintBag: false);
 				return;
 			}
-			if (isInvisiblez)
+			if (me && isTanHinh)
+			{
+				paintCharBody(g, cx, cy + fy, cdir, cf, isPaintBag: true);
+			}
+			else if (isInvisiblez)
 			{
 				if (me)
 				{

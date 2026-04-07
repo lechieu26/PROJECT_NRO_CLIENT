@@ -5813,6 +5813,7 @@ public static int JavaHashCode(string str)
 					GameScr.vCharInMap.removeAllElements();
 					GameScr.vItemMap.removeAllElements();
 					Char.vItemTime.removeAllElements();
+					Char.myCharz().isTanHinh = false;
 					GameScr.loadImg();
 					GameScr.currentCharViewInfo = Char.myCharz();
 					Char.myCharz().charID = msg.reader().readInt();
