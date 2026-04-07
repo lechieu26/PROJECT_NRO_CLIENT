@@ -2839,30 +2839,30 @@ public class ModFunc : IActionListener
 
     private void LoadSkillToScreen()
     {
-        for (int i = 0; i < Char.myCharz().vSkill.size(); i++)
+        for (int i = 0; i < 12; i++)
         {
-            Skill skill = (Skill)Char.myCharz().vSkill.elementAt(i);
+            GameScr.onScreenSkill[i] = null;
+            GameScr.keySkill[i] = null;
+        }
+        int num = Char.myCharz().vSkill.size();
+        for (int j = 0; j < num && j < 12; j++)
+        {
+            Skill skill = (Skill)Char.myCharz().vSkill.elementAt(j);
             if (GameCanvas.isTouch && !Main.isPC)
             {
-                for (int j = 0; j < GameScr.onScreenSkill.Length; j++)
-                {
-                    if (GameScr.onScreenSkill[j] == skill)
-                    {
-                        GameScr.onScreenSkill[j] = null;
-                    }
-                }
-                GameScr.onScreenSkill[i] = skill;
-                GameScr.gI().saveonScreenSkillToRMS();
-                continue;
+                GameScr.onScreenSkill[j] = skill;
             }
-            for (int k = 0; k < GameScr.keySkill.Length; k++)
+            else
             {
-                if (GameScr.keySkill[k] == skill)
-                {
-                    GameScr.keySkill[k] = null;
-                }
+                GameScr.keySkill[j] = skill;
             }
-            GameScr.keySkill[i] = skill;
+        }
+        if (GameCanvas.isTouch && !Main.isPC)
+        {
+            GameScr.gI().saveonScreenSkillToRMS();
+        }
+        else
+        {
             GameScr.gI().saveKeySkillToRMS();
         }
     }

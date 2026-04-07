@@ -323,8 +323,10 @@ public class mResources
 			string.Empty
 		} };
 
-	public static string[] key_skill_qwerty = new string[]
+	public static string[] key_skill_qwerty = new string[12]
 	{
+		string.Empty,
+		string.Empty,
 		string.Empty,
 		string.Empty,
 		string.Empty,
@@ -337,8 +339,10 @@ public class mResources
 		string.Empty
 	};
 
-	public static string[] key_skill = new string[]
+	public static string[] key_skill = new string[12]
 	{
+		string.Empty,
+		string.Empty,
 		string.Empty,
 		string.Empty,
 		string.Empty,

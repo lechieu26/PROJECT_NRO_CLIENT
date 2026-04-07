@@ -1172,7 +1172,7 @@ public class GameScr : mScreen, IChatable
 	{
 		Skill skill = Char.myCharz().getSkill(skillTemplate);
 		MyVector myVector = new MyVector();
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < onScreenSkill.Length; i++)
 		{
 			object p = new object[2]
 			{
@@ -1194,7 +1194,7 @@ public class GameScr : mScreen, IChatable
 		Skill skill = Char.myCharz().getSkill(skillTemplate);
 		string[] array = ((!TField.isQwerty) ? mResources.key_skill : mResources.key_skill_qwerty);
 		MyVector myVector = new MyVector();
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < keySkill.Length; i++)
 		{
 			myVector.addElement(new Command(p: new object[2]
 			{
@@ -1709,22 +1709,24 @@ public class GameScr : mScreen, IChatable
 		Skill[] array = ((!GameCanvas.isTouch) ? keySkill : onScreenSkill);
 		xS = new int[array.Length];
 		yS = new int[array.Length];
+		int rowSize = array.Length > 5 ? array.Length / 2 : array.Length;
 		if (GameCanvas.isTouchControlSmallScreen && isUseTouch)
 		{
 			xSkill = 23;
 			ySkill = 52;
 			padSkill = 5;
+			wSkill = 25 + padSkill;
 			for (int i = 0; i < xS.Length; i++)
 			{
-				xS[i] = i * (25 + padSkill);
-				yS[i] = ySkill;
+				xS[i] = i * wSkill;
+				yS[i] = ySkill - 32;
 				if (xS.Length > 5 && i >= xS.Length / 2)
 				{
-					xS[i] = (i - xS.Length / 2) * (25 + padSkill);
-					yS[i] = ySkill - 32;
+					xS[i] = (i - xS.Length / 2) * wSkill;
+					yS[i] = ySkill;
 				}
 			}
-			xHP = array.Length * (25 + padSkill);
+			xHP = rowSize * wSkill;
 			yHP = ySkill;
 		}
 		else
@@ -1733,7 +1735,7 @@ public class GameScr : mScreen, IChatable
 			if (GameCanvas.w <= 320)
 			{
 				ySkill = gH - wSkill - 6;
-				xSkill = gW2 - array.Length * wSkill / 2 - 25;
+				xSkill = gW2 - rowSize * wSkill / 2 - 25;
 			}
 			else
 			{
@@ -1744,14 +1746,14 @@ public class GameScr : mScreen, IChatable
 			for (int j = 0; j < xS.Length; j++)
 			{
 				xS[j] = j * wSkill;
-				yS[j] = ySkill;
+				yS[j] = ySkill - wSkill - 2;
 				if (xS.Length > 5 && j >= xS.Length / 2)
 				{
 					xS[j] = (j - xS.Length / 2) * wSkill;
-					yS[j] = ySkill - 32;
+					yS[j] = ySkill;
 				}
 			}
-			xHP = array.Length * wSkill;
+			xHP = rowSize * wSkill;
 			yHP = ySkill;
 		}
 		if (!GameCanvas.isTouch)
@@ -1762,7 +1764,7 @@ public class GameScr : mScreen, IChatable
 		ySkill = GameCanvas.h - 40;
 		if (gamePad.isSmallGamePad && isAnalog == 1)
 		{
-			xHP = array.Length * wSkill;
+			xHP = rowSize * wSkill;
 			yHP = ySkill;
 		}
 		else
@@ -2607,6 +2609,20 @@ public class GameScr : mScreen, IChatable
 							if (keySkill[9] != null)
 							{
 								doSelectSkill(keySkill[9], isShortcut: true);
+							}
+						}
+						else if (GameCanvas.keyAsciiPress == 113 || GameCanvas.keyAsciiPress == 81)
+						{
+							if (keySkill[10] != null)
+							{
+								doSelectSkill(keySkill[10], isShortcut: true);
+							}
+						}
+						else if (GameCanvas.keyAsciiPress == 119 || GameCanvas.keyAsciiPress == 87)
+						{
+							if (keySkill[11] != null)
+							{
+								doSelectSkill(keySkill[11], isShortcut: true);
 							}
 						}
 						else if (GameCanvas.keyAsciiPress == 114)
@@ -4274,21 +4290,21 @@ public class GameScr : mScreen, IChatable
 				return;
 			}
 			keyTouchSkill = -1;
-			bool flag = false;
-            int rowSize = onScreenSkill.Length > 5 ? onScreenSkill.Length / 2 : onScreenSkill.Length;
-			if (onScreenSkill.Length > 5 && (GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, rowSize * wSkill, wSkill) || GameCanvas.isPointerHoldIn(xSkill + xS[rowSize] - wSkill / 2 + 12, yS[rowSize] - wSkill / 2 + 12, rowSize * wSkill, wSkill)))
+			int num = -1;
+			int boxW = wSkill + 6;
+			int boxH = wSkill + 6;
+			for (int i = 0; i < onScreenSkill.Length; i++)
 			{
-				flag = true;
+				if (GameCanvas.isPointerHoldIn(xSkill + xS[i] - 4, yS[i] - 4, boxW, boxH))
+				{
+					num = i;
+					break;
+				}
 			}
-			if (flag || GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, rowSize * wSkill, wSkill) || (!GameCanvas.isTouchControl && GameCanvas.isPointerHoldIn(xSkill + xS[0] - wSkill / 2 + 12, yS[0] - wSkill / 2 + 12, wSkill, onScreenSkill.Length * wSkill)))
+			if (num != -1)
 			{
 				GameCanvas.isPointerJustDown = false;
 				isPointerDowning = false;
-				int num = (GameCanvas.pxLast - (xSkill + xS[0] - wSkill / 2 + 12)) / wSkill;
-				if (flag && GameCanvas.pyLast < yS[0])
-				{
-					num += rowSize;
-				}
 				keyTouchSkill = num;
 				if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
 				{
@@ -4581,15 +4597,6 @@ public class GameScr : mScreen, IChatable
 				((Npc)vNpc.elementAt(l)).update();
 			}
 			nSkill = onScreenSkill.Length;
-			for (int i2 = onScreenSkill.Length - 1; i2 >= 0; i2--)
-			{
-				if (onScreenSkill[i2] != null)
-				{
-					nSkill = i2 + 1;
-					break;
-				}
-				nSkill--;
-			}
 			if (nSkill == 1 && GameCanvas.isTouch)
 			{
 				xSkill = -200;
@@ -5971,25 +5978,30 @@ public class GameScr : mScreen, IChatable
 					g.fillRect(xSkill + xHP + 2, yHP - 10 + 6, 20, 10);
 					mFont.tahoma_7_white.drawString(g, "*", xSkill + xHP + 12, yHP - 8 + 6, mFont.CENTER);
 				}
-				int num4 = (Main.isPC ? array.Length : ((!GameCanvas.isTouch) ? array.Length : nSkill));
+				int num4 = array.Length;
 				for (int i = 0; i < num4; i++)
 				{
 					Skill skill = array[i];
-					if (skill == null)
-					{
-						continue;
-					}
-					if (skill != Char.myCharz().myskill)
+					if (skill != null && skill != Char.myCharz().myskill)
 					{
 						g.drawImage(imgSkill, xSkill + xS[i] - 1, yS[i] - 1, 0);
 					}
-					if (skill == Char.myCharz().myskill)
+					if (skill != null && skill == Char.myCharz().myskill)
 					{
 						g.drawImage(imgSkill2, xSkill + xS[i] - 1, yS[i] - 1, 0);
 						if (GameCanvas.isTouch && !Main.isPC)
 						{
 							g.drawRegion(Mob.imgHP, 0, 12, 9, 6, 0, xSkill + xS[i] + 8, yS[i] - 7, 0);
 						}
+					}
+					if (skill == null)
+					{
+						g.drawImage(imgSkill, xSkill + xS[i] - 1, yS[i] - 1, 0);
+						if ((i == selectedIndexSkill && !isPaintUI() && GameCanvas.gameTick % 10 > 5) || i == keyTouchSkill)
+						{
+							g.drawImage(ItemMap.imageFlare, xSkill + xS[i] + 13, yS[i] + 14, 3);
+						}
+						continue;
 					}
 					skill.paint(xSkill + xS[i] + 13, yS[i] + 13, g);
 					if ((i == selectedIndexSkill && !isPaintUI() && GameCanvas.gameTick % 10 > 5) || i == keyTouchSkill)
