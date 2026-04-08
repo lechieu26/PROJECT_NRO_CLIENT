@@ -928,7 +928,7 @@ public class ServerListScreen : mScreen, IActionListener
 				switchToMe();
 				return;
 			case 2:
-				Res.outchieu("chieu.lq - start download");
+				Res.outz("chieu.lq - start download");
 				stopDownload = false;
 				cmdDownload = new Command(mResources.huy, this, 4, null);
 				cmdDownload.x = GameCanvas.w / 2 - mScreen.cmdW / 2;
@@ -1178,7 +1178,7 @@ public class ServerListScreen : mScreen, IActionListener
 				LinkIP = tfIP.getText();
 				PortIP = tfPort.getText();
 				linkDefault = "NRO:" + LinkIP + ":" + PortIP + ":0,0,0";
-				Res.outchieu("chieu.lq " +  linkDefault);
+				Res.outz("chieu.lq " +  linkDefault);
 				SaveIPNew(linkDefault);
 				isChangeIP = false;
 				center = null;

@@ -138,16 +138,11 @@ public class Res
 		return angle;
 	}
 
-    public static void outchieu(string s)
-    {
-        Debug.Log("chieu.lq " + s);
-    }
-
     public static void outz(string s)
 	{
 		if (mSystem.isTest)
 		{
-			Debug.Log("chieu.lq " + s);
+			Debug.Log("NRO test " + s);
 		}
 	}
 

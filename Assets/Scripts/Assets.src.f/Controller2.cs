@@ -590,7 +590,7 @@ namespace Assets.src.f
 					{
 						sbyte b4 = msg.reader().readByte();
 						sbyte b5 = msg.reader().readByte();
-						Res.outchieu("[TANG_HINH_DEBUG] Client received Msg -124: toggle=" + b4 + " targetType=" + b5);
+						Res.outz("[TANG_HINH_DEBUG] Client received Msg -124: toggle=" + b4 + " targetType=" + b5);
 						if (b5 == 0)
 							{
 								if (b4 == 2)
@@ -741,19 +741,19 @@ namespace Assets.src.f
 								}
 								if (num5 == 43)
 								{
-									Res.outchieu("[TANG_HINH_DEBUG] Effect 43 received: toggle=" + b4 + " charId=" + num6 + " myId=" + Char.myCharz().charID);
+									Res.outz("[TANG_HINH_DEBUG] Effect 43 received: toggle=" + b4 + " charId=" + num6 + " myId=" + Char.myCharz().charID);
 									if (b4 == 1)
 									{
 										if (num6 == Char.myCharz().charID)
 										{
 											Char.myCharz().isTanHinh = true;
-											Res.outchieu("[TANG_HINH_DEBUG] isTanHinh = true");
+											Res.outz("[TANG_HINH_DEBUG] isTanHinh = true");
 										}
 									}
 									else if (num6 == Char.myCharz().charID)
 									{
 										Char.myCharz().isTanHinh = false;
-										Res.outchieu("[TANG_HINH_DEBUG] isTanHinh = false");
+										Res.outz("[TANG_HINH_DEBUG] isTanHinh = false");
 									}
 								}
 							}

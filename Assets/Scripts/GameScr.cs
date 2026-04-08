@@ -939,7 +939,7 @@ public class GameScr : mScreen, IChatable
 		{
 			vcItem = array4[0];
 		}
-		Res.outchieu("[CLIENT] Loaded cached versions - vcData=" + vcData + ", vcMap=" + vcMap + ", vcSkill=" + vcSkill + ", vcItem=" + vcItem);
+		Res.outz("[CLIENT] Loaded cached versions - vcData=" + vcData + ", vcMap=" + vcMap + ", vcSkill=" + vcSkill + ", vcItem=" + vcItem);
 		imgNut = GameCanvas.loadImage("/mainImage/myTexture2dnut.png");
 		imgNutF = GameCanvas.loadImage("/mainImage/myTexture2dnutF.png");
 		imgCapsule = GameCanvas.loadImage("/mainImage/capsule.png");
