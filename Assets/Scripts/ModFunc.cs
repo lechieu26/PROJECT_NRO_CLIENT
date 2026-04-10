@@ -34,6 +34,7 @@ public class ModFunc : IActionListener
     public static int idRadaDoBoss = 1861;
 
     public static bool ModNotLogo = false;
+    public static bool showMobName = true;
 
     public static bool ModNotLogoGif = false;
 
@@ -549,6 +550,12 @@ public class ModFunc : IActionListener
                 return false;
         }
         return true;
+    }
+
+    public static void toggleMobName()
+    {
+        showMobName = !showMobName;
+        GameScr.info1.addInfo("Hiển thị tên quái: " + (showMobName ? "Bật" : "Tắt"), 0);
     }
 
     public void LoadGame()
@@ -2056,6 +2063,7 @@ public class ModFunc : IActionListener
                         menuOthers.addElement(new Command("Auto\nHồi sinh " + (autoWakeUp ? "[Bật]" : "[Tắt]"), 60));
                         menuOthers.addElement(new Command("Hành trang\nLưới " + (isInventory ? "[Bật]" : "[Tắt]"), 59));
                         menuOthers.addElement(new Command("Load ô\nskill", 57));
+                        menuOthers.addElement(new Command("Hiện tên quái " + (showMobName ? "[Bật]" : "[Tắt]"), 999));
                         menuOthers.addElement(new Command(strTitleOff + (!isTitleOff ? " [Bật]" : " [Tắt]"), 905));
                         menuOthers.addElement(new Command("Âm thanh\n" + (GameCanvas.isPlaySound ? "[Bật]" : "[Tắt]"), 18));
                         /*if (Main.isPC) // Chỉ hiển thị trên PC
@@ -2374,15 +2382,19 @@ public class ModFunc : IActionListener
                     }
                     break;
                 }
-            case 902: // Mở popup quản lý nhạc nền
-                isShowMusicList = !isShowMusicList;
-                if (isShowMusicList)
-                {
-                    scrollY = 0; // Reset scroll khi mở
-                    GameCanvas.menu.showMenu = false; // Đóng menu cũ
+                    case 902: // Mở popup quản lý nhạc nền
+                        isShowMusicList = !isShowMusicList;
+                        if (isShowMusicList)
+                        {
+                            scrollY = 0; // Reset scroll khi mở
+                            GameCanvas.menu.showMenu = false; // Đóng menu cũ
+                        }
+                        break;
+                    case 999:
+                        ModFunc.toggleMobName();
+                        break;
                 }
-                break;
-        }
+
     }
 
     public void AutoBuyItem(int num, Item itemBuy)

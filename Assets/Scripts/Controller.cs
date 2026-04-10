@@ -2504,10 +2504,12 @@ public class Controller : IMessageHandler
 					if (playerId == Char.myCharz().charID)
 					{
 						Char.myCharz().setAutoSkillPaint(GameScr.sks[skillId], 0);
+						EffecMn.addEff(new Effect(18, Char.myCharz().cx, Char.myCharz().cy, 2, 10, -1));
 					}
 					else if (GameScr.findCharInMap(playerId) != null)
 					{
 						GameScr.findCharInMap(playerId).setAutoSkillPaint(GameScr.sks[skillId], 0);
+						EffecMn.addEff(new Effect(18, GameScr.findCharInMap(playerId).cx, GameScr.findCharInMap(playerId).cy, 2, 10, -1));
 						SoundMn.gI().gong();
 					}
 				}

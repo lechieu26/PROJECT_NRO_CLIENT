@@ -1458,7 +1458,10 @@ public class Mob : IMapObject
 		{
 			bool isFocus = Char.myCharz().mobFocus != null && Char.myCharz().mobFocus.Equals(this);
 			int yName = y - h - (isFocus ? 17 : 10);
-			mFont.tahoma_7b_white.drawString(g, getTemplate().name, x, yName, mFont.CENTER);
+			if (ModFunc.showMobName)
+			{
+				mFont.tahoma_7b_white.drawString(g, getTemplate().name, x, yName, mFont.CENTER);
+			}
 		}
 		if (Char.myCharz().mobFocus == null || !Char.myCharz().mobFocus.Equals(this) || status == 1 || hp <= 0.0 || imgHPtem == null)
 		{
