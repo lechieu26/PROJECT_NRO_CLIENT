@@ -202,14 +202,37 @@ public class FarmPlot
     }
 
     /// <summary>
-    /// Kiểm tra điểm click có nằm trong ô không
+    /// Kiểm tra điểm click có nằm trong ô hình thoi (isometric diamond) không
+    /// Ô đất được vẽ với anchor BOTTOM | HCENTER tại (posX, posY)
+    /// 
+    /// Hình thoi có 4 đỉnh:
+    ///         (posX, posY - height)     ← đỉnh trên
+    ///  (posX - w/2, posY - h/2)   (posX + w/2, posY - h/2)  ← 2 cạnh
+    ///         (posX, posY)              ← đáy dưới
+    /// 
+    /// Thuật toán: Manhattan distance từ tâm hình thoi
+    /// |dx| / halfW + |dy| / halfH <= 1.0
     /// </summary>
     public bool ContainsPoint(int x, int y, int width, int height)
     {
-        // Vẽ với anchor BOTTOM | HCENTER nên:
-        // x nằm trong khoảng [posX - width/2, posX + width/2]
-        // y nằm trong khoảng [posY - height, posY]
-        return x >= posX - width/2 && x <= posX + width/2 && 
-               y >= posY - height && y <= posY;
+        // Tâm hình thoi (anchor BOTTOM | HCENTER → đáy = posY, tâm Y = posY - height/2)
+        float centerX = posX;
+        float centerY = posY - height / 2.0f;
+
+        // Nửa chiều rộng và nửa chiều cao của hình thoi
+        float halfW = width / 2.0f;
+        float halfH = height / 2.0f;
+
+        // Tránh chia cho 0
+        if (halfW <= 0 || halfH <= 0) return false;
+
+        // Khoảng cách tương đối từ tâm
+        float dx = x - centerX;
+        if (dx < 0) dx = -dx;
+        float dy = y - centerY;
+        if (dy < 0) dy = -dy;
+
+        // Kiểm tra Manhattan distance: điểm nằm trong thoi khi tổng tỷ lệ <= 1
+        return (dx / halfW + dy / halfH) <= 1.0f;
     }
 }

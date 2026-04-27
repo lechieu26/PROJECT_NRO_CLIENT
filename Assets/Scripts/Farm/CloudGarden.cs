@@ -12,6 +12,7 @@ public class CloudGarden
     public FarmPlot[] plots;        // Danh sách ô ruộng
     public int unlockedPlots;       // Số ô đã mở khóa
     public bool isInitialized;      // Đã khởi tạo chưa (từ server)
+    private bool yAdjustApplied;    // Đã apply offset Y cho mặt đất chưa
     
     // Logic hiển thị click
     public int focusedPlotId = -1; // ID ô đang được bấm vào
@@ -42,6 +43,7 @@ public class CloudGarden
         }
         unlockedPlots = FarmConstants.INITIAL_PLOTS;
         isInitialized = false;
+        yAdjustApplied = false;
     }
 
     /// <summary>
@@ -56,6 +58,7 @@ public class CloudGarden
         }
         unlockedPlots = FarmConstants.INITIAL_PLOTS;
         isInitialized = false;
+        yAdjustApplied = false;
     }
 
     /// <summary>
@@ -81,6 +84,13 @@ public class CloudGarden
         try
         {
             unlockedPlots = msg.reader().readInt();
+            Res.outz("CloudGarden.UpdateFullGarden: unlockedPlots=" + unlockedPlots + " available=" + msg.reader().available());
+            
+            // Validate bounds
+            if (unlockedPlots < 0) unlockedPlots = 0;
+            if (unlockedPlots > FarmConstants.MAX_PLOTS) unlockedPlots = FarmConstants.MAX_PLOTS;
+
+            if (plots == null) plots = new FarmPlot[FarmConstants.MAX_PLOTS];
 
             for (int i = 0; i < FarmConstants.MAX_PLOTS; i++)
             {
@@ -93,7 +103,21 @@ public class CloudGarden
                 short posX = msg.reader().readShort();
                 short posY = msg.reader().readShort();
 
-                if (plotId >= 0 && plotId < FarmConstants.MAX_PLOTS)
+                if (i == 0) // Log chi tiết plot đầu tiên để debug
+                {
+                    Res.outz("CloudGarden: Plot[0] id=" + plotId + " unlocked=" + unlocked +
+                             " stage=" + stage + " crop=" + cropType + " posX=" + posX + " posY=" + posY);
+                }
+
+                // Validate tọa độ - bảo vệ khỏi dữ liệu bị lỗi
+                if (posX < 0 || posX > 1000 || posY < 0 || posY > 1000)
+                {
+                    Res.outz("CloudGarden: Invalid pos for plot " + plotId + 
+                             " posX=" + posX + " posY=" + posY + " - skipping");
+                    continue;
+                }
+
+                if (plotId >= 0 && plotId < FarmConstants.MAX_PLOTS && plots[plotId] != null)
                 {
                     plots[plotId].UpdateFromServer(unlocked, stage, cropType, timeToHarvest, watered);
                     // Sử dụng vị trí từ server (server quản lý tập trung)
@@ -103,12 +127,73 @@ public class CloudGarden
             }
 
             isInitialized = true;
+            yAdjustApplied = false; // Reset để tính lại offset
             Res.outz("CloudGarden: Initialized with " + unlockedPlots + " unlocked plots");
         }
         catch (Exception ex)
         {
             Res.outz("CloudGarden: Error updating garden - " + ex.Message);
+            // Không set isInitialized = true nếu lỗi để tránh vẽ data sai
         }
+    }
+
+    /// <summary>
+    /// Dịch chuyển posY tất cả ô đất sao cho đường giữa 2 hàng = mặt đất nhân vật
+    /// Đường giữa = trung điểm giữa (đáy hàng trên) và (đỉnh hàng dưới)
+    ///           = (minPosY + maxPosY - PLOT_HEIGHT) / 2
+    /// </summary>
+    private void AdjustPlotsToGround()
+    {
+        if (yAdjustApplied) return;
+
+        Char myChar = Char.myCharz();
+        if (myChar == null) return; // Nhân vật chưa khởi tạo
+
+        int groundY = myChar.cy;
+        if (groundY <= 0) return; // Nhân vật chưa có vị trí hợp lệ
+
+        // Tìm min/max posY để xác định 2 hàng
+        int minY = int.MaxValue;
+        int maxY = int.MinValue;
+        int validCount = 0;
+
+        for (int i = 0; i < FarmConstants.MAX_PLOTS; i++)
+        {
+            if (plots[i] != null && plots[i].posY > 0)
+            {
+                if (plots[i].posY < minY) minY = plots[i].posY;
+                if (plots[i].posY > maxY) maxY = plots[i].posY;
+                validCount++;
+            }
+        }
+
+        if (validCount == 0 || minY == int.MaxValue)
+        {
+            // Nếu không có ô nào có vị trí (có thể do chưa nhận đủ data), 
+            // đánh dấu là đã apply để không lặp lại loop này mỗi frame cho đến khi có update mới
+            yAdjustApplied = true; 
+            return;
+        }
+
+        // Đường giữa 2 hàng:
+        // - Hàng trên (anchor BOTTOM): đáy ở minY
+        // - Hàng dưới (anchor BOTTOM): đỉnh ở maxY - PLOT_HEIGHT
+        // - Trung điểm = (minY + maxY - PLOT_HEIGHT) / 2
+        int midLine = (minY + maxY - PLOT_HEIGHT) / 2;
+
+        int offset = groundY - midLine;
+
+        // Apply offset vào posY từng ô
+        for (int i = 0; i < FarmConstants.MAX_PLOTS; i++)
+        {
+            if (plots[i] != null)
+            {
+                plots[i].posY += offset;
+            }
+        }
+
+        yAdjustApplied = true;
+        Res.outz("CloudGarden: Adjusted Y offset=" + offset + " groundY=" + groundY + " midLine=" + midLine + " map=" + TileMap.mapID);
     }
 
 
@@ -134,12 +219,26 @@ public class CloudGarden
 
     /// <summary>
     /// Lấy ô ruộng tại vị trí click
+    /// Tọa độ click (x,y) và posX/posY đều ở hệ logical world-space
+    /// Kích thước hit area lấy từ ảnh plot (logical = physical / zoomLevel)
     /// </summary>
     public FarmPlot GetPlotAt(int x, int y)
     {
+        // Lấy kích thước LOGICAL từ ảnh plot_empty
+        // image.getWidth() = image.w / zoomLevel (logical pixels)
+        // image.w = texture physical pixels (đã nhân zoom)
+        int plotW = PLOT_WIDTH;
+        int plotH = PLOT_HEIGHT;
+        Image plotImg = FarmAssetManager.GI().GetPlotEmptyImage();
+        if (plotImg != null)
+        {
+            plotW = plotImg.getWidth();   // logical width = physical / zoomLevel
+            plotH = plotImg.getHeight();  // logical height = physical / zoomLevel
+        }
+
         for (int i = 0; i < FarmConstants.MAX_PLOTS; i++)
         {
-            if (plots[i].ContainsPoint(x, y, PLOT_WIDTH, PLOT_HEIGHT))
+            if (plots[i] != null && plots[i].ContainsPoint(x, y, plotW, plotH))
             {
                 return plots[i];
             }
@@ -222,24 +321,49 @@ public class CloudGarden
     /// </summary>
     public void Paint(mGraphics g)
     {
-        if (!isInitialized) return;
-
-        // Vẽ các ô đã mở khóa
-        for (int i = 0; i < unlockedPlots; i++)
+        if (!isInitialized || g == null)
         {
-            PaintPlot(g, plots[i]);
+            // Log chỉ 1 lần mỗi 5 giây để tránh spam
+            if (GameCanvas.gameTick % 300 == 0)
+                Res.outz("CloudGarden.Paint SKIP: isInit=" + isInitialized + " g=" + (g != null));
+            return;
         }
 
-        // Vẽ các ô chưa mở khóa (với icon khóa)
-        for (int i = unlockedPlots; i < FarmConstants.MAX_PLOTS; i++)
+        // Chỉ tính offset Y khi nhân vật đã có vị trí đúng
+        if (!yAdjustApplied && Char.myCharz() != null && Char.myCharz().cy > 0)
         {
-            PaintLockedPlot(g, plots[i]);
+            AdjustPlotsToGround();
         }
-        
-        // Vẽ hiệu ứng thu hoạch
-        for (int i = 0; i < harvestEffects.Count; i++)
+
+        try
         {
-            harvestEffects[i].Paint(g);
+            // Vẽ các ô đã mở khóa
+            for (int i = 0; i < unlockedPlots && i < FarmConstants.MAX_PLOTS; i++)
+            {
+                if (plots[i] != null)
+                    PaintPlot(g, plots[i]);
+            }
+
+            // Vẽ các ô chưa mở khóa (với icon khóa)
+            for (int i = unlockedPlots; i < FarmConstants.MAX_PLOTS; i++)
+            {
+                if (plots[i] != null)
+                    PaintLockedPlot(g, plots[i]);
+            }
+            
+            // Vẽ hiệu ứng thu hoạch
+            if (harvestEffects != null)
+            {
+                for (int i = 0; i < harvestEffects.Count; i++)
+                {
+                    if (harvestEffects[i] != null)
+                        harvestEffects[i].Paint(g);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Res.outz("CloudGarden.Paint error: " + ex.Message);
         }
     }
 
@@ -260,6 +384,12 @@ public class CloudGarden
         if (plotEmpty != null)
         {
             g.drawImage(plotEmpty, plot.posX, plot.posY, mGraphics.BOTTOM | mGraphics.HCENTER);
+        }
+        else
+        {
+            // Fallback khi chưa có hình ảnh - vẽ text placeholder để debug
+            mFont.tahoma_7b_white.drawString(g, "[" + plot.plotId + "]", 
+                plot.posX, plot.posY - PLOT_HEIGHT / 2, mFont.CENTER);
         }
 
         // 1b. Vẽ highlight nếu ô đang được chọn (dùng ảnh plot_selected.png)
@@ -429,24 +559,36 @@ public class CloudGarden
     /// </summary>
     public void Update()
     {
-        // Kiểm tra các ô có hết thời gian chưa
-        for (int i = 0; i < unlockedPlots; i++)
+        if (!isInitialized) return;
+
+        try
         {
-            if (plots[i].IsGrowing() && plots[i].GetRemainingTime() <= 0)
+            // Kiểm tra các ô có hết thời gian chưa
+            for (int i = 0; i < unlockedPlots && i < FarmConstants.MAX_PLOTS; i++)
             {
-                // Client-side auto-maturation:
-                // Nếu hết giờ mà chưa có update server, tự chuyển sang MATURE để hiện icon thu hoạch
-                plots[i].currentStage = FarmConstants.STAGE_MATURE;
+                if (plots[i] != null && plots[i].IsGrowing() && plots[i].GetRemainingTime() <= 0)
+                {
+                    // Client-side auto-maturation:
+                    // Nếu hết giờ mà chưa có update server, tự chuyển sang MATURE để hiện icon thu hoạch
+                    plots[i].currentStage = FarmConstants.STAGE_MATURE;
+                }
+            }
+
+            // Update harvest effects
+            if (harvestEffects != null)
+            {
+                for (int i = harvestEffects.Count - 1; i >= 0; i--)
+                {
+                    if (harvestEffects[i] != null && harvestEffects[i].Update())
+                    {
+                        harvestEffects.RemoveAt(i);
+                    }
+                }
             }
         }
-
-        // Update harvest effects
-        for (int i = harvestEffects.Count - 1; i >= 0; i--)
+        catch (Exception ex)
         {
-            if (harvestEffects[i].Update())
-            {
-                harvestEffects.RemoveAt(i);
-            }
+            Res.outz("CloudGarden.Update error: " + ex.Message);
         }
     }
 

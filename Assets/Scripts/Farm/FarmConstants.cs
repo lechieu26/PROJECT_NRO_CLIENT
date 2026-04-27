@@ -49,10 +49,10 @@ public class FarmConstants
     public const int MAX_PLOTS = 10;
 
     // ===================== MESSAGE TYPES =====================
-    public const sbyte MSG_FARM_ASSET = -33;
+    public const sbyte MSG_FARM_ASSET = -58;   // Đã đổi sang -58 để tránh xung đột với Offline Map (-33) và Mabu Power (-115)
     public const sbyte MSG_FARM_DATA = -34;
     
-    // Sub-types for MSG_FARM_ASSET (-33)
+    // Sub-types for MSG_FARM_ASSET (-115)
     public const sbyte SUBTYPE_FARM_ASSET = 10;
     public const sbyte SUBTYPE_CROP_ASSET = 11;
     public const sbyte SUBTYPE_FARM_ICON = 12;

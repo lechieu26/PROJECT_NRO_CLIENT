@@ -70,14 +70,14 @@ public class GamePad
 		if (!isLargeGamePad)
 		{
 			xZone = 0;
-			wZone = GameCanvas.hw;
+			wZone = 80;
 			yZone = GameCanvas.hh >> 1;
 			hZone = GameCanvas.h - 80;
 		}
 		else
 		{
 			xZone = 0;
-			wZone = GameCanvas.hw / 4 * 3 - 20;
+			wZone = 80;
 			yZone = GameCanvas.hh >> 1;
 			hZone = GameCanvas.h;
 		}

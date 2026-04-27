@@ -1719,7 +1719,7 @@ public class GameScr : mScreen, IChatable
 			for (int i = 0; i < xS.Length; i++)
 			{
 				xS[i] = i * wSkill;
-				yS[i] = ySkill - 32;
+				yS[i] = ySkill - wSkill;
 				if (xS.Length > 5 && i >= xS.Length / 2)
 				{
 					xS[i] = (i - xS.Length / 2) * wSkill;
@@ -1760,8 +1760,8 @@ public class GameScr : mScreen, IChatable
 		{
 			return;
 		}
-		xSkill = 17;
-		ySkill = GameCanvas.h - 40;
+		xSkill = 85;
+		ySkill = GameCanvas.h - 42;
 		if (gamePad.isSmallGamePad && isAnalog == 1)
 		{
 			xHP = rowSize * wSkill;
@@ -1780,7 +1780,7 @@ public class GameScr : mScreen, IChatable
 			if (xS.Length > 5 && k >= xS.Length / 2)
 			{
 				xS[k] = (k - xS.Length / 2) * wSkill;
-				yS[k] = ySkill - 32;
+				yS[k] = ySkill - wSkill;
 			}
 		}
 	}
@@ -3433,15 +3433,14 @@ public class GameScr : mScreen, IChatable
 			return;
 		}
 		
-		// Cloud Garden - Kiểm tra click vào ô ruộng
+		// Cloud Garden - Chặn di chuyển khi click vào ô ruộng
+		// (Logic click chính xử lý ở UpdateKeyTouchControl)
 		if (FarmConstants.IsCloudGardenMap(TileMap.mapID))
 		{
 			FarmPlot plot = CloudGarden.GI().GetPlotAt(xClick, yClick);
-			if (plot != null && plot.unlocked)
+			if (plot != null)
 			{
-                CloudGarden.GI().OnClick(xClick, yClick);
-				Service.gI().farmPlotInteraction(plot.plotId);
-				return;
+				return; // Chặn di chuyển, không gửi request ở đây
 			}
 		}
 		
@@ -4204,40 +4203,42 @@ public class GameScr : mScreen, IChatable
 				flareTime = 5;
 				return;
 			}
-			if (Main.isPC)
+			int xMerc = (!Main.isIPhone ? xHP + 10 : xSkill + 6 * wSkill + 5);
+			int yMerc = (!Main.isIPhone ? yHP - 40 : ySkill - wSkill - 2);
+			if (GameCanvas.isPointerHoldIn(xMerc, yMerc, 40, 40) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
 			{
-				if (GameCanvas.isPointerHoldIn(xHP, yHP - 40, 40, 40) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
+				if (mSystem.currentTimeMillis() - lastTimeClickAutoMercenary < 5000)
 				{
-					if (mSystem.currentTimeMillis() - lastTimeClickAutoMercenary < 5000)
-					{
-						info1.addInfo("Vui lòng đợi 5s để thực hiện tiếp!", 0);
-						GameCanvas.clearAllPointerEvent();
-						return;
-					}
-					lastTimeClickAutoMercenary = mSystem.currentTimeMillis();
-					if (!isAutoMercenary)
-					{
-						if (!isHaveCloneOrMercenary())
-						{
-							info1.addInfo("Không có Lính đánh thuê hoặc Phân thân!", 0);
-							isAutoMercenary = false;
-						}
-						else
-						{
-							isAutoMercenary = true;
-							info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Bật", 0);
-							Service.gI().sendAutoMercenaryCommand(true);
-						}
-					}
-					else
-					{
-						isAutoMercenary = false;
-						info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Tắt", 0);
-						Service.gI().sendAutoMercenaryCommand(false);
-					}
+					info1.addInfo("Vui lòng đợi 5s để thực hiện tiếp!", 0);
 					GameCanvas.clearAllPointerEvent();
 					return;
 				}
+				lastTimeClickAutoMercenary = mSystem.currentTimeMillis();
+				if (!isAutoMercenary)
+				{
+					if (!isHaveCloneOrMercenary())
+					{
+						info1.addInfo("Không có Lính đánh thuê hoặc Phân thân!", 0);
+						isAutoMercenary = false;
+					}
+					else
+					{
+						isAutoMercenary = true;
+						info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Bật", 0);
+						Service.gI().sendAutoMercenaryCommand(true);
+					}
+				}
+				else
+				{
+					isAutoMercenary = false;
+					info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Tắt", 0);
+					Service.gI().sendAutoMercenaryCommand(false);
+				}
+				GameCanvas.clearAllPointerEvent();
+				return;
+			}
+			if (Main.isPC)
+			{
 				checkMouseChat();
 			}
 			if (!TileMap.isOfflineMap() && GameCanvas.isPointerHoldIn(xC, yC, 34, 34))
@@ -4503,8 +4504,12 @@ public class GameScr : mScreen, IChatable
 			AutoXmap.Update();
 			ModFunc.GI().Update();
 		}
-		// Update CloudGarden logic (auto-harvest icon, etc.)
-		CloudGarden.GI().Update();
+		// Update CloudGarden logic (auto-harvest icon, etc.) - chỉ khi ở map farm
+		if (FarmConstants.IsCloudGardenMap(TileMap.mapID))
+		{
+			try { CloudGarden.GI().Update(); }
+			catch (Exception ex) { Res.outz("CloudGarden.Update crash: " + ex.Message); }
+		}
 		if (!AutoXmap.IsXmapRunning)
 		{
 			PickMob.Update();
@@ -4938,12 +4943,14 @@ public class GameScr : mScreen, IChatable
 		{
 			((Npc)vNpc.elementAt(m)).paint(g);
 		}
+		g.translate(0, GameCanvas.transY);
 		// Cloud Garden - Vẽ khu vườn nếu đang ở map farming
+		// Phải vẽ sau g.translate(transY) để đồng bộ tọa độ với nhân vật/NPC trên mặt đất
 		if (FarmConstants.IsCloudGardenMap(TileMap.mapID))
 		{
-			CloudGarden.GI().Paint(g);
+			try { CloudGarden.GI().Paint(g); }
+			catch (Exception ex) { Res.outz("CloudGarden.Paint crash: " + ex.Message); }
 		}
-		g.translate(0, GameCanvas.transY);
 		GameCanvas.debug("PA7", 1);
 		GameCanvas.debug("PA8", 1);
 		for (int n = 0; n < vCharInMap.size(); n++)
@@ -5965,9 +5972,11 @@ public class GameScr : mScreen, IChatable
 					mFont.tahoma_7_green2.drawString(g, string.Empty + hpPotion, xHP + 20, yHP + 11, 2);
 				}
 			}
-			if (Main.isPC && imgMercOn != null && imgMercOff != null)
+			if (imgMercOn != null && imgMercOff != null)
 			{
-				g.drawImage(isAutoMercenary ? imgMercOn : imgMercOff, xHP + 20, yHP - 30, mGraphics.HCENTER | mGraphics.VCENTER);
+				int xMerc2 = (!Main.isIPhone ? xHP + 20 : xSkill + 6 * wSkill + 25);
+				int yMerc2 = (!Main.isIPhone ? yHP - 30 : ySkill - wSkill + 18);
+				g.drawImage(isAutoMercenary ? imgMercOn : imgMercOff, xMerc2, yMerc2, mGraphics.HCENTER | mGraphics.VCENTER);
 			}
 			if (isHaveSelectSkill)
 			{
@@ -6868,7 +6877,7 @@ public class GameScr : mScreen, IChatable
 			xTG = (xF = GameCanvas.w - 45);
 			if (gamePad.isLargeGamePad)
 			{
-				xSkill = gamePad.wZone + 20;
+				xSkill = 85;
 				wSkill = 35;
 				xHP = xF - 45;
 			}

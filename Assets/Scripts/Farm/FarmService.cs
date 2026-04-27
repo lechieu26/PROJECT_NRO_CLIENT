@@ -19,7 +19,6 @@ public partial class Service
             message.writer().writeByte(0); // action: interact
             message.writer().writeInt(plotId);
             session.sendMessage(message);
-            session.sendMessage(message);
             Res.outz("Service: Sent farm plot interaction for plot " + plotId);
             Res.outz("chieu.lq: [Client] Sending farmPlotInteraction for plot " + plotId);
         }
@@ -47,7 +46,6 @@ public partial class Service
             message.writer().writeInt(plotId);
             message.writer().writeShort(seedItemId);
             session.sendMessage(message);
-            session.sendMessage(message);
             Res.outz("Service: Sent plant seed request plot=" + plotId + " seed=" + seedItemId);
             Res.outz("chieu.lq: [Client] Sending farmPlantSeed plot=" + plotId + " seed=" + seedItemId);
         }
@@ -73,7 +71,6 @@ public partial class Service
             message.writer().writeByte(FarmConstants.SUBTYPE_PLOT_UPDATE); // 10
             message.writer().writeByte(2); // action: harvest
             message.writer().writeInt(plotId);
-            session.sendMessage(message);
             session.sendMessage(message);
             Res.outz("Service: Sent harvest request for plot " + plotId);
             Res.outz("chieu.lq: [Client] Sending farmHarvest for plot " + plotId);

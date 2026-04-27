@@ -66,47 +66,73 @@ public class FarmMessageHandler
 
             if (subType == FarmConstants.SUBTYPE_PLOT_UPDATE) // 10
             {
-                sbyte dataType = msg.reader().readByte();
-
-                switch (dataType)
-                {
-                    case FarmConstants.DATA_UPDATE_SINGLE: // 0
-                        ReadSinglePlotUpdate(msg);
-                        break;
-
-                    case FarmConstants.DATA_UPDATE_FULL: // 1
-                        ReadFullGardenUpdate(msg);
-                        break;
-
-                    case FarmConstants.DATA_OPEN_SEED_PANEL: // 2
-                        int plotId = msg.reader().readInt();
-                        // Mở panel chọn hạt giống, Client tự lọc từ inventory
-                        GameCanvas.panel.setTypeFarmSeed(plotId);
-                        GameCanvas.panel.show();
-                        Res.outz("FarmMessageHandler: Open seed panel for plot " + plotId);
-                        break;
-
-                    case 3: // DATA_CLOSE_DIALOG - Server yêu cầu đóng dialog
-                        CloseCurrentDialog();
-                        Res.outz("FarmMessageHandler: Server requested close dialog");
-                        break;
-
-                    case FarmConstants.DATA_HARVEST_SUCCESS: // 4 - Hiệu ứng thu hoạch
-                        int hPlotId = msg.reader().readInt();
-                        sbyte hCropType = msg.reader().readByte();
-                        int hQuantity = msg.reader().readInt();
-                        CloudGarden.GI().ShowHarvestEffect(hPlotId, hCropType, hQuantity);
-                        break;
-
-                    default:
-                        Res.outz("FarmMessageHandler: Unknown data type " + dataType);
-                        break;
-                }
+                ProcessFarmData(msg);
             }
         }
         catch (Exception ex)
         {
             Res.outz("FarmMessageHandler: Error handling data message - " + ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Xử lý message -34 khi subType (10) đã được đọc ở Controller
+    /// Gọi từ Controller.cs khi b12 == 10
+    /// </summary>
+    public void HandleFarmDataDirect(Message msg)
+    {
+        try
+        {
+            ProcessFarmData(msg);
+        }
+        catch (Exception ex)
+        {
+            Res.outz("FarmMessageHandler: Error handling farm data direct - " + ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Logic xử lý farm data chung (đọc dataType và dispatch)
+    /// </summary>
+    private void ProcessFarmData(Message msg)
+    {
+        int available = msg.reader().available();
+        sbyte dataType = msg.reader().readByte();
+        Res.outz("FarmMessageHandler: ProcessFarmData dataType=" + dataType + " available=" + available);
+
+        switch (dataType)
+        {
+            case FarmConstants.DATA_UPDATE_SINGLE: // 0
+                ReadSinglePlotUpdate(msg);
+                break;
+
+            case FarmConstants.DATA_UPDATE_FULL: // 1
+                ReadFullGardenUpdate(msg);
+                break;
+
+            case FarmConstants.DATA_OPEN_SEED_PANEL: // 2
+                int plotId = msg.reader().readInt();
+                // Mở panel chọn hạt giống, Client tự lọc từ inventory
+                GameCanvas.panel.setTypeFarmSeed(plotId);
+                GameCanvas.panel.show();
+                Res.outz("FarmMessageHandler: Open seed panel for plot " + plotId);
+                break;
+
+            case 3: // DATA_CLOSE_DIALOG - Server yêu cầu đóng dialog
+                CloseCurrentDialog();
+                Res.outz("FarmMessageHandler: Server requested close dialog");
+                break;
+
+            case FarmConstants.DATA_HARVEST_SUCCESS: // 4 - Hiệu ứng thu hoạch
+                int hPlotId = msg.reader().readInt();
+                sbyte hCropType = msg.reader().readByte();
+                int hQuantity = msg.reader().readInt();
+                CloudGarden.GI().ShowHarvestEffect(hPlotId, hCropType, hQuantity);
+                break;
+
+            default:
+                Res.outz("FarmMessageHandler: Unknown data type " + dataType);
+                break;
         }
     }
 
@@ -120,16 +146,15 @@ public class FarmMessageHandler
         sbyte[] imageData = new sbyte[length];
         msg.reader().read(ref imageData, 0, length);
 
-        Image img = Image.createImage(imageData, 0, length);
-        if (img != null)
+        if (assetId == 2000) // ICON_PLOT_EMPTY
         {
-            // Nếu là plot empty
-            if (assetId == 2000) // ICON_PLOT_EMPTY
-            {
-                FarmAssetManager.GI().SavePlotEmptyImage(img);
-            }
-            Res.outz("FarmMessageHandler: Loaded farm asset ID=" + assetId);
+            FarmAssetManager.GI().SavePlotEmptyImage(imageData);
         }
+        else if (assetId == 2001) // ICON_PLOT_SELECTED
+        {
+            FarmAssetManager.GI().SavePlotSelectedImage(imageData);
+        }
+        Res.outz("FarmMessageHandler: Loaded farm asset ID=" + assetId);
     }
 
     /// <summary>
@@ -143,12 +168,8 @@ public class FarmMessageHandler
         sbyte[] imageData = new sbyte[length];
         msg.reader().read(ref imageData, 0, length);
 
-        Image img = Image.createImage(imageData, 0, length);
-        if (img != null)
-        {
-            FarmAssetManager.GI().SaveCropAsset(cropType, stage, img);
-            Res.outz("FarmMessageHandler: Loaded crop asset type=" + cropType + " stage=" + stage);
-        }
+        FarmAssetManager.GI().SaveCropAsset(cropType, stage, imageData);
+        Res.outz("FarmMessageHandler: Loaded crop asset type=" + cropType + " stage=" + stage);
     }
 
     /// <summary>
@@ -162,12 +183,8 @@ public class FarmMessageHandler
         sbyte[] imageData = new sbyte[length];
         msg.reader().read(ref imageData, 0, length);
 
-        Image img = Image.createImage(imageData, 0, length);
-        if (img != null)
-        {
-            FarmAssetManager.GI().SaveFarmIcon(iconName, img);
-            Res.outz("FarmMessageHandler: Loaded farm icon " + iconName);
-        }
+        FarmAssetManager.GI().SaveFarmIcon(iconName, imageData);
+        Res.outz("FarmMessageHandler: Loaded farm icon " + iconName);
     }
 
     /// <summary>

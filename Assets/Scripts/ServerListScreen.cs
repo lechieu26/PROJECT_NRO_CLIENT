@@ -30,7 +30,8 @@ public class ServerListScreen : mScreen, IActionListener
 
 	public static bool isMultiSever = false;
 
-	public static string LinkIP = "127.0.0.1";
+	//public static string LinkIP = "127.0.0.1";
+	public static string LinkIP = "192.168.2.29";
 
 	public static string PortIP = "14445";
 

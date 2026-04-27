@@ -1435,6 +1435,10 @@ public class Char : IMapObject
 
 	public string getStrLevel()
 	{
+		if (strLevel == null || strLevel.Length == 0)
+		{
+			return "Lv." + clevel;
+		}
 		if (clevel >= strLevel.Length)
 		{
 			clevel = strLevel.Length - 1;
@@ -5593,6 +5597,10 @@ public class Char : IMapObject
 
 	public void paintHp(mGraphics g, int x, int y)
 	{
+		if (me)
+		{
+			return;
+		}
 		double num = cHP * 100.0 / cHPFull / 10.0 - 1.0;
 		if (num < 0.0)
 		{
@@ -5602,10 +5610,7 @@ public class Char : IMapObject
 		{
 			num = 9.0;
 		}
-		if (!me)
-		{
-			g.drawRegion(Mob.imgHP, 0, 6 * (9 - (int)num), 9, 6, 0, x, y, 3);
-		}
+		g.drawRegion(Mob.imgHP, 0, 6 * (9 - (int)num), 9, 6, 0, x, y, 3);
 		if (cTypePk == 0 && (myCharz().cFlag == 0 || cFlag == 0 || (cFlag != 8 && myCharz().cFlag != 8 && cFlag == myCharz().cFlag)))
 		{
 			return;

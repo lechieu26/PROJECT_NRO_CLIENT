@@ -14,17 +14,24 @@ public class FarmAssetManager
     private Dictionary<string, Image> farmIcons = new Dictionary<string, Image>();
 
     // Crop assets cache [cropType][stage] = Image
-    // Với early stages (seed, sprout1, sprout2), cropType = 255 (common)
-    private Image[,] cropAssets = new Image[256, FarmConstants.STAGE_COUNT + 1];
+    // Với early stages (seed, sprout1, sprout2), cropType = COMMON_INDEX
+    private const int MAX_CROP_TYPES = 32; // Giới hạn hợp lý cho mobile
+    private Image[,] cropAssets = new Image[MAX_CROP_TYPES + 1, FarmConstants.STAGE_COUNT + 1];
 
-    // Common assets cho các giai đoạn đầu (index = 255)
-    private const int COMMON_INDEX = 255;
+    // Common assets cho các giai đoạn đầu (index = MAX_CROP_TYPES)
+    private const int COMMON_INDEX = MAX_CROP_TYPES;
 
     // Plot empty image
     private Image plotEmptyImage;
 
     // Plot selected image (viền highlight khi chọn ô đất)
     private Image plotSelectedImage;
+
+    // Raw data cache for thread-safe image creation (Main Thread only)
+    private Dictionary<string, sbyte[]> pendingData = new Dictionary<string, sbyte[]>();
+
+    // Missing assets cache to avoid repeated failed load attempts
+    private Dictionary<string, bool> missingAssets = new Dictionary<string, bool>();
 
     /// <summary>
     /// Singleton instance
@@ -39,14 +46,23 @@ public class FarmAssetManager
     }
 
     /// <summary>
-    /// Lưu farm icon vào cache
+    /// Lưu farm icon vào cache (chỉ lưu data, sẽ tạo Image ở Main Thread)
     /// </summary>
-    public void SaveFarmIcon(string iconName, Image img)
+    public void SaveFarmIcon(string iconName, sbyte[] data)
     {
-        if (img != null)
+        if (data != null && data.Length > 0)
         {
-            farmIcons[iconName] = img;
-            Res.outz("FarmAssetManager: Saved icon " + iconName);
+            string key = "icon_" + iconName;
+            pendingData[key] = data;
+            
+            // Xóa khỏi cache Image cũ nếu có để force reload từ data mới
+            if (farmIcons.ContainsKey(iconName))
+                farmIcons.Remove(iconName);
+                
+            if (missingAssets.ContainsKey(key))
+                missingAssets.Remove(key);
+                
+            Res.outz("FarmAssetManager: Queued icon data " + iconName);
         }
     }
 
@@ -55,49 +71,92 @@ public class FarmAssetManager
     /// </summary>
     public Image GetFarmIcon(string iconName)
     {
-        // Kiểm tra RAM Cache
+        if (string.IsNullOrEmpty(iconName)) return null;
+
+        // 1. Kiểm tra RAM Cache (Image đã tạo)
         if (farmIcons.ContainsKey(iconName))
         {
             return farmIcons[iconName];
         }
 
-        // Kiểm tra file RMS (VD "farm_icon_water.png" hoặc "farm_water.png" - phụ thuộc log file RMS lưu bằng controller)
+        // 2. Kiểm tra dữ liệu đang chờ tạo Image (Thread safety)
+        string dataKey = "icon_" + iconName;
+        if (pendingData.ContainsKey(dataKey))
+        {
+            try
+            {
+                sbyte[] data = pendingData[dataKey];
+                Image img = Image.createImage(data, 0, data.Length);
+                if (img != null)
+                {
+                    farmIcons[iconName] = img;
+                    pendingData.Remove(dataKey);
+                    return img;
+                }
+            }
+            catch (Exception ex)
+            {
+                Res.outz("FarmAssetManager: Error creating icon " + iconName + " - " + ex.Message);
+            }
+        }
+
+        // 3. Kiểm tra danh sách đã biết là thiếu
+        if (missingAssets.ContainsKey(dataKey))
+        {
+            return null;
+        }
+
+        // 4. Kiểm tra file RMS
         Image rmsImg = LoadRMSImage("farm_icon_" + iconName + ".png");
         if (rmsImg == null)
             rmsImg = LoadRMSImage("farm_" + iconName + ".png");
 
         if (rmsImg != null)
         {
-            SaveFarmIcon(iconName, rmsImg);
+            farmIcons[iconName] = rmsImg;
             return rmsImg;
         }
 
+        // 5. Nếu vẫn không thấy, đánh dấu là thiếu để không thử lại
+        missingAssets[dataKey] = true;
         return null;
     }
 
     /// <summary>
-    /// Lưu crop asset vào cache
-    /// Nếu isCommon = true, lưu vào vị trí common (dùng cho seed, sprout1, sprout2)
+    /// Lưu crop asset vào cache (chỉ lưu data, sẽ tạo Image ở Main Thread)
     /// </summary>
-    public void SaveCropAsset(sbyte cropType, sbyte stage, Image img, bool isCommon = false)
+    public void SaveCropAsset(sbyte cropType, sbyte stage, sbyte[] data, bool isCommon = false)
     {
-        if (stage >= 0 && stage <= FarmConstants.STAGE_COUNT && img != null)
+        if (stage >= 0 && stage <= FarmConstants.STAGE_COUNT && data != null && data.Length > 0)
         {
-            int typeIndex = isCommon ? COMMON_INDEX : cropType;
-            if (typeIndex >= 0 && typeIndex < 256)
-            {
-                cropAssets[typeIndex, stage] = img;
-                Res.outz("FarmAssetManager: Saved crop asset type=" + (isCommon ? "common" : cropType.ToString()) + " stage=" + stage);
-            }
+            // Dùng key cố định (typeIndex, stage) để tránh timing issue
+            // (data có thể đến trước cropTemplate info)
+            int typeIndex = (isCommon || cropType == -1) ? COMMON_INDEX : cropType;
+            if (typeIndex < 0 || typeIndex > MAX_CROP_TYPES) return;
+
+            string dataKey = "crop_" + typeIndex + "_" + stage;
+            pendingData[dataKey] = data;
+
+            // Clear Image cache cũ
+            cropAssets[typeIndex, stage] = null;
+                
+            // Clear missing flags
+            string filename = GetCropFilename(cropType, stage);
+            if (!string.IsNullOrEmpty(filename) && missingAssets.ContainsKey(filename))
+                missingAssets.Remove(filename);
+            if (missingAssets.ContainsKey(dataKey))
+                missingAssets.Remove(dataKey);
+                    
+            Res.outz("FarmAssetManager: Queued crop data key=" + dataKey + " len=" + data.Length);
         }
     }
 
     /// <summary>
     /// Lưu common crop asset (seed, sprout1, sprout2 dùng chung)
     /// </summary>
-    public void SaveCommonCropAsset(sbyte stage, Image img)
+    public void SaveCommonCropAsset(sbyte stage, sbyte[] data)
     {
-        SaveCropAsset(-1, stage, img, true);
+        SaveCropAsset(-1, stage, data, true);
     }
 
     /// <summary>
@@ -116,7 +175,7 @@ public class FarmAssetManager
             {
                 typeIndex = COMMON_INDEX;
             }
-            else if (cropType >= 0 && cropType < 255)
+            else if (cropType >= 0 && cropType < MAX_CROP_TYPES)
             {
                 typeIndex = cropType;
             }
@@ -125,17 +184,49 @@ public class FarmAssetManager
                 return null;
             }
             
-            // Nếu đã có trong RAM, trả về
+            // 1. Nếu đã có trong RAM, trả về
             if (cropAssets[typeIndex, stage] != null)
             {
                 return cropAssets[typeIndex, stage];
             }
+
+            // 2. Kiểm tra dữ liệu đang chờ tạo Image (Thread safety)
+            // Dùng key cố định (typeIndex, stage) khớp với SaveCropAsset
+            string dataKey = "crop_" + typeIndex + "_" + stage;
+            if (pendingData.ContainsKey(dataKey))
+            {
+                try
+                {
+                    sbyte[] data = pendingData[dataKey];
+                    Image cropImg = Image.createImage(data, 0, data.Length);
+                    if (cropImg != null)
+                    {
+                        cropAssets[typeIndex, stage] = cropImg;
+                        pendingData.Remove(dataKey);
+                        return cropImg;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Res.outz("FarmAssetManager: Error creating crop image key=" + dataKey + " - " + ex.Message);
+                    pendingData.Remove(dataKey);
+                }
+            }
             
-            // Chưa có trong RAM, thử load từ bộ nhớ Cache đệm RMS (lưu từ Controller -74)
+            // 3. Kiểm tra danh sách đã biết là thiếu
+            if (missingAssets.ContainsKey(dataKey))
+            {
+                return null;
+            }
+            
+            // 4. Chưa có trong RAM, thử load từ bộ nhớ Cache đệm RMS
+            // RMS key: "farm_crop_tomato_mature.png" (lưu bởi Controller case -74 sub-type 5)
             string filename = GetCropFilename(cropType, stage);
             if (!string.IsNullOrEmpty(filename))
             {
-                Image rmsImg = LoadRMSImage("farm_" + filename);
+                Image rmsImg = LoadRMSImage("farm_" + filename + ".png");
+                if (rmsImg == null)
+                    rmsImg = LoadRMSImage("farm_" + filename);
                 if (rmsImg != null)
                 {
                     cropAssets[typeIndex, stage] = rmsImg;
@@ -143,13 +234,16 @@ public class FarmAssetManager
                 }
             }
             
-            // Chưa có trong RMS, thử load từ resources local của APK/PC build
+            // 5. Chưa có trong RMS, thử load từ resources local của APK/PC build
             Image img = TryLoadCropImageFromLocal(cropType, stage);
             if (img != null)
             {
                 cropAssets[typeIndex, stage] = img;
                 return img;
             }
+
+            // 6. Nếu vẫn không thấy, đánh dấu là thiếu để không thử lại mỗi frame
+            missingAssets[dataKey] = true;
         }
         return null;
     }
@@ -223,32 +317,29 @@ public class FarmAssetManager
     {
         try
         {
-            // Xác định tên file
             string filename = GetCropFilename(cropType, stage);
+            if (string.IsNullOrEmpty(filename)) return null;
+
+            // Thử load từ Resources/farm/x{zoom}/
+            string resourcePath = "farm/x" + mGraphics.zoomLevel + "/" + filename;
+            UnityEngine.Texture2D texture = UnityEngine.Resources.Load<UnityEngine.Texture2D>(resourcePath);
             
-            if (!string.IsNullOrEmpty(filename))
+            if (texture == null)
             {
-                // Thử load từ Resources/farm/x{zoom}/
-                string resourcePath = "farm/x" + mGraphics.zoomLevel + "/" + filename;
-                UnityEngine.Texture2D texture = UnityEngine.Resources.Load<UnityEngine.Texture2D>(resourcePath);
-                
-                if (texture == null)
-                {
-                    // Fallback to x2 or x1 if specific zoom not found
-                     resourcePath = "farm/x2/" + filename;
-                     texture = UnityEngine.Resources.Load<UnityEngine.Texture2D>(resourcePath);
-                }
-                
-                if (texture != null)
-                {
-                    Image img = new Image();
-                    img.texture = texture;
-                    img.w = img.texture.width;
-                    img.h = img.texture.height;
-                    Image.setTextureQuality(img.texture);
-                    Res.outz("Loaded local crop asset: " + resourcePath);
-                    return img;
-                }
+                // Fallback to x2 if specific zoom not found
+                 resourcePath = "farm/x2/" + filename;
+                 texture = UnityEngine.Resources.Load<UnityEngine.Texture2D>(resourcePath);
+            }
+            
+            if (texture != null)
+            {
+                Image img = new Image();
+                img.texture = texture;
+                img.w = img.texture.width;
+                img.h = img.texture.height;
+                Image.setTextureQuality(img.texture);
+                Res.outz("Loaded local crop asset: " + resourcePath);
+                return img;
             }
         }
         catch (Exception ex)
@@ -269,12 +360,18 @@ public class FarmAssetManager
     }
 
     /// <summary>
-    /// Lưu plot empty image
+    /// Lưu plot empty image (chỉ lưu data)
     /// </summary>
-    public void SavePlotEmptyImage(Image img)
+    public void SavePlotEmptyImage(sbyte[] data)
     {
-        plotEmptyImage = img;
-        Res.outz("FarmAssetManager: Saved plot empty image");
+        if (data != null && data.Length > 0)
+        {
+            pendingData["plot_empty_data"] = data;
+            plotEmptyImage = null;
+            if (missingAssets.ContainsKey("plot_empty"))
+                missingAssets.Remove("plot_empty");
+            Res.outz("FarmAssetManager: Queued plot empty data");
+        }
     }
 
     /// <summary>
@@ -285,6 +382,25 @@ public class FarmAssetManager
         if (plotEmptyImage != null)
             return plotEmptyImage;
             
+        if (pendingData.ContainsKey("plot_empty_data"))
+        {
+            try
+            {
+                sbyte[] data = pendingData["plot_empty_data"];
+                plotEmptyImage = Image.createImage(data, 0, data.Length);
+                pendingData.Remove("plot_empty_data");
+                if (plotEmptyImage != null) return plotEmptyImage;
+            }
+            catch (Exception ex)
+            {
+                Res.outz("FarmAssetManager: Error creating plot empty image - " + ex.Message);
+                pendingData.Remove("plot_empty_data");
+            }
+        }
+
+        if (missingAssets.ContainsKey("plot_empty"))
+            return null;
+
         Image rmsImg = LoadRMSImage("farm_plot_empty.png");
         if (rmsImg != null)
         {
@@ -292,16 +408,23 @@ public class FarmAssetManager
             return rmsImg;
         }
             
-        return plotEmptyImage;
+        missingAssets["plot_empty"] = true;
+        return null;
     }
 
     /// <summary>
-    /// Lưu plot selected image
+    /// Lưu plot selected image (chỉ lưu data)
     /// </summary>
-    public void SavePlotSelectedImage(Image img)
+    public void SavePlotSelectedImage(sbyte[] data)
     {
-        plotSelectedImage = img;
-        Res.outz("FarmAssetManager: Saved plot selected image");
+        if (data != null && data.Length > 0)
+        {
+            pendingData["plot_selected_data"] = data;
+            plotSelectedImage = null;
+            if (missingAssets.ContainsKey("plot_selected"))
+                missingAssets.Remove("plot_selected");
+            Res.outz("FarmAssetManager: Queued plot selected data");
+        }
     }
 
     /// <summary>
@@ -312,6 +435,17 @@ public class FarmAssetManager
         if (plotSelectedImage != null)
             return plotSelectedImage;
             
+        if (pendingData.ContainsKey("plot_selected_data"))
+        {
+            sbyte[] data = pendingData["plot_selected_data"];
+            plotSelectedImage = Image.createImage(data, 0, data.Length);
+            pendingData.Remove("plot_selected_data");
+            if (plotSelectedImage != null) return plotSelectedImage;
+        }
+
+        if (missingAssets.ContainsKey("plot_selected"))
+            return null;
+
         Image rmsImg = LoadRMSImage("farm_plot_selected.png");
         if (rmsImg != null)
         {
@@ -319,7 +453,8 @@ public class FarmAssetManager
             return rmsImg;
         }
             
-        return plotSelectedImage;
+        missingAssets["plot_selected"] = true;
+        return null;
     }
 
     /// <summary>
@@ -328,7 +463,8 @@ public class FarmAssetManager
     public void ClearAll()
     {
         farmIcons.Clear();
-        cropAssets = new Image[256, FarmConstants.STAGE_COUNT + 1];
+        missingAssets.Clear();
+        cropAssets = new Image[MAX_CROP_TYPES + 1, FarmConstants.STAGE_COUNT + 1];
         plotEmptyImage = null;
         plotSelectedImage = null;
         Res.outz("FarmAssetManager: Cleared all cache");
@@ -347,6 +483,6 @@ public class FarmAssetManager
     /// </summary>
     public bool HasFarmIcon(string iconName)
     {
-        return farmIcons.ContainsKey(iconName);
+        return GetFarmIcon(iconName) != null;
     }
 }

@@ -126,7 +126,7 @@ public class Controller : IMessageHandler
 			Controller2.readMessage(msg);
 			switch (msg.command)
 			{
-			case -33: // Farm Asset
+			case -58: // Farm Asset (ID mới tránh xung đột)
 				FarmMessageHandler.GI().HandleFarmAssetMessage(msg);
 				break;
 			case -114:
@@ -1343,33 +1343,48 @@ public class Controller : IMessageHandler
 						msg.reader().read(ref farmData, 0, length);
 						
 						// Lưu vào RMS để cache
-						Rms.saveRMS("farm_" + farmAssetName.Replace("/", "_"), farmData);
+						// farmAssetName = "farm/plot_empty.png" → RMS key = "farm_plot_empty.png"
+						string rmsKey = farmAssetName.Replace("farm/", "farm_").Replace("/", "_");
+						Rms.saveRMS(rmsKey, farmData);
 						
-						// Tạo Image và cache vào FarmAssetManager
-						Image img = Image.createImage(farmData, 0, length);
-						if (img != null)
+						// Lưu data thô vào FarmAssetManager (sẽ tạo Image ở Main Thread)
+						// Parse filename để xác định loại asset
+						if (farmAssetName.Contains("plot_empty"))
 						{
-							// Parse filename để xác định loại asset
-							if (farmAssetName.Contains("plot_empty"))
-							{
-								FarmAssetManager.GI().SavePlotEmptyImage(img);
-							}
-							else if (farmAssetName.Contains("plot_selected"))
-							{
-								FarmAssetManager.GI().SavePlotSelectedImage(img);
-							}
-							else if (farmAssetName.Contains("crop_"))
-							{
-								// Parse crop type và stage từ filename
-								// Format: farm/crop_tomato_seed.png
-								ParseAndSaveCropAsset(farmAssetName, img);
-							}
-							else if (farmAssetName.Contains("icon_"))
-							{
-								// Parse icon name
-								string iconName = farmAssetName.Replace("farm/", "").Replace("icon_", "").Replace(".png", "");
-								FarmAssetManager.GI().SaveFarmIcon(iconName, img);
-							}
+							FarmAssetManager.GI().SavePlotEmptyImage(farmData);
+						}
+						else if (farmAssetName.Contains("plot_selected"))
+						{
+							FarmAssetManager.GI().SavePlotSelectedImage(farmData);
+						}
+						else if (farmAssetName.Contains("crop_"))
+						{
+							// Parse crop type và stage từ filename
+							// Format: farm/crop_tomato_seed.png
+							ParseAndSaveCropAsset(farmAssetName, farmData);
+						}
+						else if (farmAssetName.Contains("icon_"))
+						{
+							// Parse icon name: "farm/icon_hoe.png" → "hoe"
+							string iconName = farmAssetName.Replace("farm/", "").Replace("icon_", "").Replace(".png", "");
+							FarmAssetManager.GI().SaveFarmIcon(iconName, farmData);
+						}
+						else if (farmAssetName.Contains("thu_hoach"))
+						{
+							// thu_hoach.png → icon key "harvest" (dùng trong CloudGarden.Paint)
+							FarmAssetManager.GI().SaveFarmIcon("harvest", farmData);
+						}
+						else if (farmAssetName.Contains("khung_raucu"))
+						{
+							FarmAssetManager.GI().SaveFarmIcon("khung_raucu", farmData);
+						}
+						else if (farmAssetName.Contains("khoa_0"))
+						{
+							FarmAssetManager.GI().SaveFarmIcon("khoa_0", farmData);
+						}
+						else if (farmAssetName.Contains("khoa_1"))
+						{
+							FarmAssetManager.GI().SaveFarmIcon("khoa_1", farmData);
 						}
 						Res.outz("Loaded farm asset: " + farmAssetName);
 					}
@@ -2770,9 +2785,8 @@ public class Controller : IMessageHandler
 				{
 					try
 					{
-						// Reset reader position và gọi FarmMessageHandler
-						msg.reader().reset();
-						FarmMessageHandler.GI().HandleFarmDataMessage(msg);
+						// SubType byte (10) đã đọc ở b12 rồi, đọc tiếp dataType
+						FarmMessageHandler.GI().HandleFarmDataDirect(msg);
 					}
 					catch (Exception ex)
 					{
@@ -6991,47 +7005,97 @@ public static int JavaHashCode(string str)
 
     /// <summary>
     /// Parse crop asset filename và lưu vào FarmAssetManager
-    /// Format: farm/crop_[cropname]_[stage].png hoặc farm/crop_common_[stage].png
+    /// Format: farm/crop_common_[stage].png
     /// </summary>
-    private void ParseAndSaveCropAsset(string filename, Image img)
+    private void ParseAndSaveCropAsset(string filename, sbyte[] data)
     {
         try
         {
             // Remove prefix và extension
+            // Input: "farm/crop_common_seed.png" hoặc "farm/crop_tomato_mature.png"
             string name = filename.Replace("farm/", "").Replace("crop_", "").Replace(".png", "");
             
             // Kiểm tra xem có phải common asset không (seed, sprout1, sprout2)
             bool isCommon = name.StartsWith("common");
             
-            sbyte cropType = -1;
-            sbyte stage = -1;
-            string stageName = "";
-            
             if (isCommon)
             {
                 // Format: common_seed, common_sprout1, common_sprout2
-                stageName = name.Substring(7); // remove "common_"
-                
-                // Parse stage
-                switch (stageName)
-                {
-                    case "empty": stage = FarmConstants.STAGE_EMPTY; break;
-                    case "seed": stage = FarmConstants.STAGE_SEED; break;
-                    case "sprout1": stage = FarmConstants.STAGE_SPROUT_1; break;
-                    case "sprout2": stage = FarmConstants.STAGE_SPROUT_2; break;
-                }
+                string stageName = name.Substring(7); // remove "common_"
+                sbyte stage = ParseStageName(stageName);
                 
                 if (stage >= 0)
                 {
-                    FarmAssetManager.GI().SaveCommonCropAsset(stage, img);
+                    FarmAssetManager.GI().SaveCommonCropAsset(stage, data);
+                    Res.outz("ParseCropAsset: common stage=" + stageName + " -> " + stage);
                 }
             }
-            // Mọi loại crop khác (young, mature, withered) không dùng hardcode parsing nữa, 
-            // bỏ qua vì đã được nạp qua MSG_FARM_ASSET subtype 11 (gửi trực tiếp với cropType và stage)
-            return;
-        }        catch (Exception ex)
+            else
+            {
+                // Format: {cropName}_{stageName} (ví dụ: tomato_mature, corn_young)
+                int lastUnderscore = name.LastIndexOf('_');
+                if (lastUnderscore > 0)
+                {
+                    string cropName = name.Substring(0, lastUnderscore);
+                    string stageName = name.Substring(lastUnderscore + 1);
+                    
+                    sbyte cropType = ParseCropName(cropName);
+                    sbyte stage = ParseStageName(stageName);
+                    
+                    if (cropType >= 0 && stage >= 0)
+                    {
+                        FarmAssetManager.GI().SaveCropAsset(cropType, stage, data, false);
+                        Res.outz("ParseCropAsset: crop=" + cropName + "(" + cropType + ") stage=" + stageName + "(" + stage + ")");
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
         {
             Res.outz("Error parsing crop asset: " + ex.Message);
         }
+    }
+
+    private sbyte ParseStageName(string stageName)
+    {
+        switch (stageName)
+        {
+            case "empty": return FarmConstants.STAGE_EMPTY;
+            case "seed": return FarmConstants.STAGE_SEED;
+            case "sprout1": return FarmConstants.STAGE_SPROUT_1;
+            case "sprout2": return FarmConstants.STAGE_SPROUT_2;
+            case "young": return FarmConstants.STAGE_YOUNG;
+            case "mature": return FarmConstants.STAGE_MATURE;
+            case "withered": return FarmConstants.STAGE_WITHERED;
+            default: return -1;
+        }
+    }
+
+    private sbyte ParseCropName(string cropName)
+    {
+        // Tìm crop ID từ cropTemplates (dữ liệu từ DB, đã nhận qua sendCropTemplateInfo)
+        string searchFilename = "crop_" + cropName;
+        foreach (var pair in FarmConstants.cropTemplates)
+        {
+            FarmConstants.CropTemplateInfo info = pair.Value;
+            // So sánh với imgYoung/imgMature/imgWithered (có thể có hoặc không có .png)
+            if (MatchesCropFilename(info.imgYoung, searchFilename) ||
+                MatchesCropFilename(info.imgMature, searchFilename) ||
+                MatchesCropFilename(info.imgWithered, searchFilename))
+            {
+                return info.id;
+            }
+        }
+        Res.outz("ParseCropName: unknown crop '" + cropName + "', templates=" + FarmConstants.cropTemplates.Count);
+        return -1;
+    }
+
+    private bool MatchesCropFilename(string templateImg, string searchPrefix)
+    {
+        if (string.IsNullOrEmpty(templateImg)) return false;
+        // templateImg có thể là "crop_carot_young" hoặc "crop_carot_young.png"
+        string clean = templateImg.Replace(".png", "");
+        // searchPrefix là "crop_carot" → kiểm tra templateImg bắt đầu bằng prefix
+        return clean.StartsWith(searchPrefix);
     }
 }
