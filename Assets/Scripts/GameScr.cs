@@ -3621,16 +3621,38 @@ public class GameScr : mScreen, IChatable
 	{
 		Res.outz("VE RONG THAN O VI TRI x= " + x + " y=" + y);
 		doiMauTroi();
-		EffecMn.addEff(new Effect((!isRongNamek) ? 17 : 25, x, y - 77, 2, -1, 1));
+		if (isRongNamek)
+		{
+			if (RongThanNamekSpineController.IsAvailable())
+			{
+				EffecMn.removeEff(25);
+				RongThanNamekSpineController.Show(x, y - 77);
+			}
+			else
+			{
+				EffecMn.addEff(new Effect(25, x, y - 77, 2, -1, 1));
+			}
+		}
+		else if (RongThanSpineController.IsAvailable())
+		{
+			EffecMn.removeEff(17);
+			RongThanSpineController.Show(x, y - 77);
+		}
+		else
+		{
+			EffecMn.addEff(new Effect(17, x, y - 77, 2, -1, 1));
+		}
 	}
 
 	public void hideRongThan()
 	{
 		isRongThanXuatHien = false;
+		RongThanSpineController.Hide();
 		EffecMn.removeEff(17);
 		if (isRongNamek)
 		{
 			isRongNamek = false;
+			RongThanNamekSpineController.Hide();
 			EffecMn.removeEff(25);
 		}
 	}
@@ -4476,6 +4498,10 @@ public class GameScr : mScreen, IChatable
 
 	public override void update()
 	{
+		RongThanSpineController.Update();
+		RongThanSpineController.UpdateGameCameraFocus();
+		RongThanNamekSpineController.Update();
+		RongThanNamekSpineController.UpdateGameCameraFocus();
 		if (isAutoMercenary && GameCanvas.gameTick % 20 == 0 && !Char.ischangingMap && !Char.isLoadingMap)
 		{
 			if (!isHaveCloneOrMercenary())

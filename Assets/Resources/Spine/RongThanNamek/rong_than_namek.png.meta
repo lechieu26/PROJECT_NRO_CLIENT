@@ -1,0 +1,1781 @@
+fileFormatVersion: 2
+guid: ac277484f901a4522b26210db6763058
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8452300010999616987
+    second: rong_than_namek_0
+  - first:
+      213: -4554609766728622611
+    second: rong_than_namek_1
+  - first:
+      213: -5928681752931123124
+    second: rong_than_namek_2
+  - first:
+      213: 1433628462096170247
+    second: rong_than_namek_3
+  - first:
+      213: 5358925582541893808
+    second: rong_than_namek_4
+  - first:
+      213: -2495408625406292699
+    second: rong_than_namek_5
+  - first:
+      213: -4972021722840365564
+    second: rong_than_namek_6
+  - first:
+      213: -2603097111447648911
+    second: rong_than_namek_7
+  - first:
+      213: 3851549830010086608
+    second: rong_than_namek_8
+  - first:
+      213: -8253796726168475178
+    second: rong_than_namek_9
+  - first:
+      213: 2819174509954973248
+    second: rong_than_namek_10
+  - first:
+      213: 342606513161220944
+    second: rong_than_namek_11
+  - first:
+      213: -8478869092831673315
+    second: rong_than_namek_12
+  - first:
+      213: 4309622866006164328
+    second: rong_than_namek_13
+  - first:
+      213: -949016573472487559
+    second: rong_than_namek_14
+  - first:
+      213: 9191801818154603153
+    second: rong_than_namek_15
+  - first:
+      213: 8330168850982123656
+    second: rong_than_namek_16
+  - first:
+      213: 8377633477252557066
+    second: rong_than_namek_17
+  - first:
+      213: 6854215051699234713
+    second: rong_than_namek_18
+  - first:
+      213: 4181331229751238797
+    second: rong_than_namek_19
+  - first:
+      213: -634977342937487143
+    second: rong_than_namek_20
+  - first:
+      213: -8147461058272094807
+    second: rong_than_namek_21
+  - first:
+      213: 7932990299366790535
+    second: rong_than_namek_22
+  - first:
+      213: 1703627660609565370
+    second: rong_than_namek_23
+  - first:
+      213: 6550570582916272210
+    second: rong_than_namek_24
+  - first:
+      213: -5330663346111795007
+    second: rong_than_namek_25
+  - first:
+      213: 5522991228392382259
+    second: rong_than_namek_26
+  - first:
+      213: -1163571778973171999
+    second: rong_than_namek_27
+  - first:
+      213: 1092650031946647454
+    second: rong_than_namek_28
+  - first:
+      213: -3274424836197935161
+    second: rong_than_namek_29
+  - first:
+      213: 8034070285813294433
+    second: rong_than_namek_30
+  - first:
+      213: 6275336745093673423
+    second: rong_than_namek_31
+  - first:
+      213: -6610711581025898617
+    second: rong_than_namek_32
+  - first:
+      213: -401578164284549667
+    second: rong_than_namek_33
+  - first:
+      213: 1441012176099353744
+    second: rong_than_namek_34
+  - first:
+      213: 414864969146205609
+    second: rong_than_namek_35
+  - first:
+      213: -3678445095273413380
+    second: rong_than_namek_36
+  - first:
+      213: -3358777653209863359
+    second: rong_than_namek_37
+  - first:
+      213: -5327495417855957068
+    second: rong_than_namek_38
+  - first:
+      213: -4047713115618072773
+    second: rong_than_namek_39
+  - first:
+      213: 3172094362665860496
+    second: rong_than_namek_40
+  - first:
+      213: -1412360547922184037
+    second: rong_than_namek_41
+  - first:
+      213: -8510697895504256403
+    second: rong_than_namek_42
+  - first:
+      213: -3114695998257283955
+    second: rong_than_namek_43
+  - first:
+      213: 5761715091044296730
+    second: rong_than_namek_44
+  - first:
+      213: -6610399782332185024
+    second: rong_than_namek_45
+  - first:
+      213: -8046734703851771595
+    second: rong_than_namek_46
+  - first:
+      213: 454853216276001117
+    second: rong_than_namek_47
+  - first:
+      213: -747066409850253903
+    second: rong_than_namek_48
+  - first:
+      213: 4395364682593355904
+    second: rong_than_namek_49
+  - first:
+      213: 5476053426121529965
+    second: rong_than_namek_50
+  - first:
+      213: -1595481019855552553
+    second: rong_than_namek_51
+  - first:
+      213: 7969776480434557296
+    second: rong_than_namek_52
+  - first:
+      213: -4356141169758997861
+    second: rong_than_namek_53
+  - first:
+      213: 8218191696049938540
+    second: rong_than_namek_54
+  - first:
+      213: -1915232791583623853
+    second: rong_than_namek_55
+  - first:
+      213: 3119208269900409258
+    second: rong_than_namek_56
+  - first:
+      213: -938348833994831203
+    second: rong_than_namek_57
+  - first:
+      213: -2589934484260183638
+    second: rong_than_namek_58
+  - first:
+      213: -3002794596173395569
+    second: rong_than_namek_59
+  - first:
+      213: -373352861718477784
+    second: rong_than_namek_60
+  - first:
+      213: -4579384844341029810
+    second: rong_than_namek_61
+  - first:
+      213: -9188644936103073864
+    second: rong_than_namek_62
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: rong_than_namek_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 469
+        height: 2021
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52a66551ce563ba80800000000000000
+      internalID: -8452300010999616987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_1
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 1956
+        width: 101
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ded9d9b6c86cac0c0800000000000000
+      internalID: -4554609766728622611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_2
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 1956
+        width: 703
+        height: 91
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4043327b5719bda0800000000000000
+      internalID: -5928681752931123124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_3
+      rect:
+        serializedVersion: 2
+        x: 1254
+        y: 1957
+        width: 81
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70db1279d7545e310800000000000000
+      internalID: 1433628462096170247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_4
+      rect:
+        serializedVersion: 2
+        x: 1334
+        y: 1956
+        width: 68
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b0b92dac6abe5a40800000000000000
+      internalID: 5358925582541893808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_5
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 1956
+        width: 57
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52d463193178e5dd0800000000000000
+      internalID: -2495408625406292699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_6
+      rect:
+        serializedVersion: 2
+        x: 1510
+        y: 1897
+        width: 84
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40603920694dffab0800000000000000
+      internalID: -4972021722840365564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_7
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 1575
+        width: 1058
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 175415c08f0ffdbd0800000000000000
+      internalID: -2603097111447648911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_8
+      rect:
+        serializedVersion: 2
+        x: 1510
+        y: 1543
+        width: 87
+        height: 354
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d4a77cf924737530800000000000000
+      internalID: 3851549830010086608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_9
+      rect:
+        serializedVersion: 2
+        x: 1596
+        y: 1783
+        width: 351
+        height: 169
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d92278ab9f947d80800000000000000
+      internalID: -8253796726168475178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_10
+      rect:
+        serializedVersion: 2
+        x: 1871
+        y: 1726
+        width: 74
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04eb3b9b748bf1720800000000000000
+      internalID: 2819174509954973248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_11
+      rect:
+        serializedVersion: 2
+        x: 1944
+        y: 1726
+        width: 77
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 053b5bafece21c400800000000000000
+      internalID: 342606513161220944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_12
+      rect:
+        serializedVersion: 2
+        x: 1946
+        y: 1836
+        width: 64
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d14cab8ab71055a80800000000000000
+      internalID: -8478869092831673315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_13
+      rect:
+        serializedVersion: 2
+        x: 1596
+        y: 1542
+        width: 245
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 863c23cc92bdecb30800000000000000
+      internalID: 4309622866006164328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_14
+      rect:
+        serializedVersion: 2
+        x: 1839
+        y: 1599
+        width: 178
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 977c63c547a64d2f0800000000000000
+      internalID: -949016573472487559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_15
+      rect:
+        serializedVersion: 2
+        x: 1839
+        y: 1465
+        width: 145
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19215e8ad07df8f70800000000000000
+      internalID: 9191801818154603153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_16
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 879
+        width: 517
+        height: 698
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88830d15f64ba9370800000000000000
+      internalID: 8330168850982123656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_17
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 1099
+        width: 333
+        height: 446
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a092f0ec245534470800000000000000
+      internalID: 8377633477252557066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_18
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 1542
+        width: 34
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9972baa36401f1f50800000000000000
+      internalID: 6854215051699234713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_19
+      rect:
+        serializedVersion: 2
+        x: 1316
+        y: 1100
+        width: 332
+        height: 444
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d80e19d8992170a30800000000000000
+      internalID: 4181331229751238797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_20
+      rect:
+        serializedVersion: 2
+        x: 1646
+        y: 1518
+        width: 34
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d82ac9887b1037f0800000000000000
+      internalID: -634977342937487143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_21
+      rect:
+        serializedVersion: 2
+        x: 1643
+        y: 1314
+        width: 142
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a51d58a5576eee80800000000000000
+      internalID: -8147461058272094807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_22
+      rect:
+        serializedVersion: 2
+        x: 1643
+        y: 1098
+        width: 390
+        height: 217
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 785906085a4a71e60800000000000000
+      internalID: 7932990299366790535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_23
+      rect:
+        serializedVersion: 2
+        x: 1785
+        y: 1314
+        width: 163
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab2b924c45084a710800000000000000
+      internalID: 1703627660609565370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_24
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 1045
+        width: 74
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25019de1d3d48ea50800000000000000
+      internalID: 6550570582916272210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_25
+      rect:
+        serializedVersion: 2
+        x: 1079
+        y: 783
+        width: 596
+        height: 317
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c0bfc50eeda506b0800000000000000
+      internalID: -5330663346111795007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_26
+      rect:
+        serializedVersion: 2
+        x: 1675
+        y: 797
+        width: 358
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33f1de9924b95ac40800000000000000
+      internalID: 5522991228392382259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_27
+      rect:
+        serializedVersion: 2
+        x: 983
+        y: 879
+        width: 90
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ee72a3c1a92adfe0800000000000000
+      internalID: -1163571778973171999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_28
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 1
+        width: 612
+        height: 876
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e97cff93a6fd92f00800000000000000
+      internalID: 1092650031946647454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_29
+      rect:
+        serializedVersion: 2
+        x: 1087
+        y: 0
+        width: 674
+        height: 781
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c794bac5f7ee82d0800000000000000
+      internalID: -3274424836197935161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_30
+      rect:
+        serializedVersion: 2
+        x: 1796
+        y: 749
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1652c6ecb50ce7f60800000000000000
+      internalID: 8034070285813294433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_31
+      rect:
+        serializedVersion: 2
+        x: 1807
+        y: 725
+        width: 50
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc1b3418589761750800000000000000
+      internalID: 6275336745093673423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_32
+      rect:
+        serializedVersion: 2
+        x: 1863
+        y: 739
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78fe36497d80244a0800000000000000
+      internalID: -6610711581025898617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_33
+      rect:
+        serializedVersion: 2
+        x: 1885
+        y: 743
+        width: 52
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd5144889ce4d6af0800000000000000
+      internalID: -401578164284549667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_34
+      rect:
+        serializedVersion: 2
+        x: 1935
+        y: 723
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0942a6970f08ff310800000000000000
+      internalID: 1441012176099353744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_35
+      rect:
+        serializedVersion: 2
+        x: 1851
+        y: 711
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a586bbcd75e1c500800000000000000
+      internalID: 414864969146205609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_36
+      rect:
+        serializedVersion: 2
+        x: 1884
+        y: 723
+        width: 13
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf44372dca983fcc0800000000000000
+      internalID: -3678445095273413380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_37
+      rect:
+        serializedVersion: 2
+        x: 1899
+        y: 727
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14be7ec15893361d0800000000000000
+      internalID: -3358777653209863359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_38
+      rect:
+        serializedVersion: 2
+        x: 1827
+        y: 707
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b7ac2cc42fe016b0800000000000000
+      internalID: -5327495417855957068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_39
+      rect:
+        serializedVersion: 2
+        x: 1907
+        y: 707
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3725e6fd52a3d7c0800000000000000
+      internalID: -4047713115618072773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_40
+      rect:
+        serializedVersion: 2
+        x: 1891
+        y: 699
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09db7b0340b850c20800000000000000
+      internalID: 3172094362665860496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_41
+      rect:
+        serializedVersion: 2
+        x: 1895
+        y: 679
+        width: 21
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b98725e8099466ce0800000000000000
+      internalID: -1412360547922184037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_42
+      rect:
+        serializedVersion: 2
+        x: 1932
+        y: 623
+        width: 83
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d62edcb0b5de3e980800000000000000
+      internalID: -8510697895504256403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_43
+      rect:
+        serializedVersion: 2
+        x: 1955
+        y: 695
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8c3b80fd7066c4d0800000000000000
+      internalID: -3114695998257283955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_44
+      rect:
+        serializedVersion: 2
+        x: 1783
+        y: 675
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a18e3b23959b5ff40800000000000000
+      internalID: 5761715091044296730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_45
+      rect:
+        serializedVersion: 2
+        x: 1819
+        y: 675
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04645cedb642344a0800000000000000
+      internalID: -6610399782332185024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_46
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 643
+        width: 29
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5396b179b61445090800000000000000
+      internalID: -8046734703851771595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_47
+      rect:
+        serializedVersion: 2
+        x: 1875
+        y: 679
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d51331d1796ff4600800000000000000
+      internalID: 454853216276001117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_48
+      rect:
+        serializedVersion: 2
+        x: 1923
+        y: 667
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bdcf31fe03e1a5f0800000000000000
+      internalID: -747066409850253903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_49
+      rect:
+        serializedVersion: 2
+        x: 1762
+        y: 659
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 088464424e87ffc30800000000000000
+      internalID: 4395364682593355904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_50
+      rect:
+        serializedVersion: 2
+        x: 1779
+        y: 627
+        width: 34
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6ad803e399defb40800000000000000
+      internalID: 5476053426121529965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_51
+      rect:
+        serializedVersion: 2
+        x: 1867
+        y: 663
+        width: 22
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dfb1a53776bbd9e0800000000000000
+      internalID: -1595481019855552553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_52
+      rect:
+        serializedVersion: 2
+        x: 1903
+        y: 659
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0719097bb755a9e60800000000000000
+      internalID: 7969776480434557296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_53
+      rect:
+        serializedVersion: 2
+        x: 1876
+        y: 619
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b927f099fa0eb83c0800000000000000
+      internalID: -4356141169758997861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_54
+      rect:
+        serializedVersion: 2
+        x: 1907
+        y: 601
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c602f134ec1ec0270800000000000000
+      internalID: 8218191696049938540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_55
+      rect:
+        serializedVersion: 2
+        x: 1923
+        y: 629
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3557a736ce9bb65e0800000000000000
+      internalID: -1915232791583623853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_56
+      rect:
+        serializedVersion: 2
+        x: 1815
+        y: 583
+        width: 34
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa9efdb2567a94b20800000000000000
+      internalID: 3119208269900409258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_57
+      rect:
+        serializedVersion: 2
+        x: 1849
+        y: 585
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9a065205b05af2f0800000000000000
+      internalID: -938348833994831203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_58
+      rect:
+        serializedVersion: 2
+        x: 1947
+        y: 579
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa123220f44be0cd0800000000000000
+      internalID: -2589934484260183638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_59
+      rect:
+        serializedVersion: 2
+        x: 1759
+        y: 335
+        width: 262
+        height: 246
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f894f99693ee356d0800000000000000
+      internalID: -3002794596173395569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_60
+      rect:
+        serializedVersion: 2
+        x: 1763
+        y: 0
+        width: 258
+        height: 337
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8240565ec8591daf0800000000000000
+      internalID: -373352861718477784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_61
+      rect:
+        serializedVersion: 2
+        x: 2011
+        y: 235
+        width: 18
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e44de372fb1c270c0800000000000000
+      internalID: -4579384844341029810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_namek_62
+      rect:
+        serializedVersion: 2
+        x: 2019
+        y: 191
+        width: 10
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b762683d106b7080800000000000000
+      internalID: -9188644936103073864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      rong_than_namek_0: -8452300010999616987
+      rong_than_namek_1: -4554609766728622611
+      rong_than_namek_10: 2819174509954973248
+      rong_than_namek_11: 342606513161220944
+      rong_than_namek_12: -8478869092831673315
+      rong_than_namek_13: 4309622866006164328
+      rong_than_namek_14: -949016573472487559
+      rong_than_namek_15: 9191801818154603153
+      rong_than_namek_16: 8330168850982123656
+      rong_than_namek_17: 8377633477252557066
+      rong_than_namek_18: 6854215051699234713
+      rong_than_namek_19: 4181331229751238797
+      rong_than_namek_2: -5928681752931123124
+      rong_than_namek_20: -634977342937487143
+      rong_than_namek_21: -8147461058272094807
+      rong_than_namek_22: 7932990299366790535
+      rong_than_namek_23: 1703627660609565370
+      rong_than_namek_24: 6550570582916272210
+      rong_than_namek_25: -5330663346111795007
+      rong_than_namek_26: 5522991228392382259
+      rong_than_namek_27: -1163571778973171999
+      rong_than_namek_28: 1092650031946647454
+      rong_than_namek_29: -3274424836197935161
+      rong_than_namek_3: 1433628462096170247
+      rong_than_namek_30: 8034070285813294433
+      rong_than_namek_31: 6275336745093673423
+      rong_than_namek_32: -6610711581025898617
+      rong_than_namek_33: -401578164284549667
+      rong_than_namek_34: 1441012176099353744
+      rong_than_namek_35: 414864969146205609
+      rong_than_namek_36: -3678445095273413380
+      rong_than_namek_37: -3358777653209863359
+      rong_than_namek_38: -5327495417855957068
+      rong_than_namek_39: -4047713115618072773
+      rong_than_namek_4: 5358925582541893808
+      rong_than_namek_40: 3172094362665860496
+      rong_than_namek_41: -1412360547922184037
+      rong_than_namek_42: -8510697895504256403
+      rong_than_namek_43: -3114695998257283955
+      rong_than_namek_44: 5761715091044296730
+      rong_than_namek_45: -6610399782332185024
+      rong_than_namek_46: -8046734703851771595
+      rong_than_namek_47: 454853216276001117
+      rong_than_namek_48: -747066409850253903
+      rong_than_namek_49: 4395364682593355904
+      rong_than_namek_5: -2495408625406292699
+      rong_than_namek_50: 5476053426121529965
+      rong_than_namek_51: -1595481019855552553
+      rong_than_namek_52: 7969776480434557296
+      rong_than_namek_53: -4356141169758997861
+      rong_than_namek_54: 8218191696049938540
+      rong_than_namek_55: -1915232791583623853
+      rong_than_namek_56: 3119208269900409258
+      rong_than_namek_57: -938348833994831203
+      rong_than_namek_58: -2589934484260183638
+      rong_than_namek_59: -3002794596173395569
+      rong_than_namek_6: -4972021722840365564
+      rong_than_namek_60: -373352861718477784
+      rong_than_namek_61: -4579384844341029810
+      rong_than_namek_62: -9188644936103073864
+      rong_than_namek_7: -2603097111447648911
+      rong_than_namek_8: 3851549830010086608
+      rong_than_namek_9: -8253796726168475178
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

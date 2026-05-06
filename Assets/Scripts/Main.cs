@@ -164,6 +164,8 @@ public class Main : MonoBehaviour
 			{
 				GameMidlet.gameCanvas.paint(g);
 			}
+			RongThanSpineController.DrawOverlay();
+			RongThanNamekSpineController.DrawOverlay();
 			paintCount++;
 			if (g != null)
 			{

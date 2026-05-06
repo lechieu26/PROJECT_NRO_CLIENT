@@ -1,0 +1,1651 @@
+fileFormatVersion: 2
+guid: 2182c524ed6454667aba77aea6d42e81
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4549216910465493669
+    second: rong_than_traidat_original_0
+  - first:
+      213: 1121072732373627755
+    second: rong_than_traidat_original_1
+  - first:
+      213: 3412471091849521939
+    second: rong_than_traidat_original_2
+  - first:
+      213: -8710371571070723908
+    second: rong_than_traidat_original_3
+  - first:
+      213: -2537357933675210888
+    second: rong_than_traidat_original_4
+  - first:
+      213: -3776553969943267753
+    second: rong_than_traidat_original_5
+  - first:
+      213: -6785498497126286711
+    second: rong_than_traidat_original_6
+  - first:
+      213: 7240914477069076866
+    second: rong_than_traidat_original_7
+  - first:
+      213: 8293704637434776581
+    second: rong_than_traidat_original_8
+  - first:
+      213: -8964180665709793151
+    second: rong_than_traidat_original_9
+  - first:
+      213: 6607965343569410810
+    second: rong_than_traidat_original_10
+  - first:
+      213: 570133397131712906
+    second: rong_than_traidat_original_11
+  - first:
+      213: 8679375056215229178
+    second: rong_than_traidat_original_12
+  - first:
+      213: -3804596820863820441
+    second: rong_than_traidat_original_13
+  - first:
+      213: 7194246279279396356
+    second: rong_than_traidat_original_14
+  - first:
+      213: -6672815996118552622
+    second: rong_than_traidat_original_15
+  - first:
+      213: -7689023321245898821
+    second: rong_than_traidat_original_16
+  - first:
+      213: 2584283495849274162
+    second: rong_than_traidat_original_17
+  - first:
+      213: -2719709815746880544
+    second: rong_than_traidat_original_18
+  - first:
+      213: 1148763428727055764
+    second: rong_than_traidat_original_19
+  - first:
+      213: -4616051461121560321
+    second: rong_than_traidat_original_20
+  - first:
+      213: -2183020657636298320
+    second: rong_than_traidat_original_21
+  - first:
+      213: 2546951064410305295
+    second: rong_than_traidat_original_22
+  - first:
+      213: 664959732173044477
+    second: rong_than_traidat_original_23
+  - first:
+      213: 131175661588826834
+    second: rong_than_traidat_original_24
+  - first:
+      213: 6376714536413068676
+    second: rong_than_traidat_original_25
+  - first:
+      213: 7421713561934235923
+    second: rong_than_traidat_original_26
+  - first:
+      213: 4704584425713073223
+    second: rong_than_traidat_original_27
+  - first:
+      213: -8717190268622169649
+    second: rong_than_traidat_original_28
+  - first:
+      213: -8437210543088504759
+    second: rong_than_traidat_original_29
+  - first:
+      213: -7390224207560307763
+    second: rong_than_traidat_original_30
+  - first:
+      213: 2614564411429374013
+    second: rong_than_traidat_original_31
+  - first:
+      213: 7645587966787740481
+    second: rong_than_traidat_original_32
+  - first:
+      213: -7704096605765324243
+    second: rong_than_traidat_original_33
+  - first:
+      213: -1624667022775635663
+    second: rong_than_traidat_original_34
+  - first:
+      213: -372734177212226729
+    second: rong_than_traidat_original_35
+  - first:
+      213: -76631761034267729
+    second: rong_than_traidat_original_36
+  - first:
+      213: 2896002066173868676
+    second: rong_than_traidat_original_37
+  - first:
+      213: -8202436868941208504
+    second: rong_than_traidat_original_38
+  - first:
+      213: 2931188010247687797
+    second: rong_than_traidat_original_39
+  - first:
+      213: -6229446150049469199
+    second: rong_than_traidat_original_40
+  - first:
+      213: -3154939282165283315
+    second: rong_than_traidat_original_41
+  - first:
+      213: -3190579624766668842
+    second: rong_than_traidat_original_42
+  - first:
+      213: 7816655872067346283
+    second: rong_than_traidat_original_43
+  - first:
+      213: 4584683798531321909
+    second: rong_than_traidat_original_44
+  - first:
+      213: 2597792159091934305
+    second: rong_than_traidat_original_45
+  - first:
+      213: 8034814174126246699
+    second: rong_than_traidat_original_46
+  - first:
+      213: 5765660335865971498
+    second: rong_than_traidat_original_47
+  - first:
+      213: -4243720997499598037
+    second: rong_than_traidat_original_48
+  - first:
+      213: -7798377856988108760
+    second: rong_than_traidat_original_49
+  - first:
+      213: 1973578452900118498
+    second: rong_than_traidat_original_50
+  - first:
+      213: 4081251100045500594
+    second: rong_than_traidat_original_51
+  - first:
+      213: 654417268158425885
+    second: rong_than_traidat_original_52
+  - first:
+      213: -1615968004492882973
+    second: rong_than_traidat_original_53
+  - first:
+      213: 9063562892915338695
+    second: rong_than_traidat_original_54
+  - first:
+      213: -4273343229149218678
+    second: rong_than_traidat_original_55
+  - first:
+      213: -4082180640407756491
+    second: rong_than_traidat_original_56
+  - first:
+      213: -3915588041740040974
+    second: rong_than_traidat_original_57
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: rong_than_traidat_original_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 538
+        height: 2033
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aaee726da0122f30800000000000000
+      internalID: 4549216910465493669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_1
+      rect:
+        serializedVersion: 2
+        x: 538
+        y: 1583
+        width: 157
+        height: 458
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b63b18cd5b9de8f00800000000000000
+      internalID: 1121072732373627755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_2
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 1668
+        width: 177
+        height: 333
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31beaf3c0688b5f20800000000000000
+      internalID: 3412471091849521939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_3
+      rect:
+        serializedVersion: 2
+        x: 695
+        y: 2001
+        width: 65
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb81ba4a43b8e1780800000000000000
+      internalID: -8710371571070723908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_4
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 2001
+        width: 64
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 877154f176e79ccd0800000000000000
+      internalID: -2537357933675210888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_5
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 1906
+        width: 133
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 756b0726c2cf69bc0800000000000000
+      internalID: -3776553969943267753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_6
+      rect:
+        serializedVersion: 2
+        x: 870
+        y: 1736
+        width: 148
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98a37d6611115d1a0800000000000000
+      internalID: -6785498497126286711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_7
+      rect:
+        serializedVersion: 2
+        x: 1017
+        y: 1735
+        width: 124
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2898fa65a55ec7460800000000000000
+      internalID: 7240914477069076866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_8
+      rect:
+        serializedVersion: 2
+        x: 1136
+        y: 1869
+        width: 221
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50c4f420d68291370800000000000000
+      internalID: 8293704637434776581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_9
+      rect:
+        serializedVersion: 2
+        x: 1136
+        y: 1743
+        width: 157
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18071f5cd25d89380800000000000000
+      internalID: -8964180665709793151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_10
+      rect:
+        serializedVersion: 2
+        x: 1291
+        y: 1743
+        width: 70
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afafb8f287534bb50800000000000000
+      internalID: 6607965343569410810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_11
+      rect:
+        serializedVersion: 2
+        x: 1360
+        y: 1752
+        width: 139
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a895f92dd4589e700800000000000000
+      internalID: 570133397131712906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_12
+      rect:
+        serializedVersion: 2
+        x: 1499
+        y: 1752
+        width: 121
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af2481ad0a5537870800000000000000
+      internalID: 8679375056215229178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_13
+      rect:
+        serializedVersion: 2
+        x: 1620
+        y: 1855
+        width: 191
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76dd4da595b533bc0800000000000000
+      internalID: -3804596820863820441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_14
+      rect:
+        serializedVersion: 2
+        x: 1849
+        y: 1801
+        width: 196
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 406cf1fcfd817d360800000000000000
+      internalID: 7194246279279396356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_15
+      rect:
+        serializedVersion: 2
+        x: 1363
+        y: 1567
+        width: 190
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2df2fc3a4356563a0800000000000000
+      internalID: -6672815996118552622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_16
+      rect:
+        serializedVersion: 2
+        x: 1621
+        y: 1752
+        width: 229
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb7a17b070a1b4590800000000000000
+      internalID: -7689023321245898821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_17
+      rect:
+        serializedVersion: 2
+        x: 1705
+        y: 1171
+        width: 340
+        height: 582
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23b2009b5283dd320800000000000000
+      internalID: 2584283495849274162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_18
+      rect:
+        serializedVersion: 2
+        x: 1880
+        y: 1647
+        width: 167
+        height: 156
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0eb934c0556a14ad0800000000000000
+      internalID: -2719709815746880544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_19
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 1603
+        width: 90
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4956c34804a31ff00800000000000000
+      internalID: 1148763428727055764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_20
+      rect:
+        serializedVersion: 2
+        x: 747
+        y: 1583
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff03dea27ad70ffb0800000000000000
+      internalID: -4616051461121560321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_21
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 1603
+        width: 69
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b1bf3c274a54b1e0800000000000000
+      internalID: -2183020657636298320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_22
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 1413
+        width: 97
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f03ba7eaf76985320800000000000000
+      internalID: 2546951064410305295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_23
+      rect:
+        serializedVersion: 2
+        x: 931
+        y: 1567
+        width: 218
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfafc127a596a3900800000000000000
+      internalID: 664959732173044477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_24
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 1566
+        width: 213
+        height: 179
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dacd28b19702d100800000000000000
+      internalID: 131175661588826834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_25
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 1568
+        width: 148
+        height: 178
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48d78f8e514ae7850800000000000000
+      internalID: 6376714536413068676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_26
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 1567
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3190ac3a9293ff660800000000000000
+      internalID: 7421713561934235923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_27
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 1579
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74c7676fb9a0a4140800000000000000
+      internalID: 4704584425713073223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_28
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 1587
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc99847e2a1560780800000000000000
+      internalID: -8717190268622169649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_29
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 1563
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 940770c96b109ea80800000000000000
+      internalID: -8437210543088504759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_30
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 1563
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcb00e10d36a07990800000000000000
+      internalID: -7390224207560307763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_31
+      rect:
+        serializedVersion: 2
+        x: 927
+        y: 1223
+        width: 789
+        height: 344
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3840a9ca7cc84420800000000000000
+      internalID: 2614564411429374013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_32
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 1555
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 143626b6fb59a1a60800000000000000
+      internalID: 7645587966787740481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_33
+      rect:
+        serializedVersion: 2
+        x: 695
+        y: 1531
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d22b01284fc851590800000000000000
+      internalID: -7704096605765324243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_34
+      rect:
+        serializedVersion: 2
+        x: 763
+        y: 1551
+        width: 22
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 131ba2d53f50479e0800000000000000
+      internalID: -1624667022775635663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_35
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 1527
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7532e9b9d38c3daf0800000000000000
+      internalID: -372734177212226729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_36
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 1523
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa33a01c1dfbfeef0800000000000000
+      internalID: -76631761034267729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_37
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 1487
+        width: 34
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48a3717198aa03820800000000000000
+      internalID: 2896002066173868676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_38
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 1531
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 844213640271b2e80800000000000000
+      internalID: -8202436868941208504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_39
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 1515
+        width: 14
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57e82b817fbada820800000000000000
+      internalID: 2931188010247687797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_40
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 1463
+        width: 97
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fc60e64bbf8c89a0800000000000000
+      internalID: -6229446150049469199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_41
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 1507
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d06cc9e30776734d0800000000000000
+      internalID: -3154939282165283315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_42
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 1471
+        width: 38
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6dffe265cb8c8b3d0800000000000000
+      internalID: -3190579624766668842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_43
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 1515
+        width: 22
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6f9b0ae9175a7c60800000000000000
+      internalID: 7816655872067346283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_44
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 1507
+        width: 21
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 530b2f2cf9110af30800000000000000
+      internalID: 4584683798531321909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_45
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 1459
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16448fa74363d0420800000000000000
+      internalID: 2597792159091934305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_46
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 1439
+        width: 26
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2b811dcbe4618f60800000000000000
+      internalID: 8034814174126246699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_47
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 1472
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a23c9d6178db30050800000000000000
+      internalID: 5765660335865971498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_48
+      rect:
+        serializedVersion: 2
+        x: 599
+        y: 1415
+        width: 38
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2b8b2aac364b15c0800000000000000
+      internalID: -4243720997499598037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_49
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 1415
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 828a3f918a896c390800000000000000
+      internalID: -7798377856988108760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_50
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 1411
+        width: 42
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eff97d752f836b10800000000000000
+      internalID: 1973578452900118498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_51
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 476
+        width: 644
+        height: 937
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b06269804483a830800000000000000
+      internalID: 4081251100045500594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_52
+      rect:
+        serializedVersion: 2
+        x: 931
+        y: 475
+        width: 630
+        height: 750
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1be673c905f41900800000000000000
+      internalID: 654417268158425885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_53
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 1173
+        width: 64
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3eb0ec369ade299e0800000000000000
+      internalID: -1615968004492882973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_54
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 891
+        width: 421
+        height: 319
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cd61a72e6e38cd70800000000000000
+      internalID: 9063562892915338695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_55
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 2
+        width: 1263
+        height: 472
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a887d3769f802b4c0800000000000000
+      internalID: -4273343229149218678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_56
+      rect:
+        serializedVersion: 2
+        x: 1559
+        y: 0
+        width: 440
+        height: 890
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 531e48bf55e2957c0800000000000000
+      internalID: -4082180640407756491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rong_than_traidat_original_57
+      rect:
+        serializedVersion: 2
+        x: 1999
+        y: 1
+        width: 30
+        height: 861
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f44155fb6909a9c0800000000000000
+      internalID: -3915588041740040974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      rong_than_traidat_original_0: 4549216910465493669
+      rong_than_traidat_original_1: 1121072732373627755
+      rong_than_traidat_original_10: 6607965343569410810
+      rong_than_traidat_original_11: 570133397131712906
+      rong_than_traidat_original_12: 8679375056215229178
+      rong_than_traidat_original_13: -3804596820863820441
+      rong_than_traidat_original_14: 7194246279279396356
+      rong_than_traidat_original_15: -6672815996118552622
+      rong_than_traidat_original_16: -7689023321245898821
+      rong_than_traidat_original_17: 2584283495849274162
+      rong_than_traidat_original_18: -2719709815746880544
+      rong_than_traidat_original_19: 1148763428727055764
+      rong_than_traidat_original_2: 3412471091849521939
+      rong_than_traidat_original_20: -4616051461121560321
+      rong_than_traidat_original_21: -2183020657636298320
+      rong_than_traidat_original_22: 2546951064410305295
+      rong_than_traidat_original_23: 664959732173044477
+      rong_than_traidat_original_24: 131175661588826834
+      rong_than_traidat_original_25: 6376714536413068676
+      rong_than_traidat_original_26: 7421713561934235923
+      rong_than_traidat_original_27: 4704584425713073223
+      rong_than_traidat_original_28: -8717190268622169649
+      rong_than_traidat_original_29: -8437210543088504759
+      rong_than_traidat_original_3: -8710371571070723908
+      rong_than_traidat_original_30: -7390224207560307763
+      rong_than_traidat_original_31: 2614564411429374013
+      rong_than_traidat_original_32: 7645587966787740481
+      rong_than_traidat_original_33: -7704096605765324243
+      rong_than_traidat_original_34: -1624667022775635663
+      rong_than_traidat_original_35: -372734177212226729
+      rong_than_traidat_original_36: -76631761034267729
+      rong_than_traidat_original_37: 2896002066173868676
+      rong_than_traidat_original_38: -8202436868941208504
+      rong_than_traidat_original_39: 2931188010247687797
+      rong_than_traidat_original_4: -2537357933675210888
+      rong_than_traidat_original_40: -6229446150049469199
+      rong_than_traidat_original_41: -3154939282165283315
+      rong_than_traidat_original_42: -3190579624766668842
+      rong_than_traidat_original_43: 7816655872067346283
+      rong_than_traidat_original_44: 4584683798531321909
+      rong_than_traidat_original_45: 2597792159091934305
+      rong_than_traidat_original_46: 8034814174126246699
+      rong_than_traidat_original_47: 5765660335865971498
+      rong_than_traidat_original_48: -4243720997499598037
+      rong_than_traidat_original_49: -7798377856988108760
+      rong_than_traidat_original_5: -3776553969943267753
+      rong_than_traidat_original_50: 1973578452900118498
+      rong_than_traidat_original_51: 4081251100045500594
+      rong_than_traidat_original_52: 654417268158425885
+      rong_than_traidat_original_53: -1615968004492882973
+      rong_than_traidat_original_54: 9063562892915338695
+      rong_than_traidat_original_55: -4273343229149218678
+      rong_than_traidat_original_56: -4082180640407756491
+      rong_than_traidat_original_57: -3915588041740040974
+      rong_than_traidat_original_6: -6785498497126286711
+      rong_than_traidat_original_7: 7240914477069076866
+      rong_than_traidat_original_8: 8293704637434776581
+      rong_than_traidat_original_9: -8964180665709793151
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
