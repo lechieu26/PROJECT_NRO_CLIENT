@@ -3136,7 +3136,7 @@ public class GameScr : mScreen, IChatable
 		}
 		else
 		{
-			if (ModFunc.isEditButton || ModFunc.isShowFilterList || ModFunc.isShowMusicList || ModFunc.isShowMenuChat || QuayTamBao.isTamBao || QuaNapTuan.isNapTuan || checkClickToCapcha())
+			if (ModFunc.isEditButton || ModFunc.isShowFilterList || ModFunc.isShowMusicList || ModFunc.isShowMenuChat || QuayTamBao.isTamBao || QuaNapTuan.isNapTuan || CustomInventoryPanel.IsPointerInPanel()  || checkClickToCapcha())
 			{
 				return;
 			}
@@ -4503,7 +4503,8 @@ public class GameScr : mScreen, IChatable
 		{
 			AutoXmap.Update();
 			ModFunc.GI().Update();
-		}
+            CustomInventoryPanel.Update();
+        }
 		// Update CloudGarden logic (auto-harvest icon, etc.) - chỉ khi ở map farm
 		if (FarmConstants.IsCloudGardenMap(TileMap.mapID))
 		{
@@ -5348,7 +5349,8 @@ public class GameScr : mScreen, IChatable
 		paintPhuBanBar(g, num27 + GameCanvas.w / 2, 0, num28);
 		EffectManager.hiEffects.paintAll(g);
 		AdminPopup.gI().paint(g);
-	}
+        CustomInventoryPanel.Paint(g);
+    }
 
 	private void paintXoSo(mGraphics g)
 	{

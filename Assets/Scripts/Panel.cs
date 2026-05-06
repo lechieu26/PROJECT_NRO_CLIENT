@@ -80,6 +80,11 @@ public class Panel : IActionListener, IChatable
             }
         }
     }
+
+    public void customPaintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
+    {
+        this.paintEffectItem(g, item, x, y, w, h);
+    }
     private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
     {
         try
@@ -139,9 +144,9 @@ public class Panel : IActionListener, IChatable
 
                         if (eff != null && eff[GameCanvas.gameTick / 6 % 8] != null)
                         {
-                            g.drawImageScale(eff[GameCanvas.gameTick / 6 % 8], x + 2, y + 2, w-4, h-4, 0);
+                            g.drawImageScale(eff[GameCanvas.gameTick / 6 % 8], x + 2, y + 2, w - 4, h - 4, 0);
                         }
-                        
+
                     }
                 }
             }
@@ -432,7 +437,7 @@ public class Panel : IActionListener, IChatable
 
     private void updateKeyFarmSeed()
     {
-        
+
         // Xử lý pointer down - bắt đầu kéo
         if (GameCanvas.isPointerDown && !this.pointerIsDowning)
         {
@@ -442,7 +447,7 @@ public class Panel : IActionListener, IChatable
                 this.pointerIsDowning = true;
             }
         }
-        
+
         // Xử lý pointer release - kiểm tra click
         if (GameCanvas.isPointerJustRelease && this.pointerIsDowning)
         {
@@ -451,13 +456,13 @@ public class Panel : IActionListener, IChatable
             {
                 int x = GameCanvas.px - this.xScroll;
                 int y = GameCanvas.py - this.yScroll + this.cmy;
-                
+
                 int slotW = 36; // 34 + 2 spacing
                 int slotH = this.ITEM_HEIGHT; // 35
-                
+
                 int col = x / slotW;
                 int row = y / slotH;
-                
+
                 if (col >= 0 && col < 5 && row >= 0)
                 {
                     int index = row * 5 + col;
@@ -478,11 +483,11 @@ public class Panel : IActionListener, IChatable
             this.pointerIsDowning = false;
             GameCanvas.isPointerJustRelease = false;
         }
-        
+
         // Di chuyển camera khi scroll
         this.moveCamera();
     }
-    
+
     private int pointerDownFirstY; // Thêm field để track vị trí pointer down
 
     private void doFireFarmSeed()
@@ -514,9 +519,9 @@ public class Panel : IActionListener, IChatable
         // Tính vị trí menu giống inventory: dựa trên row của item
         int row = this.selected / 5;
         int menuY = (row + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll;
-        
+
         GameCanvas.menu.startAt(myVector, this.X, menuY);
-        
+
         // Hiện info item SAU khi gọi startAt (giống inventory)
         this.addItemDetail(item);
     }
@@ -774,14 +779,15 @@ public class Panel : IActionListener, IChatable
             GameCanvas.panel2.show();
         }
     }
-	public static MyVector vRecipe = new MyVector();
-	public static CookingSlot[] cookingSlots;
-    public class FlyItem {
+    public static MyVector vRecipe = new MyVector();
+    public static CookingSlot[] cookingSlots;
+    public class FlyItem
+    {
         public int imgId;
         public int x, y, dy, life;
     }
     public static List<FlyItem> vFlyItems = new List<FlyItem>();
-	public static string serverCookingData = "";
+    public static string serverCookingData = "";
 
     public static ItemRecipe GetRecipeById(short id)
     {
@@ -998,12 +1004,12 @@ public class Panel : IActionListener, IChatable
             string infoName = "Chọn một món để xem";
             string infoTime = "Thời gian: ---";
             string infoGia = "Giá bán: ---";
-            
+
             if (selectedRecipe != null)
             {
                 infoName = selectedRecipe.name;
                 infoTime = "Thời gian: " + selectedRecipe.time + "s";
-                
+
                 ItemTemplate donGiaItem = ItemTemplates.get(selectedRecipe.donGiaId);
                 string donGiaName = (donGiaItem != null) ? donGiaItem.name : "Vật phẩm";
                 infoGia = "Giá bán: " + selectedRecipe.gia + " " + donGiaName;
@@ -1036,41 +1042,41 @@ public class Panel : IActionListener, IChatable
 
                 g.setColor(6047789, 0.3f);
                 g.fillRect(bx, by, slotSize, slotSize, 5);
-                
+
                 if (selectedRecipe != null && selectedRecipe.ingredients != null && i < selectedRecipe.ingredients.Length)
                 {
                     short ingTemplateId = selectedRecipe.ingredients[i];
                     ItemTemplate it = ItemTemplates.get(ingTemplateId);
                     if (it != null)
                     {
-                         SmallImage.drawSmallImage(g, it.iconID, bx + slotSize / 2, by + slotSize / 2, 0, 3);
-                         if (selectedRecipe.quantities != null && i < selectedRecipe.quantities.Length)
-                         {
-                             int sl = selectedRecipe.quantities[i];
-                             if (sl > 0)
-                             {
-                                 int currQty = 0;
-                                 if (Char.myCharz().arrItemBag != null)
-                                 {
-                                     for (int b = 0; b < Char.myCharz().arrItemBag.Length; b++)
-                                     {
-                                         if (Char.myCharz().arrItemBag[b] != null && Char.myCharz().arrItemBag[b].template.id == ingTemplateId)
-                                         {
-                                             currQty += Char.myCharz().arrItemBag[b].quantity;
-                                         }
-                                     }
-                                 }
+                        SmallImage.drawSmallImage(g, it.iconID, bx + slotSize / 2, by + slotSize / 2, 0, 3);
+                        if (selectedRecipe.quantities != null && i < selectedRecipe.quantities.Length)
+                        {
+                            int sl = selectedRecipe.quantities[i];
+                            if (sl > 0)
+                            {
+                                int currQty = 0;
+                                if (Char.myCharz().arrItemBag != null)
+                                {
+                                    for (int b = 0; b < Char.myCharz().arrItemBag.Length; b++)
+                                    {
+                                        if (Char.myCharz().arrItemBag[b] != null && Char.myCharz().arrItemBag[b].template.id == ingTemplateId)
+                                        {
+                                            currQty += Char.myCharz().arrItemBag[b].quantity;
+                                        }
+                                    }
+                                }
 
-                                 if (currQty >= sl)
-                                 {
-                                     mFont.tahoma_7b_white.drawString(g, "x" + sl, bx + slotSize - 2, by + slotSize - 10, 1);
-                                 }
-                                 else
-                                 {
-                                     mFont.tahoma_7b_red.drawString(g, "x" + sl, bx + slotSize - 2, by + slotSize - 10, 1);
-                                 }
-                             }
-                         }
+                                if (currQty >= sl)
+                                {
+                                    mFont.tahoma_7b_white.drawString(g, "x" + sl, bx + slotSize - 2, by + slotSize - 10, 1);
+                                }
+                                else
+                                {
+                                    mFont.tahoma_7b_red.drawString(g, "x" + sl, bx + slotSize - 2, by + slotSize - 10, 1);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1097,7 +1103,7 @@ public class Panel : IActionListener, IChatable
             }
             g.fillRect(btnX, btnY, btnW, btnH, 5);
             mFont.tahoma_7b_white.drawString(g, "Nấu ăn", btnX + btnW / 2, btnY + btnH / 2 - mFont.tahoma_7b_white.getHeight() / 2, 3);
-            
+
             // Render floating items
             for (int i = vFlyItems.Count - 1; i >= 0; i--)
             {
@@ -1131,7 +1137,7 @@ public class Panel : IActionListener, IChatable
         curY += 14; // label nguyên liệu
 
         ingredientRowY = curY;
-        
+
         btnY = curY + rowH;
     }
 
@@ -1371,10 +1377,10 @@ public class Panel : IActionListener, IChatable
             GameScr.info1.addInfo("Món ăn không hợp lệ!", 0);
             return;
         }
-        
+
         ItemRecipe recipe = (ItemRecipe)Panel.vRecipe.elementAt(recipeIdx);
         if (recipe == null) return;
-        
+
         try
         {
             // Server sẽ check item, vàng, và xếp ô.
@@ -1626,6 +1632,44 @@ public class Panel : IActionListener, IChatable
         this.setType(0);
         this.setTabZone();
         this.cmx = (this.cmtoX = 0);
+    }
+
+    public void customSelectInventoryItem(int inventorySelected)
+    {
+        this.type = 0;
+        this.currentTabIndex = 4;
+        this.selected = inventorySelected + ((!ModFunc.isInventory) ? 1 : 0);
+        this.newSelected = 0;
+        this.isnewInventory = false;
+    }
+
+    public void customShowItemDetail(Item item, int anchorX, int anchorY, int boundsX, int boundsY, int boundsW, int boundsH)
+    {
+        this.addItemDetail(item);
+        if (this.cp == null || this.cp.says == null)
+        {
+            return;
+        }
+        int x = anchorX - this.cp.sayWidth - 8;
+        if (x < boundsX + 6)
+        {
+            x = anchorX + 42;
+        }
+        if (x + this.cp.sayWidth > boundsX + boundsW - 6)
+        {
+            x = boundsX + boundsW - this.cp.sayWidth - 6;
+        }
+        int y = anchorY - this.cp.ch / 2;
+        if (y < boundsY + 28)
+        {
+            y = boundsY + 28;
+        }
+        if (y + this.cp.ch > boundsY + boundsH - 6)
+        {
+            y = boundsY + boundsH - this.cp.ch - 6;
+        }
+        this.cp.cx = x;
+        this.cp.cy = y;
     }
 
     public void addItemDetail(Item item)
@@ -3915,8 +3959,9 @@ public class Panel : IActionListener, IChatable
         }
     IL_645:
         this.selected = this.lastSelect[this.currentTabIndex];
-        if (this.type == 29) {
-             Debug.Log("updateKeyInTabBar SET SELECTED: stored=" + this.lastSelect[this.currentTabIndex]);
+        if (this.type == 29)
+        {
+            Debug.Log("updateKeyInTabBar SET SELECTED: stored=" + this.lastSelect[this.currentTabIndex]);
         }
     }
 
@@ -6884,7 +6929,7 @@ public class Panel : IActionListener, IChatable
         g.setColor(16711680);
         Item[] arrItemBody = Char.myCharz().arrItemBody;
         Item[] arrItemBag = Char.myCharz().arrItemBag;
-        
+
         // === LẤY CHỈ SỐ TRỰC TIẾP TỪ CHAR ===
         long totalHP = 0;
         long totalKI = 0;
@@ -6897,10 +6942,10 @@ public class Panel : IActionListener, IChatable
         // Tính HP%, KI% theo công thức thực tế (Hiện tại - Gốc) / Gốc * 100
         if (Char.myCharz().cHPGoc > 0)
             totalHP = (long)((Char.myCharz().cHPFull - Char.myCharz().cHPGoc) * 100 / Char.myCharz().cHPGoc);
-             
+
         if (Char.myCharz().cMPGoc > 0)
             totalKI = (long)((Char.myCharz().cMPFull - Char.myCharz().cMPGoc) * 100 / Char.myCharz().cMPGoc);
-        
+
         // Tính tổng % Sức đánh và Hút từ item body options
         for (int idx = 0; idx < arrItemBody.Length; idx++)
         {
@@ -6914,12 +6959,12 @@ public class Panel : IActionListener, IChatable
                     {
                         int optId = option.optionTemplate.id;
                         int param = option.param;
-                        
+
                         // Sức đánh % (77 = %SD)
                         if (optId == 77) totalSD += param;
-                         // Hút HP % (id: 95)
+                        // Hút HP % (id: 95)
                         else if (optId == 95) totalHutHP += param;
-                         // Hút KI % (id: 96)
+                        // Hút KI % (id: 96)
                         else if (optId == 96) totalHutKI += param;
                         // Kháng choáng (id: 116 = Kháng TDHS)
                         else if (optId == 116) hasKhangChoang = true;
@@ -6929,7 +6974,7 @@ public class Panel : IActionListener, IChatable
                 }
             }
         }
-        
+
         // Đảm bảo hiển thị ít nhất 15 ô body
         int numBody = 15;
         if (arrItemBody.Length > 15)
@@ -6940,19 +6985,19 @@ public class Panel : IActionListener, IChatable
                 numBody = (numBody / 5 + 1) * 5;
             }
         }
-        
+
         int numBagRows = arrItemBag.Length / 5;
         if (arrItemBag.Length % 5 != 0) numBagRows++;
-        
+
         this.currentListLength = this.checkCurrentListLengthNew(6 + numBagRows + 2);
         this.TAB_W_NEW = 1;
         g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
         g.translate(0, -this.cmy);
-        
+
         try
         {
             int bodyStartY = this.yScroll;
-            
+
             // === VẼ VÙNG TRUNG TÂM (CHỈ NHÂN VẬT VÀ THÔNG TIN TỔNG HỢP) ===
             int leftColX = this.xScroll + 4;
             int rightColX = this.xScroll + this.wScroll - 34 - 4;
@@ -6960,57 +7005,57 @@ public class Panel : IActionListener, IChatable
             int centerW = rightColX - centerX - 2;
             int centerY = bodyStartY + 2;
             int centerH = 5 * this.ITEM_HEIGHT - 4;
-            
+
             // Kiểm tra có trong vùng hiển thị không
             int centerScreenY = centerY - this.cmy;
             bool isCenterVisible = (centerScreenY + centerH > this.yScroll) && (centerScreenY < this.yScroll + this.hScroll);
-            
+
             if (isCenterVisible)
             {
                 // Vẽ nhân vật ở giữa phần trên (không vẽ tilemap)
                 int charX = centerX + centerW / 2;
                 int charY = centerY + centerH / 2;
                 Char.myCharz().paintCharBody(g, charX, charY, 1, Char.myCharz().cf, false);
-                
+
                 // === VẼ THÔNG TIN TỔNG HỢP Ở GIỮA ===
                 int infoY = centerY + centerH / 2 + 5;
                 int infoLineHeight = 11;
-                
+
                 // Nền cho thông tin (semi-transparent)
                 //g.setColor(0x000000, 0.65f);
                 g.setColor(6047789, 0.45f);
                 g.fillRect(centerX, infoY - 2, centerW, infoLineHeight * 5 + 3, 4);
-                
+
                 // Dòng 1: HP%, KI%
                 string line1 = "HP: " + totalHP + "%, KI: " + totalKI + "%";
                 mFont.tahoma_7_yellow.drawString(g, line1, centerX + 5, infoY, 0);
-                
+
                 // Dòng 2: Sức Đánh%
                 string line2 = "SĐ: " + totalSD + "%";
                 mFont.tahoma_7_yellow.drawString(g, line2, centerX + 5, infoY + infoLineHeight, 0);
-                
+
                 // Dòng 3: Hút HP%, Hút KI%
                 string line3 = "Hút HP: " + totalHutHP + "%, Hút KI: " + totalHutKI + "%";
                 mFont.tahoma_7_yellow.drawString(g, line3, centerX + 5, infoY + infoLineHeight * 2, 0);
-                
+
                 // Dòng 4: Kháng choáng
                 string line4 = "Kháng choáng: " + (hasKhangChoang ? "Có" : "Không");
                 mFont.tahoma_7_white.drawString(g, line4, centerX + 5, infoY + infoLineHeight * 3, 0);
-                
+
                 // Dòng 5: Chống lạnh
                 string line5 = "Chống lạnh: " + (hasChongLanh ? "Có" : "Không");
                 mFont.tahoma_7_white.drawString(g, line5, centerX + 5, infoY + infoLineHeight * 4, 0);
             }
-            
+
             // === VẼ 15 Ô ITEM BODY ===
             int bagStartY = bodyStartY + 6 * this.ITEM_HEIGHT + 10;
-            
+
             for (int i = 0; i < numBody && i < 15; i++)
             {
                 int x = 0;
                 int y = 0;
                 int itemWidth = 34; // Width mặc định
-                
+
                 if (i < 5)
                 {
                     // Cột trái (5 ô dọc)
@@ -7029,7 +7074,7 @@ public class Panel : IActionListener, IChatable
                     int bottomIdx = i - 10;
                     int boxWidth = 34;
                     int middleBoxWidth = 30;  // Width nhỏ hơn cho 3 ô giữa
-                    
+
                     if (bottomIdx == 0)
                     {
                         // Ô đầu tiên căn lề trái (giống cột trái)
@@ -7048,38 +7093,38 @@ public class Panel : IActionListener, IChatable
                         int startMiddle = leftColX + boxWidth + 4;  // Sau ô trái + gap
                         int endMiddle = rightColX - 4;  // Trước ô phải - gap
                         int totalMiddleSpace = endMiddle - startMiddle;
-                        
+
                         // Tính khoảng cách giữa các ô giữa
                         int gapBetweenMiddle = (totalMiddleSpace - 3 * middleBoxWidth) / 2;
                         if (gapBetweenMiddle < 2) gapBetweenMiddle = 2;
-                        
+
                         x = startMiddle + (bottomIdx - 1) * (middleBoxWidth + gapBetweenMiddle);
                         itemWidth = middleBoxWidth;
                     }
-                    
+
                     y = bodyStartY + 5 * this.ITEM_HEIGHT;
                 }
-                
+
                 int bx = x;
                 int by = y;
                 int bw = itemWidth;
                 int bh = this.ITEM_HEIGHT - 1;
-                
+
                 if (by - this.cmy <= this.yScroll + this.hScroll && by - this.cmy >= this.yScroll - this.ITEM_HEIGHT)
                 {
                     bool isSelected = (this.selected == i && this.selected < arrItemBody.Length);
-                    
+
                     // Viền vàng đậm khi được chọn (giống item bag: 16383818)
                     if (isSelected)
                     {
                         g.setColor(16383818); // Viền vàng đậm
                         g.fillRect(bx - 1, by - 1, bw + 2, bh + 2, 2);
                     }
-                    
+
                     // Nền luôn giữ nguyên màu (giống bag), không đổi màu khi selected
                     g.setColor(6047789, 0.5f);
                     g.fillRect(bx, by, bw, bh, 2);
-                    
+
                     // Vẽ item nếu có
                     Item item = (i < arrItemBody.Length) ? arrItemBody[i] : null;
                     if (item != null)
@@ -7104,9 +7149,9 @@ public class Panel : IActionListener, IChatable
                             }
                         }
                         this.paintEffectItem(g, item, bx, by, bw, bh);
-                        
+
                         // Icon dao động khi được chọn
-                        float bodyOffset = (this.selected == i && this.selected < arrItemBody.Length) 
+                        float bodyOffset = (this.selected == i && this.selected < arrItemBody.Length)
                             ? (float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f : 0f;
                         SmallImage.drawSmallImage(g, (int)item.template.iconID, bx + bw / 2, by + bh / 2 + (int)bodyOffset, 0, 3);
                     }
@@ -8935,7 +8980,7 @@ public class Panel : IActionListener, IChatable
         GameCanvas.menu.startAt(myVector8, this.X, (this.selected + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll);
     }
 
-    private void doFireGameInfo()
+    public void doFireGameInfo()
     {
         if (this.selected != -1)
         {
@@ -9909,6 +9954,8 @@ public class Panel : IActionListener, IChatable
         }
         if (this.selected == -1)
         {
+            this.currItem = null;
+            this.cp = null;
             return;
         }
         if (this.selected == 0 && !ModFunc.isInventory)
@@ -10056,7 +10103,7 @@ public class Panel : IActionListener, IChatable
                 int numBodyRows = 5 + (numBody - 10) / 5;
                 int bodyStartY = this.yScroll;
                 int bagStartY = bodyStartY + numBodyRows * this.ITEM_HEIGHT + 10;
-                
+
                 if (this.selected < arrItemBody.Length)
                 {
                     // Item body
@@ -10089,7 +10136,7 @@ public class Panel : IActionListener, IChatable
             GameCanvas.menu.startAt(myVector, this.X, menuY);
             this.addItemDetail(this.currItem);
             return;
-        } 
+        }
         else
         {
             this.cp = null;
@@ -10108,7 +10155,7 @@ public class Panel : IActionListener, IChatable
         RadarScr.gI().switchToMe();
     }
 
-    private void doFireTool()
+    public void doFireTool()
     {
         if (this.selected < 0)
         {
@@ -10424,7 +10471,7 @@ public class Panel : IActionListener, IChatable
             GameCanvas.panel.setTypePetMain();
             GameCanvas.panel.show();
             ModFunc.userOpenPet = false;
-        }   
+        }
     }
 
     private void doFirePet2()
@@ -13080,7 +13127,7 @@ public class Panel : IActionListener, IChatable
         this.paintScrollArrow(g);
     }
 
-    private void doFireOption()
+    public void doFireOption()
     {
         if (this.selected >= 0)
         {
@@ -13110,7 +13157,7 @@ public class Panel : IActionListener, IChatable
         }
     }
 
-    private void DoFireModFunc() //chieu.lq Chức năng MOD
+    public void DoFireModFunc() //chieu.lq Chức năng MOD
     {
         if (this.selected < 0)
         {
@@ -13457,7 +13504,7 @@ public class Panel : IActionListener, IChatable
         this.paintScrollArrow(g);
     }
 
-    private void doFireAccount()
+    public void doFireAccount()
     {
         if (this.selected < 0)
         {
@@ -13928,22 +13975,22 @@ public class Panel : IActionListener, IChatable
         {
             return -1; // Fallback, sử dụng logic cũ
         }
-        
+
         Item[] arrItemBody = Char.myCharz().arrItemBody;
         Item[] arrItemBag = Char.myCharz().arrItemBag;
-        
+
         int bodyStartY = this.yScroll;
         int itemHeight = this.ITEM_HEIGHT;
         int itemWidth = 34;
         int leftColumnX = 4;
         int rightColumnX = this.wScroll - itemWidth - 4;
-        
+
         // BagStartY theo layout mới: sau 6 hàng item body + 10px gap
         int bagStartY = bodyStartY + 6 * itemHeight + 10;
-        
+
         int relY = py + this.cmy - bodyStartY;
         int relX = px - this.xScroll;
-        
+
         // Kiểm tra item body bên trái (index 0-4)
         if (relX >= leftColumnX && relX < leftColumnX + itemWidth && relY >= 0 && relY < 5 * itemHeight)
         {
@@ -13953,7 +14000,7 @@ public class Panel : IActionListener, IChatable
                 return row; // Item body 0-4
             }
         }
-        
+
         // Kiểm tra item body bên phải (index 5-9)
         if (relX >= rightColumnX && relX < rightColumnX + itemWidth && relY >= 0 && relY < 5 * itemHeight)
         {
@@ -13967,7 +14014,7 @@ public class Panel : IActionListener, IChatable
                 }
             }
         }
-        
+
         // Kiểm tra hàng dưới (index 10-14) - Layout mới: 2 ô bên căn lề, 3 ô giữa
         int bottomRowY = 5 * itemHeight;
         if (relY >= bottomRowY && relY < bottomRowY + itemHeight)
@@ -13979,7 +14026,7 @@ public class Panel : IActionListener, IChatable
             int totalMiddleSpace = endMiddle - startMiddle;
             int gapBetweenMiddle = (totalMiddleSpace - 3 * middleBoxWidth) / 2;
             if (gapBetweenMiddle < 2) gapBetweenMiddle = 2;
-            
+
             // Ô 10: căn lề trái
             if (relX >= leftColumnX && relX < leftColumnX + boxWidth)
             {
@@ -14007,7 +14054,7 @@ public class Panel : IActionListener, IChatable
                 }
             }
         }
-        
+
         // Kiểm tra item bag
         int bagRelY = py + this.cmy - bagStartY;
         if (bagRelY >= 0)
@@ -14023,7 +14070,7 @@ public class Panel : IActionListener, IChatable
                 }
             }
         }
-        
+
         return -1; // Không click vào item nào
     }
 
@@ -14034,8 +14081,8 @@ public class Panel : IActionListener, IChatable
 
     private bool isTabInven()
     {
-        return (this.type == 0 && this.currentTabIndex == 1) || 
-               (this.type == 7 && this.currentTabIndex == 0) || 
+        return (this.type == 0 && this.currentTabIndex == 1) ||
+               (this.type == 7 && this.currentTabIndex == 0) ||
                (this.type == 13 && this.currentTabIndex == 0);
     }
 
@@ -14565,7 +14612,7 @@ public class Panel : IActionListener, IChatable
                 ""
             }
     };
-    
+
     // boxMod cho Mobile (không có tab Nhạc)
     private static readonly string[][] boxModMobile = new string[][]
     {
@@ -14590,7 +14637,7 @@ public class Panel : IActionListener, IChatable
                 "đặt"
             }
     };
-    
+
     // Property để lấy boxMod phù hợp với platform
     public static string[][] boxMod
     {
