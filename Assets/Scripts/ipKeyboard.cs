@@ -25,7 +25,7 @@ public class ipKeyboard
 	{
 		try
 		{
-			if (tk != null && tk.done)
+			if (tk != null && tk.status == TouchScreenKeyboard.Status.Done)
 			{
 				if (act != null)
 				{

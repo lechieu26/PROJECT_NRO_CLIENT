@@ -5,6 +5,7 @@ using UnityEngine;
 public class CustomInventoryPanel
 {
     public static bool isShow;
+    public static bool suppressFlagUI;
     public static Image closeImg = GameCanvas.loadImage("/mainImage/myTexture2der.png");
 
     private const int DEBUG_LAYER = 2;
@@ -66,6 +67,12 @@ public class CustomInventoryPanel
     private static int selectedToolGroupIndex;
     private static int selectedToolAction = -1;
     private static int selectedToolDetailIndex = -1;
+    private static int toolDetailScrollY;
+    private static int toolDetailScrollTargetY;
+    private static int toolDetailScrollRun;
+    private static bool toolDetailDragged;
+    private static int toolDetailDragStartY;
+    private static int toolDetailScrollYBeforeDrag;
     private static GameInfo selectedGameInfoPopup;
     private static int topTab = 4;
     private static int rightSubTab;
@@ -97,6 +104,10 @@ public class CustomInventoryPanel
     private static bool triedLoadPanel9;
     private static bool triedLoadPanelBg;
     private static bool triedLoadTabs;
+
+    private static int abs(int v) { return v > 0 ? v : -v; }
+    private static int min(int a, int b) { return a < b ? a : b; }
+    private static int max(int a, int b) { return a > b ? a : b; }
     private static bool triedLoadEquipFrame;
     private static bool triedLoadStatsFrame;
     private static bool triedLoadCurrencyFrame;
@@ -207,9 +218,15 @@ public class CustomInventoryPanel
                 return;
             }
 
-            // Nếu có Dialog hoặc Menu gốc đang mở, không xử lý input của CustomPanel
-            if (GameCanvas.currentDialog != null || GameCanvas.menu.showMenu || (GameCanvas.panel != null && GameCanvas.panel.cp != null))
+            // Nếu có Dialog hoặc Menu gốc hoặc bất kỳ Popup nào đang mở, không xử lý input của CustomPanel
+            if (GameCanvas.currentDialog != null || GameCanvas.menu.showMenu || (GameCanvas.panel != null && GameCanvas.panel.cp != null) || 
+                ChatLogPopup.gI().IsPointerInPopup() || FriendPopup.gI().IsPointerInPopup() || EnemyPopup.gI().IsPointerInPopup())
             {
+                if (ChatLogPopup.gI().IsPointerInPopup() || FriendPopup.gI().IsPointerInPopup() || EnemyPopup.gI().IsPointerInPopup())
+                {
+                    // Vẫn cần ResetSelection để tránh "dính" highlight khi click vào popup
+                    ResetSelection();
+                }
                 return;
             }
 
@@ -230,6 +247,10 @@ public class CustomInventoryPanel
                 }
                 BlockGameInput();
                 return;
+            }
+            if (selectedToolAction >= 0)
+            {
+                UpdateToolDetailScroll();
             }
             if (ShouldAutoClosePanel())
             {
@@ -346,8 +367,9 @@ public class CustomInventoryPanel
                     return;
                 }
                 
-                // Đóng panel khi click ra ngoài (Tap outside)
-                if (!pointerInPanel && !globalDragged && isDownOutside)
+                // Đóng panel khi click ra ngoài (Tap outside), tránh đóng khi click vào các popup
+                if (!pointerInPanel && !globalDragged && isDownOutside && 
+                    !ChatLogPopup.gI().IsPointerInPopup() && !FriendPopup.gI().IsPointerInPopup() && !EnemyPopup.gI().IsPointerInPopup())
                 {
                     ClosePanelState(true);
                     return;
@@ -697,6 +719,81 @@ public class CustomInventoryPanel
                 popupScrollY += popupScrollCmdy >> 4;
                 popupScrollCmdy &= 15;
             }
+        }
+    }
+
+    private static void UpdateToolDetailScroll()
+    {
+        if (selectedToolAction < 0) return;
+
+        int safeY = panelY + 52;
+        int safeH = panelH - 118;
+        int detailH = safeH - 30;
+
+        // Recalculate detail area for hit testing
+        int safeX = panelX + 24;
+        int safeW = panelW - 48;
+        int gap = 6;
+        int catW = 108;
+        int detailW = 164;
+        int listW = safeW - catW - gap - (detailW + gap);
+        int detailX = safeX + catW + gap + listW + gap;
+
+        int rowH = 26;
+        int count = 0;
+        Panel p = GameCanvas.panel;
+        if (selectedToolAction == 0 && Panel.vGameInfo != null) count = Panel.vGameInfo.size();
+        else if (selectedToolAction == 4 && p.vFlag != null) count = p.vFlag.size();
+        else if (selectedToolAction == 5 && GameScr.gI().zones != null) count = GameScr.gI().zones.Length;
+        else if (selectedToolAction == 7 && selectedAccountSubAction == 1 && p.vFriend != null) { count = p.vFriend.size(); rowH = 28; }
+        else if (selectedToolAction == 7 && selectedAccountSubAction == 2 && p.vEnemy != null) { count = p.vEnemy.size(); rowH = 28; }
+        else if (selectedToolAction == 7 && selectedAccountSubAction <= 0 && Panel.strAccount != null) count = Panel.strAccount.Length;
+        else if (selectedToolAction == 8 && Panel.strCauhinh != null) count = Panel.strCauhinh.Length;
+
+        int totalH = count * rowH;
+        int maxScroll = totalH - detailH;
+        if (maxScroll < 0) maxScroll = 0;
+
+        if (GameCanvas.pXYScrollMouse != 0)
+        {
+            toolDetailScrollTargetY -= GameCanvas.pXYScrollMouse * 20;
+            GameCanvas.pXYScrollMouse = 0;
+        }
+
+        bool inside = GameCanvas.px >= detailX && GameCanvas.px <= detailX + detailW && GameCanvas.py >= safeY + 24 && GameCanvas.py <= safeY + safeH;
+
+        if (GameCanvas.isPointerDown)
+        {
+            if (!toolDetailDragged)
+            {
+                if (inside)
+                {
+                    toolDetailDragged = true;
+                    toolDetailDragStartY = GameCanvas.py;
+                    toolDetailScrollYBeforeDrag = toolDetailScrollY;
+                    toolDetailScrollRun = 0;
+                }
+            }
+            else
+            {
+                int dy = toolDetailDragStartY - GameCanvas.py;
+                if (abs(dy) > 5) globalDragged = true;
+                toolDetailScrollTargetY = toolDetailScrollYBeforeDrag + dy;
+            }
+        }
+        else if (GameCanvas.isPointerJustRelease && toolDetailDragged)
+        {
+            toolDetailDragged = false;
+        }
+
+        if (toolDetailScrollTargetY < 0) toolDetailScrollTargetY = 0;
+        if (toolDetailScrollTargetY > maxScroll) toolDetailScrollTargetY = maxScroll;
+
+        if (!toolDetailDragged && toolDetailScrollY != toolDetailScrollTargetY)
+        {
+            toolDetailScrollRun = (toolDetailScrollTargetY - toolDetailScrollY) >> 2;
+            if (toolDetailScrollRun == 0) toolDetailScrollRun = (toolDetailScrollTargetY > toolDetailScrollY) ? 1 : -1;
+            toolDetailScrollY += toolDetailScrollRun;
         }
     }
 
@@ -2934,6 +3031,8 @@ public class CustomInventoryPanel
         if (selectedToolAction < 0)
         {
             SoundMn.gI().getSoundOption();
+            if (selectedToolGroupIndex == 3 && (Panel.strAccount == null || Panel.strAccount.Length == 0))
+                p.setTypeAccount();
         }
         int safeX = panelX + 24;
         int safeY = panelY + 52;
@@ -2941,6 +3040,8 @@ public class CustomInventoryPanel
         int safeH = panelH - 118;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;
+        if (selectedToolGroupIndex == 3)
+            showDetail = (selectedAccountSubAction == 1 || selectedAccountSubAction == 2);
         int catW = 108;
         int detailW = showDetail ? 164 : 0;
         int listW = safeW - catW - gap - (showDetail ? detailW + gap : 0);
@@ -2981,6 +3082,65 @@ public class CustomInventoryPanel
     private static void PaintToolList(mGraphics g, int x, int y, int w, int h)
     {
         int rowH = 26;
+        // Group 3 (Tài khoản): hiện trực tiếp các mục từ Panel.strAccount + các action bổ sung (9, 10, 11)
+        if (selectedToolGroupIndex == 3)
+        {
+            MyVector items = new MyVector();
+            MyVector actions = new MyVector();
+            
+            if (Panel.strAccount != null)
+            {
+                for (int i = 0; i < Panel.strAccount.Length; i++)
+                {
+                    items.addElement(Panel.strAccount[i]);
+                    actions.addElement(new int[] { i, -1 }); // { accountSubAction, toolAction }
+                }
+            }
+            
+            int[] extras = { 9, 10, 11 };
+            foreach (int act in extras)
+            {
+                int idx = GetToolOriginalIndexByAction(act);
+                if (idx >= 0)
+                {
+                    string l = GetToolOriginalLabel(idx);
+                    if (!string.IsNullOrEmpty(l))
+                    {
+                        bool isDup = false;
+                        if (Panel.strAccount != null)
+                        {
+                            for (int j = 0; j < Panel.strAccount.Length; j++)
+                                if (Panel.strAccount[j] == l) isDup = true;
+                        }
+                        if (!isDup)
+                        {
+                            items.addElement(l);
+                            actions.addElement(new int[] { -1, act });
+                        }
+                    }
+                }
+            }
+
+            if (items.size() == 0)
+            {
+                mFont.tahoma_7_grey.drawString(g, "Không có chức năng", x + w / 2, y + 35, mFont.CENTER);
+                return;
+            }
+
+            for (int i = 0; i < items.size(); i++)
+            {
+                int yy = y + i * rowH;
+                if (yy > y + h) break;
+                
+                string label = (string)items.elementAt(i);
+                int[] actData = (int[])actions.elementAt(i);
+                bool isSelected = (actData[0] >= 0) ? (selectedAccountSubAction == actData[0]) : (selectedToolAction == actData[1]);
+
+                PaintOldTextCell(g, x, yy, w, rowH - 4, isSelected);
+                mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, w - 18), x + 10, yy + 6, mFont.LEFT);
+            }
+            return;
+        }
         int count = GetToolGroupCount(selectedToolGroupIndex);
         if (count == 0)
         {
@@ -2996,7 +3156,7 @@ public class CustomInventoryPanel
             }
             int originalIndex = GetToolOriginalIndex(selectedToolGroupIndex, i);
             int action = GetToolActionFromGroupRow(selectedToolGroupIndex, i);
-            string label = GetToolOriginalLabel(originalIndex);
+            string label = (action == 100) ? "Chat thế giới" : GetToolOriginalLabel(originalIndex);
             PaintOldTextCell(g, x, yy, w, rowH - 4, selectedToolAction == action);
             mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, w - 18), x + 10, yy + 6, mFont.LEFT);
         }
@@ -3007,7 +3167,30 @@ public class CustomInventoryPanel
         if (group == 0) return 3;
         if (group == 1) return 2;
         if (group == 2) return 1;
-        if (group == 3) return GetToolOriginalIndexByAction(11) >= 0 ? 4 : 3;
+        if (group == 3)
+        {
+            int count = (Panel.strAccount != null) ? Panel.strAccount.Length : 0;
+            int[] extras = { 9, 10, 11 };
+            foreach (int act in extras)
+            {
+                int idx = GetToolOriginalIndexByAction(act);
+                if (idx >= 0)
+                {
+                    string l = GetToolOriginalLabel(idx);
+                    if (!string.IsNullOrEmpty(l))
+                    {
+                        bool isDup = false;
+                        if (Panel.strAccount != null)
+                        {
+                            for (int j = 0; j < Panel.strAccount.Length; j++)
+                                if (Panel.strAccount[j] == l) isDup = true;
+                        }
+                        if (!isDup) count++;
+                    }
+                }
+            }
+            return count;
+        }
         return 0;
     }
 
@@ -3016,8 +3199,8 @@ public class CustomInventoryPanel
         if (group == 0)
         {
             if (row == 0) return GetToolOriginalIndexByAction(0);
-            if (row == 1) return GetToolOriginalIndexByAction(3);
-            return GetToolOriginalIndexByAction(8);
+            if (row == 1) return GetToolOriginalIndexByAction(8);
+            return GetToolOriginalIndexByAction(3);
         }
         if (group == 1)
         {
@@ -3080,8 +3263,8 @@ public class CustomInventoryPanel
         if (group == 0)
         {
             if (row == 0) return 0;
-            if (row == 1) return 3;
-            return 8;
+            if (row == 1) return 8;
+            return 3;
         }
         if (group == 1)
         {
@@ -3089,7 +3272,7 @@ public class CustomInventoryPanel
         }
         if (group == 2)
         {
-            return 6;
+            return 100;
         }
         if (group == 3)
         {
@@ -3101,15 +3284,29 @@ public class CustomInventoryPanel
         return -1;
     }
 
+    // Sub-action cho Tài khoản: khi chọn Bạn bè/Kẻ thù thì hiển thị danh sách trong box 3
+    private static int selectedAccountSubAction = -1; // -1: chưa chọn, 1: bạn bè, 2: kẻ thù
+    private static int friendEnemySelected = -1;
+    private static int friendEnemyDragStartY;
+    private static bool friendEnemyDragged;
+
     private static bool ToolActionHasDetail(int action)
     {
-        return action == 0 || action == 7 || action == 8;
+        if (action == 7 && selectedAccountSubAction > 0) return true;
+        return action == 0 || action == 4 || action == 5 || action == 7 || action == 8;
     }
 
     private static string GetToolDetailTitle()
     {
         if (selectedToolAction == 0) return "THÔNG BÁO";
-        if (selectedToolAction == 7) return "TÀI KHOẢN";
+        if (selectedToolAction == 4) return "ĐỔI CỜ";
+        if (selectedToolAction == 5) return "ĐỔI KHU";
+        if (selectedToolAction == 7)
+        {
+            if (selectedAccountSubAction == 1) return "BẠN BÈ";
+            if (selectedAccountSubAction == 2) return "KẺ THÙ";
+            return "TÀI KHOẢN";
+        }
         if (selectedToolAction == 8) return "CẤU HÌNH";
         return "CHI TIẾT";
     }
@@ -3117,25 +3314,168 @@ public class CustomInventoryPanel
     private static void PaintToolDetail(mGraphics g, int x, int y, int w, int h)
     {
         Panel p = GameCanvas.panel;
-        if (p == null)
-        {
-            return;
-        }
-        if (selectedToolAction == 0)
-        {
-            PaintGameInfoDetailList(g, x, y, w, h);
-        }
+        if (p == null) return;
+
+        if (selectedToolAction == 0) PaintGameInfoDetailList(g, x, y, w, h);
+        else if (selectedToolAction == 4) PaintFlagDetail(g, x, y, w, h);
+        else if (selectedToolAction == 5) PaintZoneDetail(g, x, y, w, h);
         else if (selectedToolAction == 7)
         {
-            p.setTypeAccount();
-            PaintStringArrayDetail(g, Panel.strAccount, x, y, w, h);
+            if (selectedAccountSubAction == 1)
+                PaintFriendEnemyDetail(g, x, y, w, h, p.vFriend, 0);
+            else if (selectedAccountSubAction == 2)
+                PaintFriendEnemyDetail(g, x, y, w, h, p.vEnemy, 1);
+            else
+                PaintStringArrayDetail(g, Panel.strAccount, x, y, w, h);
         }
-        else if (selectedToolAction == 8)
+        else if (selectedToolAction == 8) PaintStringArrayDetail(g, Panel.strCauhinh, x, y, w, h);
+    }
+
+    private static void PaintFriendEnemyDetail(mGraphics g, int x, int y, int w, int h, MyVector list, int feType)
+    {
+        if (list == null || list.size() == 0)
         {
-            p.setTypeOption();
-            SoundMn.gI().getStrOption();
-            PaintStringArrayDetail(g, Panel.strCauhinh, x, y, w, h);
+            mFont.tahoma_7_grey.drawString(g, "Đang tải dữ liệu...", x + w / 2, y + h / 2, mFont.CENTER);
+            return;
         }
+
+        int rowH = 28;
+        int iconColW = 24;
+        int oldClipX = g.getClipX();
+        int oldClipY = g.getClipY();
+        int oldClipW = g.getClipWidth();
+        int oldClipH = g.getClipHeight();
+
+        g.setClip(x, y, w, h);
+        g.translate(0, -toolDetailScrollY);
+
+        for (int i = 0; i < list.size(); i++)
+        {
+            InfoItem infoItem = (InfoItem)list.elementAt(i);
+            int rowY = y + i * rowH;
+            if (rowY + rowH < y + toolDetailScrollY || rowY > y + toolDetailScrollY + h) continue;
+
+            int iconX = x;
+            int textBgX = x + iconColW;
+            int textBgW = w - iconColW;
+            int rh = rowH - 1;
+
+            g.setColor(i == friendEnemySelected ? 0x919100 : 0x989355);
+            g.fillRect(iconX, rowY, iconColW, rh);
+            g.setColor(i == friendEnemySelected ? 0xF9F5CA : 0xE7E3D2);
+            g.fillRect(textBgX, rowY, textBgW, rh);
+
+            if (infoItem.charInfo != null)
+            {
+                if (infoItem.charInfo.headICON != -1)
+                {
+                    SmallImage.drawSmallImage(g, infoItem.charInfo.headICON, iconX, rowY, 0, 0);
+                }
+                else
+                {
+                    Part part = GameScr.parts[infoItem.charInfo.head];
+                    if (part != null && part.pi != null && part.pi.Length > 0)
+                    {
+                        SmallImage.drawSmallImage(g, (int)part.pi[Char.CharInfo[0][0][0]].id,
+                            iconX + (int)part.pi[Char.CharInfo[0][0][0]].dx,
+                            rowY + 3 + (int)part.pi[Char.CharInfo[0][0][0]].dy, 0, 0);
+                    }
+                }
+
+                if (infoItem.isOnline)
+                {
+                    mFont.tahoma_7b_green.drawString(g, infoItem.charInfo.cName, textBgX + 5, rowY, 0);
+                    mFont.tahoma_7_blue.drawString(g, infoItem.s, textBgX + 5, rowY + 11, 0);
+                }
+                else
+                {
+                    mFont.tahoma_7_grey.drawString(g, infoItem.charInfo.cName, textBgX + 5, rowY, 0);
+                    mFont.tahoma_7_grey.drawString(g, infoItem.s, textBgX + 5, rowY + 11, 0);
+                }
+            }
+        }
+
+        g.translate(0, toolDetailScrollY);
+        g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+    }
+
+    private static void PaintFlagDetail(mGraphics g, int x, int y, int w, int h)
+    {
+        Panel p = GameCanvas.panel;
+        if (p.vFlag == null || p.vFlag.size() == 0)
+        {
+            mFont.tahoma_7_grey.drawString(g, "Không có cờ", x + w / 2, y + 35, mFont.CENTER);
+            return;
+        }
+
+        int rowH = 26;
+        int startY = y;
+        g.setClip(x, startY, w, h);
+        g.translate(0, -toolDetailScrollY);
+        
+        for (int i = 0; i < p.vFlag.size(); i++)
+        {
+            int yy = startY + i * rowH;
+            if (yy + rowH < startY + toolDetailScrollY || yy > startY + toolDetailScrollY + h) continue;
+            
+            bool isSelected = (selectedToolDetailIndex == i);
+            
+            g.setColor(isSelected ? SELECT_BG : 15723751);
+            g.fillRect(x + 4, yy, w - 8, rowH - 2, 5);
+            
+            Item item = (Item)p.vFlag.elementAt(i);
+            if (item != null)
+            {
+                SmallImage.drawSmallImage(g, (int)item.template.iconID, x + 16, yy + rowH / 2, 0, 3);
+                mFont.tahoma_7b_dark.drawString(g, item.template.name, x + 32, yy + 2, mFont.LEFT);
+                if (item.itemOption != null && item.itemOption.Length > 0)
+                {
+                    mFont.tahoma_7_blue.drawString(g, item.itemOption[0].getOptionString(), x + 32, yy + 12, mFont.LEFT);
+                }
+            }
+        }
+        g.translate(0, toolDetailScrollY);
+        g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+    }
+
+    private static void PaintZoneDetail(mGraphics g, int x, int y, int w, int h)
+    {
+        int[] zones = GameScr.gI().zones;
+        int[] pts = GameScr.gI().pts;
+        if (zones == null || zones.Length == 0)
+        {
+            mFont.tahoma_7_grey.drawString(g, "Đang tải dữ liệu...", x + w / 2, y + 35, mFont.CENTER);
+            return;
+        }
+
+        int rowH = 26;
+        int startY = y;
+        g.setClip(x, startY, w, h);
+        g.translate(0, -toolDetailScrollY);
+        
+        for (int i = 0; i < zones.Length; i++)
+        {
+            int yy = startY + i * rowH;
+            if (yy + rowH < startY + toolDetailScrollY || yy > startY + toolDetailScrollY + h) continue;
+            
+            bool isSelected = (selectedToolDetailIndex == i);
+            
+            g.setColor(isSelected ? SELECT_BG : 15723751);
+            g.fillRect(x + 4, yy, w - 8, rowH - 2, 5);
+            
+            int color = 0x00FF00; // Green
+            if (pts[i] == 1) color = 0xFFFF00; // Yellow
+            else if (pts[i] == 2) color = 0xFF0000; // Red
+            
+            g.setColor(color);
+            g.fillRect(x + 8, yy + 6, 12, 12, 5);
+            
+            mFont.tahoma_7b_dark.drawString(g, "Khu " + zones[i], x + 26, yy + 6, mFont.LEFT);
+            string countStr = GameScr.gI().numPlayer[i] + "/" + GameScr.gI().maxPlayer[i];
+            mFont.tahoma_7_blue.drawString(g, countStr, x + w - 10, yy + 6, mFont.RIGHT);
+        }
+        g.translate(0, toolDetailScrollY);
+        g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
     }
 
     private static void PaintGameInfoDetailList(mGraphics g, int x, int y, int w, int h)
@@ -3146,10 +3486,12 @@ public class CustomInventoryPanel
             mFont.tahoma_7_grey.drawString(g, "Chưa có thông báo", x + w / 2, y + 35, mFont.CENTER);
             return;
         }
+        g.setClip(x, y, w, h);
+        g.translate(0, -toolDetailScrollY);
         for (int i = 0; i < Panel.vGameInfo.size(); i++)
         {
             int yy = y + i * rowH;
-            if (yy > y + h) break;
+            if (yy + rowH < y + toolDetailScrollY || yy > y + toolDetailScrollY + h) continue;
             GameInfo info = (GameInfo)Panel.vGameInfo.elementAt(i);
             PaintOldTextCell(g, x, yy, w, rowH - 4, selectedToolDetailIndex == i);
             mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, info.main, w - 18), x + 10, yy + 6, mFont.LEFT);
@@ -3158,6 +3500,8 @@ public class CustomInventoryPanel
                 g.drawImage(Panel.imgNew, x + w - 12, yy + 11, 3);
             }
         }
+        g.translate(0, toolDetailScrollY);
+        g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
     }
 
     private static void TryHandleGameInfoPopupClick(bool isFire)
@@ -3257,10 +3601,12 @@ public class CustomInventoryPanel
             mFont.tahoma_7_grey.drawString(g, "Không có tuỳ chọn", x + w / 2, y + 35, mFont.CENTER);
             return;
         }
+        g.setClip(x, y, w, h);
+        g.translate(0, -toolDetailScrollY);
         for (int i = 0; i < values.Length; i++)
         {
             int yy = y + i * rowH;
-            if (yy > y + h) break;
+            if (yy + rowH < y + toolDetailScrollY || yy > y + toolDetailScrollY + h) continue;
             string raw = values[i];
             bool hasToggle = raw != null && (raw.StartsWith("[x]") || raw.StartsWith("[  ]"));
             bool enabled = raw != null && raw.StartsWith("[x]");
@@ -3276,12 +3622,14 @@ public class CustomInventoryPanel
                 mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, w - 18), x + 10, yy + 6, mFont.LEFT);
             }
         }
+        g.translate(0, toolDetailScrollY);
+        g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
     }
 
     private static bool TryHandleToolClick(bool isFire)
     {
         Panel p = GameCanvas.panel;
-        if (p == null)
+        if (p == null || globalDragged)
         {
             return false;
         }
@@ -3289,9 +3637,11 @@ public class CustomInventoryPanel
         int safeX = panelX + 24;
         int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 88;
+        int safeH = panelH - 118;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;
+        if (selectedToolGroupIndex == 3)
+            showDetail = (selectedAccountSubAction == 1 || selectedAccountSubAction == 2);
         int catW = 108;
         int detailW = showDetail ? 164 : 0;
         int listW = safeW - catW - gap - (showDetail ? detailW + gap : 0);
@@ -3306,8 +3656,10 @@ public class CustomInventoryPanel
             {
                 if (!isFire) return true;
                 selectedToolGroupIndex = row;
+                if (row == 3) p.setTypeAccount();
                 selectedToolAction = -1;
                 selectedToolDetailIndex = -1;
+                selectedAccountSubAction = -1;
                 SoundMn.gI().panelClick();
                 return true;
             }
@@ -3315,6 +3667,88 @@ public class CustomInventoryPanel
         else if (GameCanvas.px >= listX && GameCanvas.px <= listX + listW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
         {
             int row = (GameCanvas.py - (safeY + 24)) / 26;
+            
+            // Group 3 (Tài khoản): click trực tiếp vào các mục đã lọc
+            if (selectedToolGroupIndex == 3)
+            {
+                MyVector actions = new MyVector();
+                if (Panel.strAccount != null)
+                {
+                    for (int i = 0; i < Panel.strAccount.Length; i++)
+                        actions.addElement(new int[] { i, -1 });
+                }
+                int[] extras = { 9, 10, 11 };
+                foreach (int act in extras)
+                {
+                    int idx = GetToolOriginalIndexByAction(act);
+                    if (idx >= 0)
+                    {
+                        string l = GetToolOriginalLabel(idx);
+                        if (!string.IsNullOrEmpty(l))
+                        {
+                            bool isDup = false;
+                            if (Panel.strAccount != null)
+                            {
+                                for (int j = 0; j < Panel.strAccount.Length; j++)
+                                    if (Panel.strAccount[j] == l) isDup = true;
+                            }
+                            if (!isDup) actions.addElement(new int[] { -1, act });
+                        }
+                    }
+                }
+
+                if (row >= 0 && row < actions.size())
+                {
+                    if (!isFire) return true;
+                    int[] actData = (int[])actions.elementAt(row);
+                    
+                    if (actData[0] >= 0) // Mục trong strAccount
+                    {
+                        int subAct = actData[0];
+                        if (subAct == 1) // Bạn bè
+                        {
+                            selectedAccountSubAction = subAct;
+                            selectedToolAction = 7;
+                            toolDetailScrollY = 0;
+                            toolDetailScrollTargetY = 0;
+                            friendEnemySelected = -1;
+                            if (p.vFriend == null || p.vFriend.size() == 0)
+                                Service.gI().friend(0, -1);
+                        }
+                        else if (subAct == 2) // Kẻ thù
+                        {
+                            selectedAccountSubAction = subAct;
+                            selectedToolAction = 7;
+                            toolDetailScrollY = 0;
+                            toolDetailScrollTargetY = 0;
+                            friendEnemySelected = -1;
+                            if (p.vEnemy == null || p.vEnemy.size() == 0)
+                                Service.gI().enemy(0, -1);
+                        }
+                        else
+                        {
+                            selectedAccountSubAction = subAct;
+                            selectedToolAction = -1;
+                            p.selected = subAct;
+                            p.doFireAccount();
+                            if (subAct == 4) Hide(); // Chỉ đóng khi nạp tiền
+                        }
+                    }
+                    else // Extra action (9, 10, 11)
+                    {
+                        int action = actData[1];
+                        int origIdx = GetToolOriginalIndexByAction(action);
+                        selectedAccountSubAction = -1;
+                        selectedToolAction = action;
+                        p.selected = origIdx;
+                        p.doFireTool();
+                    }
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                return false;
+            }
+
             int originalIndex = GetToolOriginalIndex(selectedToolGroupIndex, row);
             if (originalIndex >= 0 && Panel.strTool != null && originalIndex < Panel.strTool.Length)
             {
@@ -3324,18 +3758,34 @@ public class CustomInventoryPanel
                 if (ToolActionHasDetail(action))
                 {
                     selectedToolAction = action;
+                    selectedAccountSubAction = -1;
+                    toolDetailScrollY = 0;
+                    toolDetailScrollTargetY = 0;
+                    toolDetailScrollRun = 0;
                     if (action == 0)
                     {
                         p.selected = -1;
                     }
-                    else if (action == 7)
+                    else if (action == 4)
                     {
-                        p.setTypeAccount();
+                        suppressFlagUI = true;
+                        Service.gI().getFlag(0, 0);
+                    }
+                    else if (action == 5)
+                    {
+                        Service.gI().openUIZone();
                     }
                     else if (action == 8)
                     {
                         p.setTypeOption();
+                        SoundMn.gI().getStrOption();
                     }
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                if (action == 100)
+                {
+                    ChatLogPopup.gI().Toggle();
                     SoundMn.gI().panelClick();
                     return true;
                 }
@@ -3349,11 +3799,17 @@ public class CustomInventoryPanel
         }
         else if (showDetail && GameCanvas.px >= detailX && GameCanvas.px <= detailX + detailW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
         {
-            int row = (GameCanvas.py - (safeY + 24)) / 26;
+            int feRowH = (selectedToolAction == 7 && selectedAccountSubAction > 0) ? 28 : 26;
+            int scrollOffset = (selectedToolAction == 7 && selectedAccountSubAction > 0) ? toolDetailScrollY : toolDetailScrollY;
+            int row = (GameCanvas.py + scrollOffset - (safeY + 24)) / feRowH;
             
             int maxRow = 0;
             if (selectedToolAction == 0 && Panel.vGameInfo != null) maxRow = Panel.vGameInfo.size();
-            else if (selectedToolAction == 7 && Panel.strAccount != null) maxRow = Panel.strAccount.Length;
+            else if (selectedToolAction == 4 && p.vFlag != null) maxRow = p.vFlag.size();
+            else if (selectedToolAction == 5 && GameScr.gI().zones != null) maxRow = GameScr.gI().zones.Length;
+            else if (selectedToolAction == 7 && selectedAccountSubAction == 1 && p.vFriend != null) maxRow = p.vFriend.size();
+            else if (selectedToolAction == 7 && selectedAccountSubAction == 2 && p.vEnemy != null) maxRow = p.vEnemy.size();
+            else if (selectedToolAction == 7 && selectedAccountSubAction <= 0 && Panel.strAccount != null) maxRow = Panel.strAccount.Length;
             else if (selectedToolAction == 8 && Panel.strCauhinh != null) maxRow = Panel.strCauhinh.Length;
 
             if (row >= 0 && row < maxRow)
@@ -3372,11 +3828,80 @@ public class CustomInventoryPanel
                     SoundMn.gI().panelClick();
                     return true;
                 }
+                if (selectedToolAction == 4)
+                {
+                    Service.gI().getFlag(1, (sbyte)row);
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                if (selectedToolAction == 5)
+                {
+                    Service.gI().requestChangeZone(row, -1);
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
                 if (selectedToolAction == 7)
                 {
-                    p.selected = row;
-                    p.doFireAccount();
-                    //ClosePanelState(false);
+                    if (selectedAccountSubAction <= 0)
+                    {
+                        // Đang ở danh sách chính Tài khoản
+                        if (row == 1)
+                        {
+                            selectedAccountSubAction = 1; // Bạn bè
+                            toolDetailScrollY = 0;
+                            toolDetailScrollTargetY = 0;
+                            friendEnemySelected = -1;
+                            if (p.vFriend == null || p.vFriend.size() == 0)
+                                Service.gI().friend(0, -1);
+                        }
+                        else if (row == 2)
+                        {
+                            selectedAccountSubAction = 2; // Kẻ thù
+                            toolDetailScrollY = 0;
+                            toolDetailScrollTargetY = 0;
+                            friendEnemySelected = -1;
+                            if (p.vEnemy == null || p.vEnemy.size() == 0)
+                                Service.gI().enemy(0, -1);
+                        }
+                        else
+                        {
+                            p.selected = row;
+                            p.doFireAccount();
+                        }
+                    }
+                    else
+                    {
+                        // Đang xem danh sách Bạn bè/Kẻ thù trong box 3
+                        friendEnemySelected = row;
+                        p.currInfoItem = row;
+                        p.selected = row;
+                        
+                        // Tính toán lại tọa độ Box 3 chính xác để menu hiện đúng vị trí
+                        int _detailW = 164;
+                        int _listW = safeW - catW - gap - (_detailW + gap);
+                        int _detailX = safeX + catW + gap + _listW + gap;
+                        
+                        p.X = _detailX;
+                        p.Y = safeY + 24;
+                        p.wScroll = _detailW;
+                        p.hScroll = safeH - 30;
+                        p.yScroll = p.Y;
+                        p.cmy = toolDetailScrollY;
+                        p.ITEM_HEIGHT = 28;
+
+                        if (selectedAccountSubAction == 1)
+                        {
+                            p.type = 11;
+                            p.vFriend = p.vFriend;
+                            p.doFireFriend();
+                        }
+                        else
+                        {
+                            p.type = 16;
+                            p.vEnemy = p.vEnemy;
+                            p.doFireEnemy();
+                        }
+                    }
                     SoundMn.gI().panelClick();
                     return true;
                 }
@@ -3399,7 +3924,7 @@ public class CustomInventoryPanel
         int safeX = panelX + 24;
         int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 88;
+        int safeH = panelH - 118;
         int gap = 6;
         int msgW = safeW / 2 - gap / 2;
         int logicW = safeW - msgW - gap;

@@ -3,6 +3,7 @@ using System.Threading;
 using Assets.src.g;
 using Mod;
 using Mod.XMAP;
+using UnityEngine;
 
 public class GameScr : mScreen, IChatable
 {
@@ -4529,6 +4530,9 @@ public class GameScr : mScreen, IChatable
 		{
 			AutoXmap.Update();
 			ModFunc.GI().Update();
+            FriendPopup.gI().Update();
+            EnemyPopup.gI().Update();
+            ChatLogPopup.gI().Update();
             CustomInventoryPanel.Update();
         }
 		// Update CloudGarden logic (auto-harvest icon, etc.) - chỉ khi ở map farm
@@ -4766,6 +4770,7 @@ public class GameScr : mScreen, IChatable
 			checkRemoveImage();
 		}
 		EffectManager.update();
+		ChatLogPopup.gI().Update();
 	}
 
 	public bool isRongThanMenu()
@@ -5353,6 +5358,7 @@ public class GameScr : mScreen, IChatable
 			{
 				g.drawImage(imgNapTuan, GameCanvas.w - 130, 0, 0);
 			}
+			ChatLogPopup.gI().Paint(g);
 			if (mResources.language == 1)
 			{
 				long second = mSystem.currentTimeMillis() - deltaTime;
@@ -5376,6 +5382,9 @@ public class GameScr : mScreen, IChatable
 		EffectManager.hiEffects.paintAll(g);
 		AdminPopup.gI().paint(g);
         CustomInventoryPanel.Paint(g);
+        ChatLogPopup.gI().Paint(g);
+        FriendPopup.gI().Paint(g);
+        EnemyPopup.gI().Paint(g);
     }
 
 	private void paintXoSo(mGraphics g)

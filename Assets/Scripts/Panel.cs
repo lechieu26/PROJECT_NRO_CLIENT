@@ -10641,7 +10641,7 @@ public class Panel : IActionListener, IChatable
         this.currItem = null;
     }
 
-    private void doFireEnemy()
+    public void doFireEnemy()
     {
         if (this.selected >= 0 && this.vEnemy.size() != 0)
         {
@@ -10654,7 +10654,7 @@ public class Panel : IActionListener, IChatable
         }
     }
 
-    private void doFireFriend()
+    public void doFireFriend()
     {
         if (this.selected >= 0 && this.vFriend.size() != 0)
         {
@@ -15200,7 +15200,7 @@ public class Panel : IActionListener, IChatable
 
     public bool isViewChatServer;
 
-    private int currInfoItem;
+    public int currInfoItem;
 
     public Char charInfo;
 

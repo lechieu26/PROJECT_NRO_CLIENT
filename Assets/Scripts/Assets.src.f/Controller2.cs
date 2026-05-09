@@ -925,8 +925,12 @@ namespace Assets.src.f
 									}
 									GameCanvas.panel.vFlag.addElement(item);
 								}
-								GameCanvas.panel.setTypeFlag();
-								GameCanvas.panel.show();
+								if (!CustomInventoryPanel.suppressFlagUI)
+								{
+									GameCanvas.panel.setTypeFlag();
+									GameCanvas.panel.show();
+								}
+								CustomInventoryPanel.suppressFlagUI = false;
 							}
 							else if (b15 == 1)
 							{

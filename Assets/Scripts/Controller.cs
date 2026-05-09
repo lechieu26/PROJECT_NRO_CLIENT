@@ -1065,7 +1065,10 @@ public class Controller : IMessageHandler
 						GameCanvas.panel.vFriend.addElement(infoItem2);
 					}
 					GameCanvas.panel.setTypeFriend();
-					GameCanvas.panel.show();
+					if (!CustomInventoryPanel.isShow)
+					{
+						GameCanvas.panel.show();
+					}
 				}
 				if (b48 == 3)
 				{
@@ -1125,7 +1128,10 @@ public class Controller : IMessageHandler
 						GameCanvas.panel.vEnemy.addElement(infoItem);
 					}
 					GameCanvas.panel.setTypeEnemy();
-					GameCanvas.panel.show();
+					if (!CustomInventoryPanel.isShow)
+					{
+						GameCanvas.panel.show();
+					}
 				}
 				break;
 			case -79:
