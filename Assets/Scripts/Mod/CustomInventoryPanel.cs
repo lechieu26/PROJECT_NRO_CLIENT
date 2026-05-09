@@ -66,6 +66,7 @@ public class CustomInventoryPanel
     private static int selectedToolGroupIndex;
     private static int selectedToolAction = -1;
     private static int selectedToolDetailIndex = -1;
+    private static GameInfo selectedGameInfoPopup;
     private static int topTab = 4;
     private static int rightSubTab;
     private static int petSubTab;
@@ -115,6 +116,13 @@ public class CustomInventoryPanel
     private static int taskMapContentY;
     private static int taskMapContentW;
     private static int taskMapContentH;
+    private static int popupScrollY;
+    private static int popupScrollTargetY;
+    private static int popupScrollRun;
+    private static int popupScrollCmdy;
+    private static int popupScrollCmvy;
+    private static int popupDragStartY;
+    private static bool popupDragged;
 
     public static void Show()
     {
@@ -198,6 +206,13 @@ public class CustomInventoryPanel
             {
                 return;
             }
+
+            // Nếu có Dialog hoặc Menu gốc đang mở, không xử lý input của CustomPanel
+            if (GameCanvas.currentDialog != null || GameCanvas.menu.showMenu || (GameCanvas.panel != null && GameCanvas.panel.cp != null))
+            {
+                return;
+            }
+
             SyncPetStateFlags();
 
             // 1. Lưu trạng thái và Tracking (Phải ở đầu)
@@ -206,6 +221,16 @@ public class CustomInventoryPanel
             int px = GameCanvas.px;
             int py = GameCanvas.py;
             ComputeLayout();
+            if (selectedGameInfoPopup != null)
+            {
+                UpdatePopupScroll();
+                if (isRelease)
+                {
+                    TryHandleGameInfoPopupClick(true);
+                }
+                BlockGameInput();
+                return;
+            }
             if (ShouldAutoClosePanel())
             {
                 ClosePanelState(false);
@@ -434,6 +459,7 @@ public class CustomInventoryPanel
             {
                 GameCanvas.panel.chatTField.paint(g);
             }
+            PaintGameInfoPopup(g);
             if (GameCanvas.panel != null && GameCanvas.panel.tabIcon != null && GameCanvas.panel.tabIcon.isShow)
             {
                 GameCanvas.panel.tabIcon.paint(g);
@@ -580,6 +606,96 @@ public class CustomInventoryPanel
                 bagScrollCmdy += bagScrollCmvy;
                 bagScrollY += bagScrollCmdy >> 4;
                 bagScrollCmdy &= 15;
+            }
+        }
+    }
+
+    private static void UpdatePopupScroll()
+    {
+        if (selectedGameInfoPopup == null) return;
+        
+        int w = 240;
+        int popupH = 160;
+        int cx = GameCanvas.w / 2;
+        int cy = GameCanvas.h / 2;
+        int popupX = cx - w / 2;
+        int popupY = cy - popupH / 2;
+
+        int textW = w - 20;
+        string[] mainLines = mFont.tahoma_7b_dark.splitFontArray(selectedGameInfoPopup.main, textW);
+        string[] contentLines = mFont.tahoma_7.splitFontArray(selectedGameInfoPopup.content, textW);
+        
+        int totalContentH = (mainLines.Length + contentLines.Length) * 12 + 10;
+        int viewH = popupH - 40;
+        int maxScroll = totalContentH - viewH;
+        if (maxScroll < 0) maxScroll = 0;
+
+        // Xử lý lăn chuột
+        if (GameCanvas.pXYScrollMouse != 0)
+        {
+            popupScrollTargetY -= GameCanvas.pXYScrollMouse * 10;
+            GameCanvas.pXYScrollMouse = 0;
+        }
+
+        bool inside = Hit(GameCanvas.px, GameCanvas.py, popupX, popupY + 30, w, popupH - 40);
+        if (GameCanvas.isPointerDown)
+        {
+            if (!popupDragged)
+            {
+                if (inside)
+                {
+                    popupDragged = true;
+                    popupDragStartY = GameCanvas.py;
+                    popupScrollRun = 0;
+                }
+            }
+            else
+            {
+                int dy = GameCanvas.py - dragLastY[0];
+                popupScrollTargetY -= dy;
+                
+                // Giới hạn đàn hồi khi đang kéo
+                if (popupScrollTargetY < -60) popupScrollTargetY = -60;
+                if (popupScrollTargetY > maxScroll + 60) popupScrollTargetY = maxScroll + 60;
+                
+                popupScrollY = popupScrollTargetY;
+            }
+        }
+        else if (GameCanvas.isPointerJustRelease && popupDragged)
+        {
+            int force = GameCanvas.py - dragLastY[0] + (dragLastY[0] - dragLastY[1]) + (dragLastY[1] - dragLastY[2]);
+            if (force > 15) force = 15;
+            if (force < -15) force = -15;
+            popupScrollRun = -force * 150;
+            popupDragged = false;
+        }
+
+        ApplyPopupScrollRun(maxScroll);
+    }
+
+    private static void ApplyPopupScrollRun(int maxScroll)
+    {
+        if (popupScrollRun != 0 && !popupDragged)
+        {
+            popupScrollTargetY += popupScrollRun / 100;
+            popupScrollRun = popupScrollRun * 9 / 10;
+            if (popupScrollRun < 100 && popupScrollRun > -100)
+            {
+                popupScrollRun = 0;
+            }
+        }
+        
+        if (!popupDragged)
+        {
+            if (popupScrollTargetY < 0) popupScrollTargetY = 0;
+            if (popupScrollTargetY > maxScroll) popupScrollTargetY = maxScroll;
+
+            if (popupScrollY != popupScrollTargetY)
+            {
+                popupScrollCmvy = popupScrollTargetY - popupScrollY << 2;
+                popupScrollCmdy += popupScrollCmvy;
+                popupScrollY += popupScrollCmdy >> 4;
+                popupScrollCmdy &= 15;
             }
         }
     }
@@ -1814,8 +1930,8 @@ public class CustomInventoryPanel
         selectedBodyIndex = -1;
         selectedClanMsgIndex = -1;
         selectedClanLogicIndex = -1;
-        selectedToolAction = -1;
-        selectedToolDetailIndex = -1;
+        // selectedToolAction = -1;       // Do not reset here, handled by TryHandleToolClick
+        // selectedToolDetailIndex = -1;  // Do not reset here, handled by TryHandleToolClick
         selectedItemInfo = null;
         if (GameCanvas.panel != null)
         {
@@ -3044,6 +3160,95 @@ public class CustomInventoryPanel
         }
     }
 
+    private static void TryHandleGameInfoPopupClick(bool isFire)
+    {
+        if (selectedGameInfoPopup == null || !isFire) return;
+        
+        int w = 240;
+        int popupH = 160;
+        int cx = GameCanvas.w / 2;
+        int cy = GameCanvas.h / 2;
+        int popupX = cx - w / 2;
+        int popupY = cy - popupH / 2;
+
+        int closeBtnX = popupX + w - 16;
+        int closeBtnY = popupY + 16;
+        
+        if (GameCanvas.px >= closeBtnX - 12 && GameCanvas.px <= closeBtnX + 12 && GameCanvas.py >= closeBtnY - 12 && GameCanvas.py <= closeBtnY + 12)
+        {
+            selectedGameInfoPopup = null;
+            popupScrollY = 0;
+            popupScrollTargetY = 0;
+            popupScrollRun = 0;
+            SoundMn.gI().panelClick();
+            return;
+        }
+        
+        if (GameCanvas.px < popupX || GameCanvas.px > popupX + w || GameCanvas.py < popupY || GameCanvas.py > popupY + popupH)
+        {
+            selectedGameInfoPopup = null;
+            popupScrollY = 0;
+            popupScrollTargetY = 0;
+            popupScrollRun = 0;
+            SoundMn.gI().panelClick();
+            return;
+        }
+    }
+
+    private static void PaintGameInfoPopup(mGraphics g)
+    {
+        if (selectedGameInfoPopup == null) return;
+        
+        int w = 240;
+        int popupH = 160;
+        int cx = GameCanvas.w / 2;
+        int cy = GameCanvas.h / 2;
+        int popupX = cx - w / 2;
+        int popupY = cy - popupH / 2;
+
+        int oldClipX = g.getClipX();
+        int oldClipY = g.getClipY();
+        int oldClipW = g.getClipWidth();
+        int oldClipH = g.getClipHeight();
+        int oldTx = g.getTranslateX();
+        int oldTy = g.getTranslateY();
+
+        PaintOldPanelBox(g, popupX, popupY, w, popupH);
+
+        mFont.tahoma_7b_dark.drawString(g, "CHI TIẾT THÔNG BÁO", cx, popupY + 8, mFont.CENTER);
+
+        if (closeImg != null)
+        {
+            g.drawImage(closeImg, popupX + w - 16, popupY + 16, 3);
+        }
+
+        int textX = popupX + 10;
+        int textW = w - 20;
+        int clipY = popupY + 30;
+        int clipH = popupH - 40;
+
+        g.setClip(popupX + 4, clipY, w - 8, clipH);
+        g.translate(0, -popupScrollY);
+
+        int currentY = clipY;
+        string[] mainLines = mFont.tahoma_7b_dark.splitFontArray(selectedGameInfoPopup.main, textW);
+        for (int i = 0; i < mainLines.Length; i++)
+        {
+            mFont.tahoma_7b_dark.drawString(g, mainLines[i], textX, currentY, mFont.LEFT);
+            currentY += 12;
+        }
+        currentY += 4;
+        string[] contentLines = mFont.tahoma_7.splitFontArray(selectedGameInfoPopup.content, textW);
+        for (int i = 0; i < contentLines.Length; i++)
+        {
+            mFont.tahoma_7.drawString(g, contentLines[i], textX, currentY, mFont.LEFT);
+            currentY += 12;
+        }
+
+        g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+        g.translate(-g.getTranslateX() + oldTx, -g.getTranslateY() + oldTy);
+    }
+
     private static void PaintStringArrayDetail(mGraphics g, string[] values, int x, int y, int w, int h)
     {
         int rowH = 26;
@@ -3090,17 +3295,13 @@ public class CustomInventoryPanel
         int catW = 108;
         int detailW = showDetail ? 164 : 0;
         int listW = safeW - catW - gap - (showDetail ? detailW + gap : 0);
-        int catX = safeX + 6;
-        int catY = safeY + 24;
-        int listX = safeX + catW + gap + 6;
-        int listY = safeY + 24;
-        int detailX = safeX + catW + gap + listW + gap + 6;
-        int detailY = safeY + 24;
-        int innerH = safeH - 30;
+        int catX = safeX;
+        int listX = catX + catW + gap;
+        int detailX = listX + listW + gap;
 
-        if (GameCanvas.px >= catX && GameCanvas.px <= catX + catW - 12 && GameCanvas.py >= catY && GameCanvas.py <= catY + innerH)
+        if (GameCanvas.px >= catX && GameCanvas.px <= catX + catW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
         {
-            int row = (GameCanvas.py - catY) / 29;
+            int row = (GameCanvas.py - (safeY + 24)) / 29;
             if (row >= 0 && row < TOOL_GROUPS.Length)
             {
                 if (!isFire) return true;
@@ -3111,10 +3312,9 @@ public class CustomInventoryPanel
                 return true;
             }
         }
-
-        if (GameCanvas.px >= listX && GameCanvas.px <= listX + listW - 12 && GameCanvas.py >= listY && GameCanvas.py <= listY + innerH)
+        else if (GameCanvas.px >= listX && GameCanvas.px <= listX + listW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
         {
-            int row = (GameCanvas.py - listY) / 26;
+            int row = (GameCanvas.py - (safeY + 24)) / 26;
             int originalIndex = GetToolOriginalIndex(selectedToolGroupIndex, row);
             if (originalIndex >= 0 && Panel.strTool != null && originalIndex < Panel.strTool.Length)
             {
@@ -3142,37 +3342,53 @@ public class CustomInventoryPanel
                 selectedToolAction = -1;
                 p.selected = originalIndex;
                 p.doFireTool();
+                if (action == 3) ClosePanelState(false);
                 SoundMn.gI().panelClick();
                 return true;
             }
         }
-
-        if (showDetail && GameCanvas.px >= detailX && GameCanvas.px <= detailX + detailW - 12 && GameCanvas.py >= detailY && GameCanvas.py <= detailY + innerH)
+        else if (showDetail && GameCanvas.px >= detailX && GameCanvas.px <= detailX + detailW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
         {
-            int row = (GameCanvas.py - detailY) / 26;
-            if (!isFire) return true;
-            selectedToolDetailIndex = row;
-            if (selectedToolAction == 0 && Panel.vGameInfo != null && row >= 0 && row < Panel.vGameInfo.size())
+            int row = (GameCanvas.py - (safeY + 24)) / 26;
+            
+            int maxRow = 0;
+            if (selectedToolAction == 0 && Panel.vGameInfo != null) maxRow = Panel.vGameInfo.size();
+            else if (selectedToolAction == 7 && Panel.strAccount != null) maxRow = Panel.strAccount.Length;
+            else if (selectedToolAction == 8 && Panel.strCauhinh != null) maxRow = Panel.strCauhinh.Length;
+
+            if (row >= 0 && row < maxRow)
             {
-                p.selected = row;
-                p.doFireGameInfo();
-                SoundMn.gI().panelClick();
-                return true;
-            }
-            if (selectedToolAction == 7 && Panel.strAccount != null && row >= 0 && row < Panel.strAccount.Length)
-            {
-                p.selected = row;
-                p.doFireAccount();
-                SoundMn.gI().panelClick();
-                return true;
-            }
-            if (selectedToolAction == 8 && Panel.strCauhinh != null && row >= 0 && row < Panel.strCauhinh.Length)
-            {
-                p.selected = row;
-                p.doFireOption();
-                SoundMn.gI().getStrOption();
-                SoundMn.gI().panelClick();
-                return true;
+                selectedToolDetailIndex = row;
+                if (!isFire) return true;
+                
+                if (selectedToolAction == 0)
+                {
+                    p.selected = row;
+                    p.doFireGameInfo();
+                    selectedGameInfoPopup = (GameInfo)Panel.vGameInfo.elementAt(row);
+                    popupScrollY = 0;
+                    popupScrollTargetY = 0;
+                    popupScrollRun = 0;
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                if (selectedToolAction == 7)
+                {
+                    p.selected = row;
+                    p.doFireAccount();
+                    //ClosePanelState(false);
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                if (selectedToolAction == 8)
+                {
+                    p.selected = row;
+                    p.doFireOption();
+                    SoundMn.gI().getStrOption();
+                    //ClosePanelState(false);
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
             }
         }
         return false;
