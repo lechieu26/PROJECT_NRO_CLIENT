@@ -14605,12 +14605,12 @@ public class Panel : IActionListener, IChatable
             {
                 "Cài",
                 "đặt"
-            },
+            }/*,
             new string[]
             {
                 "Nhạc",
                 ""
-            }
+            }*/
     };
 
     // boxMod cho Mobile (không có tab Nhạc)

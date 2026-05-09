@@ -16,6 +16,21 @@ public class CustomInventoryPanel
         "Nhiệm Vụ", "Nhân Vật", "Đệ Tử", "Kĩ Năng", "Hành Trang", "Bang Hội", "Mod", "Chức Năng"
     };
 
+    // Bản 1: taskId < 12 – chưa mở Bang Hội (tương tự mainTab1)
+    private static readonly int[] VISIBLE_TABS_1 = new int[] { 0, 1, 2, 3, 4, 6, 7 };
+    // Bản 2: taskId >= 12 – đã mở Bang Hội (tương tự mainTab2)
+    private static readonly int[] VISIBLE_TABS_2 = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+    private static int[] GetVisibleTabs()
+    {
+        Char me = Char.myCharz();
+        if (me != null && me.taskMaint != null && me.taskMaint.taskId >= 12)
+        {
+            return VISIBLE_TABS_2;
+        }
+        return VISIBLE_TABS_1;
+    }
+
     private static int panelX;
     private static int panelY;
     private static int panelW;
@@ -93,6 +108,13 @@ public class CustomInventoryPanel
     private static long pendingPetStatusUntil;
     private static bool hasPorataInBag;
     private static bool isPorataFusionActive;
+    private static int taskMapClickedIndex = -1;
+    private static int taskMapScrollX;
+    private static int taskMapScrollY;
+    private static int taskMapContentX;
+    private static int taskMapContentY;
+    private static int taskMapContentW;
+    private static int taskMapContentH;
 
     public static void Show()
     {
@@ -764,18 +786,20 @@ public class CustomInventoryPanel
 
     private static bool TryHandleTopTabClick(bool isFire)
     {
+        int[] visibleTabs = GetVisibleTabs();
         int tabW = 60;
         int tabH = 24;
         int gap = 1;
-        int tabX = panelX + 22;
+        int totalTabsW = visibleTabs.Length * tabW + (visibleTabs.Length - 1) * gap;
+        int tabX = panelX + (panelW - totalTabsW) / 2;
         int tabY = panelY + 18;
-        for (int i = 0; i < TOP_TABS.Length; i++)
+        for (int vi = 0; vi < visibleTabs.Length; vi++)
         {
-            int x = tabX + i * (tabW + gap);
+            int x = tabX + vi * (tabW + gap);
             if (Hit(GameCanvas.px, GameCanvas.py, x, tabY, tabW, tabH))
             {
                 if (!isFire) return true; // Chỉ chặn, không đổi tab khi chưa thả chuột
-                topTab = i;
+                topTab = visibleTabs[vi];
                 bagScrollY = 0;
                 bagScrollTargetY = 0;
                 bagScrollRun = 0;
@@ -798,7 +822,7 @@ public class CustomInventoryPanel
                 {
                     GameCanvas.panel.cp = null;
                 }
-                if (i == 2)
+                if (visibleTabs[vi] == 2)
                 {
                     RequestPetInfoIfNeeded(true);
                 }
@@ -1080,6 +1104,11 @@ public class CustomInventoryPanel
             return;
         }
 
+        if (topTab == 0)
+        {
+            TryHandleTaskMapClick(isFire);
+            return;
+        }
         if (topTab == 2)
         {
             HandlePetSelection(isFire);
@@ -2065,15 +2094,18 @@ public class CustomInventoryPanel
 
     private static void PaintTopTabs(mGraphics g)
     {
+        int[] visibleTabs = GetVisibleTabs();
         int tabW = 60;
         int tabH = 20;
         int gap = 1;
-        int tabX = panelX + 22;
+        int totalTabsW = visibleTabs.Length * tabW + (visibleTabs.Length - 1) * gap;
+        int tabX = panelX + (panelW - totalTabsW) / 2;
         int tabY = panelY + 22;
-        for (int i = 0; i < TOP_TABS.Length; i++)
+        for (int vi = 0; vi < visibleTabs.Length; vi++)
         {
-            int x = tabX + i * (tabW + gap);
-            bool active = i == topTab;
+            int logicalIndex = visibleTabs[vi];
+            int x = tabX + vi * (tabW + gap);
+            bool active = logicalIndex == topTab;
             
             // Vẽ nền và viền đồng nhất cho tất cả các tab
             int bgColor = active ? 0xBEEA8D : 0xF8DDA8;
@@ -2095,7 +2127,7 @@ public class CustomInventoryPanel
                 g.fillRect(x + 2, tabY + 2, tabW - 4, tabH - 4, 5);
             }
 
-            string label = TOP_TABS[i];
+            string label = TOP_TABS[logicalIndex];
             int textY = tabY + (tabH - mFont.tahoma_7b_dark.getHeight()) / 2;
             mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, tabW - 6), x + tabW / 2, textY, mFont.CENTER);
         }
@@ -2612,9 +2644,11 @@ public class CustomInventoryPanel
         SoundMn.gI().GetStrModFunc();
 
         int safeX = panelX + 24;
-        int safeY = panelY + 44;
+        int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 75;
+        int safeH = panelH - 118;
+
+
         int gap = 6;
         int catW = 126;
         int listW = safeW - catW - gap;
@@ -2646,15 +2680,8 @@ public class CustomInventoryPanel
             string line1 = tabs[i][0];
             string line2 = (tabs[i].Length > 1) ? tabs[i][1] : string.Empty;
             mFont font = selected ? mFont.tahoma_7b_green2 : mFont.tahoma_7b_dark;
-            if (!line2.Equals(string.Empty))
-            {
-                font.drawString(g, line1, x + w / 2, yy + 3, mFont.CENTER);
-                font.drawString(g, line2, x + w / 2, yy + 14, mFont.CENTER);
-            }
-            else
-            {
-                font.drawString(g, line1, x + w / 2, yy + 8, mFont.CENTER);
-            }
+            string title = line1 + " " + line2;
+            font.drawString(g, title, x + w / 2, yy + 8, mFont.CENTER);
         }
     }
 
@@ -2732,9 +2759,9 @@ public class CustomInventoryPanel
             else return true;
         }
         int safeX = panelX + 24;
-        int safeY = panelY + 44;
+        int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 75;
+        int safeH = panelH - 88;
         int gap = 6;
         int catW = 126;
         int listW = safeW - catW - gap;
@@ -2793,9 +2820,9 @@ public class CustomInventoryPanel
             SoundMn.gI().getSoundOption();
         }
         int safeX = panelX + 24;
-        int safeY = panelY + 44;
+        int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 75;
+        int safeH = panelH - 118;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;
         int catW = 108;
@@ -3055,9 +3082,9 @@ public class CustomInventoryPanel
         }
         SoundMn.gI().getSoundOption();
         int safeX = panelX + 24;
-        int safeY = panelY + 44;
+        int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 75;
+        int safeH = panelH - 88;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;
         int catW = 108;
@@ -3154,9 +3181,9 @@ public class CustomInventoryPanel
     private static void PaintClanTab(mGraphics g)
     {
         int safeX = panelX + 24;
-        int safeY = panelY + 44;
+        int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 75;
+        int safeH = panelH - 88;
         int gap = 6;
         int msgW = safeW / 2 - gap / 2;
         int logicW = safeW - msgW - gap;
@@ -3620,9 +3647,9 @@ public class CustomInventoryPanel
     private static bool TryHandleClanClick(bool isFire)
     {
         int safeX = panelX + 24;
-        int safeY = panelY + 44;
+        int safeY = panelY + 52;
         int safeW = panelW - 48;
-        int safeH = panelH - 72;
+        int safeH = panelH - 88;
         int gap = 6;
         int msgW = safeW / 2 - gap / 2;
         int logicW = safeW - msgW - gap;
@@ -3699,18 +3726,7 @@ public class CustomInventoryPanel
         // Yêu cầu dữ liệu nếu cần
         RequestPetInfoIfNeeded(false);
         
-        if (!hasPet)
-        {
-            int safeX = panelX + 24;
-            int safeW = panelW - 48;
-            int rightX = safeX + safeW / 2 + 10;
-            int rightW = 34 * 6 + 4 * 5;
-            mFont.tahoma_7b_dark.drawString(g, "Chưa có đệ tử", rightX + rightW / 2, panelY + 126, mFont.CENTER);
-            PaintInventoryCurrency(g);
-            return;
-        }
-
-        Char pet = GetPrimaryPet();
+        Char pet = hasPet ? GetPrimaryPet() : null;
         if (pet != null)
         {
             // Bỏ SyncCharPartsFromItems vì nó ghi đè dữ liệu server gây lỗi lệch bộ phận.
@@ -3731,7 +3747,11 @@ public class CustomInventoryPanel
         PaintPetInfoFrame(g, pet);
         PaintPetSubTabs(g, rightX2, panelY + 44, rightW2);
 
-        if (petSubTab == 0)
+        if (!hasPet)
+        {
+            mFont.tahoma_7b_dark.drawString(g, "Chưa có đệ tử", rightX2 + rightW2 / 2, panelY + 126, mFont.CENTER);
+        }
+        else if (petSubTab == 0)
         {
             PaintPetBag(g, pet, rightX2, panelY + 66);
         }
@@ -4285,6 +4305,41 @@ public class CustomInventoryPanel
         g.fillRect(knobX, y + 1, knobW, knobH, 4);
     }
 
+    private static void TryHandleTaskMapClick(bool isFire)
+    {
+        if (Panel.imgMap == null || !Panel.isPaintMap)
+        {
+            return;
+        }
+        int px = GameCanvas.px;
+        int py = GameCanvas.py;
+        // Kiểm tra click trong vùng bản đồ
+        if (px < taskMapContentX || px > taskMapContentX + taskMapContentW ||
+            py < taskMapContentY || py > taskMapContentY + taskMapContentH)
+        {
+            return;
+        }
+        if (!isFire)
+        {
+            return;
+        }
+        // Chuyển đổi tọa độ click sang tọa độ bản đồ
+        int mapClickX = px - taskMapContentX + taskMapScrollX;
+        int mapClickY = py - taskMapContentY + taskMapScrollY;
+        // Tìm vị trí gần nhất trên bản đồ
+        taskMapClickedIndex = -1;
+        for (int i = 0; i < Panel.mapX[(int)TileMap.planetID].Length; i++)
+        {
+            int mx = Panel.mapX[(int)TileMap.planetID][i];
+            int my = Panel.mapY[(int)TileMap.planetID][i];
+            if (Res.inRect(mx - 15, my - 15, 30, 30, mapClickX, mapClickY))
+            {
+                taskMapClickedIndex = i;
+                break;
+            }
+        }
+    }
+
     private static void PaintTaskTab(mGraphics g)
     {
         int safeX = panelX + 24;
@@ -4344,10 +4399,10 @@ public class CustomInventoryPanel
         // === Vẽ nội dung Box 2: Bản đồ ===
         mFont.tahoma_7b_dark.drawString(g, mResources.map, mapBoxX + mapBoxW / 2, frameY + 8, mFont.CENTER);
 
-        int mapContentX = mapBoxX + 3;
-        int mapContentY = frameY + 22;
-        int mapContentW = mapBoxW - 6;
-        int mapContentH = frameH - 28;
+        taskMapContentX = mapBoxX + 3;
+        taskMapContentY = frameY + 22;
+        taskMapContentW = mapBoxW - 6;
+        taskMapContentH = frameH - 28;
 
         // Load bản đồ nếu chưa có
         if (Panel.imgMap == null && Panel.isPaintMap)
@@ -4382,64 +4437,118 @@ public class CustomInventoryPanel
             int scrollY = 0;
             if (charMapX >= 0)
             {
-                scrollX = charMapX - mapContentW / 2;
-                scrollY = charMapY - mapContentH / 2;
+                scrollX = charMapX - taskMapContentW / 2;
+                scrollY = charMapY - taskMapContentH / 2;
             }
             if (scrollX < 0) scrollX = 0;
             if (scrollY < 0) scrollY = 0;
-            if (scrollX > imgW - mapContentW) scrollX = imgW - mapContentW;
-            if (scrollY > imgH - mapContentH) scrollY = imgH - mapContentH;
+            if (scrollX > imgW - taskMapContentW) scrollX = imgW - taskMapContentW;
+            if (scrollY > imgH - taskMapContentH) scrollY = imgH - taskMapContentH;
             if (scrollX < 0) scrollX = 0;
             if (scrollY < 0) scrollY = 0;
+
+            // Lưu scroll offset để dùng trong click handler
+            taskMapScrollX = scrollX;
+            taskMapScrollY = scrollY;
 
             // Clip và vẽ bản đồ
             int oldClipX = g.getClipX();
             int oldClipY = g.getClipY();
             int oldClipW = g.getClipWidth();
             int oldClipH = g.getClipHeight();
-            g.setClip(mapContentX, mapContentY, mapContentW, mapContentH);
+            g.setClip(taskMapContentX, taskMapContentY, taskMapContentW, taskMapContentH);
             g.translate(-scrollX, -scrollY);
-            g.drawImage(Panel.imgMap, mapContentX, mapContentY, 0);
+            g.drawImage(Panel.imgMap, taskMapContentX, taskMapContentY, 0);
 
-            // Vẽ vị trí nhiệm vụ nhấp nháy
-            int taskMapId = GameScr.getTaskMapId();
-            if (taskMapId != -1)
+            // Vẽ vị trí nhiệm vụ nhấp nháy (sao vàng)
+            int taskMapIdVal = GameScr.getTaskMapId();
+            int taskPointIdx = -1;
+            if (taskMapIdVal != -1)
             {
-                int taskIdx = -1;
                 for (int i = 0; i < Panel.mapId[(int)TileMap.planetID].Length; i++)
                 {
-                    if (Panel.mapId[(int)TileMap.planetID][i] == taskMapId)
+                    if (Panel.mapId[(int)TileMap.planetID][i] == taskMapIdVal)
                     {
-                        taskIdx = i;
+                        taskPointIdx = i;
                         break;
                     }
                 }
-                if (taskIdx >= 0 && GameCanvas.gameTick % 4 > 0)
+                if (taskPointIdx >= 0 && GameCanvas.gameTick % 4 > 0)
                 {
                     g.drawImage(ItemMap.imageFlare,
-                        mapContentX + Panel.mapX[(int)TileMap.planetID][taskIdx],
-                        mapContentY + Panel.mapY[(int)TileMap.planetID][taskIdx], 3);
+                        taskMapContentX + Panel.mapX[(int)TileMap.planetID][taskPointIdx],
+                        taskMapContentY + Panel.mapY[(int)TileMap.planetID][taskPointIdx], 3);
                 }
             }
 
-            // Vẽ vị trí nhân vật
+            // Vẽ vị trí nhân vật (icon đầu + tên map hiện tại)
             if (charMapX >= 0)
             {
                 int head = Char.myCharz().head;
                 Part part = GameScr.parts[head];
                 SmallImage.drawSmallImage(g, (int)part.pi[Char.CharInfo[0][0][0]].id,
-                    mapContentX + charMapX, mapContentY + charMapY + 5, 0, 3);
+                    taskMapContentX + charMapX, taskMapContentY + charMapY + 5, 0, 3);
 
-                // Tên map hiện tại
                 int nameAlign = mFont.CENTER;
                 if (charMapX <= 40) nameAlign = mFont.LEFT;
                 if (charMapX >= imgW - 40) nameAlign = mFont.RIGHT;
                 mFont.tahoma_7b_yellow.drawString(g, TileMap.mapName,
-                    mapContentX + charMapX, mapContentY + charMapY - 12, nameAlign, mFont.tahoma_7_grey);
+                    taskMapContentX + charMapX, taskMapContentY + charMapY - 12, nameAlign, mFont.tahoma_7_grey);
+            }
+
+            // Vẽ vị trí đã click (icon bàn tay + tên địa điểm)
+            if (taskMapClickedIndex >= 0 && taskMapClickedIndex < Panel.mapX[(int)TileMap.planetID].Length)
+            {
+                int clickedPx = Panel.mapX[(int)TileMap.planetID][taskMapClickedIndex] + taskMapContentX;
+                int clickedPy = Panel.mapY[(int)TileMap.planetID][taskMapClickedIndex] + taskMapContentY;
+                int clickedMapId = Panel.mapId[(int)TileMap.planetID][taskMapClickedIndex];
+
+                // Vẽ icon bàn tay
+                if (Panel.imgBantay != null)
+                {
+                    g.drawImage(Panel.imgBantay, clickedPx, clickedPy, StaticObj.TOP_RIGHT);
+                }
+
+                // Vẽ tên địa điểm
+                if (TileMap.mapNames != null && clickedMapId >= 0 && clickedMapId < TileMap.mapNames.Length)
+                {
+                    int clickAlign = mFont.CENTER;
+                    if (clickedPx - taskMapContentX + scrollX <= 30) clickAlign = mFont.LEFT;
+                    if (clickedPx - taskMapContentX + scrollX >= imgW - 30) clickAlign = mFont.RIGHT;
+                    mFont.tahoma_7b_yellow.drawString(g, TileMap.mapNames[clickedMapId],
+                        clickedPx, clickedPy - 12, clickAlign, mFont.tahoma_7_grey);
+                }
             }
 
             g.translate(-g.getTranslateX(), -g.getTranslateY());
             g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+
+            // Vẽ mũi tên chỉ hướng nhiệm vụ ngoài viewport (không cần translate)
+            if (taskPointIdx >= 0)
+            {
+                int tpx = Panel.mapX[(int)TileMap.planetID][taskPointIdx];
+                int tpy = Panel.mapY[(int)TileMap.planetID][taskPointIdx];
+                if (tpx < scrollX)
+                {
+                    g.drawRegion(Mob.imgHP, 0, 0, 9, 6, 5,
+                        taskMapContentX + 5, taskMapContentY + taskMapContentH / 2 - 4, 0);
+                }
+                if (tpx > scrollX + taskMapContentW)
+                {
+                    g.drawRegion(Mob.imgHP, 0, 0, 9, 6, 6,
+                        taskMapContentX + taskMapContentW - 5, taskMapContentY + taskMapContentH / 2 - 4, StaticObj.TOP_RIGHT);
+                }
+                if (tpy < scrollY)
+                {
+                    g.drawRegion(Mob.imgHP, 0, 0, 9, 6, 1,
+                        taskMapContentX + taskMapContentW / 2, taskMapContentY + 5, StaticObj.TOP_CENTER);
+                }
+                if (tpy > scrollY + taskMapContentH)
+                {
+                    g.drawRegion(Mob.imgHP, 0, 0, 9, 6, 0,
+                        taskMapContentX + taskMapContentW / 2, taskMapContentY + taskMapContentH - 5, StaticObj.BOTTOM_HCENTER);
+                }
+            }
         }
         else
         {
