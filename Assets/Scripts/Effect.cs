@@ -180,7 +180,8 @@ public class Effect
 		{
 			typeEff = 5;
 		}
-		if (id == 191 || id == 192)
+		// speed title (tốc độ danh hiệu)
+		if (id == 191 || id == 192 || id == 92)
 		{
 			speed = 4;
 		}
@@ -243,7 +244,7 @@ public class Effect
 		{
 			newEff.addElement(effId + string.Empty);
 		}
-		if (id == 191 || id == 192)
+		if (id == 191 || id == 192 || id == 92)
 		{
 			speed = 4;
 		}

@@ -34,6 +34,7 @@ public class CustomInventoryPanel
     private static int skillDragStartY;
     private static int lastDragY;
     private static int firstDragY;
+    private static int firstDragX;
     private static int dragTime;
     private static readonly int[] dragLastY = new int[3];
     private static bool draggingBag;
@@ -84,15 +85,72 @@ public class CustomInventoryPanel
     private static bool triedLoadStatsFrame;
     private static bool triedLoadCurrencyFrame;
     private static bool triedLoadTaskFrame;
+    private static bool isDownOutside;
+    private static int openMapId = -1;
+    private static int openZoneId = -1;
+    private static long suppressFusionHighlightUntil;
+    private static int pendingPetStatus = -1;
+    private static long pendingPetStatusUntil;
+    private static bool hasPorataInBag;
+    private static bool isPorataFusionActive;
 
     public static void Show()
     {
         isShow = true;
+        openMapId = TileMap.mapID;
+        openZoneId = TileMap.zoneID;
+        pendingPetStatus = -1;
+        pendingPetStatusUntil = 0L;
+        SyncPetStateFlags();
     }
 
     public static void Hide()
     {
         isShow = false;
+        pendingPetStatus = -1;
+        pendingPetStatusUntil = 0L;
+        hasPorataInBag = false;
+        isPorataFusionActive = false;
+    }
+
+    private static void ClosePanelState(bool playSound)
+    {
+        Hide();
+        if (GameCanvas.panel != null)
+        {
+            GameCanvas.panel.cp = null;
+        }
+        GameCanvas.menu.showMenu = false;
+        ResetSelection();
+        GameCanvas.clearAllPointerEvent();
+        if (playSound)
+        {
+            SoundMn.gI().panelClick();
+        }
+    }
+
+    private static bool ShouldAutoClosePanel()
+    {
+        if (!isShow)
+        {
+            return false;
+        }
+
+        // Đóng ngay khi đang chuyển map/khu để tránh panel "kẹt" qua scene mới.
+        if (Char.ischangingMap || Char.isLoadingMap)
+        {
+            return true;
+        }
+
+        // Đổi map/khu xong thì đóng panel.
+        if (openMapId != -1 && (TileMap.mapID != openMapId || TileMap.zoneID != openZoneId))
+        {
+            return true;
+        }
+
+        // Gọi rồng: đóng panel để không đè giao diện sự kiện.
+        GameScr scr = GameScr.gI();
+        return scr != null && scr.isRongThanXuatHien;
     }
 
     public static void Toggle()
@@ -118,12 +176,20 @@ public class CustomInventoryPanel
             {
                 return;
             }
+            SyncPetStateFlags();
 
             // 1. Lưu trạng thái và Tracking (Phải ở đầu)
             bool isDown = GameCanvas.isPointerDown;
             bool isRelease = GameCanvas.isPointerJustRelease;
             int px = GameCanvas.px;
             int py = GameCanvas.py;
+            ComputeLayout();
+            if (ShouldAutoClosePanel())
+            {
+                ClosePanelState(false);
+                return;
+            }
+            bool pointerInPanel = IsPointerInPanel();
 
             if (isDown)
             {
@@ -131,10 +197,18 @@ public class CustomInventoryPanel
                 if (dragTime == 1)
                 {
                     firstDragY = py;
+                    firstDragX = px;
                     for (int i = 0; i < dragLastY.Length; i++) dragLastY[i] = py;
                     globalDragged = false;
+                    isDownOutside = !pointerInPanel;
+                    // Chỉ reset selection nếu không phải đang click vào menu/popup
+                    bool isMenuShown = GameCanvas.menu.showMenu || (GameCanvas.panel != null && GameCanvas.panel.cp != null);
+                    if (!isMenuShown)
+                    {
+                        ResetSelection();
+                    }
                 }
-                if (dragTime > 1 && System.Math.Abs(py - firstDragY) > 5)
+                if (dragTime > 1 && (System.Math.Abs(py - firstDragY) > 10 || System.Math.Abs(px - firstDragX) > 10))
                 {
                     if (!globalDragged)
                     {
@@ -146,12 +220,15 @@ public class CustomInventoryPanel
             else
             {
                 dragTime = 0;
+                // Không reset ngay khi vừa nhả chuột, vì nhánh isRelease cần đọc cờ này
+                // để xử lý đóng panel khi click bắt đầu từ bên ngoài.
+                if (!isRelease)
+                {
+                    isDownOutside = false;
+                }
             }
 
-            ComputeLayout();
-
             // 2. Trạng thái tương tác
-            bool pointerInPanel = IsPointerInPanel();
             bool wasInteracting = pointerInPanel || draggingBag || draggingSkill;
 
             // 3. Cập nhật Scroll
@@ -200,35 +277,63 @@ public class CustomInventoryPanel
                 }
             }
 
-            // 4. Reset Selection nếu có di chuyển đáng kể khi đang nhấn giữ
             if (isDown && dragTime > 1)
             {
                 int dyTotal = System.Math.Abs(py - firstDragY);
-                if (dyTotal > 10)
+                int dxTotal = System.Math.Abs(px - firstDragX);
+                if (dyTotal > 10 || dxTotal > 10)
                 {
                     ResetSelection();
                 }
             }
 
             // 5. Xử lý Selection
-            if (GameCanvas.isPointerJustRelease)
+            if (isRelease)
             {
-                if (GameCanvas.isPointerHoldIn(panelX + panelW - 2, panelY + 10, 18, 18))
+                // Tính toán hitbox cho nút Close (tâm tại panelX + panelW - 5, panelY + 28)
+                int closeBtnX = panelX + panelW - 17; // (panelX + panelW - 5) - 12
+                int closeBtnY = panelY + 16;         // (panelY + 28) - 12
+                if (GameCanvas.isPointerHoldIn(closeBtnX, closeBtnY, 24, 24))
                 {
-                    Hide();
-                    GameCanvas.clearAllPointerEvent();
+                    ClosePanelState(true);
                     return;
                 }
-                if (wasInteracting)
+                
+                // Đóng panel khi click ra ngoài (Tap outside)
+                if (!pointerInPanel && !globalDragged && isDownOutside)
+                {
+                    ClosePanelState(true);
+                    return;
+                }
+
+                if (wasInteracting && !globalDragged)
                 {
                     HandlePanelSelection(true);
                     BlockGameInput();
                 }
+
+                // Reset tracking flags sau khi nhả
+                globalDragged = false;
+                isDownOutside = false;
             }
             else if (isDown && wasInteracting)
             {
-                HandlePanelSelection(false);
-                if (topTab != 3 || skillDragged)
+                // Chỉ cập nhật visual selection nếu KHÔNG đang drag và KHÔNG đang chạy quán tính
+                if (!globalDragged && bagScrollRun == 0 && skillScrollRun == 0)
+                {
+                    // Tăng delay lên 5 frames để chắc chắn người dùng muốn chọn chứ không phải scroll
+                    if (dragTime > 5)
+                    {
+                        HandlePanelSelection(false);
+                    }
+                }
+                else
+                {
+                    // Nếu đang drag, xóa ngay selection hiện tại để tránh nhầm lẫn
+                    ResetSelection();
+                }
+
+                if (topTab != 3 || skillDragged || globalDragged)
                 {
                     BlockGameInput();
                 }
@@ -323,17 +428,19 @@ public class CustomInventoryPanel
     private static void ComputeLayout()
     {
         panelW = (GameCanvas.w - 28 < 540) ? (GameCanvas.w - 28) : 540;
-        panelH = (GameCanvas.h - 24 < 330) ? (GameCanvas.h - 24) : 330;
+        // Tăng chiều cao panel để phần tab trên cùng và nội dung có thêm khoảng thở.
+        panelH = (GameCanvas.h - 20 < 360) ? (GameCanvas.h - 20) : 360;
         if (panelW < 420)
         {
             panelW = 420;
         }
-        if (panelH < 290)
+        if (panelH < 310)
         {
-            panelH = 290;
+            panelH = 310;
         }
         panelX = (GameCanvas.w - panelW) / 2;
-        panelY = (GameCanvas.h - panelH) / 2 - 14;
+        // Không kéo panel lên trên nữa để tránh tab top bị nhô khỏi khung.
+        panelY = (GameCanvas.h - panelH) / 2;
         if (panelY < 6)
         {
             panelY = 6;
@@ -345,7 +452,7 @@ public class CustomInventoryPanel
         bool isInfoVisible = (GameCanvas.panel != null && GameCanvas.panel.cp != null) || GameCanvas.menu.showMenu;
         if (isInfoVisible)
         {
-            if (GameCanvas.isPointerDown && dragTime > 2 && System.Math.Abs(GameCanvas.py - firstDragY) > 5)
+            if (GameCanvas.isPointerDown && dragTime > 2 && (System.Math.Abs(GameCanvas.py - firstDragY) > 10 || System.Math.Abs(GameCanvas.px - firstDragX) > 10))
             {
                 if (GameCanvas.panel != null) GameCanvas.panel.cp = null;
                 GameCanvas.menu.showMenu = false;
@@ -377,15 +484,13 @@ public class CustomInventoryPanel
             {
                 int dy = GameCanvas.py - dragLastY[0];
                 bagScrollTargetY -= dy;
-                // Cho php kAo v_t biA?n mTt chAAt (50px)
-                if (bagScrollTargetY < -50) bagScrollTargetY = -50;
-                if (bagScrollTargetY > maxScroll + 50) bagScrollTargetY = maxScroll + 50;
+                
+                // Giới hạn biên cứng khi đang drag (cho phép kéo lố 60px để tạo cảm giác đàn hồi)
+                if (bagScrollTargetY < -60) bagScrollTargetY = -60;
+                if (bagScrollTargetY > maxScroll + 60) bagScrollTargetY = maxScroll + 60;
 
-                if (bagScrollY < 0 || bagScrollY > maxScroll)
-                {
-                    dy /= 2;
-                }
-                bagScrollY -= dy;
+                // Trong lúc drag, ép bagScrollY đi theo TargetY ngay lập tức để bám chuột (không smoothing)
+                bagScrollY = bagScrollTargetY;
             }
         }
         if (!GameCanvas.isPointerJustRelease || !draggingBag)
@@ -393,7 +498,7 @@ public class CustomInventoryPanel
             ApplyBagScrollRun(maxScroll);
             return;
         }
-        if (System.Math.Abs(GameCanvas.py - firstDragY) <= 20)
+        if (System.Math.Abs(GameCanvas.py - firstDragY) <= 20 && System.Math.Abs(GameCanvas.px - firstDragX) <= 20)
         {
             bagScrollY = bagScrollYBeforeDrag;
             bagScrollTargetY = bagScrollY;
@@ -462,7 +567,7 @@ public class CustomInventoryPanel
         bool isInfoVisible = (GameCanvas.panel != null && GameCanvas.panel.cp != null) || GameCanvas.menu.showMenu;
         if (isInfoVisible)
         {
-            if (GameCanvas.isPointerDown && dragTime > 2 && System.Math.Abs(GameCanvas.py - firstDragY) > 5)
+            if (GameCanvas.isPointerDown && dragTime > 2 && (System.Math.Abs(GameCanvas.py - firstDragY) > 10 || System.Math.Abs(GameCanvas.px - firstDragX) > 10))
             {
                 if (GameCanvas.panel != null) GameCanvas.panel.cp = null;
                 GameCanvas.menu.showMenu = false;
@@ -493,22 +598,20 @@ public class CustomInventoryPanel
             }
             else
             {
-                int dy = GameCanvas.py - dragLastY[0];
                 if (System.Math.Abs(GameCanvas.py - skillDragStartY) > 4)
                 {
                     skillDragged = true;
                 }
                 if (skillDragged)
                 {
+                    int dy = GameCanvas.py - dragLastY[0];
                     skillScrollTargetY -= dy;
-                    if (skillScrollTargetY < -50) skillScrollTargetY = -50;
-                    if (skillScrollTargetY > maxScroll + 50) skillScrollTargetY = maxScroll + 50;
+                    
+                    if (skillScrollTargetY < -60) skillScrollTargetY = -60;
+                    if (skillScrollTargetY > maxScroll + 60) skillScrollTargetY = maxScroll + 60;
 
-                    if (skillScrollY < 0 || skillScrollY > maxScroll)
-                    {
-                        dy /= 2;
-                    }
-                    skillScrollY -= dy;
+                    // Bám chuột tuyệt đối khi đang drag
+                    skillScrollY = skillScrollTargetY;
                 }
             }
             if (skillDragged)
@@ -597,8 +700,7 @@ public class CustomInventoryPanel
 
     private static int GetSkillMaxScroll(int viewH)
     {
-        int count = GetFullSkillCount(Char.myCharz());
-        int rows = count / 2 + ((count % 2 != 0) ? 1 : 0);
+        int rows = 6;
         int contentH = rows * 40;
         int max = contentH - viewH;
         return (max > 0) ? max : 0;
@@ -663,10 +765,10 @@ public class CustomInventoryPanel
     private static bool TryHandleTopTabClick(bool isFire)
     {
         int tabW = 60;
-        int tabH = 18;
+        int tabH = 24;
         int gap = 1;
         int tabX = panelX + 22;
-        int tabY = panelY + 23;
+        int tabY = panelY + 18;
         for (int i = 0; i < TOP_TABS.Length; i++)
         {
             int x = tabX + i * (tabW + gap);
@@ -775,17 +877,17 @@ public class CustomInventoryPanel
         int safeX = panelX + 24;
         int safeY = panelY + 42;
         int safeW = panelW - 48;
-        int listY = panelY + 47;
+        int listY = panelY + 52;
         int listH = panelY + panelH - 36 - listY;
         int colGap = 3;
         int colW = (safeW - colGap * 2) / 3;
-        int listX = safeX + 6;
+        int listX = safeX;
         if (GameCanvas.py < listY || GameCanvas.py > listY + listH)
         {
             return false;
         }
         int col = -1;
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             int x = listX + i * (colW + colGap);
             if (GameCanvas.px >= x && GameCanvas.px <= x + colW)
@@ -800,7 +902,8 @@ public class CustomInventoryPanel
         }
         int localY = GameCanvas.py - listY + skillScrollY;
         int row = localY / 40;
-        int index = row * 2 + col;
+        if (row >= 6) return false;
+        int index = col * 6 + row;
         if (index < 0 || index >= GetFullSkillCount(c))
         {
             return false;
@@ -1180,6 +1283,158 @@ public class CustomInventoryPanel
         return Char.myPetz();
     }
 
+    private static bool IsPrimaryPet2()
+    {
+        Char me = Char.myCharz();
+        return me != null && me.havePet2 && !me.havePet;
+    }
+
+    private static string[] GetPetStatusOptions()
+    {
+        Char me = Char.myCharz();
+        bool hasFusionForever = me != null && me.cgender == 1;
+        return hasFusionForever
+            ? new string[] { mResources.follow, mResources.defend, mResources.attack, mResources.gohome, mResources.fusion, mResources.fusionForever }
+            : new string[] { mResources.follow, mResources.defend, mResources.attack, mResources.gohome, mResources.fusion };
+    }
+
+    private static void ApplyPetStatusSelection(int selectedStatus)
+    {
+        Char pet = GetPrimaryPet();
+        if (pet == null)
+        {
+            return;
+        }
+        // Trạng thái hợp thể vĩnh viễn cần xác nhận như panel gốc.
+        if (selectedStatus == 5)
+        {
+            pendingPetStatus = 5;
+            pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
+            GameCanvas.startYesNoDlg(
+                mResources.sure_fusion,
+                new Command(mResources.YES, IsPrimaryPet2() ? 888352 : 888351),
+                new Command(mResources.NO, 2001)
+            );
+            return;
+        }
+        // Nút "Hợp thể" đang bật: bấm lại sẽ tách hợp thể.
+        if (selectedStatus == 4)
+        {
+            if (isPorataFusionActive)
+            {
+                isPorataFusionActive = false;
+                RequestDetachFusion();
+                return;
+            }
+
+            // Chưa hợp thể: ưu tiên dùng bông tai để hợp thể.
+            int porataIndex = hasPorataInBag ? FindPorataBagIndex() : -1;
+            if (porataIndex >= 0)
+            {
+                Service.gI().useItem(0, 1, (sbyte)porataIndex, -1);
+                suppressFusionHighlightUntil = 0L;
+                pendingPetStatus = 4;
+                pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
+                isPorataFusionActive = true;
+                return;
+            }
+        }
+        // Đang hợp thể thì phải tắt hợp thể trước, chưa cho đổi state ngay.
+        if (selectedStatus != 4 && isPorataFusionActive)
+        {
+            isPorataFusionActive = false;
+            RequestDetachFusion();
+            pendingPetStatus = pet.petStatus;
+            pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
+            GameScr.info1.addInfo("Đã yêu cầu tắt hợp thể, hãy chọn lại trạng thái sau khi tách xong", 0);
+            return;
+        }
+        if (IsPrimaryPet2())
+        {
+            Service.gI().pet2Status((sbyte)selectedStatus);
+        }
+        else
+        {
+            Service.gI().petStatus((sbyte)selectedStatus);
+        }
+        pet.petStatus = (sbyte) selectedStatus;
+        pendingPetStatus = selectedStatus;
+        pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
+    }
+
+    private static void RequestDetachFusion()
+    {
+        int porataIndex = FindPorataBagIndex();
+        if (porataIndex >= 0)
+        {
+            Service.gI().useItem(0, 1, (sbyte)porataIndex, -1);
+        }
+        else
+        {
+            // Fallback an toàn khi không có bông tai trong túi.
+            Service.gI().funsion(6);
+        }
+        // Tránh giữ highlight "Hợp thể" quá lâu khi vừa bấm tách.
+        suppressFusionHighlightUntil = mSystem.currentTimeMillis() + 2500L;
+    }
+
+    private static int FindPorataBagIndex()
+    {
+        Char me = Char.myCharz();
+        Item[] bag = (me != null) ? me.arrItemBag : null;
+        if (bag == null)
+        {
+            return -1;
+        }
+        int[] porataIds = new int[] { 454, 921, 2104, 1255 };
+        for (int i = 0; i < bag.Length; i++)
+        {
+            Item item = bag[i];
+            if (item == null || item.template == null)
+            {
+                continue;
+            }
+            int templateId = item.template.id;
+            for (int j = 0; j < porataIds.Length; j++)
+            {
+                if (templateId == porataIds[j])
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static void SyncPetStateFlags()
+    {
+        Char me = Char.myCharz();
+        if (me == null)
+        {
+            hasPorataInBag = false;
+            isPorataFusionActive = false;
+            return;
+        }
+        hasPorataInBag = FindPorataBagIndex() >= 0;
+        long now = mSystem.currentTimeMillis();
+        if (pendingPetStatus == 4 && now < pendingPetStatusUntil)
+        {
+            isPorataFusionActive = true;
+            return;
+        }
+        isPorataFusionActive = me.isFusion;
+    }
+
+    private static void GetPetStatusLayout(int x, int y, int w, out int rowX, out int rowY, out int rowW, out int rowH, out int toggleW, out int toggleH)
+    {
+        rowX = x + 8;
+        rowY = y + 12;
+        rowW = w - 16;
+        rowH = 22;
+        toggleW = 24;
+        toggleH = 14;
+    }
+
     private static bool HasLoadedPetInfo(Char pet)
     {
         if (pet == null)
@@ -1231,6 +1486,11 @@ public class CustomInventoryPanel
     {
         if (TryHandlePetSubTabClick(isFire))
         {
+            return;
+        }
+        if (petSubTab == 2)
+        {
+            TryHandlePetStatusClick(isFire);
             return;
         }
         if (petSubTab != 0)
@@ -1389,6 +1649,57 @@ public class CustomInventoryPanel
         }
     }
 
+    private static bool TryHandlePetStatusClick(bool isFire)
+    {
+        Char pet = GetPrimaryPet();
+        if (pet == null)
+        {
+            return false;
+        }
+        int safeX = panelX + 24;
+        int safeW = panelW - 48;
+        int rightX = safeX + safeW / 2 + 10;
+        int rightW = 34 * 6 + 4 * 5;
+        int contentY = panelY + 66;
+        string[] options = GetPetStatusOptions();
+        int rowX;
+        int rowYStart;
+        int rowW;
+        int rowH;
+        int toggleW;
+        int toggleH;
+        GetPetStatusLayout(rightX, contentY, rightW, out rowX, out rowYStart, out rowW, out rowH, out toggleW, out toggleH);
+        for (int i = 0; i < options.Length; i++)
+        {
+            int rowY = rowYStart + i * rowH;
+            int toggleX = rowX + rowW - toggleW - 6;
+            int toggleY = rowY + (rowH - toggleH) / 2;
+            bool hitRow = Hit(GameCanvas.px, GameCanvas.py, rowX, rowY, rowW, rowH - 1);
+            bool hitToggle = Hit(GameCanvas.px, GameCanvas.py, toggleX, toggleY, toggleW, toggleH);
+            if (!hitRow && !hitToggle)
+            {
+                continue;
+            }
+            if (!isFire)
+            {
+                return true;
+            }
+            int newStatus = i;
+            if (pet.petStatus != newStatus)
+            {
+                ApplyPetStatusSelection(newStatus);
+            }
+            else
+            {
+                // Luôn giữ đúng 1 trạng thái bật, click lại trạng thái đang bật chỉ sync lại.
+                ApplyPetStatusSelection(newStatus);
+            }
+            SoundMn.gI().panelClick();
+            return true;
+        }
+        return false;
+    }
+
     private static void HandleCharacterSelection(bool isFire)
     {
         Char me = Char.myCharz();
@@ -1479,7 +1790,14 @@ public class CustomInventoryPanel
         selectedItemInfo = null;
         if (GameCanvas.panel != null)
         {
-            GameCanvas.panel.currItem = null;
+            // KHÔNG reset currItem và selected nếu menu đang hiện 
+            // vì lệnh thực thi từ menu sẽ cần tham chiếu đến item hiện tại
+            if (!GameCanvas.menu.showMenu)
+            {
+                GameCanvas.panel.currItem = null;
+                GameCanvas.panel.selected = -1;
+            }
+            // Thông tin mô tả (cp) có thể reset nếu không phải đang click vào chính nó
             GameCanvas.panel.cp = null;
         }
     }
@@ -1685,10 +2003,10 @@ public class CustomInventoryPanel
         else if (topTab == 3 && selectedSkillIndex >= 0)
         {
             int colW = (safeW - 6) / 3;
-            int col = selectedSkillIndex % 2;
-            int row = selectedSkillIndex / 2;
-            selectedItemX = safeX + 6 + col * (colW + 3);
-            newY = panelY + 47 + row * 40 - skillScrollY;
+            int col = selectedSkillIndex / 6;
+            int row = selectedSkillIndex % 6;
+            selectedItemX = safeX + col * (colW + 3) + 3;
+            newY = panelY + 52 + row * 40 - skillScrollY;
         }
 
         if (newY != -1)
@@ -1748,34 +2066,38 @@ public class CustomInventoryPanel
     private static void PaintTopTabs(mGraphics g)
     {
         int tabW = 60;
-        int tabH = 18;
+        int tabH = 20;
         int gap = 1;
         int tabX = panelX + 22;
-        int tabY = panelY + 23;
+        int tabY = panelY + 22;
         for (int i = 0; i < TOP_TABS.Length; i++)
         {
             int x = tabX + i * (tabW + gap);
-            Image tabImg = GetTabImage(i == topTab, false);
-            if (tabImg != null)
+            bool active = i == topTab;
+            
+            // Vẽ nền và viền đồng nhất cho tất cả các tab
+            int bgColor = active ? 0xBEEA8D : 0xF8DDA8;
+            int borderColor = active ? 0x4C9D27 : 0x7B4B1F;
+            
+            // Vẽ viền bo góc bằng fillRect lớn (giả lập drawRect bo góc)
+            g.setColor(borderColor);
+            g.fillRect(x, tabY, tabW, tabH, 5);
+            
+            // Vẽ nền nhỏ hơn 1px để hiện viền
+            g.setColor(bgColor);
+            g.fillRect(x + 1, tabY + 1, tabW - 2, tabH - 2, 5);
+
+            if (active)
             {
-                g.drawImage(tabImg, x, tabY, 0);
-            }
-            else
-            {
-                int color = (i == topTab) ? 0xBEEA8D : 0xF8DDA8;
-                Fill(g, x, tabY, tabW, tabH, color);
-                g.setColor((i == topTab) ? 0x4C9D27 : 0x7B4B1F);
-                g.drawRect(x + 1, tabY + 1, tabW - 3, tabH - 2);
-            }
-            if (i == topTab)
-            {
+                g.setColor(SELECT_BORDER);
+                g.fillRect(x + 1, tabY + 1, tabW - 2, tabH - 2, 5);
                 g.setColor(SELECT_BG);
                 g.fillRect(x + 2, tabY + 2, tabW - 4, tabH - 4, 5);
-                g.setColor(SELECT_BORDER);
-                g.drawRect(x + 1, tabY + 1, tabW - 3, tabH - 2);
             }
+
             string label = TOP_TABS[i];
-            mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, tabW - 6), x + tabW / 2, tabY + 5, mFont.CENTER);
+            int textY = tabY + (tabH - mFont.tahoma_7b_dark.getHeight()) / 2;
+            mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, tabW - 6), x + tabW / 2, textY, mFont.CENTER);
         }
     }
 
@@ -1841,7 +2163,7 @@ public class CustomInventoryPanel
         int infoW = topW;
         int infoH = safeH - topH - frameGap - frameMargin * 2;
         PaintOldPanelBox(g, topX, topY, topW, topH);
-        PaintOldPanelBox(g, infoX, infoY, infoW, infoH);
+        PaintOldPanelBox(g, infoX, infoY, infoW, infoH - 28);
 
         Char me = Char.myCharz();
         if (me == null)
@@ -1861,7 +2183,7 @@ public class CustomInventoryPanel
         int previewY = topY + 104;
 
         mFont.tahoma_7b_dark.drawString(g, me.cName, centerX, topY + 10, mFont.CENTER);
-        PaintCharacterPreview(g, me, centerX, previewY);
+            PaintCharacterPreview(g, me, centerX, previewY, false);
 
         for (int i = 0; i < 5; i++)
         {
@@ -2043,14 +2365,6 @@ public class CustomInventoryPanel
         mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, text, maxTextW), x + textOffset, y, mFont.LEFT);
     }
 
-    /*private static void PaintCloseButton(mGraphics g)
-    {
-        Fill(g, panelX + panelW - 2, panelY + 10, 18, 18, 0xE95A35);
-        g.setColor(0xFFFFFF);
-        g.drawRect(panelX + panelW - 1, panelY + 11, 16, 16);
-        mFont.tahoma_7b_white.drawString(g, "X", panelX + panelW + 7, panelY + 13, mFont.CENTER);
-    }*/
-
     private static void PaintCloseButton(mGraphics g)
     {
         int x = panelX + panelW - 2;
@@ -2065,7 +2379,7 @@ public class CustomInventoryPanel
         int safeX = panelX + 24;
         int safeY = panelY + 42;
         int safeW = panelW - 48;
-        int listY = panelY + 47;
+        int listY = panelY + 52;
         int listH = panelY + panelH - 36 - listY;
         int oldClipX = g.getClipX();
         int oldClipY = g.getClipY();
@@ -2075,13 +2389,13 @@ public class CustomInventoryPanel
         int colW = (safeW - colGap * 2) / 3;
         int columnsX = safeX;
         int columnsY = listY - 4;
-        int columnsH = listH + 8;
+        int columnsH = (listH + 8 < 248) ? (listH + 8) : 248;
         for (int i = 0; i < 3; i++)
         {
             PaintOldPanelBox(g, columnsX + i * (colW + colGap), columnsY, colW, columnsH);
         }
-        g.setClip(safeX + 6, listY, safeW - 12, listH);
-        PaintSkillList(g, Char.myCharz(), safeX + 6, safeW - 12, listY, listY, listY + listH);
+        g.setClip(safeX, listY, safeW, listH);
+        PaintSkillList(g, Char.myCharz(), safeX, safeW, listY, listY, listY + listH);
         g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
         PaintBagScrollBar(g, safeX + safeW - 8, listY, listH, GetSkillMaxScroll(listH));
     }
@@ -2100,9 +2414,10 @@ public class CustomInventoryPanel
         int rowH = 40;
         for (int i = 0; i < count; i++)
         {
-            int col = i % 2;
-            int row = i / 2;
-            int xx = x + col * (colW + colGap);
+            int col = i / 6;
+            int row = i % 6;
+            int boxX = x + col * (colW + colGap);
+            int xx = boxX + 3;
             int yy = y + row * rowH - skillScrollY;
             if (yy + 40 < top)
             {
@@ -2198,13 +2513,23 @@ public class CustomInventoryPanel
             info = string.Empty;
         }
         SmallImage.drawSmallImage(g, icon, x + 4, y + (h - 20) / 2, 0, 0);
-        mFont.tahoma_7b_blue.drawString(g, TrimText(mFont.tahoma_7b_blue, title, w - 43), x + 33, y + 4, mFont.LEFT);
+        
+        int infoLines = 0;
+        string[] wrapped = null;
         if (info.Length > 0)
         {
-            string[] wrapped = mFont.tahoma_7_green2.splitFontArray(info, w - 43);
-            for (int i = 0; i < wrapped.Length && i < 2; i++)
+            wrapped = mFont.tahoma_7_green2.splitFontArray(info, w - 43);
+            infoLines = (wrapped.Length < 2) ? wrapped.Length : 2;
+        }
+        int totalLines = 1 + infoLines;
+        int textY = y + (h - totalLines * 11) / 2;
+        
+        mFont.tahoma_7b_blue.drawString(g, TrimText(mFont.tahoma_7b_blue, title, w - 43), x + 33, textY, mFont.LEFT);
+        if (infoLines > 0)
+        {
+            for (int i = 0; i < infoLines; i++)
             {
-                mFont.tahoma_7_green2.drawString(g, wrapped[i], x + 33, y + 15 + i * 11, mFont.LEFT);
+                mFont.tahoma_7_green2.drawString(g, wrapped[i], x + 33, textY + 11 + i * 11, mFont.LEFT);
             }
         }
     }
@@ -2261,9 +2586,11 @@ public class CustomInventoryPanel
             SmallImage.drawSmallImage(g, template.iconId, x + 15, y + h / 2, 0, StaticObj.VCENTER_HCENTER);
         }
         string name = (template != null) ? template.name : ((skill != null && skill.template != null) ? skill.template.name : "Skill");
-        mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, name, w - 43), x + 33, y + 4, mFont.LEFT);
         string info = (skill != null) ? ("Lv " + skill.point + " KI " + skill.manaUse + " CD " + skill.strTimeReplay() + "s") : "Chưa học";
-        mFont.tahoma_7_grey.drawString(g, TrimText(mFont.tahoma_7_grey, info, w - 43), x + 33, y + 16, mFont.LEFT);
+        
+        int textY = y + (h - 22) / 2;
+        mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, name, w - 43), x + 33, textY, mFont.LEFT);
+        mFont.tahoma_7_grey.drawString(g, TrimText(mFont.tahoma_7_grey, info, w - 43), x + 33, textY + 11, mFont.LEFT);
     }
 
     private static void PaintSkillCell(mGraphics g, Skill skill, int x, int y, int w, int h)
@@ -3386,8 +3713,10 @@ public class CustomInventoryPanel
         Char pet = GetPrimaryPet();
         if (pet != null)
         {
-            SyncCharPartsFromItems(pet);
-            // Đảm bảo có bộ phận tối thiểu để vẽ
+            // Bỏ SyncCharPartsFromItems vì nó ghi đè dữ liệu server gây lỗi lệch bộ phận.
+            // Để server tự cập nhật ngoại hình đệ tử (giống player) sẽ chính xác hơn.
+            
+            // Đảm bảo có bộ phận tối thiểu để vẽ nếu server chưa gửi dữ liệu
             if (pet.head == -1 || pet.head == 0) pet.setDefaultPart();
         }
 
@@ -3444,7 +3773,7 @@ public class CustomInventoryPanel
         }
         if (pet != null)
         {
-            PaintCharacterPreview(g, pet, centerX, frameY + 132);
+            PaintCharacterPreview(g, pet, centerX, frameY + 132, true);
         }
         int bottomY = frameY + 159;
         int bottomW = 36;
@@ -3459,7 +3788,7 @@ public class CustomInventoryPanel
         }
     }
 
-    private static void PaintCharacterPreview(mGraphics g, Char ch, int x, int y)
+    private static void PaintCharacterPreview(mGraphics g, Char ch, int x, int y, bool applyCostumePartsForPreview)
     {
         if (ch == null)
         {
@@ -3472,6 +3801,9 @@ public class CustomInventoryPanel
         int oldFy = ch.fy;
         sbyte oldMonkey = ch.isMonkey;
         bool oldFusion = ch.isFusion;
+        short oldHead = (short) ch.head;
+        short oldBody = (short) ch.body;
+        short oldLeg = (short) ch.leg;
         
         int[] effXs, effYs;
         CapturePreviewEffectPositions(ch, out effXs, out effYs);
@@ -3485,6 +3817,10 @@ public class CustomInventoryPanel
             ch.isMonkey = 0;
             ch.isFusion = false;
             ch.cf = ((GameCanvas.gameTick / 8) % 2 == 0) ? 0 : 1;
+            if (applyCostumePartsForPreview)
+            {
+                SyncCharPartsFromItems(ch);
+            }
             
             PositionPreviewCharEffects(ch);
             PaintPreviewCharBoundEffects(g, ch, 0);
@@ -3508,49 +3844,78 @@ public class CustomInventoryPanel
             ch.fy = oldFy;
             ch.isMonkey = oldMonkey;
             ch.isFusion = oldFusion;
+            ch.head = oldHead;
+            ch.body = oldBody;
+            ch.leg = oldLeg;
             RestorePreviewEffectPositions(ch, effXs, effYs);
         }
     }
 
     private static void SyncCharPartsFromItems(Char ch)
     {
-        if (ch == null)
+        if (ch == null || ch.arrItemBody == null)
         {
             return;
         }
 
-        // Đảm bảo không bị -1 để có thể vẽ được nhân vật mặc định
-        if (ch.head == -1) ch.head = 0;
-        if (ch.body == -1) ch.body = 0;
-        if (ch.leg == -1) ch.leg = 0;
+        bool overrideHead = false;
+        bool overrideBody = false;
+        bool overrideLeg = false;
+        short costumeHead = (short)ch.head;
+        short costumeBody = (short)ch.body;
+        short costumeLeg = (short)ch.leg;
 
-        if (ch.arrItemBody == null)
+        // 1. Ưu tiên lấy part từ Cải trang đang trang bị (type tóc/cải trang)
+        Item costume = FindEquippedCostume(ch.arrItemBody);
+        if (costume != null)
         {
-            return;
-        }
+            if (costume.headTemp != -1)
+            {
+                costumeHead = (short)costume.headTemp;
+                overrideHead = true;
+            }
+            if (costume.bodyTemp != -1)
+            {
+                costumeBody = (short)costume.bodyTemp;
+                overrideBody = true;
+            }
+            if (costume.legTemp != -1)
+            {
+                costumeLeg = (short)costume.legTemp;
+                overrideLeg = true;
+            }
 
-        // Ưu tiên Cải trang (Mask/Costume) ở slot 5
-        Item costume = GetItem(ch.arrItemBody, 5);
-        if (costume != null && costume.template != null)
-        {
-            int headC = -1;
-            int bodyC = -1;
-            int legC = -1;
             if (costume.itemOption != null)
             {
                 for (int j = 0; j < costume.itemOption.Length; j++)
                 {
-                    if (costume.itemOption[j].optionTemplate.id == 127) headC = costume.itemOption[j].param;
-                    if (costume.itemOption[j].optionTemplate.id == 128) bodyC = costume.itemOption[j].param;
-                    if (costume.itemOption[j].optionTemplate.id == 129) legC = costume.itemOption[j].param;
+                    ItemOption opt = costume.itemOption[j];
+                    if (opt == null || opt.optionTemplate == null) continue;
+                    if (opt.optionTemplate.id == 127)
+                    {
+                        costumeHead = (short)opt.param;
+                        overrideHead = true;
+                    }
+                    if (opt.optionTemplate.id == 128)
+                    {
+                        costumeBody = (short)opt.param;
+                        overrideBody = true;
+                    }
+                    if (opt.optionTemplate.id == 129)
+                    {
+                        costumeLeg = (short)opt.param;
+                        overrideLeg = true;
+                    }
                 }
             }
-            if (headC != -1) ch.head = headC;
-            if (bodyC != -1) ch.body = bodyC;
-            if (legC != -1) ch.leg = legC;
         }
 
-        // Đồng bộ cơ bản nếu các part chưa được set bởi cải trang
+        // 2. Ghi part từ cải trang trước, từng bộ phận độc lập
+        if (overrideHead) ch.head = costumeHead;
+        if (overrideBody) ch.body = costumeBody;
+        if (overrideLeg) ch.leg = costumeLeg;
+
+        // 3. Bộ phận nào không bị cải trang ghi đè thì lấy từ trang bị gốc
         for (int i = 0; i < ch.arrItemBody.Length; i++)
         {
             Item item = ch.arrItemBody[i];
@@ -3559,10 +3924,53 @@ public class CustomInventoryPanel
             int part = item.template.part;
             if (part == -1) continue;
 
-            if (item.template.type == 0) ch.head = part;
-            else if (item.template.type == 1) ch.body = part;
-            else if (item.template.type == 2) ch.leg = part;
+            if (item.template.type == 0 && !overrideBody)
+                ch.body = (short)part;
+            else if (item.template.type == 1 && !overrideLeg)
+                ch.leg = (short)part;
+            else if ((item.template.type == 2 || item.template.type == 6) && !overrideHead)
+                ch.head = (short)part;
         }
+
+        // 4. Fallback để không bị trống
+        if (ch.head == -1) ch.head = 0;
+        if (ch.body == -1) ch.body = 0;
+        if (ch.leg == -1) ch.leg = 0;
+    }
+
+    private static Item FindEquippedCostume(Item[] bodyItems)
+    {
+        if (bodyItems == null)
+        {
+            return null;
+        }
+        // Ưu tiên item type 5 (hair/cải trang). Không cứng theo index vì mỗi server có thể map slot khác nhau.
+        for (int i = 0; i < bodyItems.Length; i++)
+        {
+            Item item = bodyItems[i];
+            if (item == null || item.template == null)
+            {
+                continue;
+            }
+            if (item.template.type == 5)
+            {
+                return item;
+            }
+        }
+        // Fallback: item nào có temp part thì dùng để preview.
+        for (int i = 0; i < bodyItems.Length; i++)
+        {
+            Item item = bodyItems[i];
+            if (item == null)
+            {
+                continue;
+            }
+            if (item.headTemp != -1 || item.bodyTemp != -1 || item.legTemp != -1)
+            {
+                return item;
+            }
+        }
+        return null;
     }
 
     private static void CapturePreviewEffectPositions(Char ch, out int[] xs, out int[] ys)
@@ -3819,21 +4227,62 @@ public class CustomInventoryPanel
 
     private static void PaintPetStatus(mGraphics g, Char pet, int x, int y, int w)
     {
-        string[] lines = new string[]
+        if (pet == null)
         {
-            "Tên: " + pet.cName,
-            "HP: " + FormatStat(pet.cHPFull),
-            "KI: " + FormatStat(pet.cMPFull),
-            "SĐ: " + FormatStat(pet.cDamFull),
-            "Giáp: " + FormatStat(pet.cDefull),
-            "Crit: " + pet.cCriticalFull + "%",
-            "SM: " + FormatStat(pet.cPower),
-            "Trạng thái: " + pet.petStatus
-        };
-        for (int i = 0; i < lines.Length; i++)
-        {
-            mFont.tahoma_7b_dark.drawString(g, lines[i], x + 6, y + i * 12, mFont.LEFT);
+            mFont.tahoma_7b_dark.drawString(g, "Chưa có dữ liệu đệ tử", x + 6, y + 6, mFont.LEFT);
+            return;
         }
+        string[] options = GetPetStatusOptions();
+        int activeStatus = pet.petStatus;
+        bool shouldHighlightFusion = isPorataFusionActive && mSystem.currentTimeMillis() >= suppressFusionHighlightUntil;
+        if (shouldHighlightFusion)
+        {
+            activeStatus = 4;
+        }
+        else
+        {
+            long now = mSystem.currentTimeMillis();
+            if (pendingPetStatus >= 0 && now < pendingPetStatusUntil)
+            {
+                activeStatus = pendingPetStatus;
+            }
+            else if (pendingPetStatus >= 0)
+            {
+                pendingPetStatus = -1;
+                pendingPetStatusUntil = 0L;
+            }
+        }
+        if (activeStatus < 0 || activeStatus >= options.Length)
+        {
+            activeStatus = 0;
+        }
+        int rowX;
+        int rowY;
+        int rowW;
+        int rowH;
+        int toggleW;
+        int toggleH;
+        GetPetStatusLayout(x, y, w, out rowX, out rowY, out rowW, out rowH, out toggleW, out toggleH);
+        mFont.tahoma_7b_dark.drawString(g, "Chọn trạng thái đệ tử", x + 6, y, mFont.LEFT);
+        for (int i = 0; i < options.Length; i++)
+        {
+            bool enabled = i == activeStatus;
+            int itemY = rowY + i * rowH;
+            PaintOldTextCell(g, rowX, itemY, rowW, rowH - 2, enabled);
+            mFont.tahoma_7b_dark.drawString(g, options[i], rowX + 8, itemY + 7, mFont.LEFT);
+            PaintStatusToggle(g, rowX + rowW - toggleW - 6, itemY + (rowH - toggleH) / 2, toggleW, toggleH, enabled);
+        }
+    }
+
+    private static void PaintStatusToggle(mGraphics g, int x, int y, int w, int h, bool enabled)
+    {
+        g.setColor(enabled ? 4825130 : 9671571);
+        g.fillRect(x, y, w, h, 6);
+        g.setColor(0xFFFFFF);
+        int knobW = w / 2 - 1;
+        int knobH = h - 2;
+        int knobX = enabled ? (x + w - knobW - 1) : (x + 1);
+        g.fillRect(knobX, y + 1, knobW, knobH, 4);
     }
 
     private static void PaintTaskTab(mGraphics g)
@@ -3843,37 +4292,160 @@ public class CustomInventoryPanel
         int safeW = panelW - 48;
         int safeH = panelH - 82;
         Task task = (Char.myCharz() != null) ? Char.myCharz().taskMaint : null;
-        int frameX = panelX + 21;
+
+        int gap = 6;
         int frameY = safeY + 4;
-        int frameW = 499;
         int frameH = 253;
-        PaintOldPanelBox(g, frameX, frameY, frameW, frameH);
-        mFont.tahoma_7b_dark.drawString(g, "NHIỆM VỤ", safeX + safeW / 2, safeY + 12, mFont.CENTER);
+
+        // Box 1: Thông tin nhiệm vụ (bên trái)
+        int taskBoxX = panelX + 21;
+        int taskBoxW = (safeW - gap) / 2 + 10;
+        PaintOldPanelBox(g, taskBoxX, frameY, taskBoxW, frameH);
+
+        // Box 2: Bản đồ (bên phải)
+        int mapBoxX = taskBoxX + taskBoxW + gap;
+        int mapBoxW = 499 - taskBoxW - gap;
+        PaintOldPanelBox(g, mapBoxX, frameY, mapBoxW, frameH);
+
+        // === Vẽ nội dung Box 1: Thông tin nhiệm vụ ===
+        int contentX = taskBoxX + 8;
+        int contentW = taskBoxW - 16;
+        mFont.tahoma_7b_dark.drawString(g, "NHIỆM VỤ", taskBoxX + taskBoxW / 2, frameY + 8, mFont.CENTER);
+
         if (task == null)
         {
-            mFont.tahoma_7b_dark.drawString(g, "Chưa có nhiệm vụ", safeX + safeW / 2, safeY + 56, mFont.CENTER);
-            return;
+            mFont.tahoma_7b_dark.drawString(g, "Chưa có nhiệm vụ", taskBoxX + taskBoxW / 2, frameY + 50, mFont.CENTER);
         }
-        int y = safeY + 30;
-        if (task.names != null)
+        else
         {
-            for (int i = 0; i < task.names.Length && y < safeY + safeH - 20; i++)
+            int y = frameY + 26;
+            int bottomLimit = frameY + frameH - 12;
+            if (task.names != null)
             {
-                mFont.tahoma_7b_green2.drawString(g, task.names[i], safeX + 18, y, mFont.LEFT);
-                y += 11;
+                for (int i = 0; i < task.names.Length && y < bottomLimit - 20; i++)
+                {
+                    mFont.tahoma_7b_green2.drawString(g, task.names[i], contentX, y, mFont.LEFT);
+                    y += 11;
+                }
             }
+            y += 4;
+            if (task.details != null)
+            {
+                for (int i = 0; i < task.details.Length && y < bottomLimit - 40; i++)
+                {
+                    mFont.tahoma_7b_dark.drawString(g, task.details[i], contentX, y, mFont.LEFT);
+                    y += 10;
+                }
+            }
+            y += 6;
+            PaintTaskProgress(g, task, contentX, y, contentW, bottomLimit);
         }
-        y += 4;
-        if (task.details != null)
+
+        // === Vẽ nội dung Box 2: Bản đồ ===
+        mFont.tahoma_7b_dark.drawString(g, mResources.map, mapBoxX + mapBoxW / 2, frameY + 8, mFont.CENTER);
+
+        int mapContentX = mapBoxX + 3;
+        int mapContentY = frameY + 22;
+        int mapContentW = mapBoxW - 6;
+        int mapContentH = frameH - 28;
+
+        // Load bản đồ nếu chưa có
+        if (Panel.imgMap == null && Panel.isPaintMap)
         {
-            for (int i = 0; i < task.details.Length && y < safeY + safeH - 58; i++)
+            try
             {
-                mFont.tahoma_7b_dark.drawString(g, task.details[i], safeX + 18, y, mFont.LEFT);
-                y += 10;
+                Panel.imgMap = GameCanvas.loadImageRMS("/img/map" + TileMap.planetID.ToString() + ".png");
+                TileMap.lastPlanetId = TileMap.planetID;
             }
+            catch (System.Exception) { }
         }
-        y += 6;
-        PaintTaskProgress(g, task, safeX + 18, y, safeW - 36, safeY + safeH - 12);
+
+        if (Panel.imgMap != null && Panel.isPaintMap)
+        {
+            // Tính vị trí nhân vật trên bản đồ
+            int charMapX = -1;
+            int charMapY = -1;
+            for (int i = 0; i < Panel.mapId[(int)TileMap.planetID].Length; i++)
+            {
+                if (TileMap.mapID == Panel.mapId[(int)TileMap.planetID][i])
+                {
+                    charMapX = Panel.mapX[(int)TileMap.planetID][i];
+                    charMapY = Panel.mapY[(int)TileMap.planetID][i];
+                    break;
+                }
+            }
+
+            // Tính offset để center bản đồ vào vị trí nhân vật
+            int imgW = Panel.imgMap.getWidth();
+            int imgH = Panel.imgMap.getHeight();
+            int scrollX = 0;
+            int scrollY = 0;
+            if (charMapX >= 0)
+            {
+                scrollX = charMapX - mapContentW / 2;
+                scrollY = charMapY - mapContentH / 2;
+            }
+            if (scrollX < 0) scrollX = 0;
+            if (scrollY < 0) scrollY = 0;
+            if (scrollX > imgW - mapContentW) scrollX = imgW - mapContentW;
+            if (scrollY > imgH - mapContentH) scrollY = imgH - mapContentH;
+            if (scrollX < 0) scrollX = 0;
+            if (scrollY < 0) scrollY = 0;
+
+            // Clip và vẽ bản đồ
+            int oldClipX = g.getClipX();
+            int oldClipY = g.getClipY();
+            int oldClipW = g.getClipWidth();
+            int oldClipH = g.getClipHeight();
+            g.setClip(mapContentX, mapContentY, mapContentW, mapContentH);
+            g.translate(-scrollX, -scrollY);
+            g.drawImage(Panel.imgMap, mapContentX, mapContentY, 0);
+
+            // Vẽ vị trí nhiệm vụ nhấp nháy
+            int taskMapId = GameScr.getTaskMapId();
+            if (taskMapId != -1)
+            {
+                int taskIdx = -1;
+                for (int i = 0; i < Panel.mapId[(int)TileMap.planetID].Length; i++)
+                {
+                    if (Panel.mapId[(int)TileMap.planetID][i] == taskMapId)
+                    {
+                        taskIdx = i;
+                        break;
+                    }
+                }
+                if (taskIdx >= 0 && GameCanvas.gameTick % 4 > 0)
+                {
+                    g.drawImage(ItemMap.imageFlare,
+                        mapContentX + Panel.mapX[(int)TileMap.planetID][taskIdx],
+                        mapContentY + Panel.mapY[(int)TileMap.planetID][taskIdx], 3);
+                }
+            }
+
+            // Vẽ vị trí nhân vật
+            if (charMapX >= 0)
+            {
+                int head = Char.myCharz().head;
+                Part part = GameScr.parts[head];
+                SmallImage.drawSmallImage(g, (int)part.pi[Char.CharInfo[0][0][0]].id,
+                    mapContentX + charMapX, mapContentY + charMapY + 5, 0, 3);
+
+                // Tên map hiện tại
+                int nameAlign = mFont.CENTER;
+                if (charMapX <= 40) nameAlign = mFont.LEFT;
+                if (charMapX >= imgW - 40) nameAlign = mFont.RIGHT;
+                mFont.tahoma_7b_yellow.drawString(g, TileMap.mapName,
+                    mapContentX + charMapX, mapContentY + charMapY - 12, nameAlign, mFont.tahoma_7_grey);
+            }
+
+            g.translate(-g.getTranslateX(), -g.getTranslateY());
+            g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+        }
+        else
+        {
+            // Không có bản đồ
+            mFont.tahoma_7_grey.drawString(g, "Không có bản đồ", mapBoxX + mapBoxW / 2, frameY + frameH / 2, mFont.CENTER);
+        }
     }
 
     private static void PaintTaskProgress(mGraphics g, Task task, int x, int y, int w, int bottom)
@@ -3943,7 +4515,7 @@ public class CustomInventoryPanel
         Char me = Char.myCharz();
         if (me != null)
         {
-            PaintCharacterPreview(g, me, centerX, frameY + 121);
+            PaintCharacterPreview(g, me, centerX, frameY + 121, false);
         }
         int bottomY = frameY + 148;
         int bottomW = 36;
