@@ -2005,6 +2005,7 @@ public class Controller : IMessageHandler
 				Char.myPetz().cPower = msg.reader().readLong();
 				Char.myPetz().cTiemNang = msg.reader().readLong();
 				Char.myPetz().petStatus = msg.reader().readByte();
+				CustomInventoryPanel.OnPetStatusReceived();
 				Char.myPetz().cStamina = msg.reader().readShort();
 				Char.myPetz().cMaxStamina = msg.reader().readShort();
 				Char.myPetz().cCriticalFull = msg.reader().readByte();
@@ -2093,6 +2094,7 @@ public class Controller : IMessageHandler
 				Char.MyPet2z().cPower = msg.reader().readLong();
 				Char.MyPet2z().cTiemNang = msg.reader().readLong();
 				Char.MyPet2z().petStatus = msg.reader().readByte();
+				CustomInventoryPanel.OnPetStatusReceived();
 				Char.MyPet2z().cStamina = msg.reader().readShort();
 				Char.MyPet2z().cMaxStamina = msg.reader().readShort();
 				Char.MyPet2z().cCriticalFull = msg.reader().readByte();

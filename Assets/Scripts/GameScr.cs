@@ -4530,7 +4530,6 @@ public class GameScr : mScreen, IChatable
 		{
 			AutoXmap.Update();
 			ModFunc.GI().Update();
-            ChatLogPopup.gI().Update();
             CustomInventoryPanel.Update();
         }
 		// Update CloudGarden logic (auto-harvest icon, etc.) - chỉ khi ở map farm
@@ -4768,7 +4767,6 @@ public class GameScr : mScreen, IChatable
 			checkRemoveImage();
 		}
 		EffectManager.update();
-		ChatLogPopup.gI().Update();
 	}
 
 	public bool isRongThanMenu()
@@ -5356,7 +5354,6 @@ public class GameScr : mScreen, IChatable
 			{
 				g.drawImage(imgNapTuan, GameCanvas.w - 130, 0, 0);
 			}
-			ChatLogPopup.gI().Paint(g);
 			if (mResources.language == 1)
 			{
 				long second = mSystem.currentTimeMillis() - deltaTime;
@@ -5380,7 +5377,6 @@ public class GameScr : mScreen, IChatable
 		EffectManager.hiEffects.paintAll(g);
 		AdminPopup.gI().paint(g);
         CustomInventoryPanel.Paint(g);
-        ChatLogPopup.gI().Paint(g);
     }
 
 	private void paintXoSo(mGraphics g)

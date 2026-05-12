@@ -54,11 +54,14 @@ public class CustomInventoryPanel
     private static int dragTime;
     private static readonly int[] dragLastY = new int[3];
     private static bool draggingBag;
+    private static bool bagDragged;
+    private static int bagDragStartY;
     private static int bagScrollYBeforeDrag;
     private static bool downWhenRunning;
     private static bool draggingSkill;
     private static bool skillDragged;
     private static bool globalDragged;
+    private static bool pendingSelectionClick;
     private static int bagElasticY;
     private static int clanMsgScrollY;
     private static int clanLogicScrollY;
@@ -121,6 +124,7 @@ public class CustomInventoryPanel
     private static long suppressFusionHighlightUntil;
     private static int pendingPetStatus = -1;
     private static long pendingPetStatusUntil;
+    private static sbyte lastConfirmedPetStatus = -1;
     private static bool hasPorataInBag;
     private static bool isPorataFusionActive;
     private static int taskMapClickedIndex = -1;
@@ -233,17 +237,6 @@ public class CustomInventoryPanel
                 GameCanvas.panel.tabIcon.update();
                 GameCanvas.panel.tabIcon.updateKey();
                 return; 
-            }
-
-            // Nếu có Menu gốc hoặc bất kỳ Popup nào đang mở, không xử lý input của CustomPanel
-            if (GameCanvas.menu.showMenu || (GameCanvas.panel != null && GameCanvas.panel.cp != null) || 
-                ChatLogPopup.gI().IsPointerInPopup())
-            {
-                if (ChatLogPopup.gI().IsPointerInPopup())
-                {
-                    ResetSelection();
-                }
-                return;
             }
 
             SyncPetStateFlags();
@@ -469,16 +462,8 @@ public class CustomInventoryPanel
                     ClosePanelState(true);
                     return;
                 }
-                
-                // Đóng panel khi click ra ngoài (Tap outside), tránh đóng khi click vào các popup
-                if (!pointerInPanel && !globalDragged && isDownOutside && 
-                    !ChatLogPopup.gI().IsPointerInPopup())
-                {
-                    ClosePanelState(true);
-                    return;
-                }
 
-                if (wasInteracting && !globalDragged)
+                if ((wasInteracting && !globalDragged && GameCanvas.isPointerJustRelease) || pendingSelectionClick)
                 {
                     HandlePanelSelection(true);
                     BlockGameInput();
@@ -486,6 +471,7 @@ public class CustomInventoryPanel
 
                 // Reset tracking flags sau khi nhả
                 globalDragged = false;
+                pendingSelectionClick = false;
                 isDownOutside = false;
             }
             else if (isDown && wasInteracting)
@@ -641,7 +627,7 @@ public class CustomInventoryPanel
         int gap = 4;
         int cols = 6;
         int viewW = 34 * cols + gap * (cols - 1);
-        int viewH = panelY + panelH - 14 - rightY;
+        int viewH = panelH - 132;
         int maxScroll = GetBagMaxScroll(viewH);
         
         bool inside = GameCanvas.px >= rightX && GameCanvas.px <= rightX + viewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + viewH;
@@ -650,42 +636,40 @@ public class CustomInventoryPanel
         {
             if (!draggingBag)
             {
-                for (int i = 0; i < dragLastY.Length; i++)
-                {
-                    dragLastY[i] = GameCanvas.py;
-                }
-                firstDragY = GameCanvas.py;
+                bagDragStartY = GameCanvas.py;
                 draggingBag = true;
+                bagDragged = false;
                 downWhenRunning = (bagScrollRun != 0);
                 bagScrollRun = 0;
                 bagScrollCmdy = 0;
                 bagScrollCmvy = 0;
                 bagScrollTargetY = bagScrollY;
-                dragTime = 0;
             }
             else
             {
-                dragTime++;
-                int dy = GameCanvas.py - dragLastY[0];
-                for (int i = dragLastY.Length - 1; i > 0; i--)
+                if (System.Math.Abs(GameCanvas.py - bagDragStartY) > 5)
                 {
-                    dragLastY[i] = dragLastY[i - 1];
+                    bagDragged = true;
+                    globalDragged = true;
                 }
-                dragLastY[0] = GameCanvas.py;
-                
-                if (maxScroll == 0 || (bagScrollY <= 0 && dy > 0) || (bagScrollY >= maxScroll && dy < 0))
+
+                if (bagDragged)
                 {
-                    bagElasticY += dy / 2;
-                    if (bagElasticY > 28) bagElasticY = 28;
-                    if (bagElasticY < -28) bagElasticY = -28;
-                }
-                else
-                {
-                    bagScrollTargetY -= dy;
-                    if (bagScrollTargetY < 0) bagScrollTargetY = 0;
-                    if (bagScrollTargetY > maxScroll) bagScrollTargetY = maxScroll;
-                    
-                    bagScrollY = bagScrollTargetY;
+                    int dy = GameCanvas.py - dragLastY[0];
+                    if (maxScroll == 0 || (bagScrollY <= 0 && dy > 0) || (bagScrollY >= maxScroll && dy < 0))
+                    {
+                        bagElasticY += dy / 2;
+                        if (bagElasticY > 28) bagElasticY = 28;
+                        if (bagElasticY < -28) bagElasticY = -28;
+                    }
+                    else
+                    {
+                        bagScrollTargetY -= dy;
+                        if (bagScrollTargetY < 0) bagScrollTargetY = 0;
+                        if (bagScrollTargetY > maxScroll) bagScrollTargetY = maxScroll;
+                        
+                        bagScrollY = bagScrollTargetY;
+                    }
                 }
             }
         }
@@ -697,9 +681,10 @@ public class CustomInventoryPanel
         }
         
         int releaseDelta = GameCanvas.py - dragLastY[0];
-        if (System.Math.Abs(releaseDelta) < 20 && System.Math.Abs(GameCanvas.py - firstDragY) < 20 && !downWhenRunning)
+        GameCanvas.isPointerJustRelease = false;
+        if (System.Math.Abs(releaseDelta) < 20 && System.Math.Abs(GameCanvas.py - bagDragStartY) < 20 && !downWhenRunning)
         {
-            // Reset state to allow click
+            pendingSelectionClick = true;
             bagScrollRun = 0;
             bagScrollTargetY = bagScrollY;
         }
@@ -723,7 +708,9 @@ public class CustomInventoryPanel
         }
         
         draggingBag = false;
+        bagDragged = false;
         dragTime = 0;
+        GameCanvas.isPointerJustRelease = false;
         ApplyBagScrollRun(maxScroll);
     }
 
@@ -819,6 +806,10 @@ public class CustomInventoryPanel
             else
             {
                 int dy = GameCanvas.py - dragLastY[0];
+                if (System.Math.Abs(dy) > 5)
+                {
+                    globalDragged = true;
+                }
                 popupScrollTargetY -= dy;
                 
                 // Giới hạn đàn hồi khi đang kéo
@@ -830,11 +821,23 @@ public class CustomInventoryPanel
         }
         else if (GameCanvas.isPointerJustRelease && popupDragged)
         {
-            int force = GameCanvas.py - dragLastY[0] + (dragLastY[0] - dragLastY[1]) + (dragLastY[1] - dragLastY[2]);
-            if (force > 15) force = 15;
-            if (force < -15) force = -15;
-            popupScrollRun = -force * 150;
+            int releaseDelta = GameCanvas.py - dragLastY[0];
+            GameCanvas.isPointerJustRelease = false;
+            if (System.Math.Abs(releaseDelta) < 20 && System.Math.Abs(GameCanvas.py - popupDragStartY) < 20)
+            {
+                // Tap nhẹ vào popup (thường là để đóng)
+                pendingSelectionClick = true;
+                popupScrollRun = 0;
+            }
+            else
+            {
+                int force = GameCanvas.py - dragLastY[0] + (dragLastY[0] - dragLastY[1]) + (dragLastY[1] - dragLastY[2]);
+                if (force > 15) force = 15;
+                if (force < -15) force = -15;
+                popupScrollRun = -force * 150;
+            }
             popupDragged = false;
+            GameCanvas.isPointerJustRelease = false;
         }
 
         ApplyPopupScrollRun(maxScroll);
@@ -897,7 +900,7 @@ public class CustomInventoryPanel
         else if (selectedToolAction == 100)
         {
             count = (p != null && p.logChat != null) ? p.logChat.size() : 0;
-            rowH = 28;
+            rowH = 32;
             detailH -= 34; 
         }
 
@@ -934,7 +937,15 @@ public class CustomInventoryPanel
         }
         else if (GameCanvas.isPointerJustRelease && toolDetailDragged)
         {
+            int releaseDelta = GameCanvas.py - dragLastY[0];
+            GameCanvas.isPointerJustRelease = false;
+            if (System.Math.Abs(releaseDelta) < 20 && System.Math.Abs(GameCanvas.py - toolDetailDragStartY) < 20)
+            {
+                pendingSelectionClick = true;
+                toolDetailScrollRun = 0;
+            }
             toolDetailDragged = false;
+            GameCanvas.isPointerJustRelease = false;
         }
 
         if (toolDetailScrollTargetY < 0) toolDetailScrollTargetY = 0;
@@ -984,9 +995,10 @@ public class CustomInventoryPanel
             }
             else
             {
-                if (System.Math.Abs(GameCanvas.py - skillDragStartY) > 4)
+                if (System.Math.Abs(GameCanvas.py - skillDragStartY) > 5)
                 {
                     skillDragged = true;
+                    globalDragged = true;
                 }
                 if (skillDragged)
                 {
@@ -1010,19 +1022,24 @@ public class CustomInventoryPanel
             ApplySkillScrollRun(maxScroll);
             return;
         }
-        if (System.Math.Abs(GameCanvas.py - skillDragStartY) <= 20)
+        int releaseDelta = GameCanvas.py - dragLastY[0];
+        GameCanvas.isPointerJustRelease = false;
+        if (System.Math.Abs(releaseDelta) < 20 && System.Math.Abs(GameCanvas.py - skillDragStartY) < 20 && !downWhenRunning)
         {
+            pendingSelectionClick = true;
             skillScrollRun = 0;
             skillScrollTargetY = skillScrollY;
-            draggingSkill = false;
-            return;
         }
-        GameCanvas.isPointerJustRelease = false;
-        int force = GameCanvas.py - dragLastY[0] + (dragLastY[0] - dragLastY[1]) + (dragLastY[1] - dragLastY[2]);
-        if (force > 15) force = 15;
-        if (force < -15) force = -15;
-        skillScrollRun = -force * 150;
+        else if (!downWhenRunning)
+        {
+            int force = GameCanvas.py - dragLastY[0] + (dragLastY[0] - dragLastY[1]) + (dragLastY[1] - dragLastY[2]);
+            if (force > 15) force = 15;
+            if (force < -15) force = -15;
+            skillScrollRun = -force * 150;
+        }
         draggingSkill = false;
+        skillDragged = false;
+        GameCanvas.isPointerJustRelease = false;
         ApplySkillScrollRun(maxScroll);
     }
 
@@ -1517,7 +1534,7 @@ public class CustomInventoryPanel
         int rightY = panelY + 66;
         int gap = 4;
         int bagViewW = 34 * 6 + gap * 5;
-        int bagViewH = panelY + panelH - 14 - rightY;
+        int bagViewH = panelH - 132;
         if (GameCanvas.px >= rightX && GameCanvas.px <= rightX + bagViewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + bagViewH)
         {
             int localX = GameCanvas.px - rightX;
@@ -1728,18 +1745,14 @@ public class CustomInventoryPanel
                 suppressFusionHighlightUntil = 0L;
                 pendingPetStatus = 4;
                 pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
-                isPorataFusionActive = true;
                 return;
             }
         }
         // Đang hợp thể thì phải tắt hợp thể trước, chưa cho đổi state ngay.
         if (selectedStatus != 4 && isPorataFusionActive)
         {
-            isPorataFusionActive = false;
             RequestDetachFusion();
-            pendingPetStatus = pet.petStatus;
-            pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
-            GameScr.info1.addInfo("Đã yêu cầu tắt hợp thể, hãy chọn lại trạng thái sau khi tách xong", 0);
+            GameScr.info1.addInfo("Đang yêu cầu tách hợp thể...", 0);
             return;
         }
         if (IsPrimaryPet2())
@@ -1750,13 +1763,36 @@ public class CustomInventoryPanel
         {
             Service.gI().petStatus((sbyte)selectedStatus);
         }
-        pet.petStatus = (sbyte) selectedStatus;
+        // Cung cấp phản hồi thị giác ngay lập tức nhưng không thay đổi dữ liệu gốc.
+        // UI sẽ tự động quay lại nếu Server không cập nhật trạng thái trong vòng 2.5s.
         pendingPetStatus = selectedStatus;
         pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
     }
 
+    public static void OnPetStatusReceived()
+    {
+        Char pet = GetPrimaryPet();
+        if (pet != null)
+        {
+            // Chỉ xóa trạng thái chờ nếu Server đã cập nhật ĐÚNG trạng thái đó (xác nhận thành công)
+            if (pendingPetStatus != -1 && pet.petStatus == (sbyte)pendingPetStatus)
+            {
+                pendingPetStatus = -1;
+                pendingPetStatusUntil = 0L;
+            }
+            lastConfirmedPetStatus = pet.petStatus;
+        }
+    }
+
     private static void RequestDetachFusion()
     {
+        Char pet = GetPrimaryPet();
+        // Tránh giữ highlight "Hợp thể" quá lâu khi vừa bấm tách.
+        suppressFusionHighlightUntil = mSystem.currentTimeMillis() + 2500L;
+        // Đặt trạng thái chờ hiển thị là "Về nhà" để phản hồi tức thì
+        pendingPetStatus = 3;
+        pendingPetStatusUntil = mSystem.currentTimeMillis() + 2500L;
+
         int porataIndex = FindPorataBagIndex();
         if (porataIndex >= 0)
         {
@@ -1767,8 +1803,6 @@ public class CustomInventoryPanel
             // Fallback an toàn khi không có bông tai trong túi.
             Service.gI().funsion(6);
         }
-        // Tránh giữ highlight "Hợp thể" quá lâu khi vừa bấm tách.
-        suppressFusionHighlightUntil = mSystem.currentTimeMillis() + 2500L;
     }
 
     private static int FindPorataBagIndex()
@@ -1813,9 +1847,11 @@ public class CustomInventoryPanel
         if (pendingPetStatus == 4 && now < pendingPetStatusUntil)
         {
             isPorataFusionActive = true;
-            return;
         }
-        isPorataFusionActive = me.isFusion;
+        else
+        {
+            isPorataFusionActive = me.isFusion;
+        }
     }
 
     private static void GetPetStatusLayout(int x, int y, int w, out int rowX, out int rowY, out int rowW, out int rowH, out int toggleW, out int toggleH)
@@ -1901,7 +1937,7 @@ public class CustomInventoryPanel
         int rightY = panelY + 66;
         int gap = 4;
         int bagViewW = 34 * 6 + gap * 5;
-        int bagViewH = panelY + panelH - 14 - rightY;
+        int bagViewH = panelH - 132;
         if (GameCanvas.px >= rightX && GameCanvas.px <= rightX + bagViewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + bagViewH)
         {
             int localX = GameCanvas.px - rightX;
@@ -2732,7 +2768,7 @@ public class CustomInventoryPanel
         int safeW = panelW - 48;
         int rightX = safeX + safeW / 2 + 10;
         int viewW = 246;
-        int y = panelY + 66 + (26 * 7 + 4 * 6) + 8;
+        int y = panelY + panelH - 50;
         PaintOldPanelBox(g, rightX - 11, y - 4, viewW, 22);
         int x1 = rightX - 6;
         int x2 = rightX + 74;
@@ -3595,7 +3631,7 @@ public class CustomInventoryPanel
         else
         {
             MyVector logs = p.logChat;
-            int rowH = 20;
+            int rowH = 32;
 
             g.setClip(x, msgY, w, msgH);
             g.translate(0, -toolDetailScrollY);
@@ -3608,9 +3644,9 @@ public class CustomInventoryPanel
                 // Culling
                 if (yy + rowH < msgY + toolDetailScrollY || yy > msgY + toolDetailScrollY + msgH) continue;
 
-                int headX = x;
-                int headY = yy;
-                int textX = headX + 26;
+                int headX = x + 10;
+                int headY = yy + 4;
+                int textX = headX + 34;
 
                 // Vẽ avatar đầu nhân vật
                 if (infoItem.charInfo != null)
@@ -3631,7 +3667,7 @@ public class CustomInventoryPanel
                     }
 
                     // Tên nhân vật
-                    mFont.tahoma_7b_green2.drawString(g, (infoItem.charInfo.isTichXanh ? "     " : string.Empty) + infoItem.charInfo.cName, textX, yy, 0);
+                    mFont.tahoma_7b_green2.drawString(g, (infoItem.charInfo.isTichXanh ? "     " : string.Empty) + infoItem.charInfo.cName, textX, yy + 2, 0);
                 }
 
                 // Nội dung chat
@@ -3642,7 +3678,7 @@ public class CustomInventoryPanel
                 } catch { msg = infoItem.s; }
                 
                 mFont font = infoItem.isChatServer ? mFont.tahoma_7_red : mFont.tahoma_7_blue;
-                font.drawString(g, TrimText(font, msg, w - 30), textX, yy + 12, 0);
+                font.drawString(g, TrimText(font, msg, w - 50), textX, yy + 16, 0);
             }
 
             g.translate(0, toolDetailScrollY);
@@ -5780,23 +5816,38 @@ public class CustomInventoryPanel
         }
         string[] options = GetPetStatusOptions();
         int activeStatus = pet.petStatus;
-        bool shouldHighlightFusion = isPorataFusionActive && mSystem.currentTimeMillis() >= suppressFusionHighlightUntil;
-        if (shouldHighlightFusion)
+        long now = mSystem.currentTimeMillis();
+
+        // 1. Tự động đồng bộ khi phát hiện thay đổi từ server
+        if (pet.petStatus != lastConfirmedPetStatus)
         {
-            activeStatus = 4;
-        }
-        else
-        {
-            long now = mSystem.currentTimeMillis();
-            if (pendingPetStatus >= 0 && now < pendingPetStatusUntil)
-            {
-                activeStatus = pendingPetStatus;
-            }
-            else if (pendingPetStatus >= 0)
+            lastConfirmedPetStatus = pet.petStatus;
+            // CHỈ xóa trạng thái chờ nếu thực tế từ server đã khớp với mong muốn
+            if (pendingPetStatus != -1 && pet.petStatus == (sbyte)pendingPetStatus)
             {
                 pendingPetStatus = -1;
                 pendingPetStatusUntil = 0L;
             }
+        }
+
+        // 2. Xác định trạng thái hiển thị (Ưu tiên pending -> Fusion -> Thực tế)
+        if (pendingPetStatus >= 0)
+        {
+            // Nếu đã hết thời gian chờ mà server chưa update, quay về thực tế
+            if (now >= pendingPetStatusUntil)
+            {
+                pendingPetStatus = -1;
+                pendingPetStatusUntil = 0L;
+                activeStatus = pet.petStatus;
+            }
+            else
+            {
+                activeStatus = (sbyte)pendingPetStatus;
+            }
+        }
+        else if (isPorataFusionActive && now >= suppressFusionHighlightUntil)
+        {
+            activeStatus = 4;
         }
         if (activeStatus < 0 || activeStatus >= options.Length)
         {
@@ -5809,14 +5860,14 @@ public class CustomInventoryPanel
         int toggleW;
         int toggleH;
         GetPetStatusLayout(x, y, w, out rowX, out rowY, out rowW, out rowH, out toggleW, out toggleH);
-        mFont.tahoma_7b_dark.drawString(g, "Chọn trạng thái đệ tử", x + 6, y, mFont.LEFT);
+        //mFont.tahoma_7b_dark.drawString(g, "Trạng thái", x + 26, y, mFont.LEFT);
         for (int i = 0; i < options.Length; i++)
         {
             bool enabled = i == activeStatus;
             int itemY = rowY + i * rowH;
             PaintOldTextCell(g, rowX, itemY, rowW, rowH - 2, enabled);
-            mFont.tahoma_7b_dark.drawString(g, options[i], rowX + 8, itemY + 7, mFont.LEFT);
-            PaintStatusToggle(g, rowX + rowW - toggleW - 6, itemY + (rowH - toggleH) / 2, toggleW, toggleH, enabled);
+            mFont.tahoma_7b_dark.drawString(g, options[i], rowX + 28, itemY + 4, mFont.LEFT);
+            PaintStatusToggle(g, rowX + rowW - toggleW - 6, itemY + (rowH - toggleH) / 2, toggleW-2, toggleH - 3, enabled);
         }
     }
 
@@ -6133,8 +6184,7 @@ public class CustomInventoryPanel
         PaintBodySlots(g);
         PaintBagSlots(g);
         
-        // 4. Vẽ thông tin bổ sung (nằm trên cùng)
-        PaintInventoryCurrency(g);
+
     }
 
     private static void PaintBodySlots(mGraphics g)
