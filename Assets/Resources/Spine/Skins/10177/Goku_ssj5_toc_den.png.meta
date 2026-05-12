@@ -1,0 +1,1391 @@
+fileFormatVersion: 2
+guid: 02a88f15a144240e6ba9f6f67945e7cf
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1101175039250809013
+    second: Goku_ssj5_toc_den_0
+  - first:
+      213: -7155325731585817836
+    second: Goku_ssj5_toc_den_1
+  - first:
+      213: -3720607618034876795
+    second: Goku_ssj5_toc_den_2
+  - first:
+      213: 3396572334224698839
+    second: Goku_ssj5_toc_den_3
+  - first:
+      213: -8067757275399055051
+    second: Goku_ssj5_toc_den_4
+  - first:
+      213: -949041928657433517
+    second: Goku_ssj5_toc_den_5
+  - first:
+      213: 5719201042371106971
+    second: Goku_ssj5_toc_den_6
+  - first:
+      213: 826526912795511314
+    second: Goku_ssj5_toc_den_7
+  - first:
+      213: 6552558112979485007
+    second: Goku_ssj5_toc_den_8
+  - first:
+      213: -8517483703382521543
+    second: Goku_ssj5_toc_den_9
+  - first:
+      213: 6455569074970098334
+    second: Goku_ssj5_toc_den_10
+  - first:
+      213: 1893964913105901117
+    second: Goku_ssj5_toc_den_11
+  - first:
+      213: 5768504281440041974
+    second: Goku_ssj5_toc_den_12
+  - first:
+      213: 8549240513068662701
+    second: Goku_ssj5_toc_den_13
+  - first:
+      213: -3393437597268880291
+    second: Goku_ssj5_toc_den_14
+  - first:
+      213: -4812358370125044776
+    second: Goku_ssj5_toc_den_15
+  - first:
+      213: -5805007476222472020
+    second: Goku_ssj5_toc_den_16
+  - first:
+      213: 433378161345073946
+    second: Goku_ssj5_toc_den_17
+  - first:
+      213: 7505708776739817712
+    second: Goku_ssj5_toc_den_18
+  - first:
+      213: 1153735194466313575
+    second: Goku_ssj5_toc_den_19
+  - first:
+      213: -7497011810842252694
+    second: Goku_ssj5_toc_den_20
+  - first:
+      213: 6072403944938086975
+    second: Goku_ssj5_toc_den_21
+  - first:
+      213: -1402937931506076398
+    second: Goku_ssj5_toc_den_22
+  - first:
+      213: -955507184103989891
+    second: Goku_ssj5_toc_den_23
+  - first:
+      213: -609010891691099433
+    second: Goku_ssj5_toc_den_24
+  - first:
+      213: 7424592753805340937
+    second: Goku_ssj5_toc_den_25
+  - first:
+      213: -2033398895944785752
+    second: Goku_ssj5_toc_den_26
+  - first:
+      213: -3824415115855193991
+    second: Goku_ssj5_toc_den_27
+  - first:
+      213: 7734316492379778726
+    second: Goku_ssj5_toc_den_28
+  - first:
+      213: -6209719054535806604
+    second: Goku_ssj5_toc_den_29
+  - first:
+      213: 778745630806047180
+    second: Goku_ssj5_toc_den_30
+  - first:
+      213: -1685441084487873084
+    second: Goku_ssj5_toc_den_31
+  - first:
+      213: -5771797854147732581
+    second: Goku_ssj5_toc_den_32
+  - first:
+      213: 5511772427484276790
+    second: Goku_ssj5_toc_den_33
+  - first:
+      213: 6055079020537098761
+    second: Goku_ssj5_toc_den_34
+  - first:
+      213: -6418706390181632176
+    second: Goku_ssj5_toc_den_35
+  - first:
+      213: -8691982027225361505
+    second: Goku_ssj5_toc_den_36
+  - first:
+      213: 5889035530766397841
+    second: Goku_ssj5_toc_den_37
+  - first:
+      213: 4151219741757955763
+    second: Goku_ssj5_toc_den_38
+  - first:
+      213: -5034575851819645795
+    second: Goku_ssj5_toc_den_39
+  - first:
+      213: 6954576548884465288
+    second: Goku_ssj5_toc_den_40
+  - first:
+      213: 1448716138492619751
+    second: Goku_ssj5_toc_den_41
+  - first:
+      213: 3135055119579055259
+    second: Goku_ssj5_toc_den_42
+  - first:
+      213: 3572739526816664996
+    second: Goku_ssj5_toc_den_43
+  - first:
+      213: -5675266295630716090
+    second: Goku_ssj5_toc_den_44
+  - first:
+      213: 4641948434065955747
+    second: Goku_ssj5_toc_den_45
+  - first:
+      213: 5268883660744989393
+    second: Goku_ssj5_toc_den_46
+  - first:
+      213: 5551061965636232857
+    second: Goku_ssj5_toc_den_47
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 503
+        width: 29
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4fbde5d227d7b0f0800000000000000
+      internalID: -1101175039250809013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 389
+        width: 366
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4138d9c582d23bc90800000000000000
+      internalID: -7155325731585817836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_2
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 469
+        width: 50
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58e3b62851fbd5cc0800000000000000
+      internalID: -3720607618034876795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_3
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 434
+        width: 158
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dde16bca8c032f20800000000000000
+      internalID: 3396572334224698839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_4
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 469
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53914c9b081990090800000000000000
+      internalID: -8067757275399055051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_5
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 464
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35c0c65e46354d2f0800000000000000
+      internalID: -949041928657433517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_6
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 459
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b98d291eb0fae5f40800000000000000
+      internalID: 5719201042371106971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_7
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 459
+        width: 21
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21a0a7a19d9687b00800000000000000
+      internalID: 826526912795511314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_8
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 369
+        width: 102
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f410f3603ec5fea50800000000000000
+      internalID: 6552558112979485007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_9
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 441
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 939c4b703b1dbc980800000000000000
+      internalID: -8517483703382521543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_10
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 438
+        width: 37
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9af690eed9c69950800000000000000
+      internalID: 6455569074970098334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_11
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 365
+        width: 78
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d361bb6cd07b84a10800000000000000
+      internalID: 1893964913105901117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_12
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 399
+        width: 35
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fbbd84c418dd0050800000000000000
+      internalID: 5768504281440041974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_13
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 333
+        width: 28
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: daff5d863f005a670800000000000000
+      internalID: 8549240513068662701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_14
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 227
+        width: 230
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5455570c7618e0d0800000000000000
+      internalID: -3393437597268880291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_15
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 358
+        width: 42
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d3a1d03f81173db0800000000000000
+      internalID: -4812358370125044776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_16
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 357
+        width: 39
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca0d545e478707fa0800000000000000
+      internalID: -5805007476222472020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_17
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 353
+        width: 36
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a139260442ba30600800000000000000
+      internalID: 433378161345073946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_18
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 329
+        width: 42
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f8cb119d52a92860800000000000000
+      internalID: 7505708776739817712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_19
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 323
+        width: 32
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 765e70feb04e20010800000000000000
+      internalID: 1153735194466313575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_20
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 333
+        width: 40
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6ae6d99a7345f790800000000000000
+      internalID: -7497011810842252694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_21
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 333
+        width: 26
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3227b60733854450800000000000000
+      internalID: 6072403944938086975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_22
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 229
+        width: 114
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 215b8a66263c78ce0800000000000000
+      internalID: -1402937931506076398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_23
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 297
+        width: 40
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7dd52f474b5db2f0800000000000000
+      internalID: -955507184103989891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_24
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 323
+        width: 36
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7da786812db5c87f0800000000000000
+      internalID: -609010891691099433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_25
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 292
+        width: 41
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 901b18cb5c3790760800000000000000
+      internalID: 7424592753805340937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_26
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 225
+        width: 86
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a02a804a7ae7c3e0800000000000000
+      internalID: -2033398895944785752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_27
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 295
+        width: 23
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97811d9f6b2fceac0800000000000000
+      internalID: -3824415115855193991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_28
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 288
+        width: 37
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6aeedb42fdfc55b60800000000000000
+      internalID: 7734316492379778726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_29
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 249
+        width: 42
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4713b6f9b65a2d9a0800000000000000
+      internalID: -6209719054535806604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_30
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 244
+        width: 44
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc9f4967609aeca00800000000000000
+      internalID: 778745630806047180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_31
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 242
+        width: 35
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cd4045734c1c98e0800000000000000
+      internalID: -1685441084487873084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_32
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 191
+        width: 53
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9b99249e6476efa0800000000000000
+      internalID: -5771797854147732581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_33
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 250
+        width: 37
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6382ef6f1dfbd7c40800000000000000
+      internalID: 5511772427484276790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_34
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 246
+        height: 229
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 902b80ab946f70450800000000000000
+      internalID: 6055079020537098761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_35
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 131
+        width: 74
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 057a1bfbb8c2ce6a0800000000000000
+      internalID: -6418706390181632176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_36
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 204
+        width: 48
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f931729f560ef5780800000000000000
+      internalID: -8691982027225361505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_37
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 204
+        width: 34
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1913cf02d9e0ab150800000000000000
+      internalID: 5889035530766397841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_38
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 131
+        width: 75
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3be521c6c581c9930800000000000000
+      internalID: 4151219741757955763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_39
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 194
+        width: 37
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d94c785efe7912ab0800000000000000
+      internalID: -5034575851819645795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_40
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 178
+        width: 44
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8864587368e938060800000000000000
+      internalID: 6954576548884465288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_41
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 178
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7eb6a3ff6afda1410800000000000000
+      internalID: 1448716138492619751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_42
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 128
+        width: 55
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9487c16504f18b20800000000000000
+      internalID: 3135055119579055259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_43
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 135
+        width: 50
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ad87e2ababe49130800000000000000
+      internalID: 3572739526816664996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_44
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 130
+        width: 26
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6432f2b7f576d31b0800000000000000
+      internalID: -5675266295630716090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_45
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 0
+        width: 206
+        height: 131
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ab9e26b1838b6040800000000000000
+      internalID: 4641948434065955747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_46
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 1
+        width: 62
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1da909116c5de1940800000000000000
+      internalID: 5268883660744989393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Goku_ssj5_toc_den_47
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 83
+        width: 55
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 996edeb6275590d40800000000000000
+      internalID: 5551061965636232857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Goku_ssj5_toc_den_0: -1101175039250809013
+      Goku_ssj5_toc_den_1: -7155325731585817836
+      Goku_ssj5_toc_den_10: 6455569074970098334
+      Goku_ssj5_toc_den_11: 1893964913105901117
+      Goku_ssj5_toc_den_12: 5768504281440041974
+      Goku_ssj5_toc_den_13: 8549240513068662701
+      Goku_ssj5_toc_den_14: -3393437597268880291
+      Goku_ssj5_toc_den_15: -4812358370125044776
+      Goku_ssj5_toc_den_16: -5805007476222472020
+      Goku_ssj5_toc_den_17: 433378161345073946
+      Goku_ssj5_toc_den_18: 7505708776739817712
+      Goku_ssj5_toc_den_19: 1153735194466313575
+      Goku_ssj5_toc_den_2: -3720607618034876795
+      Goku_ssj5_toc_den_20: -7497011810842252694
+      Goku_ssj5_toc_den_21: 6072403944938086975
+      Goku_ssj5_toc_den_22: -1402937931506076398
+      Goku_ssj5_toc_den_23: -955507184103989891
+      Goku_ssj5_toc_den_24: -609010891691099433
+      Goku_ssj5_toc_den_25: 7424592753805340937
+      Goku_ssj5_toc_den_26: -2033398895944785752
+      Goku_ssj5_toc_den_27: -3824415115855193991
+      Goku_ssj5_toc_den_28: 7734316492379778726
+      Goku_ssj5_toc_den_29: -6209719054535806604
+      Goku_ssj5_toc_den_3: 3396572334224698839
+      Goku_ssj5_toc_den_30: 778745630806047180
+      Goku_ssj5_toc_den_31: -1685441084487873084
+      Goku_ssj5_toc_den_32: -5771797854147732581
+      Goku_ssj5_toc_den_33: 5511772427484276790
+      Goku_ssj5_toc_den_34: 6055079020537098761
+      Goku_ssj5_toc_den_35: -6418706390181632176
+      Goku_ssj5_toc_den_36: -8691982027225361505
+      Goku_ssj5_toc_den_37: 5889035530766397841
+      Goku_ssj5_toc_den_38: 4151219741757955763
+      Goku_ssj5_toc_den_39: -5034575851819645795
+      Goku_ssj5_toc_den_4: -8067757275399055051
+      Goku_ssj5_toc_den_40: 6954576548884465288
+      Goku_ssj5_toc_den_41: 1448716138492619751
+      Goku_ssj5_toc_den_42: 3135055119579055259
+      Goku_ssj5_toc_den_43: 3572739526816664996
+      Goku_ssj5_toc_den_44: -5675266295630716090
+      Goku_ssj5_toc_den_45: 4641948434065955747
+      Goku_ssj5_toc_den_46: 5268883660744989393
+      Goku_ssj5_toc_den_47: 5551061965636232857
+      Goku_ssj5_toc_den_5: -949041928657433517
+      Goku_ssj5_toc_den_6: 5719201042371106971
+      Goku_ssj5_toc_den_7: 826526912795511314
+      Goku_ssj5_toc_den_8: 6552558112979485007
+      Goku_ssj5_toc_den_9: -8517483703382521543
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

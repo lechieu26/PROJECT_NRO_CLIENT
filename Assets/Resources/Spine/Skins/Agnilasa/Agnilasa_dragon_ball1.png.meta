@@ -1,0 +1,2301 @@
+fileFormatVersion: 2
+guid: 4cbe4ab98b6e64d6ab3fbb8cc60dc1f2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7575156133209646273
+    second: Agnilasa_dragon_ball1_0
+  - first:
+      213: 3036397941988343286
+    second: Agnilasa_dragon_ball1_1
+  - first:
+      213: -7052335768866842484
+    second: Agnilasa_dragon_ball1_2
+  - first:
+      213: -3542361855140956532
+    second: Agnilasa_dragon_ball1_3
+  - first:
+      213: -4622906887670264028
+    second: Agnilasa_dragon_ball1_4
+  - first:
+      213: -5277640378056386881
+    second: Agnilasa_dragon_ball1_5
+  - first:
+      213: -6771985241759962194
+    second: Agnilasa_dragon_ball1_6
+  - first:
+      213: 6727121337271691021
+    second: Agnilasa_dragon_ball1_7
+  - first:
+      213: -3711055845520946176
+    second: Agnilasa_dragon_ball1_8
+  - first:
+      213: 6408878407349956980
+    second: Agnilasa_dragon_ball1_9
+  - first:
+      213: -762810824664874639
+    second: Agnilasa_dragon_ball1_10
+  - first:
+      213: 33356341115221660
+    second: Agnilasa_dragon_ball1_11
+  - first:
+      213: -355083011388342927
+    second: Agnilasa_dragon_ball1_12
+  - first:
+      213: -6159054622141137502
+    second: Agnilasa_dragon_ball1_13
+  - first:
+      213: -3663501041546581645
+    second: Agnilasa_dragon_ball1_14
+  - first:
+      213: -8634722191806373702
+    second: Agnilasa_dragon_ball1_15
+  - first:
+      213: -29025682920360940
+    second: Agnilasa_dragon_ball1_16
+  - first:
+      213: -6468638524083317209
+    second: Agnilasa_dragon_ball1_17
+  - first:
+      213: 8873957996011303453
+    second: Agnilasa_dragon_ball1_18
+  - first:
+      213: -2327625324469808249
+    second: Agnilasa_dragon_ball1_19
+  - first:
+      213: 311398480633625875
+    second: Agnilasa_dragon_ball1_20
+  - first:
+      213: -8645003990303490729
+    second: Agnilasa_dragon_ball1_21
+  - first:
+      213: -8063556491033704827
+    second: Agnilasa_dragon_ball1_22
+  - first:
+      213: 3490621781273234345
+    second: Agnilasa_dragon_ball1_23
+  - first:
+      213: 3343515112160669316
+    second: Agnilasa_dragon_ball1_24
+  - first:
+      213: -1125118117452730799
+    second: Agnilasa_dragon_ball1_25
+  - first:
+      213: -8229989143303520066
+    second: Agnilasa_dragon_ball1_26
+  - first:
+      213: 9021233550888798796
+    second: Agnilasa_dragon_ball1_27
+  - first:
+      213: 2356587844173550305
+    second: Agnilasa_dragon_ball1_28
+  - first:
+      213: 9027199855496561458
+    second: Agnilasa_dragon_ball1_29
+  - first:
+      213: -2720818895624982599
+    second: Agnilasa_dragon_ball1_30
+  - first:
+      213: 3571097487647682649
+    second: Agnilasa_dragon_ball1_31
+  - first:
+      213: -4897935062275646341
+    second: Agnilasa_dragon_ball1_32
+  - first:
+      213: -3592769134402752791
+    second: Agnilasa_dragon_ball1_33
+  - first:
+      213: 8263316024623417093
+    second: Agnilasa_dragon_ball1_34
+  - first:
+      213: -5122238582015760922
+    second: Agnilasa_dragon_ball1_35
+  - first:
+      213: 76592998286385302
+    second: Agnilasa_dragon_ball1_36
+  - first:
+      213: -4469923827564084347
+    second: Agnilasa_dragon_ball1_37
+  - first:
+      213: -3446094151472084905
+    second: Agnilasa_dragon_ball1_38
+  - first:
+      213: 6446923764712976430
+    second: Agnilasa_dragon_ball1_39
+  - first:
+      213: -1818602316267380955
+    second: Agnilasa_dragon_ball1_40
+  - first:
+      213: 4788338290919353360
+    second: Agnilasa_dragon_ball1_41
+  - first:
+      213: 8443313995522307160
+    second: Agnilasa_dragon_ball1_42
+  - first:
+      213: -999889351103019742
+    second: Agnilasa_dragon_ball1_43
+  - first:
+      213: 4167869105548872445
+    second: Agnilasa_dragon_ball1_44
+  - first:
+      213: 3508974377014367603
+    second: Agnilasa_dragon_ball1_45
+  - first:
+      213: -4143667617920501477
+    second: Agnilasa_dragon_ball1_46
+  - first:
+      213: -4100284690093962947
+    second: Agnilasa_dragon_ball1_47
+  - first:
+      213: 3873124485976993474
+    second: Agnilasa_dragon_ball1_48
+  - first:
+      213: 8867088027801373034
+    second: Agnilasa_dragon_ball1_49
+  - first:
+      213: 8070317630517873612
+    second: Agnilasa_dragon_ball1_50
+  - first:
+      213: 5171439060903179836
+    second: Agnilasa_dragon_ball1_51
+  - first:
+      213: -236602535443505107
+    second: Agnilasa_dragon_ball1_52
+  - first:
+      213: 7937141192170538172
+    second: Agnilasa_dragon_ball1_53
+  - first:
+      213: 8159168225798041179
+    second: Agnilasa_dragon_ball1_54
+  - first:
+      213: 3783035316449731388
+    second: Agnilasa_dragon_ball1_55
+  - first:
+      213: -2167912147032366043
+    second: Agnilasa_dragon_ball1_56
+  - first:
+      213: 5793868658439507385
+    second: Agnilasa_dragon_ball1_57
+  - first:
+      213: -3899750576458163341
+    second: Agnilasa_dragon_ball1_58
+  - first:
+      213: 6788138595429092130
+    second: Agnilasa_dragon_ball1_59
+  - first:
+      213: -4217034359759266289
+    second: Agnilasa_dragon_ball1_60
+  - first:
+      213: 5306221861227509415
+    second: Agnilasa_dragon_ball1_61
+  - first:
+      213: -1728923037782381122
+    second: Agnilasa_dragon_ball1_62
+  - first:
+      213: -7772771169473474168
+    second: Agnilasa_dragon_ball1_63
+  - first:
+      213: -1654222935831740477
+    second: Agnilasa_dragon_ball1_64
+  - first:
+      213: 7386750007332957749
+    second: Agnilasa_dragon_ball1_65
+  - first:
+      213: 3856751253002200105
+    second: Agnilasa_dragon_ball1_66
+  - first:
+      213: 6199248361750896132
+    second: Agnilasa_dragon_ball1_67
+  - first:
+      213: 1920737033549256898
+    second: Agnilasa_dragon_ball1_68
+  - first:
+      213: -2546366013763914398
+    second: Agnilasa_dragon_ball1_69
+  - first:
+      213: -6442205635904539634
+    second: Agnilasa_dragon_ball1_70
+  - first:
+      213: 3975568574379618469
+    second: Agnilasa_dragon_ball1_71
+  - first:
+      213: -1380907373210147690
+    second: Agnilasa_dragon_ball1_72
+  - first:
+      213: 6333677843623339110
+    second: Agnilasa_dragon_ball1_73
+  - first:
+      213: 8887957878308584126
+    second: Agnilasa_dragon_ball1_74
+  - first:
+      213: -7288899021121748241
+    second: Agnilasa_dragon_ball1_75
+  - first:
+      213: 6122696780890105342
+    second: Agnilasa_dragon_ball1_76
+  - first:
+      213: -2124910398480943550
+    second: Agnilasa_dragon_ball1_77
+  - first:
+      213: -2995774178024730468
+    second: Agnilasa_dragon_ball1_78
+  - first:
+      213: -4330174633706562918
+    second: Agnilasa_dragon_ball1_79
+  - first:
+      213: -7712109986031944653
+    second: Agnilasa_dragon_ball1_80
+  - first:
+      213: 8909936965090763803
+    second: Agnilasa_dragon_ball1_81
+  - first:
+      213: 8827361258055860123
+    second: Agnilasa_dragon_ball1_82
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 462
+        width: 68
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3bdae9b1a3afd690800000000000000
+      internalID: -7575156133209646273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_1
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 462
+        width: 64
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fd31f837d3732a20800000000000000
+      internalID: 3036397941988343286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_2
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 461
+        width: 43
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8819ebabf1112e90800000000000000
+      internalID: -7052335768866842484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_3
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 490
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c86fd6639a007dec0800000000000000
+      internalID: -3542361855140956532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_4
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 479
+        width: 38
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42f05bacda228dfb0800000000000000
+      internalID: -4622906887670264028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_5
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 470
+        width: 24
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb6d0bdc90e02c6b0800000000000000
+      internalID: -5277640378056386881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_6
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 470
+        width: 23
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaba5b85d431502a0800000000000000
+      internalID: -6771985241759962194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_7
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 461
+        width: 31
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d07a705e6398b5d50800000000000000
+      internalID: 6727121337271691021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_8
+      rect:
+        serializedVersion: 2
+        x: 324
+        y: 460
+        width: 32
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00c461ade5eaf7cc0800000000000000
+      internalID: -3711055845520946176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_9
+      rect:
+        serializedVersion: 2
+        x: 356
+        y: 476
+        width: 32
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 471f3cea4f8e0f850800000000000000
+      internalID: 6408878407349956980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_10
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 476
+        width: 32
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1710705b893f965f0800000000000000
+      internalID: -762810824664874639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_11
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 396
+        width: 79
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c96fd2f5a61867000800000000000000
+      internalID: 33356341115221660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_12
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 396
+        width: 47
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17dfb68e1ed721bf0800000000000000
+      internalID: -355083011388342927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_13
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 396
+        width: 50
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2adbc070474a68aa0800000000000000
+      internalID: -6159054622141137502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_14
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 443
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 379a7587631a82dc0800000000000000
+      internalID: -3663501041546581645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_15
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 435
+        width: 38
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab0e23f4aed4b2880800000000000000
+      internalID: -8634722191806373702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_16
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 429
+        width: 37
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4143b209b41e89ff0800000000000000
+      internalID: -29025682920360940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_17
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 425
+        width: 37
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7265b9fd887ca36a0800000000000000
+      internalID: -6468638524083317209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_18
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 427
+        width: 39
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d12bdf7f7c1a62b70800000000000000
+      internalID: 8873957996011303453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_19
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 447
+        width: 36
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78316c4891d92bfd0800000000000000
+      internalID: -2327625324469808249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_20
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 416
+        width: 34
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31d73cda44f425400800000000000000
+      internalID: 311398480633625875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_21
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 448
+        width: 30
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75d302c8ca6c60880800000000000000
+      internalID: -8645003990303490729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_22
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 396
+        width: 28
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58604ad081e781090800000000000000
+      internalID: -8063556491033704827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_23
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 390
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ab4806140e217030800000000000000
+      internalID: 3490621781273234345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_24
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 387
+        width: 39
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48eac71a74d866e20800000000000000
+      internalID: 3343515112160669316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_25
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 387
+        width: 40
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15eafd68807c260f0800000000000000
+      internalID: -1125118117452730799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_26
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 393
+        width: 40
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb082108a7439cd80800000000000000
+      internalID: -8229989143303520066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_27
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 416
+        width: 36
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4a00943e1cd13d70800000000000000
+      internalID: 9021233550888798796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_28
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 390
+        width: 39
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e2d7f5982844b020800000000000000
+      internalID: 2356587844173550305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_29
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 256
+        width: 113
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 233845fb07e074d70800000000000000
+      internalID: 9027199855496561458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_30
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 359
+        width: 42
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bf2a1441a5bd3ad0800000000000000
+      internalID: -2720818895624982599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_31
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 359
+        width: 31
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 950b7899e361f8130800000000000000
+      internalID: 3571097487647682649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_32
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 343
+        width: 39
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7c1120e20a070cb0800000000000000
+      internalID: -4897935062275646341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_33
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 345
+        width: 48
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eeafefe18be32ec0800000000000000
+      internalID: -3592769134402752791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_34
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 345
+        width: 48
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 507c87ab4223da270800000000000000
+      internalID: 8263316024623417093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_35
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 345
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e5662006272ae8b0800000000000000
+      internalID: -5122238582015760922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_36
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 348
+        width: 49
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69064271dec101100800000000000000
+      internalID: 76592998286385302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_37
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 354
+        width: 36
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5830df426f3a7f1c0800000000000000
+      internalID: -4469923827564084347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_38
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 355
+        width: 35
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75884fe90a30d20d0800000000000000
+      internalID: -3446094151472084905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_39
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 355
+        width: 19
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e20bdb9b103187950800000000000000
+      internalID: 6446923764712976430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_40
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 282
+        width: 61
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52f1e2724d603c6e0800000000000000
+      internalID: -1818602316267380955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_41
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 274
+        width: 51
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01c26ae4e48937240800000000000000
+      internalID: 4788338290919353360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_42
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 298
+        width: 54
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 854f036285dac2570800000000000000
+      internalID: 8443313995522307160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_43
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 298
+        width: 45
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2250fccceedaf12f0800000000000000
+      internalID: -999889351103019742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_44
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 297
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfac0928ede37d930800000000000000
+      internalID: 4167869105548872445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_45
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 306
+        width: 49
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37593e3ca9162b030800000000000000
+      internalID: 3508974377014367603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_46
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 334
+        width: 43
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b193f8e614cbe76c0800000000000000
+      internalID: -4143667617920501477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_47
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 305
+        width: 43
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d390af07cccd817c0800000000000000
+      internalID: -4100284690093962947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_48
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 317
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cea685033a10c530800000000000000
+      internalID: 3873124485976993474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_49
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 197
+        width: 57
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a694839d4993e0b70800000000000000
+      internalID: 8867088027801373034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_50
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 238
+        width: 51
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccb079760278fff60800000000000000
+      internalID: 8070317630517873612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_51
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 263
+        width: 46
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c36b6ba2d64a4c740800000000000000
+      internalID: 5171439060903179836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_52
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 261
+        width: 48
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d20eee16f3b67bcf0800000000000000
+      internalID: -236602535443505107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_53
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 265
+        width: 49
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb4027b8cd3662e60800000000000000
+      internalID: 7937141192170538172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_54
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 267
+        width: 43
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5ea851b5403b3170800000000000000
+      internalID: 8159168225798041179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_55
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 275
+        width: 41
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c336eb1b39a008430800000000000000
+      internalID: 3783035316449731388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_56
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 234
+        width: 36
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 524a1eb63670ae1e0800000000000000
+      internalID: -2167912147032366043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_57
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 115
+        width: 113
+        height: 141
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bd4e8df8d4f76050800000000000000
+      internalID: 5793868658439507385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_58
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 196
+        width: 56
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37b1691338d41e9c0800000000000000
+      internalID: -3899750576458163341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_59
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 178
+        width: 49
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22b8ba26610543e50800000000000000
+      internalID: 6788138595429092130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_60
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 223
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0e9ee4b7951a75c0800000000000000
+      internalID: -4217034359759266289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_61
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 232
+        width: 52
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a6b0e15bac73a940800000000000000
+      internalID: 5306221861227509415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_62
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 233
+        width: 47
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebdedf848a1a108e0800000000000000
+      internalID: -1728923037782381122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_63
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 234
+        width: 46
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 881d223adc1912490800000000000000
+      internalID: -7772771169473474168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_64
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 116
+        width: 65
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cff17a11050b09e0800000000000000
+      internalID: -1654222935831740477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_65
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 132
+        width: 43
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53ee1b7bef1038660800000000000000
+      internalID: 7386750007332957749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_66
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 172
+        width: 45
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9242d36a4dee58530800000000000000
+      internalID: 3856751253002200105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_67
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 181
+        width: 58
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40e959c3a87280650800000000000000
+      internalID: 6199248361750896132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_68
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 185
+        width: 55
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c814afc724d7aa10800000000000000
+      internalID: 1920737033549256898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_69
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 188
+        width: 46
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26579790a9d79acd0800000000000000
+      internalID: -2546366013763914398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_70
+      rect:
+        serializedVersion: 2
+        x: 486
+        y: 188
+        width: 25
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e04f3ed3b10b896a0800000000000000
+      internalID: -6442205635904539634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_71
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 113
+        width: 49
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a07a101e8e0c2730800000000000000
+      internalID: 3975568574379618469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_72
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 114
+        width: 51
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69467187f0806dce0800000000000000
+      internalID: -1380907373210147690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_73
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 132
+        width: 64
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6646ee6017eb5e750800000000000000
+      internalID: 6333677843623339110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_74
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 137
+        width: 61
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebab733999e585b70800000000000000
+      internalID: 8887957878308584126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_75
+      rect:
+        serializedVersion: 2
+        x: 451
+        y: 137
+        width: 60
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe2885265f0a8da90800000000000000
+      internalID: -7288899021121748241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_76
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 184
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef5e164684038f450800000000000000
+      internalID: 6122696780890105342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_77
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 1
+        width: 140
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2467207304dc282e0800000000000000
+      internalID: -2124910398480943550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_78
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 82
+        width: 79
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c905c83e14fdc66d0800000000000000
+      internalID: -2995774178024730468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_79
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 1
+        width: 132
+        height: 81
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9a5386ec1128e3c0800000000000000
+      internalID: -4330174633706562918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_80
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 82
+        width: 53
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33cb2d504d419f490800000000000000
+      internalID: -7712109986031944653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_81
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 66
+        width: 53
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b146b5f767476ab70800000000000000
+      internalID: 8909936965090763803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Agnilasa_dragon_ball1_82
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 2
+        width: 53
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9ff67a7b46118a70800000000000000
+      internalID: 8827361258055860123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Agnilasa_dragon_ball1_0: -7575156133209646273
+      Agnilasa_dragon_ball1_1: 3036397941988343286
+      Agnilasa_dragon_ball1_10: -762810824664874639
+      Agnilasa_dragon_ball1_11: 33356341115221660
+      Agnilasa_dragon_ball1_12: -355083011388342927
+      Agnilasa_dragon_ball1_13: -6159054622141137502
+      Agnilasa_dragon_ball1_14: -3663501041546581645
+      Agnilasa_dragon_ball1_15: -8634722191806373702
+      Agnilasa_dragon_ball1_16: -29025682920360940
+      Agnilasa_dragon_ball1_17: -6468638524083317209
+      Agnilasa_dragon_ball1_18: 8873957996011303453
+      Agnilasa_dragon_ball1_19: -2327625324469808249
+      Agnilasa_dragon_ball1_2: -7052335768866842484
+      Agnilasa_dragon_ball1_20: 311398480633625875
+      Agnilasa_dragon_ball1_21: -8645003990303490729
+      Agnilasa_dragon_ball1_22: -8063556491033704827
+      Agnilasa_dragon_ball1_23: 3490621781273234345
+      Agnilasa_dragon_ball1_24: 3343515112160669316
+      Agnilasa_dragon_ball1_25: -1125118117452730799
+      Agnilasa_dragon_ball1_26: -8229989143303520066
+      Agnilasa_dragon_ball1_27: 9021233550888798796
+      Agnilasa_dragon_ball1_28: 2356587844173550305
+      Agnilasa_dragon_ball1_29: 9027199855496561458
+      Agnilasa_dragon_ball1_3: -3542361855140956532
+      Agnilasa_dragon_ball1_30: -2720818895624982599
+      Agnilasa_dragon_ball1_31: 3571097487647682649
+      Agnilasa_dragon_ball1_32: -4897935062275646341
+      Agnilasa_dragon_ball1_33: -3592769134402752791
+      Agnilasa_dragon_ball1_34: 8263316024623417093
+      Agnilasa_dragon_ball1_35: -5122238582015760922
+      Agnilasa_dragon_ball1_36: 76592998286385302
+      Agnilasa_dragon_ball1_37: -4469923827564084347
+      Agnilasa_dragon_ball1_38: -3446094151472084905
+      Agnilasa_dragon_ball1_39: 6446923764712976430
+      Agnilasa_dragon_ball1_4: -4622906887670264028
+      Agnilasa_dragon_ball1_40: -1818602316267380955
+      Agnilasa_dragon_ball1_41: 4788338290919353360
+      Agnilasa_dragon_ball1_42: 8443313995522307160
+      Agnilasa_dragon_ball1_43: -999889351103019742
+      Agnilasa_dragon_ball1_44: 4167869105548872445
+      Agnilasa_dragon_ball1_45: 3508974377014367603
+      Agnilasa_dragon_ball1_46: -4143667617920501477
+      Agnilasa_dragon_ball1_47: -4100284690093962947
+      Agnilasa_dragon_ball1_48: 3873124485976993474
+      Agnilasa_dragon_ball1_49: 8867088027801373034
+      Agnilasa_dragon_ball1_5: -5277640378056386881
+      Agnilasa_dragon_ball1_50: 8070317630517873612
+      Agnilasa_dragon_ball1_51: 5171439060903179836
+      Agnilasa_dragon_ball1_52: -236602535443505107
+      Agnilasa_dragon_ball1_53: 7937141192170538172
+      Agnilasa_dragon_ball1_54: 8159168225798041179
+      Agnilasa_dragon_ball1_55: 3783035316449731388
+      Agnilasa_dragon_ball1_56: -2167912147032366043
+      Agnilasa_dragon_ball1_57: 5793868658439507385
+      Agnilasa_dragon_ball1_58: -3899750576458163341
+      Agnilasa_dragon_ball1_59: 6788138595429092130
+      Agnilasa_dragon_ball1_6: -6771985241759962194
+      Agnilasa_dragon_ball1_60: -4217034359759266289
+      Agnilasa_dragon_ball1_61: 5306221861227509415
+      Agnilasa_dragon_ball1_62: -1728923037782381122
+      Agnilasa_dragon_ball1_63: -7772771169473474168
+      Agnilasa_dragon_ball1_64: -1654222935831740477
+      Agnilasa_dragon_ball1_65: 7386750007332957749
+      Agnilasa_dragon_ball1_66: 3856751253002200105
+      Agnilasa_dragon_ball1_67: 6199248361750896132
+      Agnilasa_dragon_ball1_68: 1920737033549256898
+      Agnilasa_dragon_ball1_69: -2546366013763914398
+      Agnilasa_dragon_ball1_7: 6727121337271691021
+      Agnilasa_dragon_ball1_70: -6442205635904539634
+      Agnilasa_dragon_ball1_71: 3975568574379618469
+      Agnilasa_dragon_ball1_72: -1380907373210147690
+      Agnilasa_dragon_ball1_73: 6333677843623339110
+      Agnilasa_dragon_ball1_74: 8887957878308584126
+      Agnilasa_dragon_ball1_75: -7288899021121748241
+      Agnilasa_dragon_ball1_76: 6122696780890105342
+      Agnilasa_dragon_ball1_77: -2124910398480943550
+      Agnilasa_dragon_ball1_78: -2995774178024730468
+      Agnilasa_dragon_ball1_79: -4330174633706562918
+      Agnilasa_dragon_ball1_8: -3711055845520946176
+      Agnilasa_dragon_ball1_80: -7712109986031944653
+      Agnilasa_dragon_ball1_81: 8909936965090763803
+      Agnilasa_dragon_ball1_82: 8827361258055860123
+      Agnilasa_dragon_ball1_9: 6408878407349956980
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

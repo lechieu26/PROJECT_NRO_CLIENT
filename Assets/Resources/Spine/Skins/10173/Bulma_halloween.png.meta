@@ -1,0 +1,1339 @@
+fileFormatVersion: 2
+guid: 7277d1d43afbe41ad8c89878eb1de4af
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8742768137832459997
+    second: Bulma_halloween_0
+  - first:
+      213: 9063564227355665499
+    second: Bulma_halloween_1
+  - first:
+      213: 6855846121055831814
+    second: Bulma_halloween_2
+  - first:
+      213: -7693374997404155590
+    second: Bulma_halloween_3
+  - first:
+      213: 524477276648323275
+    second: Bulma_halloween_4
+  - first:
+      213: 102103166887559977
+    second: Bulma_halloween_5
+  - first:
+      213: -2112097966653941604
+    second: Bulma_halloween_6
+  - first:
+      213: -3631513804772041762
+    second: Bulma_halloween_7
+  - first:
+      213: 7786696201502590107
+    second: Bulma_halloween_8
+  - first:
+      213: 334186612710351132
+    second: Bulma_halloween_9
+  - first:
+      213: -1856084030482358716
+    second: Bulma_halloween_10
+  - first:
+      213: 4890211877408357430
+    second: Bulma_halloween_11
+  - first:
+      213: -4623819091873646500
+    second: Bulma_halloween_12
+  - first:
+      213: 4609878023312644283
+    second: Bulma_halloween_13
+  - first:
+      213: -312760305446189540
+    second: Bulma_halloween_14
+  - first:
+      213: 4899361633066731401
+    second: Bulma_halloween_15
+  - first:
+      213: -1566165786146001858
+    second: Bulma_halloween_16
+  - first:
+      213: 8583290452743102106
+    second: Bulma_halloween_17
+  - first:
+      213: 1301846711135877424
+    second: Bulma_halloween_18
+  - first:
+      213: -4048874327396899368
+    second: Bulma_halloween_19
+  - first:
+      213: -1553020819607241126
+    second: Bulma_halloween_20
+  - first:
+      213: 2930727891963704538
+    second: Bulma_halloween_21
+  - first:
+      213: -8365953598313457457
+    second: Bulma_halloween_22
+  - first:
+      213: -2444974106470275001
+    second: Bulma_halloween_23
+  - first:
+      213: 2984125689037771347
+    second: Bulma_halloween_24
+  - first:
+      213: 8927357827008203321
+    second: Bulma_halloween_25
+  - first:
+      213: -5799748482604396206
+    second: Bulma_halloween_26
+  - first:
+      213: 6935038938411365611
+    second: Bulma_halloween_27
+  - first:
+      213: -8897402908572505263
+    second: Bulma_halloween_28
+  - first:
+      213: 256690678592468954
+    second: Bulma_halloween_29
+  - first:
+      213: -494349772122182740
+    second: Bulma_halloween_30
+  - first:
+      213: -7863140158917575783
+    second: Bulma_halloween_31
+  - first:
+      213: -7455162710143835964
+    second: Bulma_halloween_32
+  - first:
+      213: 5312118010736360427
+    second: Bulma_halloween_33
+  - first:
+      213: 2479323613114588166
+    second: Bulma_halloween_34
+  - first:
+      213: 8275476867105739813
+    second: Bulma_halloween_35
+  - first:
+      213: -2128643001469010389
+    second: Bulma_halloween_36
+  - first:
+      213: 2179008005571169267
+    second: Bulma_halloween_37
+  - first:
+      213: -6950231892880560471
+    second: Bulma_halloween_38
+  - first:
+      213: 8954943484054797041
+    second: Bulma_halloween_39
+  - first:
+      213: 6782033859831899463
+    second: Bulma_halloween_40
+  - first:
+      213: 6180309051884772675
+    second: Bulma_halloween_41
+  - first:
+      213: -653574073440929717
+    second: Bulma_halloween_42
+  - first:
+      213: 5224376850617806023
+    second: Bulma_halloween_43
+  - first:
+      213: -6433589003563072146
+    second: Bulma_halloween_44
+  - first:
+      213: -9167984064899613529
+    second: Bulma_halloween_45
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Bulma_halloween_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 149
+        width: 311
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32194e623b27ba680800000000000000
+      internalID: -8742768137832459997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_1
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 465
+        width: 31
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b54e87ad4af38cd70800000000000000
+      internalID: 9063564227355665499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_2
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 459
+        width: 31
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 607c54829bbd42f50800000000000000
+      internalID: 6855846121055831814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_3
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 460
+        width: 30
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a318adb7334ab3590800000000000000
+      internalID: -7693374997404155590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_4
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 461
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc83367ed41574700800000000000000
+      internalID: 524477276648323275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_5
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 446
+        width: 29
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92386c01a4eba6100800000000000000
+      internalID: 102103166887559977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_6
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 424
+        width: 50
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9854c6f61250b2e0800000000000000
+      internalID: -2112097966653941604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_7
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 447
+        width: 26
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: edb92a56f654a9dc0800000000000000
+      internalID: -3631513804772041762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_8
+      rect:
+        serializedVersion: 2
+        x: 473
+        y: 447
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b94027880f6ef0c60800000000000000
+      internalID: 7786696201502590107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_9
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 427
+        width: 37
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c11aa4324f443a400800000000000000
+      internalID: 334186612710351132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_10
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 431
+        width: 35
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44ed2d1886ddd36e0800000000000000
+      internalID: -1856084030482358716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_11
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 430
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63c32550bc58dd340800000000000000
+      internalID: 4890211877408357430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_12
+      rect:
+        serializedVersion: 2
+        x: 397
+        y: 417
+        width: 32
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c58b333b805e4dfb0800000000000000
+      internalID: -4623819091873646500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_13
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 423
+        width: 30
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb81e6553a399ff30800000000000000
+      internalID: 4609878023312644283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_14
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 393
+        width: 37
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c168906c82ad8abf0800000000000000
+      internalID: -312760305446189540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_15
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 393
+        width: 28
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 987ce1582770ef340800000000000000
+      internalID: 4899361633066731401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_16
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 392
+        width: 25
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3ca561f38cd34ae0800000000000000
+      internalID: -1566165786146001858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_17
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 388
+        width: 21
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9e11c7c039fd1770800000000000000
+      internalID: 8583290452743102106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_18
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 322
+        width: 54
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 039b341bfa6111210800000000000000
+      internalID: 1301846711135877424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_19
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 391
+        width: 23
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d52f4740428fc7c0800000000000000
+      internalID: -4048874327396899368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_20
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 392
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5e3686facf827ae0800000000000000
+      internalID: -1553020819607241126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_21
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 394
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad473d57d790ca820800000000000000
+      internalID: 2930727891963704538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_22
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 353
+        width: 79
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc8102de68926eb80800000000000000
+      internalID: -8365953598313457457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_23
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 353
+        width: 27
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 748afc21105b11ed0800000000000000
+      internalID: -2444974106470275001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_24
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 356
+        width: 38
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 352d63ce08eb96920800000000000000
+      internalID: 2984125689037771347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_25
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 271
+        width: 82
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93a80adf4a854eb70800000000000000
+      internalID: 8927357827008203321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_26
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 289
+        width: 86
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25111c3cb77238fa0800000000000000
+      internalID: -5799748482604396206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_27
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 323
+        width: 42
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be4f28bcb253e3060800000000000000
+      internalID: 6935038938411365611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_28
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 324
+        width: 29
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15b2203f133168480800000000000000
+      internalID: -8897402908572505263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_29
+      rect:
+        serializedVersion: 2
+        x: 287
+        y: 289
+        width: 50
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad778aaefc2ff8300800000000000000
+      internalID: 256690678592468954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_30
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 290
+        width: 27
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cabacdd5087b329f0800000000000000
+      internalID: -494349772122182740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_31
+      rect:
+        serializedVersion: 2
+        x: 365
+        y: 283
+        width: 38
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99bfb98afa380e290800000000000000
+      internalID: -7863140158917575783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_32
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 283
+        width: 41
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c06327a301f98890800000000000000
+      internalID: -7455162710143835964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_33
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 270
+        width: 27
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: beb35ea9f2f68b940800000000000000
+      internalID: 5312118010736360427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_34
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 140
+        width: 92
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60cdeeaa0b3586220800000000000000
+      internalID: 2479323613114588166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_35
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 263
+        width: 55
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 524dcc28d5668d270800000000000000
+      internalID: 8275476867105739813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_36
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 236
+        width: 71
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2e71dbd77a8572e0800000000000000
+      internalID: -2128643001469010389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_37
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 232
+        width: 63
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fb4dc67c346d3e10800000000000000
+      internalID: 2179008005571169267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_38
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 263
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ae6346dae0db8f90800000000000000
+      internalID: -6950231892880560471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_39
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 185
+        width: 88
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1faf8c647a9564c70800000000000000
+      internalID: 8954943484054797041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_40
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 140
+        width: 87
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 745a3fddcdf9e1e50800000000000000
+      internalID: 6782033859831899463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_41
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 266
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34d19b7865ed4c550800000000000000
+      internalID: 6180309051884772675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_42
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 1
+        width: 175
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b48f52ec7d90ee6f0800000000000000
+      internalID: -653574073440929717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_43
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 95
+        width: 49
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cc29d1d017b08840800000000000000
+      internalID: 5224376850617806023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_44
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 96
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6583cb43ec47b6a0800000000000000
+      internalID: -6433589003563072146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bulma_halloween_45
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 0
+        width: 62
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ac77392117c4c080800000000000000
+      internalID: -9167984064899613529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Bulma_halloween_0: -8742768137832459997
+      Bulma_halloween_1: 9063564227355665499
+      Bulma_halloween_10: -1856084030482358716
+      Bulma_halloween_11: 4890211877408357430
+      Bulma_halloween_12: -4623819091873646500
+      Bulma_halloween_13: 4609878023312644283
+      Bulma_halloween_14: -312760305446189540
+      Bulma_halloween_15: 4899361633066731401
+      Bulma_halloween_16: -1566165786146001858
+      Bulma_halloween_17: 8583290452743102106
+      Bulma_halloween_18: 1301846711135877424
+      Bulma_halloween_19: -4048874327396899368
+      Bulma_halloween_2: 6855846121055831814
+      Bulma_halloween_20: -1553020819607241126
+      Bulma_halloween_21: 2930727891963704538
+      Bulma_halloween_22: -8365953598313457457
+      Bulma_halloween_23: -2444974106470275001
+      Bulma_halloween_24: 2984125689037771347
+      Bulma_halloween_25: 8927357827008203321
+      Bulma_halloween_26: -5799748482604396206
+      Bulma_halloween_27: 6935038938411365611
+      Bulma_halloween_28: -8897402908572505263
+      Bulma_halloween_29: 256690678592468954
+      Bulma_halloween_3: -7693374997404155590
+      Bulma_halloween_30: -494349772122182740
+      Bulma_halloween_31: -7863140158917575783
+      Bulma_halloween_32: -7455162710143835964
+      Bulma_halloween_33: 5312118010736360427
+      Bulma_halloween_34: 2479323613114588166
+      Bulma_halloween_35: 8275476867105739813
+      Bulma_halloween_36: -2128643001469010389
+      Bulma_halloween_37: 2179008005571169267
+      Bulma_halloween_38: -6950231892880560471
+      Bulma_halloween_39: 8954943484054797041
+      Bulma_halloween_4: 524477276648323275
+      Bulma_halloween_40: 6782033859831899463
+      Bulma_halloween_41: 6180309051884772675
+      Bulma_halloween_42: -653574073440929717
+      Bulma_halloween_43: 5224376850617806023
+      Bulma_halloween_44: -6433589003563072146
+      Bulma_halloween_45: -9167984064899613529
+      Bulma_halloween_5: 102103166887559977
+      Bulma_halloween_6: -2112097966653941604
+      Bulma_halloween_7: -3631513804772041762
+      Bulma_halloween_8: 7786696201502590107
+      Bulma_halloween_9: 334186612710351132
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

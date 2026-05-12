@@ -1,0 +1,2301 @@
+fileFormatVersion: 2
+guid: 57802f5c6525949ca96bc2210059f726
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 596483385081431747
+    second: Majin_duu_1_0
+  - first:
+      213: -6718682798962101033
+    second: Majin_duu_1_1
+  - first:
+      213: 6209794694126436270
+    second: Majin_duu_1_2
+  - first:
+      213: -1444252906662319472
+    second: Majin_duu_1_3
+  - first:
+      213: 7369564576887865546
+    second: Majin_duu_1_4
+  - first:
+      213: 8219334172934177901
+    second: Majin_duu_1_5
+  - first:
+      213: -7447354845979787982
+    second: Majin_duu_1_6
+  - first:
+      213: -6431278908560021850
+    second: Majin_duu_1_7
+  - first:
+      213: 586426985964749995
+    second: Majin_duu_1_8
+  - first:
+      213: 5357495893880039032
+    second: Majin_duu_1_9
+  - first:
+      213: 6438682579471306407
+    second: Majin_duu_1_10
+  - first:
+      213: 6682076114946515161
+    second: Majin_duu_1_11
+  - first:
+      213: 6651927519615044053
+    second: Majin_duu_1_12
+  - first:
+      213: -5041645241012382096
+    second: Majin_duu_1_13
+  - first:
+      213: -4089405481991471508
+    second: Majin_duu_1_14
+  - first:
+      213: -7878182394306926843
+    second: Majin_duu_1_15
+  - first:
+      213: -2708606114084130573
+    second: Majin_duu_1_16
+  - first:
+      213: -3880594446254003937
+    second: Majin_duu_1_17
+  - first:
+      213: -7657994917341993611
+    second: Majin_duu_1_18
+  - first:
+      213: -7386298131656863259
+    second: Majin_duu_1_19
+  - first:
+      213: 3748184811935900296
+    second: Majin_duu_1_20
+  - first:
+      213: 9147649996605272722
+    second: Majin_duu_1_21
+  - first:
+      213: 5319244990043795668
+    second: Majin_duu_1_22
+  - first:
+      213: 758608289350142458
+    second: Majin_duu_1_23
+  - first:
+      213: -5206691461884453469
+    second: Majin_duu_1_24
+  - first:
+      213: 4860752658217489342
+    second: Majin_duu_1_25
+  - first:
+      213: 3281407868689177090
+    second: Majin_duu_1_26
+  - first:
+      213: 1531850756739499965
+    second: Majin_duu_1_27
+  - first:
+      213: 6971914109222450864
+    second: Majin_duu_1_28
+  - first:
+      213: -4919677824073761701
+    second: Majin_duu_1_29
+  - first:
+      213: 1856812203930510532
+    second: Majin_duu_1_30
+  - first:
+      213: 1798401037285694698
+    second: Majin_duu_1_31
+  - first:
+      213: 8632797746555353094
+    second: Majin_duu_1_32
+  - first:
+      213: 2282816627788918031
+    second: Majin_duu_1_33
+  - first:
+      213: -3217023367857572070
+    second: Majin_duu_1_34
+  - first:
+      213: -5702445514532907229
+    second: Majin_duu_1_35
+  - first:
+      213: -9071031999583101274
+    second: Majin_duu_1_36
+  - first:
+      213: -8094709124686168913
+    second: Majin_duu_1_37
+  - first:
+      213: 3256049006720048001
+    second: Majin_duu_1_38
+  - first:
+      213: -4282314475152087182
+    second: Majin_duu_1_39
+  - first:
+      213: 8002038687558171520
+    second: Majin_duu_1_40
+  - first:
+      213: -4188557782820629302
+    second: Majin_duu_1_41
+  - first:
+      213: -3498707013394118191
+    second: Majin_duu_1_42
+  - first:
+      213: -8972748498025486925
+    second: Majin_duu_1_43
+  - first:
+      213: -7392591691627344354
+    second: Majin_duu_1_44
+  - first:
+      213: 584381942974996988
+    second: Majin_duu_1_45
+  - first:
+      213: -4610612768849235127
+    second: Majin_duu_1_46
+  - first:
+      213: 1444511804751385268
+    second: Majin_duu_1_47
+  - first:
+      213: -1551799793682736156
+    second: Majin_duu_1_48
+  - first:
+      213: -6662518000289455327
+    second: Majin_duu_1_49
+  - first:
+      213: 8771449040824002275
+    second: Majin_duu_1_50
+  - first:
+      213: 2031642071808837014
+    second: Majin_duu_1_51
+  - first:
+      213: -3254904177170402622
+    second: Majin_duu_1_52
+  - first:
+      213: 84001472137597720
+    second: Majin_duu_1_53
+  - first:
+      213: 342205053876028321
+    second: Majin_duu_1_54
+  - first:
+      213: 1317711685280345522
+    second: Majin_duu_1_55
+  - first:
+      213: 5232110572653431924
+    second: Majin_duu_1_56
+  - first:
+      213: -6628922674200063119
+    second: Majin_duu_1_57
+  - first:
+      213: -3627910484800684596
+    second: Majin_duu_1_58
+  - first:
+      213: -925916043283851301
+    second: Majin_duu_1_59
+  - first:
+      213: 4038309727358051354
+    second: Majin_duu_1_60
+  - first:
+      213: 2606991973294770578
+    second: Majin_duu_1_61
+  - first:
+      213: -8701786152261951762
+    second: Majin_duu_1_62
+  - first:
+      213: -8911793043226621705
+    second: Majin_duu_1_63
+  - first:
+      213: 6890807218585829983
+    second: Majin_duu_1_64
+  - first:
+      213: 6673701796355287620
+    second: Majin_duu_1_65
+  - first:
+      213: -770429979419550913
+    second: Majin_duu_1_66
+  - first:
+      213: 5210762806172739655
+    second: Majin_duu_1_67
+  - first:
+      213: 8146739448549826464
+    second: Majin_duu_1_68
+  - first:
+      213: 6484110911718439810
+    second: Majin_duu_1_69
+  - first:
+      213: -4382495933889274280
+    second: Majin_duu_1_70
+  - first:
+      213: -6787145729083508115
+    second: Majin_duu_1_71
+  - first:
+      213: 2623792722839754867
+    second: Majin_duu_1_72
+  - first:
+      213: 8518240427891734755
+    second: Majin_duu_1_73
+  - first:
+      213: -891615547825357854
+    second: Majin_duu_1_74
+  - first:
+      213: -1415147875142182111
+    second: Majin_duu_1_75
+  - first:
+      213: -7234190423029967229
+    second: Majin_duu_1_76
+  - first:
+      213: 6595449811327132601
+    second: Majin_duu_1_77
+  - first:
+      213: 891738328984557107
+    second: Majin_duu_1_78
+  - first:
+      213: -5272743726388745563
+    second: Majin_duu_1_79
+  - first:
+      213: -6520490016164201716
+    second: Majin_duu_1_80
+  - first:
+      213: 3621056319658837936
+    second: Majin_duu_1_81
+  - first:
+      213: 3559460598134652667
+    second: Majin_duu_1_82
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Majin_duu_1_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 461
+        width: 71
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c6833a7a72274800800000000000000
+      internalID: 596483385081431747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_1
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 457
+        width: 56
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d43659679172c2a0800000000000000
+      internalID: -6718682798962101033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_2
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 455
+        width: 44
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaff2879f5f9d2650800000000000000
+      internalID: 6209794694126436270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_3
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 497
+        width: 32
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09a219422abf4fbe0800000000000000
+      internalID: -1444252906662319472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_4
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 491
+        width: 24
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac004b2efe3f54660800000000000000
+      internalID: 7369564576887865546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_5
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 393
+        width: 52
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6488f3e1e0f01270800000000000000
+      internalID: 8219334172934177901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_6
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 452
+        width: 33
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23d3711b93ea5a890800000000000000
+      internalID: -7447354845979787982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_7
+      rect:
+        serializedVersion: 2
+        x: 215
+        y: 450
+        width: 32
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a661d338e18fb6a0800000000000000
+      internalID: -6431278908560021850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_8
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 435
+        width: 38
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba4c1299c38632800800000000000000
+      internalID: 586426985964749995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_9
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 405
+        width: 73
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87665585126a95a40800000000000000
+      internalID: 5357495893880039032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_10
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 399
+        width: 51
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ae02e241bbca5950800000000000000
+      internalID: 6438682579471306407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_11
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 391
+        width: 40
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d06289c2d08bbc50800000000000000
+      internalID: 6682076114946515161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_12
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 361
+        width: 84
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d9cc4ee5d4605c50800000000000000
+      internalID: 6651927519615044053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_13
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 423
+        width: 41
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0761be57d5a780ab0800000000000000
+      internalID: -5041645241012382096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_14
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 423
+        width: 31
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6efc5771638f37c0800000000000000
+      internalID: -4089405481991471508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_15
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 422
+        width: 10
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 507699f4ad21ba290800000000000000
+      internalID: -7878182394306926843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_16
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 403
+        width: 37
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f0709d0719196ad0800000000000000
+      internalID: -2708606114084130573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_17
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 401
+        width: 32
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f192da159eb552ac0800000000000000
+      internalID: -3880594446254003937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_18
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 401
+        width: 36
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 575651c423659b590800000000000000
+      internalID: -7657994917341993611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_19
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 403
+        width: 35
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e11679cbf89e7990800000000000000
+      internalID: -7386298131656863259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_20
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 396
+        width: 43
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88224fb4a3a340430800000000000000
+      internalID: 3748184811935900296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_21
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 395
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 292b241a43bf2fe70800000000000000
+      internalID: 9147649996605272722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_22
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 399
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d036d8c221c1d940800000000000000
+      internalID: 5319244990043795668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_23
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 367
+        width: 41
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af9c16a483e178a00800000000000000
+      internalID: 758608289350142458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_24
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 369
+        width: 38
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ad515f93bd1eb7b0800000000000000
+      internalID: -5206691461884453469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_25
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 373
+        width: 39
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb3d61e0accd47340800000000000000
+      internalID: 4860752658217489342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_26
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 373
+        width: 33
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20ad3682217e98d20800000000000000
+      internalID: 3281407868689177090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_27
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 367
+        width: 22
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db70f5ca52a324510800000000000000
+      internalID: 1531850756739499965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_28
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 298
+        width: 104
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b6fcbc81f631c060800000000000000
+      internalID: 6971914109222450864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_29
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 353
+        width: 51
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5c77b6a51bc9bbb0800000000000000
+      internalID: -4919677824073761701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_30
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 368
+        width: 42
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c463e59cd8b4c910800000000000000
+      internalID: 1856812203930510532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_31
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 366
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aec9b1f073435f810800000000000000
+      internalID: 1798401037285694698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_32
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 357
+        width: 33
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 608793ddfcbddc770800000000000000
+      internalID: 8632797746555353094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_33
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 379
+        width: 22
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0da6bac0a13eaf10800000000000000
+      internalID: 2282816627788918031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_34
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 305
+        width: 61
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a17f7bc9a46da53d0800000000000000
+      internalID: -3217023367857572070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_35
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 316
+        width: 54
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3271f337408dcd0b0800000000000000
+      internalID: -5702445514532907229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_36
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 324
+        width: 51
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6aed5aee4783d1280800000000000000
+      internalID: -9071031999583101274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_37
+      rect:
+        serializedVersion: 2
+        x: 269
+        y: 329
+        width: 55
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: facb7fe40f0d9af80800000000000000
+      internalID: -8094709124686168913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_38
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 293
+        width: 46
+        height: 76
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18bdfc0025fcf2d20800000000000000
+      internalID: 3256049006720048001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_39
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 340
+        width: 44
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 277eb0c6ca92294c0800000000000000
+      internalID: -4282314475152087182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_40
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 324
+        width: 37
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08b76da2ac3fc0f60800000000000000
+      internalID: 8002038687558171520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_41
+      rect:
+        serializedVersion: 2
+        x: 446
+        y: 321
+        width: 29
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac457c173e04fd5c0800000000000000
+      internalID: -4188557782820629302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_42
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 349
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d9c97d1288127fc0800000000000000
+      internalID: -3498707013394118191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_43
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 245
+        width: 98
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b5654cd7c46a7380800000000000000
+      internalID: -8972748498025486925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_44
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 246
+        width: 51
+        height: 85
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1e4c0b260d386990800000000000000
+      internalID: -7392591691627344354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_45
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 296
+        width: 40
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf16d2ce7442c1800800000000000000
+      internalID: 584381942974996988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_46
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 281
+        width: 35
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9437cd36d10d300c0800000000000000
+      internalID: -4610612768849235127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_47
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 281
+        width: 33
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b2901445dfeb0410800000000000000
+      internalID: 1444511804751385268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_48
+      rect:
+        serializedVersion: 2
+        x: 476
+        y: 313
+        width: 35
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4eb14073f46e67ae0800000000000000
+      internalID: -1551799793682736156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_49
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 278
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 123e913ad2bf983a0800000000000000
+      internalID: -6662518000289455327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_50
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 196
+        width: 98
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e661c3fd627ab970800000000000000
+      internalID: 8771449040824002275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_51
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 267
+        width: 62
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69587e043b7d13c10800000000000000
+      internalID: 2031642071808837014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_52
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 239
+        width: 51
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c2b2d565e144d2d0800000000000000
+      internalID: -3254904177170402622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_53
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 245
+        width: 76
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8131f53d4ee6a2100800000000000000
+      internalID: 84001472137597720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_54
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 238
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a3cf94fea1cfb400800000000000000
+      internalID: 342205053876028321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_55
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 243
+        width: 39
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bd2485dbc3794210800000000000000
+      internalID: 1317711685280345522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_56
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 242
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47cc29c48d03c9840800000000000000
+      internalID: 5232110572653431924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_57
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 210
+        width: 61
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 173d5c803f55104a0800000000000000
+      internalID: -6628922674200063119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_58
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 196
+        width: 46
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccd3a84b2a217adc0800000000000000
+      internalID: -3627910484800684596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_59
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 190
+        width: 48
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd71b3ca34c7623f0800000000000000
+      internalID: -925916043283851301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_60
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 196
+        width: 56
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a146e281d45fa0830800000000000000
+      internalID: 4038309727358051354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_61
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 191
+        width: 39
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29987842365ed2420800000000000000
+      internalID: 2606991973294770578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_62
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 191
+        width: 34
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eee530b399b0d3780800000000000000
+      internalID: -8701786152261951762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_63
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 197
+        width: 20
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f80ea2a173f25480800000000000000
+      internalID: -8911793043226621705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_64
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 198
+        width: 34
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f52818ff7a011af50800000000000000
+      internalID: 6890807218585829983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_65
+      rect:
+        serializedVersion: 2
+        x: 461
+        y: 154
+        width: 49
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44aa4accc60cd9c50800000000000000
+      internalID: 6673701796355287620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_66
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3
+        width: 190
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3bd2600402ee45f0800000000000000
+      internalID: -770429979419550913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_67
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 98
+        width: 94
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7486eb61a29505840800000000000000
+      internalID: 5210762806172739655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_68
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 158
+        width: 70
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0af597c7d580f0170800000000000000
+      internalID: 8146739448549826464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_69
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 155
+        width: 46
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28b363915803cf950800000000000000
+      internalID: 6484110911718439810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_70
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 154
+        width: 27
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85e9fe6ea2f3e23c0800000000000000
+      internalID: -4382495933889274280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_71
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 154
+        width: 35
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6afa235be63fc1a0800000000000000
+      internalID: -6787145729083508115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_72
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 106
+        width: 53
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3785e197495996420800000000000000
+      internalID: 2623792722839754867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_73
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 103
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e8bbdf998ed63670800000000000000
+      internalID: 8518240427891734755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_74
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 104
+        width: 51
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eb77ab126850a3f0800000000000000
+      internalID: -891615547825357854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_75
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 104
+        width: 46
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12b508d51826c5ce0800000000000000
+      internalID: -1415147875142182111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_76
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 2
+        width: 98
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38614cd732efa9b90800000000000000
+      internalID: -7234190423029967229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_77
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 63
+        width: 68
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b32212c8aeb78b50800000000000000
+      internalID: 6595449811327132601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_78
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 62
+        width: 49
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33699bb1947106c00800000000000000
+      internalID: 891738328984557107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_79
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 62
+        width: 52
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aaedec548373d6b0800000000000000
+      internalID: -5272743726388745563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_80
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 1
+        width: 38
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0b3d0990e09285a0800000000000000
+      internalID: -6520490016164201716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_81
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 1
+        width: 108
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b7c2fc9983904230800000000000000
+      internalID: 3621056319658837936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Majin_duu_1_82
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 0
+        width: 56
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfeb0df1e8eb56130800000000000000
+      internalID: 3559460598134652667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Majin_duu_1_0: 596483385081431747
+      Majin_duu_1_1: -6718682798962101033
+      Majin_duu_1_10: 6438682579471306407
+      Majin_duu_1_11: 6682076114946515161
+      Majin_duu_1_12: 6651927519615044053
+      Majin_duu_1_13: -5041645241012382096
+      Majin_duu_1_14: -4089405481991471508
+      Majin_duu_1_15: -7878182394306926843
+      Majin_duu_1_16: -2708606114084130573
+      Majin_duu_1_17: -3880594446254003937
+      Majin_duu_1_18: -7657994917341993611
+      Majin_duu_1_19: -7386298131656863259
+      Majin_duu_1_2: 6209794694126436270
+      Majin_duu_1_20: 3748184811935900296
+      Majin_duu_1_21: 9147649996605272722
+      Majin_duu_1_22: 5319244990043795668
+      Majin_duu_1_23: 758608289350142458
+      Majin_duu_1_24: -5206691461884453469
+      Majin_duu_1_25: 4860752658217489342
+      Majin_duu_1_26: 3281407868689177090
+      Majin_duu_1_27: 1531850756739499965
+      Majin_duu_1_28: 6971914109222450864
+      Majin_duu_1_29: -4919677824073761701
+      Majin_duu_1_3: -1444252906662319472
+      Majin_duu_1_30: 1856812203930510532
+      Majin_duu_1_31: 1798401037285694698
+      Majin_duu_1_32: 8632797746555353094
+      Majin_duu_1_33: 2282816627788918031
+      Majin_duu_1_34: -3217023367857572070
+      Majin_duu_1_35: -5702445514532907229
+      Majin_duu_1_36: -9071031999583101274
+      Majin_duu_1_37: -8094709124686168913
+      Majin_duu_1_38: 3256049006720048001
+      Majin_duu_1_39: -4282314475152087182
+      Majin_duu_1_4: 7369564576887865546
+      Majin_duu_1_40: 8002038687558171520
+      Majin_duu_1_41: -4188557782820629302
+      Majin_duu_1_42: -3498707013394118191
+      Majin_duu_1_43: -8972748498025486925
+      Majin_duu_1_44: -7392591691627344354
+      Majin_duu_1_45: 584381942974996988
+      Majin_duu_1_46: -4610612768849235127
+      Majin_duu_1_47: 1444511804751385268
+      Majin_duu_1_48: -1551799793682736156
+      Majin_duu_1_49: -6662518000289455327
+      Majin_duu_1_5: 8219334172934177901
+      Majin_duu_1_50: 8771449040824002275
+      Majin_duu_1_51: 2031642071808837014
+      Majin_duu_1_52: -3254904177170402622
+      Majin_duu_1_53: 84001472137597720
+      Majin_duu_1_54: 342205053876028321
+      Majin_duu_1_55: 1317711685280345522
+      Majin_duu_1_56: 5232110572653431924
+      Majin_duu_1_57: -6628922674200063119
+      Majin_duu_1_58: -3627910484800684596
+      Majin_duu_1_59: -925916043283851301
+      Majin_duu_1_6: -7447354845979787982
+      Majin_duu_1_60: 4038309727358051354
+      Majin_duu_1_61: 2606991973294770578
+      Majin_duu_1_62: -8701786152261951762
+      Majin_duu_1_63: -8911793043226621705
+      Majin_duu_1_64: 6890807218585829983
+      Majin_duu_1_65: 6673701796355287620
+      Majin_duu_1_66: -770429979419550913
+      Majin_duu_1_67: 5210762806172739655
+      Majin_duu_1_68: 8146739448549826464
+      Majin_duu_1_69: 6484110911718439810
+      Majin_duu_1_7: -6431278908560021850
+      Majin_duu_1_70: -4382495933889274280
+      Majin_duu_1_71: -6787145729083508115
+      Majin_duu_1_72: 2623792722839754867
+      Majin_duu_1_73: 8518240427891734755
+      Majin_duu_1_74: -891615547825357854
+      Majin_duu_1_75: -1415147875142182111
+      Majin_duu_1_76: -7234190423029967229
+      Majin_duu_1_77: 6595449811327132601
+      Majin_duu_1_78: 891738328984557107
+      Majin_duu_1_79: -5272743726388745563
+      Majin_duu_1_8: 586426985964749995
+      Majin_duu_1_80: -6520490016164201716
+      Majin_duu_1_81: 3621056319658837936
+      Majin_duu_1_82: 3559460598134652667
+      Majin_duu_1_9: 5357495893880039032
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

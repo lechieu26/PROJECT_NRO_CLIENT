@@ -1,0 +1,1006 @@
+[
+  {
+    "itemId": 2000,
+    "name": "Agnilasa_dragon_ball1",
+    "assetPath": "Spine/Skins/Agnilasa/Agnilasa_dragon_ball1",
+    "webPath": "assets/skins/10071/skin",
+    "displayName": "Skin Agnilasa"
+  },
+  {
+    "itemId": 2001,
+    "name": "fide",
+    "assetPath": "Spine/Skins/10072/skin",
+    "webPath": "assets/skins/10072/skin",
+    "displayName": "Skin Fide"
+  },
+  {
+    "itemId": 2002,
+    "name": "Bulma_rabbit",
+    "assetPath": "Spine/Skins/10073/skin",
+    "webPath": "assets/skins/10073/skin",
+    "displayName": "Skin Bulma Rabbit"
+  },
+  {
+    "itemId": 2003,
+    "name": "piccolo_oranges_1",
+    "assetPath": "Spine/Skins/10074/skin",
+    "webPath": "assets/skins/10074/skin",
+    "displayName": "Skin Piccolo Orange 1"
+  },
+  {
+    "itemId": 2004,
+    "name": "Jeice",
+    "assetPath": "Spine/Skins/10075/skin",
+    "webPath": "assets/skins/10075/skin",
+    "displayName": "Skin Jeice"
+  },
+  {
+    "itemId": 2005,
+    "name": "broly_tocbac",
+    "assetPath": "Spine/Skins/10076/skin",
+    "webPath": "assets/skins/10076/skin",
+    "displayName": "Skin Broly Tóc Bạc"
+  },
+  {
+    "itemId": 2006,
+    "name": "Vegeta_baibien",
+    "assetPath": "Spine/Skins/10077/skin",
+    "webPath": "assets/skins/10077/skin",
+    "displayName": "Skin Vegeta Bãi Biển"
+  },
+  {
+    "itemId": 2007,
+    "name": "Dyspo",
+    "assetPath": "Spine/Skins/10078/skin",
+    "webPath": "assets/skins/10078/skin",
+    "displayName": "Skin Dyspo"
+  },
+  {
+    "itemId": 2008,
+    "name": "gamma2",
+    "assetPath": "Spine/Skins/10079/skin",
+    "webPath": "assets/skins/10079/skin",
+    "displayName": "Skin Gamma 2"
+  },
+  {
+    "itemId": 2009,
+    "name": "black_frieza",
+    "assetPath": "Spine/Skins/10080/skin",
+    "webPath": "assets/skins/10080/skin",
+    "displayName": "Skin Black Frieza"
+  },
+  {
+    "itemId": 2010,
+    "name": "Monster_carrot",
+    "assetPath": "Spine/Skins/10081/skin",
+    "webPath": "assets/skins/10081/skin",
+    "displayName": "Skin Monster Carrot"
+  },
+  {
+    "itemId": 2011,
+    "name": "Namek_vang",
+    "assetPath": "Spine/Skins/10082/skin",
+    "webPath": "assets/skins/10082/skin",
+    "displayName": "Skin Namek Vàng"
+  },
+  {
+    "itemId": 2012,
+    "name": "puipui",
+    "assetPath": "Spine/Skins/10083/skin",
+    "webPath": "assets/skins/10083/skin",
+    "displayName": "Skin Pui Pui"
+  },
+  {
+    "itemId": 2013,
+    "name": "Uub",
+    "assetPath": "Spine/Skins/10084/skin",
+    "webPath": "assets/skins/10084/skin",
+    "displayName": "Skin Uub"
+  },
+  {
+    "itemId": 2014,
+    "name": "cell_bohung2",
+    "assetPath": "Spine/Skins/10085/skin",
+    "webPath": "assets/skins/10085/skin",
+    "displayName": "Skin Cell Bohung2"
+  },
+  {
+    "itemId": 2015,
+    "name": "android15",
+    "assetPath": "Spine/Skins/10086/skin",
+    "webPath": "assets/skins/10086/skin",
+    "displayName": "Skin Android15"
+  },
+  {
+    "itemId": 2016,
+    "name": "redhead",
+    "assetPath": "Spine/Skins/10087/skin",
+    "webPath": "assets/skins/10087/skin",
+    "displayName": "Skin Redhead"
+  },
+  {
+    "itemId": 2017,
+    "name": "Gogeta_toc_xanh",
+    "assetPath": "Spine/Skins/10088/skin",
+    "webPath": "assets/skins/10088/skin",
+    "displayName": "Skin Gogeta Tóc Xanh"
+  },
+  {
+    "itemId": 2018,
+    "name": "vegeta_whis",
+    "assetPath": "Spine/Skins/10089/skin",
+    "webPath": "assets/skins/10089/skin",
+    "displayName": "Skin Vegeta Whis"
+  },
+  {
+    "itemId": 2019,
+    "name": "Hit",
+    "assetPath": "Spine/Skins/10090/skin",
+    "webPath": "assets/skins/10090/skin",
+    "displayName": "Skin Hit"
+  },
+  {
+    "itemId": 2020,
+    "name": "Android14",
+    "assetPath": "Spine/Skins/10091/skin",
+    "webPath": "assets/skins/10091/skin",
+    "displayName": "Skin Android14"
+  },
+  {
+    "itemId": 2021,
+    "name": "Blue",
+    "assetPath": "Spine/Skins/10092/skin",
+    "webPath": "assets/skins/10092/skin",
+    "displayName": "Skin Blue"
+  },
+  {
+    "itemId": 2022,
+    "name": "Bulma_noel",
+    "assetPath": "Spine/Skins/10093/skin",
+    "webPath": "assets/skins/10093/skin",
+    "displayName": "Skin Bulma Noel"
+  },
+  {
+    "itemId": 2023,
+    "name": "goku_rose_3",
+    "assetPath": "Spine/Skins/10094/skin",
+    "webPath": "assets/skins/10094/skin",
+    "displayName": "Skin Goku Rose 3"
+  },
+  {
+    "itemId": 2024,
+    "name": "gohan_ssj1",
+    "assetPath": "Spine/Skins/10095/skin",
+    "webPath": "assets/skins/10095/skin",
+    "displayName": "Skin Gohan SSJ1"
+  },
+  {
+    "itemId": 2025,
+    "name": "Goku_thuy_tinh",
+    "assetPath": "Spine/Skins/10096/skin",
+    "webPath": "assets/skins/10096/skin",
+    "displayName": "Skin Goku Thủy Tinh"
+  },
+  {
+    "itemId": 2026,
+    "name": "goku_sontinh",
+    "assetPath": "Spine/Skins/10097/skin",
+    "webPath": "assets/skins/10097/skin",
+    "displayName": "Skin Goku Sơn Tinh"
+  },
+  {
+    "itemId": 2027,
+    "name": "Broly_toc_den",
+    "assetPath": "Spine/Skins/10098/skin",
+    "webPath": "assets/skins/10098/skin",
+    "displayName": "Skin Broly Tóc Đen"
+  },
+  {
+    "itemId": 2029,
+    "name": "Namek_2.1",
+    "assetPath": "Spine/Skins/10100/skin",
+    "webPath": "assets/skins/10100/skin",
+    "displayName": "Skin Namek 2"
+  },
+  {
+    "itemId": 2030,
+    "name": "Beerus",
+    "assetPath": "Spine/Skins/10101/skin",
+    "webPath": "assets/skins/10101/skin",
+    "displayName": "Skin Beerus"
+  },
+  {
+    "itemId": 2031,
+    "name": "Gohan_dau_vang",
+    "assetPath": "Spine/Skins/10102/skin",
+    "webPath": "assets/skins/10102/skin",
+    "displayName": "Skin Gohan Đầu Vàng"
+  },
+  {
+    "itemId": 2032,
+    "name": "Li_shenron",
+    "assetPath": "Spine/Skins/10103/skin",
+    "webPath": "assets/skins/10103/skin",
+    "displayName": "Skin Li Shenron"
+  },
+  {
+    "itemId": 2033,
+    "name": "guldo",
+    "assetPath": "Spine/Skins/10104/skin",
+    "webPath": "assets/skins/10104/skin",
+    "displayName": "Skin Guldo"
+  },
+  {
+    "itemId": 2034,
+    "name": "khi_trang",
+    "assetPath": "Spine/Skins/10105/khi_trang",
+    "webPath": "assets/skins/10105/khi_trang",
+    "displayName": "Skin Khỉ Trắng",
+    "special": "monkey-original-atlas"
+  },
+  {
+    "itemId": 2035,
+    "name": "Whis",
+    "assetPath": "Spine/Skins/10106/skin",
+    "webPath": "assets/skins/10106/skin",
+    "displayName": "Skin Whis"
+  },
+  {
+    "itemId": 2036,
+    "name": "Liiquir",
+    "assetPath": "Spine/Skins/10107/skin",
+    "webPath": "assets/skins/10107/skin",
+    "displayName": "Skin Liiquir"
+  },
+  {
+    "itemId": 2037,
+    "name": "zarbon",
+    "assetPath": "Spine/Skins/10108/skin",
+    "webPath": "assets/skins/10108/skin",
+    "displayName": "Skin Zarbon"
+  },
+  {
+    "itemId": 2038,
+    "name": "Captain_ginyu",
+    "assetPath": "Spine/Skins/10109/skin",
+    "webPath": "assets/skins/10109/skin",
+    "displayName": "Skin Captain Ginyu"
+  },
+  {
+    "itemId": 2039,
+    "name": "namek 3",
+    "assetPath": "Spine/Skins/10110/skin",
+    "webPath": "assets/skins/10110/skin",
+    "displayName": "Skin Namek 3"
+  },
+  {
+    "itemId": 2040,
+    "name": "Full_FX",
+    "assetPath": "Spine/Skins/10111/skin",
+    "webPath": "assets/skins/10111/skin",
+    "displayName": "Skin Full FX"
+  },
+  {
+    "itemId": 2041,
+    "name": "Goku_ssj5_toc_do",
+    "assetPath": "Spine/Skins/10112/skin",
+    "webPath": "assets/skins/10112/skin",
+    "displayName": "Skin Goku SSJ5 Tóc Đỏ"
+  },
+  {
+    "itemId": 2042,
+    "name": "bo_lao",
+    "assetPath": "Spine/Skins/10113/skin",
+    "webPath": "assets/skins/10113/skin",
+    "displayName": "Skin Bô Lão"
+  },
+  {
+    "itemId": 2043,
+    "name": "goku",
+    "assetPath": "Spine/Skins/10114/skin",
+    "webPath": "assets/skins/10114/skin",
+    "displayName": "Skin Goku"
+  },
+  {
+    "itemId": 2044,
+    "name": "Majin_duu_2",
+    "assetPath": "Spine/Skins/10115/skin",
+    "webPath": "assets/skins/10115/skin",
+    "displayName": "Skin Majin Buu 2"
+  },
+  {
+    "itemId": 2045,
+    "name": "Recoome",
+    "assetPath": "Spine/Skins/10116/skin",
+    "webPath": "assets/skins/10116/skin",
+    "displayName": "Skin Recoome"
+  },
+  {
+    "itemId": 2046,
+    "name": "Vegeta_dau_vang",
+    "assetPath": "Spine/Skins/10117/skin",
+    "webPath": "assets/skins/10117/skin",
+    "displayName": "Skin Vegeta Đầu Vàng"
+  },
+  {
+    "itemId": 2047,
+    "name": "Golden_frieza",
+    "assetPath": "Spine/Skins/10118/skin",
+    "webPath": "assets/skins/10118/skin",
+    "displayName": "Skin Golden Frieza"
+  },
+  {
+    "itemId": 2048,
+    "name": "Namek_vang_2",
+    "assetPath": "Spine/Skins/10119/skin",
+    "webPath": "assets/skins/10119/skin",
+    "displayName": "Skin Namek Vàng 2"
+  },
+  {
+    "itemId": 2049,
+    "name": "Bluehead",
+    "assetPath": "Spine/Skins/10120/skin",
+    "webPath": "assets/skins/10120/skin",
+    "displayName": "Skin Bluehead"
+  },
+  {
+    "itemId": 2050,
+    "name": "Bulma_kimono",
+    "assetPath": "Spine/Skins/10121/skin",
+    "webPath": "assets/skins/10121/skin",
+    "displayName": "Skin Bulma Kimono"
+  },
+  {
+    "itemId": 2051,
+    "name": "uub1",
+    "assetPath": "Spine/Skins/10122/skin",
+    "webPath": "assets/skins/10122/skin",
+    "displayName": "Skin Uub1"
+  },
+  {
+    "itemId": 2052,
+    "name": "songoku_trang",
+    "assetPath": "Spine/Skins/10123/skin",
+    "webPath": "assets/skins/10123/skin",
+    "displayName": "Skin Son Goku Trắng"
+  },
+  {
+    "itemId": 2053,
+    "name": "Cell_bohung_3",
+    "assetPath": "Spine/Skins/10124/skin",
+    "webPath": "assets/skins/10124/skin",
+    "displayName": "Skin Cell Bohung 3"
+  },
+  {
+    "itemId": 2054,
+    "name": "khi_vang",
+    "assetPath": "Spine/Skins/10125/khi_vang",
+    "webPath": "assets/skins/10125/khi_vang",
+    "displayName": "Skin Khỉ Vàng",
+    "special": "monkey-original-atlas"
+  },
+  {
+    "itemId": 2055,
+    "name": "Broly_dau_vang",
+    "assetPath": "Spine/Skins/10126/skin",
+    "webPath": "assets/skins/10126/skin",
+    "displayName": "Skin Broly Đầu Vàng"
+  },
+  {
+    "itemId": 2056,
+    "name": "Soi_xanh1",
+    "assetPath": "Spine/Skins/10127/skin",
+    "webPath": "assets/skins/10127/skin",
+    "displayName": "Skin Sói Xanh"
+  },
+  {
+    "itemId": 2057,
+    "name": "SuperAndroid13.1",
+    "assetPath": "Spine/Skins/10128/skin",
+    "webPath": "assets/skins/10128/skin",
+    "displayName": "Skin Super Android 13"
+  },
+  {
+    "itemId": 2058,
+    "name": "Goku_black",
+    "assetPath": "Spine/Skins/10129/skin",
+    "webPath": "assets/skins/10129/skin",
+    "displayName": "Skin Goku Black"
+  },
+  {
+    "itemId": 2059,
+    "name": "Vermoud",
+    "assetPath": "Spine/Skins/10130/skin",
+    "webPath": "assets/skins/10130/skin",
+    "displayName": "Skin Vermoud"
+  },
+  {
+    "itemId": 2060,
+    "name": "Android_19.1_skin",
+    "assetPath": "Spine/Skins/10131/skin",
+    "webPath": "assets/skins/10131/skin",
+    "displayName": "Skin Android 19"
+  },
+  {
+    "itemId": 2061,
+    "name": "namek_skin2",
+    "assetPath": "Spine/Skins/10132/skin",
+    "webPath": "assets/skins/10132/skin",
+    "displayName": "Skin Namek2"
+  },
+  {
+    "itemId": 2062,
+    "name": "gamma1",
+    "assetPath": "Spine/Skins/10133/skin",
+    "webPath": "assets/skins/10133/skin",
+    "displayName": "Skin Gamma 1"
+  },
+  {
+    "itemId": 2063,
+    "name": "cell_do2",
+    "assetPath": "Spine/Skins/10134/skin",
+    "webPath": "assets/skins/10134/skin",
+    "displayName": "Skin Cell Do2"
+  },
+  {
+    "itemId": 2064,
+    "name": "namek",
+    "assetPath": "Spine/Skins/10135/skin",
+    "webPath": "assets/skins/10135/skin",
+    "displayName": "Skin Namek"
+  },
+  {
+    "itemId": 2065,
+    "name": "Goku_trang",
+    "assetPath": "Spine/Skins/10136/skin",
+    "webPath": "assets/skins/10136/skin",
+    "displayName": "Skin Goku Trắng"
+  },
+  {
+    "itemId": 2066,
+    "name": "Android16",
+    "assetPath": "Spine/Skins/10137/skin",
+    "webPath": "assets/skins/10137/skin",
+    "displayName": "Skin Android16"
+  },
+  {
+    "itemId": 2067,
+    "name": "Vegeta",
+    "assetPath": "Spine/Skins/10138/skin",
+    "webPath": "assets/skins/10138/skin",
+    "displayName": "Skin Vegeta"
+  },
+  {
+    "itemId": 2068,
+    "name": "fieza",
+    "assetPath": "Spine/Skins/10139/skin",
+    "webPath": "assets/skins/10139/skin",
+    "displayName": "Skin Frieza"
+  },
+  {
+    "itemId": 2069,
+    "name": "Cumber",
+    "assetPath": "Spine/Skins/10140/skin",
+    "webPath": "assets/skins/10140/skin",
+    "displayName": "Skin Cumber"
+  },
+  {
+    "itemId": 2070,
+    "name": "goku_rose_1",
+    "assetPath": "Spine/Skins/10141/skin",
+    "webPath": "assets/skins/10141/skin",
+    "displayName": "Skin Goku Rose 1"
+  },
+  {
+    "itemId": 2071,
+    "name": "cui",
+    "assetPath": "Spine/Skins/10142/skin",
+    "webPath": "assets/skins/10142/skin",
+    "displayName": "Skin Cui"
+  },
+  {
+    "itemId": 2072,
+    "name": "broly",
+    "assetPath": "Spine/Skins/10143/skin",
+    "webPath": "assets/skins/10143/skin",
+    "displayName": "Skin Broly"
+  },
+  {
+    "itemId": 2073,
+    "name": "Goku_ssj5",
+    "assetPath": "Spine/Skins/10144/skin",
+    "webPath": "assets/skins/10144/skin",
+    "displayName": "Skin Goku SSJ5"
+  },
+  {
+    "itemId": 2074,
+    "name": "Baby_Vegata",
+    "assetPath": "Spine/Skins/10145/skin",
+    "webPath": "assets/skins/10145/skin",
+    "displayName": "Skin Baby Vegeta"
+  },
+  {
+    "itemId": 2075,
+    "name": "Broly_toc_do",
+    "assetPath": "Spine/Skins/10146/skin",
+    "webPath": "assets/skins/10146/skin",
+    "displayName": "Skin Broly Tóc Đỏ"
+  },
+  {
+    "itemId": 2076,
+    "name": "Dodoria",
+    "assetPath": "Spine/Skins/10147/skin",
+    "webPath": "assets/skins/10147/skin",
+    "displayName": "Skin Dodoria"
+  },
+  {
+    "itemId": 2077,
+    "name": "android17",
+    "assetPath": "Spine/Skins/10148/skin",
+    "webPath": "assets/skins/10148/skin",
+    "displayName": "Skin Android17"
+  },
+  {
+    "itemId": 2078,
+    "name": "Xicor",
+    "assetPath": "Spine/Skins/10149/skin",
+    "webPath": "assets/skins/10149/skin",
+    "displayName": "Skin Xicor"
+  },
+  {
+    "itemId": 2079,
+    "name": "Namek_god",
+    "assetPath": "Spine/Skins/10150/skin",
+    "webPath": "assets/skins/10150/skin",
+    "displayName": "Skin Namek God"
+  },
+  {
+    "itemId": 2080,
+    "name": "Bulma_baibien",
+    "assetPath": "Spine/Skins/10151/skin",
+    "webPath": "assets/skins/10151/skin",
+    "displayName": "Skin Bulma Bãi Biển"
+  },
+  {
+    "itemId": 2081,
+    "name": "Cumber_toc_trang",
+    "assetPath": "Spine/Skins/10152/skin",
+    "webPath": "assets/skins/10152/skin",
+    "displayName": "Skin Cumber Tóc Trắng"
+  },
+  {
+    "itemId": 2082,
+    "name": "cell_bohung",
+    "assetPath": "Spine/Skins/10153/skin",
+    "webPath": "assets/skins/10153/skin",
+    "displayName": "Skin Cell Bohung"
+  },
+  {
+    "itemId": 2083,
+    "name": "kunshi",
+    "assetPath": "Spine/Skins/10154/skin",
+    "webPath": "assets/skins/10154/skin",
+    "displayName": "Skin Kunshi"
+  },
+  {
+    "itemId": 2084,
+    "name": "effect_skill236",
+    "assetPath": "Spine/Skins/10155/skin",
+    "webPath": "assets/skins/10155/skin",
+    "displayName": "Skin Effect Skill 236"
+  },
+  {
+    "itemId": 2085,
+    "name": "dokkan",
+    "assetPath": "Spine/Skins/10156/skin",
+    "webPath": "assets/skins/10156/skin",
+    "displayName": "Skin Dokkan"
+  },
+  {
+    "itemId": 2086,
+    "name": "Fu",
+    "assetPath": "Spine/Skins/10157/skin",
+    "webPath": "assets/skins/10157/skin",
+    "displayName": "Skin Fu"
+  },
+  {
+    "itemId": 2087,
+    "name": "gomah",
+    "assetPath": "Spine/Skins/10158/skin",
+    "webPath": "assets/skins/10158/skin",
+    "displayName": "Skin Gomah"
+  },
+  {
+    "itemId": 2088,
+    "name": "Cell_do",
+    "assetPath": "Spine/Skins/10159/skin",
+    "webPath": "assets/skins/10159/skin",
+    "displayName": "Skin Cell Đỏ"
+  },
+  {
+    "itemId": 2089,
+    "name": "tao_paipai",
+    "assetPath": "Spine/Skins/10160/skin",
+    "webPath": "assets/skins/10160/skin",
+    "displayName": "Skin Tao Pai Pai"
+  },
+  {
+    "itemId": 2090,
+    "name": "fide",
+    "assetPath": "Spine/Skins/10161/skin",
+    "webPath": "assets/skins/10161/skin",
+    "displayName": "Skin Fide"
+  },
+  {
+    "itemId": 2091,
+    "name": "Gogeta_ssj5_toctim",
+    "assetPath": "Spine/Skins/10162/skin",
+    "webPath": "assets/skins/10162/skin",
+    "displayName": "Skin Gogeta SSJ5 Toctim"
+  },
+  {
+    "itemId": 2092,
+    "name": "Kefla",
+    "assetPath": "Spine/Skins/10163/skin",
+    "webPath": "assets/skins/10163/skin",
+    "displayName": "Skin Kefla"
+  },
+  {
+    "itemId": 2093,
+    "name": "Bu_map",
+    "assetPath": "Spine/Skins/10164/skin",
+    "webPath": "assets/skins/10164/skin",
+    "displayName": "Skin Buu Mập"
+  },
+  {
+    "itemId": 2094,
+    "name": "hearts2",
+    "assetPath": "Spine/Skins/10165/skin",
+    "webPath": "assets/skins/10165/skin",
+    "displayName": "Skin Hearts2"
+  },
+  {
+    "itemId": 2095,
+    "name": "Goku_dau_vang",
+    "assetPath": "Spine/Skins/10166/skin",
+    "webPath": "assets/skins/10166/skin",
+    "displayName": "Skin Goku Đầu Vàng"
+  },
+  {
+    "itemId": 2096,
+    "name": "Zeno",
+    "assetPath": "Spine/Skins/10167/skin",
+    "webPath": "assets/skins/10167/skin",
+    "displayName": "Skin Zeno"
+  },
+  {
+    "itemId": 2097,
+    "name": "Buuhan",
+    "assetPath": "Spine/Skins/10168/skin",
+    "webPath": "assets/skins/10168/skin",
+    "displayName": "Skin Buuhan"
+  },
+  {
+    "itemId": 2098,
+    "name": "yamcha",
+    "assetPath": "Spine/Skins/10169/skin",
+    "webPath": "assets/skins/10169/skin",
+    "displayName": "Skin Yamcha"
+  },
+  {
+    "itemId": 2099,
+    "name": "Dabura",
+    "assetPath": "Spine/Skins/10170/skin",
+    "webPath": "assets/skins/10170/skin",
+    "displayName": "Skin Dabura"
+  },
+  {
+    "itemId": 2100,
+    "name": "Cell_trang",
+    "assetPath": "Spine/Skins/10171/skin",
+    "webPath": "assets/skins/10171/skin",
+    "displayName": "Skin Cell Trắng"
+  },
+  {
+    "itemId": 2101,
+    "name": "broly_tocvang",
+    "assetPath": "Spine/Skins/10172/skin",
+    "webPath": "assets/skins/10172/skin",
+    "displayName": "Skin Broly Tóc Vàng"
+  },
+  {
+    "itemId": 2102,
+    "name": "Bulma_halloween",
+    "assetPath": "Spine/Skins/10173/skin",
+    "webPath": "assets/skins/10173/skin",
+    "displayName": "Skin Bulma Halloween"
+  },
+  {
+    "itemId": 2103,
+    "name": "Bulma_nhatbinh",
+    "assetPath": "Spine/Skins/10174/skin",
+    "webPath": "assets/skins/10174/skin",
+    "displayName": "Skin Bulma Nhật Bình"
+  },
+  {
+    "itemId": 2104,
+    "name": "fieza3rdform",
+    "assetPath": "Spine/Skins/10175/skin",
+    "webPath": "assets/skins/10175/skin",
+    "displayName": "Skin Frieza 3rd Form"
+  },
+  {
+    "itemId": 2105,
+    "name": "Gogeta",
+    "assetPath": "Spine/Skins/10176/skin",
+    "webPath": "assets/skins/10176/skin",
+    "displayName": "Skin Gogeta"
+  },
+  {
+    "itemId": 2106,
+    "name": "Goku_ssj5_toc_den",
+    "assetPath": "Spine/Skins/10177/skin",
+    "webPath": "assets/skins/10177/skin",
+    "displayName": "Skin Goku SSJ5 Tóc Đen"
+  },
+  {
+    "itemId": 2107,
+    "name": "Jiren",
+    "assetPath": "Spine/Skins/10178/skin",
+    "webPath": "assets/skins/10178/skin",
+    "displayName": "Skin Jiren"
+  },
+  {
+    "itemId": 2108,
+    "name": "khi_oozaru",
+    "assetPath": "Spine/Skins/10179/khi_oozaru",
+    "webPath": "assets/skins/10179/khi_oozaru",
+    "displayName": "Skin Khỉ Oozaru"
+  },
+  {
+    "itemId": 2109,
+    "name": "Majin_duu_1",
+    "assetPath": "Spine/Skins/10180/skin",
+    "webPath": "assets/skins/10180/skin",
+    "displayName": "Skin Majin Buu 1"
+  },
+  {
+    "itemId": 2110,
+    "name": "Moro",
+    "assetPath": "Spine/Skins/10181/skin",
+    "webPath": "assets/skins/10181/skin",
+    "displayName": "Skin Moro"
+  },
+  {
+    "itemId": 2111,
+    "name": "skin_10099",
+    "assetPath": "Spine/Skins/10099/skin",
+    "webPath": "assets/skins/10099/skin",
+    "displayName": "Skin 10099"
+  },
+  {
+    "itemId": 2112,
+    "name": "goku",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/1/goku",
+    "webPath": "assets/skins/1/goku",
+    "displayName": "Skin goku (1)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2113,
+    "name": "gohan",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/5/gohan",
+    "webPath": "assets/skins/5/gohan",
+    "displayName": "Skin gohan (5)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2114,
+    "name": "Android18",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10005/Vegeta",
+    "webPath": "assets/skins/10005/Vegeta",
+    "displayName": "Skin Android 18 (10005)",
+    "source": "external-data",
+    "renameNote": "auto-audit: texture shows blonde jacket Android 18, source file was named Vegeta"
+  },
+  {
+    "itemId": 2115,
+    "name": "gohan_ssj1",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10007/gohan_ssj1",
+    "webPath": "assets/skins/10007/gohan_ssj1",
+    "displayName": "Skin gohan_ssj1 (10007)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2116,
+    "name": "Vegito",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10017/Vegito",
+    "webPath": "assets/skins/10017/Vegito",
+    "displayName": "Skin Vegito (10017)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2117,
+    "name": "fieza",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10021/fieza",
+    "webPath": "assets/skins/10021/fieza",
+    "displayName": "Skin fieza (10021)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2118,
+    "name": "gohan_ssj1",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10023/gohan_ssj1",
+    "webPath": "assets/skins/10023/gohan_ssj1",
+    "displayName": "Skin gohan_ssj1 (10023)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2119,
+    "name": "gohan_ssj1",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10038/gohan_ssj1",
+    "webPath": "assets/skins/10038/gohan_ssj1",
+    "displayName": "Skin gohan_ssj1 (10038)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2120,
+    "name": "Cumber",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10049/Cumber",
+    "webPath": "assets/skins/10049/Cumber",
+    "displayName": "Skin Cumber (10049)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2121,
+    "name": "Bulma_nhatbinh",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10050/Bulma_nhatbinh",
+    "webPath": "assets/skins/10050/Bulma_nhatbinh",
+    "displayName": "Skin Bulma_nhatbinh (10050)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2122,
+    "name": "Bulma_kimono",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10052/Bulma_kimono",
+    "webPath": "assets/skins/10052/Bulma_kimono",
+    "displayName": "Skin Bulma_kimono (10052)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2123,
+    "name": "Goku",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10053/Goku",
+    "webPath": "assets/skins/10053/Goku",
+    "displayName": "Skin Goku (10053)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2124,
+    "name": "Vegeta",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10054/Vegeta",
+    "webPath": "assets/skins/10054/Vegeta",
+    "displayName": "Skin Vegeta (10054)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2125,
+    "name": "Broly",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10055/Broly",
+    "webPath": "assets/skins/10055/Broly",
+    "displayName": "Skin Broly (10055)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2126,
+    "name": "namek",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10056/namek",
+    "webPath": "assets/skins/10056/namek",
+    "displayName": "Skin namek (10056)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2127,
+    "name": "Gohan",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10057/Gohan",
+    "webPath": "assets/skins/10057/Gohan",
+    "displayName": "Skin Gohan (10057)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2128,
+    "name": "broly_tocbac",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10060/broly_tocbac",
+    "webPath": "assets/skins/10060/broly_tocbac",
+    "displayName": "Skin broly_tocbac (10060)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2129,
+    "name": "Kefla",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10061/Kefla",
+    "webPath": "assets/skins/10061/Kefla",
+    "displayName": "Skin Kefla (10061)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2130,
+    "name": "Jiren",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10063/Jiren",
+    "webPath": "assets/skins/10063/Jiren",
+    "displayName": "Skin Jiren (10063)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2131,
+    "name": "Vegeta",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10064/Vegeta",
+    "webPath": "assets/skins/10064/Vegeta",
+    "displayName": "Skin Vegeta (10064)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2132,
+    "name": "Goku_ssj5",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10069/Goku_ssj5",
+    "webPath": "assets/skins/10069/Goku_ssj5",
+    "displayName": "Skin Goku_ssj5 (10069)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2133,
+    "name": "Vegito",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10501/Vegito",
+    "webPath": "assets/skins/10501/Vegito",
+    "displayName": "Skin Vegito (10501)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2134,
+    "name": "Vegeta",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10511/Vegeta",
+    "webPath": "assets/skins/10511/Vegeta",
+    "displayName": "Skin Vegeta (10511)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2135,
+    "name": "khi_vang",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10516/khi_vang",
+    "webPath": "assets/skins/10516/khi_vang",
+    "displayName": "Skin khi_vang (10516)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2136,
+    "name": "Gogeta",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10517/Gogeta",
+    "webPath": "assets/skins/10517/Gogeta",
+    "displayName": "Skin Gogeta (10517)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2137,
+    "name": "Vegeta",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10702/Vegeta",
+    "webPath": "assets/skins/10702/Vegeta",
+    "displayName": "Skin Vegeta (10702)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2138,
+    "name": "broly",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/10703/broly",
+    "webPath": "assets/skins/10703/broly",
+    "displayName": "Skin broly (10703)",
+    "source": "external-data"
+  },
+  {
+    "itemId": 2139,
+    "name": "Vegeta",
+    "assetPath": "external:/Users/huyencute/suu tầm/Data/Data/resource/player/spines/14000/Vegeta",
+    "webPath": "assets/skins/14000/Vegeta",
+    "displayName": "Skin Vegeta (14000)",
+    "source": "external-data"
+  }
+]

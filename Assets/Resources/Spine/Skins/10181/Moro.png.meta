@@ -1,0 +1,845 @@
+fileFormatVersion: 2
+guid: c351d27a1d6764a28b5c16ba767a4f37
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4745841519429432463
+    second: Moro_0
+  - first:
+      213: -7189439187696556313
+    second: Moro_1
+  - first:
+      213: 47320510858252635
+    second: Moro_2
+  - first:
+      213: 5481127803673511752
+    second: Moro_3
+  - first:
+      213: 5773330569655954834
+    second: Moro_4
+  - first:
+      213: -8103812298232634252
+    second: Moro_5
+  - first:
+      213: -6443008275797191198
+    second: Moro_6
+  - first:
+      213: 5208882871138831395
+    second: Moro_7
+  - first:
+      213: 7096147045186133717
+    second: Moro_8
+  - first:
+      213: 4713351033217321263
+    second: Moro_9
+  - first:
+      213: 351700254952111421
+    second: Moro_10
+  - first:
+      213: -7467178287332552737
+    second: Moro_11
+  - first:
+      213: 8055646396250169483
+    second: Moro_12
+  - first:
+      213: 7065831777191296757
+    second: Moro_13
+  - first:
+      213: -8053823998005294270
+    second: Moro_14
+  - first:
+      213: 1741385462122764122
+    second: Moro_15
+  - first:
+      213: 2349816138274723185
+    second: Moro_16
+  - first:
+      213: 1621669327581077180
+    second: Moro_17
+  - first:
+      213: -4874727180174537374
+    second: Moro_18
+  - first:
+      213: -4247628375224767733
+    second: Moro_19
+  - first:
+      213: 1942364618948824703
+    second: Moro_20
+  - first:
+      213: -3539071471964294736
+    second: Moro_21
+  - first:
+      213: 3734349737008881039
+    second: Moro_22
+  - first:
+      213: -6840835582948358008
+    second: Moro_23
+  - first:
+      213: 5289636538864554466
+    second: Moro_24
+  - first:
+      213: -7327627359384643054
+    second: Moro_25
+  - first:
+      213: -414712893703328363
+    second: Moro_26
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Moro_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 453
+        width: 55
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8434e5a7bd9cd140800000000000000
+      internalID: 4745841519429432463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_1
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 464
+        width: 76
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e6e21b662bf93c90800000000000000
+      internalID: -7189439187696556313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_2
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 452
+        width: 56
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b51db4001cd18a000800000000000000
+      internalID: 47320510858252635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_3
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 500
+        width: 24
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8470a7a72b0e01c40800000000000000
+      internalID: 5481127803673511752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_4
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 346
+        width: 336
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29d2f3f809dfe1050800000000000000
+      internalID: 5773330569655954834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 392
+        width: 67
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 474e66d86a9798f80800000000000000
+      internalID: -8103812298232634252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_6
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 297
+        width: 156
+        height: 155
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e5d4341c16d596a0800000000000000
+      internalID: -6443008275797191198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_7
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 447
+        width: 24
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32cc8da9f5ba94840800000000000000
+      internalID: 5208882871138831395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 223
+        height: 393
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ded14ef3249a7260800000000000000
+      internalID: 7096147045186133717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_9
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 297
+        width: 109
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2983a4dacf296140800000000000000
+      internalID: 4713351033217321263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_10
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 298
+        width: 52
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3db5dbb48d71e400800000000000000
+      internalID: 351700254952111421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_11
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 93
+        width: 62
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fdf880519e04f5890800000000000000
+      internalID: -7467178287332552737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_12
+      rect:
+        serializedVersion: 2
+        x: 435
+        y: 287
+        width: 76
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b80a5ac77b76bcf60800000000000000
+      internalID: 8055646396250169483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_13
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 324
+        width: 27
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fe7722a090ee0260800000000000000
+      internalID: 7065831777191296757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_14
+      rect:
+        serializedVersion: 2
+        x: 186
+        y: 179
+        width: 164
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24bc06baeb11b3090800000000000000
+      internalID: -8053823998005294270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_15
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 244
+        width: 44
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a575bdef9d4aa2810800000000000000
+      internalID: 1741385462122764122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_16
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 257
+        width: 81
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1755851f3593c9020800000000000000
+      internalID: 2349816138274723185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_17
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 89
+        width: 79
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbedd9559a3518610800000000000000
+      internalID: 1621669327581077180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_18
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 121
+        width: 59
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26d41c0057d795cb0800000000000000
+      internalID: -4874727180174537374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_19
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 179
+        width: 47
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0babd46f746d05c0800000000000000
+      internalID: -4247628375224767733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_20
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 119
+        width: 46
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7e4bb0745aa4fa10800000000000000
+      internalID: 1942364618948824703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_21
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 122
+        width: 59
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b179de3f31b2eec0800000000000000
+      internalID: -3539071471964294736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_22
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 2
+        width: 106
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8ddc75ec4313d330800000000000000
+      internalID: 3734349737008881039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_23
+      rect:
+        serializedVersion: 2
+        x: 318
+        y: 1
+        width: 121
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 888c28718487011a0800000000000000
+      internalID: -6840835582948358008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_24
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 94
+        width: 50
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e1d2f90860986940800000000000000
+      internalID: 5289636538864554466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_25
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 41
+        width: 73
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21ad1757db90f4a90800000000000000
+      internalID: -7327627359384643054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Moro_26
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 0
+        width: 75
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59de90702d4ae3af0800000000000000
+      internalID: -414712893703328363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Moro_0: 4745841519429432463
+      Moro_1: -7189439187696556313
+      Moro_10: 351700254952111421
+      Moro_11: -7467178287332552737
+      Moro_12: 8055646396250169483
+      Moro_13: 7065831777191296757
+      Moro_14: -8053823998005294270
+      Moro_15: 1741385462122764122
+      Moro_16: 2349816138274723185
+      Moro_17: 1621669327581077180
+      Moro_18: -4874727180174537374
+      Moro_19: -4247628375224767733
+      Moro_2: 47320510858252635
+      Moro_20: 1942364618948824703
+      Moro_21: -3539071471964294736
+      Moro_22: 3734349737008881039
+      Moro_23: -6840835582948358008
+      Moro_24: 5289636538864554466
+      Moro_25: -7327627359384643054
+      Moro_26: -414712893703328363
+      Moro_3: 5481127803673511752
+      Moro_4: 5773330569655954834
+      Moro_5: -8103812298232634252
+      Moro_6: -6443008275797191198
+      Moro_7: 5208882871138831395
+      Moro_8: 7096147045186133717
+      Moro_9: 4713351033217321263
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
