@@ -483,6 +483,10 @@ public class ModFunc : IActionListener
 
     public bool UpdateKey(int key)
     {
+        if (CustomInventoryPanel.isShow)
+        {
+            return false;
+        }
         switch (key)
         {
             case 97:

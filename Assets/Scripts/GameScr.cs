@@ -4530,8 +4530,6 @@ public class GameScr : mScreen, IChatable
 		{
 			AutoXmap.Update();
 			ModFunc.GI().Update();
-            FriendPopup.gI().Update();
-            EnemyPopup.gI().Update();
             ChatLogPopup.gI().Update();
             CustomInventoryPanel.Update();
         }
@@ -5383,8 +5381,6 @@ public class GameScr : mScreen, IChatable
 		AdminPopup.gI().paint(g);
         CustomInventoryPanel.Paint(g);
         ChatLogPopup.gI().Paint(g);
-        FriendPopup.gI().Paint(g);
-        EnemyPopup.gI().Paint(g);
     }
 
 	private void paintXoSo(mGraphics g)
@@ -6364,7 +6360,7 @@ public class GameScr : mScreen, IChatable
 
 	public bool isOpenUI()
 	{
-		if (isPaintItemInfo || isPaintInfoMe || isPaintStore || isPaintNonNam || isPaintNonNu || isPaintAoNam || isPaintAoNu || isPaintGangTayNam || isPaintGangTayNu || isPaintQuanNam || isPaintQuanNu || isPaintGiayNam || isPaintGiayNu || isPaintLien || isPaintNhan || isPaintNgocBoi || isPaintPhu || isPaintWeapon || isPaintStack || isPaintStackLock || isPaintGrocery || isPaintGroceryLock || isPaintUpGrade || isPaintConvert || isPaintUpPearl || isPaintBox || isPaintSplit || isPaintTrade)
+		if (CustomInventoryPanel.isShow || isPaintItemInfo || isPaintInfoMe || isPaintStore || isPaintNonNam || isPaintNonNu || isPaintAoNam || isPaintAoNu || isPaintGangTayNam || isPaintGangTayNu || isPaintQuanNam || isPaintQuanNu || isPaintGiayNam || isPaintGiayNu || isPaintLien || isPaintNhan || isPaintNgocBoi || isPaintPhu || isPaintWeapon || isPaintStack || isPaintStackLock || isPaintGrocery || isPaintGroceryLock || isPaintUpGrade || isPaintConvert || isPaintUpPearl || isPaintBox || isPaintSplit || isPaintTrade)
 		{
 			return true;
 		}

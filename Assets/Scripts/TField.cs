@@ -72,13 +72,13 @@ public class TField : IActionListener
 
 	private string paintedText = string.Empty;
 
-	private int caretPos;
+	public int caretPos;
 
 	private int counter;
 
 	private int maxTextLenght = 500;
 
-	private int offsetX;
+	public int offsetX;
 
 	private static int lastKey = -1984;
 
@@ -185,10 +185,10 @@ public class TField : IActionListener
 		new int[2] { 44, 108 }
 	};
 
-	private static string[] telexMap = new string[13]
+	private static string[] telexMap = new string[14]
 	{
-		"aw|ă", "aa|â", "dd|đ", "ow|ơ", "oo|ô", "ee|ê", "uw|ư", "w|ư", "s|\u0301", "f|\u0300",
-		"r|\u0309", "x|\u0303", "j|\u0323"
+		"aw|ă", "aa|â", "dd|đ", "ow|ơ", "oo|ô", "ee|ê", "uw|ư", "w|ư", 
+		"s|s", "f|f", "r|r", "x|x", "j|j", "z|z"
 	};
 
 	private string telexBuffer = "";
@@ -852,19 +852,21 @@ public class TField : IActionListener
 			}
 			string before = text.Substring(0, pos);
 			string after = ((caretPos < text.Length) ? text.Substring(caretPos) : "");
-			if (input.Length == 1 && "sfrxj".Contains(input))
+			if (input.Length == 1 && "sfrxjz".Contains(input))
 			{
 				if (pos > 0)
 				{
 					char prevChar = text[pos - 1];
 					char newChar = addMark(prevChar, output[0]);
-					if (newChar == prevChar)
+					if (newChar == prevChar && input != "z")
 					{
+						// Nếu không thêm được dấu, giữ nguyên ký tự vừa gõ
 						text = before + input + after;
 						caretPos = pos + 1;
 					}
 					else
 					{
+						// Thay thế bằng ký tự đã có dấu (hoặc đã bỏ dấu nếu là z)
 						text = before.Substring(0, before.Length - 1) + newChar + after;
 						caretPos = pos;
 					}
@@ -875,52 +877,50 @@ public class TField : IActionListener
 				}
 				continue;
 			}
-			if (pos > 0 && input.Length == 2 && "âăêôơư".Contains(text[pos - 1].ToString()))
-			{
-				text = before + input[1] + after;
-				caretPos = pos + 1;
-				telexBuffer = "";
-				setPasswordTest();
-				setOffset();
-			}
-			else
-			{
-				text = before + output + after;
-				caretPos = pos + 1;
-				telexBuffer = "";
-				setPasswordTest();
-				setOffset();
-			}
+			// Xử lý các phím kết hợp như aw, aa, dd, oo...
+			text = before + output + after;
+			caretPos = pos + 1;
+			telexBuffer = "";
+			setPasswordTest();
+			setOffset();
 			break;
 		}
 	}
 
 	private char addMark(char c, char mark)
 	{
-		if ("aáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵ".IndexOf(c) < 0)
+		string vowels = "aáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵ";
+		if (vowels.IndexOf(c) < 0)
 		{
 			return c;
 		}
-		char baseVowel = c;
+		
 		int markType = getMarkType(mark);
-		string[] array;
-		if ("âăêôơư".Contains(baseVowel.ToString()))
+		if (markType == -1) return c; // Không phải phím dấu chuẩn
+
+		string[] markSets = new string[] 
+		{ 
+			"aáàảãạ", "âấầẩẫậ", "ăắằẳẵặ", 
+			"eéèẻẽẹ", "êếềểễệ", 
+			"iíìỉĩị", 
+			"oóòỏõọ", "ôốồổỗộ", "ơớờởỡợ", 
+			"uúùủũụ", "ưứừửữự", 
+			"yýỳỷỹỵ" 
+		};
+
+		foreach (string set in markSets)
 		{
-			array = new string[6] { "âấầẩẫậ", "ăắằẳẵặ", "êếềểễệ", "ôốồổỗộ", "ơớờởỡợ", "ưứừửữự" };
-			foreach (string specialMark in array)
+			if (set.Contains(c.ToString()))
 			{
-				if (specialMark[0] == baseVowel)
-				{
-					return specialMark[markType + 1];
-				}
-			}
-		}
-		array = new string[6] { "aáàảãạ", "eéèẻẽẹ", "iíìỉĩị", "oóòỏõọ", "uúùủũụ", "yýỳỷỹỵ" };
-		foreach (string markSet in array)
-		{
-			if (markSet.Contains(baseVowel))
-			{
-				return markSet[markType + 1];
+				if (mark == 'z') return set[0]; // Bỏ dấu
+				
+				int currentMark = set.IndexOf(c);
+				int nextMark = markType + 1;
+				
+				// Nếu đang có dấu đó rồi thì bỏ dấu (xoay vòng)
+				if (currentMark == nextMark) return set[0];
+				
+				return set[nextMark];
 			}
 		}
 		return c;
@@ -928,14 +928,14 @@ public class TField : IActionListener
 
 	private int getMarkType(char mark)
 	{
-		return mark switch
+		switch (mark)
 		{
-			'\u0301' => 0, 
-			'\u0300' => 1, 
-			'\u0309' => 2, 
-			'\u0303' => 3, 
-			'\u0323' => 4, 
-			_ => 0, 
-		};
+			case 's': return 0;
+			case 'f': return 1;
+			case 'r': return 2;
+			case 'x': return 3;
+			case 'j': return 4;
+			default: return -1;
+		}
 	}
 }

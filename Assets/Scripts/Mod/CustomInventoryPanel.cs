@@ -59,11 +59,14 @@ public class CustomInventoryPanel
     private static bool draggingSkill;
     private static bool skillDragged;
     private static bool globalDragged;
+    private static int bagElasticY;
     private static int clanMsgScrollY;
     private static int clanLogicScrollY;
     private static int selectedClanMsgIndex = -1;
     private static int selectedClanLogicIndex = -1;
     private static int selectedClanMenuIndex;
+    private static bool isEditingSlogan;
+    private static TField sloganTField;
     private static int selectedToolGroupIndex;
     private static int selectedToolAction = -1;
     private static int selectedToolDetailIndex = -1;
@@ -218,13 +221,26 @@ public class CustomInventoryPanel
                 return;
             }
 
-            // Nếu có Dialog hoặc Menu gốc hoặc bất kỳ Popup nào đang mở, không xử lý input của CustomPanel
-            if (GameCanvas.currentDialog != null || GameCanvas.menu.showMenu || (GameCanvas.panel != null && GameCanvas.panel.cp != null) || 
-                ChatLogPopup.gI().IsPointerInPopup() || FriendPopup.gI().IsPointerInPopup() || EnemyPopup.gI().IsPointerInPopup())
+            // ƯU TIÊN 1: Nếu có Dialog (như bảng hỏi Rời bang), dừng tất cả input của Panel để nhường cho Dialog
+            if (GameCanvas.currentDialog != null)
             {
-                if (ChatLogPopup.gI().IsPointerInPopup() || FriendPopup.gI().IsPointerInPopup() || EnemyPopup.gI().IsPointerInPopup())
+                return;
+            }
+
+            // Xử lý logic cho TabClanIcon nếu đang hiển thị
+            if (GameCanvas.panel != null && GameCanvas.panel.tabIcon != null && GameCanvas.panel.tabIcon.isShow)
+            {
+                GameCanvas.panel.tabIcon.update();
+                GameCanvas.panel.tabIcon.updateKey();
+                return; 
+            }
+
+            // Nếu có Menu gốc hoặc bất kỳ Popup nào đang mở, không xử lý input của CustomPanel
+            if (GameCanvas.menu.showMenu || (GameCanvas.panel != null && GameCanvas.panel.cp != null) || 
+                ChatLogPopup.gI().IsPointerInPopup())
+            {
+                if (ChatLogPopup.gI().IsPointerInPopup())
                 {
-                    // Vẫn cần ResetSelection để tránh "dính" highlight khi click vào popup
                     ResetSelection();
                 }
                 return;
@@ -238,6 +254,93 @@ public class CustomInventoryPanel
             int px = GameCanvas.px;
             int py = GameCanvas.py;
             ComputeLayout();
+            
+            // 2. Cập nhật và xử lý Input cho các TField (Chat bang, Chat thế giới, Slogan)
+            TField currentFocus = null;
+            
+            // Ràng buộc focus theo Tab hiện tại để tránh xung đột
+            if (topTab == 5) // Tab Bang Hội
+            {
+                if (clanChatTField != null && clanChatTField.isFocus) currentFocus = clanChatTField;
+                else if (selectedClanMenuIndex == 1 && sloganTField != null && sloganTField.isFocus) currentFocus = sloganTField;
+                
+                // Tắt focus của worldChat nếu đang ở tab Bang
+                if (worldChatTField != null) worldChatTField.isFocus = false;
+            }
+            else if (topTab == 7) // Tab Công cụ (Chat thế giới)
+            {
+                if (worldChatTField != null && worldChatTField.isFocus) currentFocus = worldChatTField;
+                
+                // Tắt focus của clanChat/slogan nếu đang ở tab Công cụ
+                if (clanChatTField != null) clanChatTField.isFocus = false;
+                if (sloganTField != null) sloganTField.isFocus = false;
+            }
+            else
+            {
+                // Nếu ở các tab khác, tắt toàn bộ focus
+                if (clanChatTField != null) clanChatTField.isFocus = false;
+                if (worldChatTField != null) worldChatTField.isFocus = false;
+                if (sloganTField != null) sloganTField.isFocus = false;
+            }
+
+            // Chỉ update các field có khả năng hiển thị để tối ưu và tránh lỗi con trỏ
+            if (topTab == 5)
+            {
+                if (clanChatTField != null) clanChatTField.update();
+                if (selectedClanMenuIndex == 1 && sloganTField != null) sloganTField.update();
+            }
+            else if (topTab == 7)
+            {
+                if (worldChatTField != null) worldChatTField.update();
+            }
+
+            // 3. Tiêu thụ phím nhấn để chặn phím tắt toàn cục (P, B, C...) khi Panel đang mở
+            if (GameCanvas.keyAsciiPress != 0)
+            {
+                int k = GameCanvas.keyAsciiPress;
+                if (currentFocus != null)
+                {
+                    // Nếu đang focus ô nhập liệu, xử lý gõ phím
+                    if (k == 10 || k == -5) // Enter hoặc phím chọn
+                    {
+                        if (currentFocus == clanChatTField) HandleSendClanChat();
+                        else if (currentFocus == worldChatTField) HandleSendWorldChat();
+                        else if (currentFocus == sloganTField) HandleSaveSlogan();
+                        SoundMn.gI().panelClick();
+                    }
+                    else
+                    {
+                        currentFocus.keyPressed(k);
+                    }
+                }
+                // LUÔN LUÔN xóa phím sau khi xử lý (hoặc để chặn nếu không có focus)
+                GameCanvas.keyAsciiPress = 0;
+            }
+
+            // 4. Xử lý các phím chức năng đặc biệt (Xóa, Enter/OK từ keyPressed)
+            if (currentFocus != null)
+            {
+                // Phím Xóa (Backspace)
+                if (GameCanvas.keyPressed[14] || GameCanvas.keyPressed[8] || GameCanvas.keyPressed[(!Main.isPC) ? 2 : 21])
+                {
+                    currentFocus.keyPressed(8);
+                    GameCanvas.keyPressed[14] = false;
+                    GameCanvas.keyPressed[8] = false;
+                    GameCanvas.keyPressed[(!Main.isPC) ? 2 : 21] = false;
+                    GameCanvas.clearKeyPressed();
+                }
+
+                // Phím Enter/OK bổ sung từ keyPressed
+                if (GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25])
+                {
+                    if (currentFocus == clanChatTField) HandleSendClanChat();
+                    else if (currentFocus == worldChatTField) HandleSendWorldChat();
+                    else if (currentFocus == sloganTField) HandleSaveSlogan();
+                    SoundMn.gI().panelClick();
+                    GameCanvas.clearKeyPressed();
+                }
+            }
+
             if (selectedGameInfoPopup != null)
             {
                 UpdatePopupScroll();
@@ -369,7 +472,7 @@ public class CustomInventoryPanel
                 
                 // Đóng panel khi click ra ngoài (Tap outside), tránh đóng khi click vào các popup
                 if (!pointerInPanel && !globalDragged && isDownOutside && 
-                    !ChatLogPopup.gI().IsPointerInPopup() && !FriendPopup.gI().IsPointerInPopup() && !EnemyPopup.gI().IsPointerInPopup())
+                    !ChatLogPopup.gI().IsPointerInPopup())
                 {
                     ClosePanelState(true);
                     return;
@@ -498,18 +601,16 @@ public class CustomInventoryPanel
     private static void ComputeLayout()
     {
         panelW = (GameCanvas.w - 28 < 540) ? (GameCanvas.w - 28) : 540;
-        // Tăng chiều cao panel để phần tab trên cùng và nội dung có thêm khoảng thở.
-        panelH = (GameCanvas.h - 20 < 360) ? (GameCanvas.h - 20) : 360;
+        panelH = (GameCanvas.h - 24 < 330) ? (GameCanvas.h - 24) : 330;
         if (panelW < 420)
         {
             panelW = 420;
         }
-        if (panelH < 310)
+        if (panelH < 290)
         {
-            panelH = 310;
+            panelH = 290;
         }
         panelX = (GameCanvas.w - panelW) / 2;
-        // Không kéo panel lên trên nữa để tránh tab top bị nhô khỏi khung.
         panelY = (GameCanvas.h - panelH) / 2;
         if (panelY < 6)
         {
@@ -537,53 +638,90 @@ public class CustomInventoryPanel
         int safeW = panelW - 48;
         int rightX = safeX + safeW / 2 + 10;
         int rightY = panelY + 66;
-        int viewW = safeW / 2;
-        int viewH = panelY + panelH - 36 - rightY;
+        int gap = 4;
+        int cols = 6;
+        int viewW = 34 * cols + gap * (cols - 1);
+        int viewH = panelY + panelH - 14 - rightY;
         int maxScroll = GetBagMaxScroll(viewH);
-        bool inside = GameCanvas.px >= rightX - 10 && GameCanvas.px <= rightX + viewW + 10 && GameCanvas.py >= rightY - 10 && GameCanvas.py <= rightY + viewH + 10;
+        
+        bool inside = GameCanvas.px >= rightX && GameCanvas.px <= rightX + viewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + viewH;
+        
         if ((inside || draggingBag) && GameCanvas.isPointerDown)
         {
             if (!draggingBag)
             {
+                for (int i = 0; i < dragLastY.Length; i++)
+                {
+                    dragLastY[i] = GameCanvas.py;
+                }
+                firstDragY = GameCanvas.py;
                 draggingBag = true;
-                bagScrollYBeforeDrag = bagScrollY;
                 downWhenRunning = (bagScrollRun != 0);
                 bagScrollRun = 0;
+                bagScrollCmdy = 0;
+                bagScrollCmvy = 0;
+                bagScrollTargetY = bagScrollY;
+                dragTime = 0;
             }
             else
             {
+                dragTime++;
                 int dy = GameCanvas.py - dragLastY[0];
-                bagScrollTargetY -= dy;
+                for (int i = dragLastY.Length - 1; i > 0; i--)
+                {
+                    dragLastY[i] = dragLastY[i - 1];
+                }
+                dragLastY[0] = GameCanvas.py;
                 
-                // Giới hạn biên cứng khi đang drag (cho phép kéo lố 60px để tạo cảm giác đàn hồi)
-                if (bagScrollTargetY < -60) bagScrollTargetY = -60;
-                if (bagScrollTargetY > maxScroll + 60) bagScrollTargetY = maxScroll + 60;
-
-                // Trong lúc drag, ép bagScrollY đi theo TargetY ngay lập tức để bám chuột (không smoothing)
-                bagScrollY = bagScrollTargetY;
+                if (maxScroll == 0 || (bagScrollY <= 0 && dy > 0) || (bagScrollY >= maxScroll && dy < 0))
+                {
+                    bagElasticY += dy / 2;
+                    if (bagElasticY > 28) bagElasticY = 28;
+                    if (bagElasticY < -28) bagElasticY = -28;
+                }
+                else
+                {
+                    bagScrollTargetY -= dy;
+                    if (bagScrollTargetY < 0) bagScrollTargetY = 0;
+                    if (bagScrollTargetY > maxScroll) bagScrollTargetY = maxScroll;
+                    
+                    bagScrollY = bagScrollTargetY;
+                }
             }
         }
+        
         if (!GameCanvas.isPointerJustRelease || !draggingBag)
         {
             ApplyBagScrollRun(maxScroll);
             return;
         }
-        if (System.Math.Abs(GameCanvas.py - firstDragY) <= 20 && System.Math.Abs(GameCanvas.px - firstDragX) <= 20)
+        
+        int releaseDelta = GameCanvas.py - dragLastY[0];
+        if (System.Math.Abs(releaseDelta) < 20 && System.Math.Abs(GameCanvas.py - firstDragY) < 20 && !downWhenRunning)
         {
-            bagScrollY = bagScrollYBeforeDrag;
-            bagScrollTargetY = bagScrollY;
+            // Reset state to allow click
             bagScrollRun = 0;
-            draggingBag = false;
-            return;
+            bagScrollTargetY = bagScrollY;
         }
-        GameCanvas.isPointerJustRelease = false;
-        if (!downWhenRunning)
+        else if (!downWhenRunning)
         {
-            int force = GameCanvas.py - dragLastY[0] + (dragLastY[0] - dragLastY[1]) + (dragLastY[1] - dragLastY[2]);
-            if (force > 15) force = 15;
-            if (force < -15) force = -15;
-            bagScrollRun = -force * 150;
+            if (bagScrollY < 0)
+            {
+                bagScrollTargetY = 0;
+            }
+            else if (bagScrollY > maxScroll)
+            {
+                bagScrollTargetY = maxScroll;
+            }
+            else
+            {
+                int force = GameCanvas.py - dragLastY[0] + (dragLastY[0] - dragLastY[1]) + (dragLastY[1] - dragLastY[2]);
+                if (force > 15) force = 15;
+                if (force < -15) force = -15;
+                bagScrollRun = -force * 150;
+            }
         }
+        
         draggingBag = false;
         dragTime = 0;
         ApplyBagScrollRun(maxScroll);
@@ -591,44 +729,51 @@ public class CustomInventoryPanel
 
     private static void ApplyBagScrollRun(int maxScroll)
     {
+        if (!draggingBag && bagElasticY != 0)
+        {
+            bagElasticY = bagElasticY * 3 / 4;
+            if (bagElasticY > -1 && bagElasticY < 1)
+            {
+                bagElasticY = 0;
+            }
+        }
+
         if (bagScrollRun != 0 && !draggingBag)
         {
             bagScrollTargetY += bagScrollRun / 100;
-            bagScrollRun = bagScrollRun * 9 / 10;
-            if (bagScrollRun < 100 && bagScrollRun > -100)
-            {
-                bagScrollRun = 0;
-            }
-
             if (bagScrollTargetY < 0)
             {
                 bagScrollTargetY = 0;
                 bagScrollRun = 0;
+                bagScrollCmdy = 0;
+                bagScrollCmvy = 0;
+                bagScrollY = 0;
             }
             else if (bagScrollTargetY > maxScroll)
             {
                 bagScrollTargetY = maxScroll;
                 bagScrollRun = 0;
+                bagScrollCmdy = 0;
+                bagScrollCmvy = 0;
+                bagScrollY = maxScroll;
             }
             else
             {
                 bagScrollY = bagScrollTargetY;
             }
+            bagScrollRun = bagScrollRun * 9 / 10;
+            if (bagScrollRun < 100 && bagScrollRun > -100)
+            {
+                bagScrollRun = 0;
+            }
         }
         
-        if (!draggingBag)
+        if (bagScrollY != bagScrollTargetY && !draggingBag)
         {
-            // T- `Tt snap lAi vA biA?n
-            if (bagScrollTargetY < 0) bagScrollTargetY = 0;
-            if (bagScrollTargetY > maxScroll) bagScrollTargetY = maxScroll;
-
-            if (bagScrollY != bagScrollTargetY)
-            {
-                bagScrollCmvy = bagScrollTargetY - bagScrollY << 2;
-                bagScrollCmdy += bagScrollCmvy;
-                bagScrollY += bagScrollCmdy >> 4;
-                bagScrollCmdy &= 15;
-            }
+            bagScrollCmvy = bagScrollTargetY - bagScrollY << 2;
+            bagScrollCmdy += bagScrollCmvy;
+            bagScrollY += bagScrollCmdy >> 4;
+            bagScrollCmdy &= 15;
         }
     }
 
@@ -726,8 +871,8 @@ public class CustomInventoryPanel
     {
         if (selectedToolAction < 0) return;
 
-        int safeY = panelY + 52;
-        int safeH = panelH - 118;
+        int safeY = panelY + 45;
+        int safeH = panelH - 82;
         int detailH = safeH - 30;
 
         // Recalculate detail area for hit testing
@@ -749,6 +894,12 @@ public class CustomInventoryPanel
         else if (selectedToolAction == 7 && selectedAccountSubAction == 2 && p.vEnemy != null) { count = p.vEnemy.size(); rowH = 28; }
         else if (selectedToolAction == 7 && selectedAccountSubAction <= 0 && Panel.strAccount != null) count = Panel.strAccount.Length;
         else if (selectedToolAction == 8 && Panel.strCauhinh != null) count = Panel.strCauhinh.Length;
+        else if (selectedToolAction == 100)
+        {
+            count = (p != null && p.logChat != null) ? p.logChat.size() : 0;
+            rowH = 28;
+            detailH -= 34; 
+        }
 
         int totalH = count * rowH;
         int maxScroll = totalH - detailH;
@@ -1001,11 +1152,11 @@ public class CustomInventoryPanel
     {
         int[] visibleTabs = GetVisibleTabs();
         int tabW = 60;
-        int tabH = 24;
-        int gap = 1;
+        int tabH = 18;
+        int gap = 2;
         int totalTabsW = visibleTabs.Length * tabW + (visibleTabs.Length - 1) * gap;
         int tabX = panelX + (panelW - totalTabsW) / 2;
-        int tabY = panelY + 18;
+        int tabY = panelY + 22;
         for (int vi = 0; vi < visibleTabs.Length; vi++)
         {
             int x = tabX + vi * (tabW + gap);
@@ -1112,7 +1263,7 @@ public class CustomInventoryPanel
             return false;
         }
         int safeX = panelX + 24;
-        int safeY = panelY + 42;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
         int listY = panelY + 52;
         int listH = panelY + panelH - 36 - listY;
@@ -1366,7 +1517,7 @@ public class CustomInventoryPanel
         int rightY = panelY + 66;
         int gap = 4;
         int bagViewW = 34 * 6 + gap * 5;
-        int bagViewH = 26 * 7 + gap * 6;
+        int bagViewH = panelY + panelH - 14 - rightY;
         if (GameCanvas.px >= rightX && GameCanvas.px <= rightX + bagViewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + bagViewH)
         {
             int localX = GameCanvas.px - rightX;
@@ -1422,12 +1573,12 @@ public class CustomInventoryPanel
         int leftY = panelY + 42;
         int leftW = safeW / 2 - 16;
         int frameX = safeX - 3;
-        int frameY = panelY + 46;
+        int frameY = panelY + 42;
         int frameW = 246;
         int centerX = frameX + frameW / 2;
         int bodyLeftX = frameX + 22;
         int bodyRightX = frameX + frameW - 22 - 36;
-        int bodyTopY = frameY + 8;
+        int bodyTopY = frameY + 19;
         int bodyGapY = 27;
         for (int i = 0; i < 5; i++)
         {
@@ -1488,7 +1639,7 @@ public class CustomInventoryPanel
             int x = centerX - 75 + i * (36 + 2);
             int bodyIndex = i + 10;
             Item clickedBottom = GetItem(body, bodyIndex);
-            int bottomY = frameY + 148;
+            int bottomY = frameY + 159;
             if (Hit(GameCanvas.px, GameCanvas.py, x, bottomY, 36, 24))
             {
                 selectedBodyIndex = bodyIndex;
@@ -1750,7 +1901,7 @@ public class CustomInventoryPanel
         int rightY = panelY + 66;
         int gap = 4;
         int bagViewW = 34 * 6 + gap * 5;
-        int bagViewH = 26 * 7 + gap * 6;
+        int bagViewH = panelY + panelH - 14 - rightY;
         if (GameCanvas.px >= rightX && GameCanvas.px <= rightX + bagViewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + bagViewH)
         {
             int localX = GameCanvas.px - rightX;
@@ -1793,7 +1944,7 @@ public class CustomInventoryPanel
         int leftX = safeX;
         int leftY = panelY + 42;
         int frameX = leftX - 3;
-        int frameY = leftY + 4;
+        int frameY = leftY;
         int frameW = 246;
         int frameH = 188;
         int centerX = frameX + frameW / 2;
@@ -1947,7 +2098,7 @@ public class CustomInventoryPanel
         Char me = Char.myCharz();
         Item[] body = (me != null) ? me.arrItemBody : null;
         int safeX = panelX + 24;
-        int safeY = panelY + 42;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
         int frameMargin = 2;
         int frameOffsetY = 6;
@@ -2297,11 +2448,6 @@ public class CustomInventoryPanel
         }
 
         PaintTopTabs(g);
-        if (topTab == 4)
-        {
-            PaintSubTabs(g);
-            PaintTitleBars(g);
-        }
         PaintCloseButton(g);
     }
 
@@ -2309,8 +2455,8 @@ public class CustomInventoryPanel
     {
         int[] visibleTabs = GetVisibleTabs();
         int tabW = 60;
-        int tabH = 20;
-        int gap = 1;
+        int tabH = 18;
+        int gap = 2;
         int totalTabsW = visibleTabs.Length * tabW + (visibleTabs.Length - 1) * gap;
         int tabX = panelX + (panelW - totalTabsW) / 2;
         int tabY = panelY + 22;
@@ -2320,24 +2466,24 @@ public class CustomInventoryPanel
             int x = tabX + vi * (tabW + gap);
             bool active = logicalIndex == topTab;
             
-            // Vẽ nền và viền đồng nhất cho tất cả các tab
-            int bgColor = active ? 0xBEEA8D : 0xF8DDA8;
-            int borderColor = active ? 0x4C9D27 : 0x7B4B1F;
+            // Vẽ theo phong cách RaisedTabBox từ bản backup
+            // 1. Viền ngoài
+            g.setColor(9993045);
+            g.fillRect(x, tabY, tabW, tabH, 3);
             
-            // Vẽ viền bo góc bằng fillRect lớn (giả lập drawRect bo góc)
-            g.setColor(borderColor);
-            g.fillRect(x, tabY, tabW, tabH, 5);
+            // 2. Nền chính
+            g.setColor(active ? 0xFFF1CF : 16770503);
+            g.fillRect(x + 1, tabY + 1, tabW - 2, tabH - 2, 3);
             
-            // Vẽ nền nhỏ hơn 1px để hiện viền
-            g.setColor(bgColor);
-            g.fillRect(x + 1, tabY + 1, tabW - 2, tabH - 2, 5);
+            // 3. Viền bóng ở trên (Highlight)
+            g.setColor(0xFFFFFF);
+            g.fillRect(x + 2, tabY + 2, tabW - 4, 3, 3);
 
             if (active)
             {
-                g.setColor(SELECT_BORDER);
-                g.fillRect(x + 1, tabY + 1, tabW - 2, tabH - 2, 5);
+                // 4. Vùng chọn (Inner)
                 g.setColor(SELECT_BG);
-                g.fillRect(x + 2, tabY + 2, tabW - 4, tabH - 4, 5);
+                g.fillRect(x + 3, tabY + 4, tabW - 6, tabH - 7, 3);
             }
 
             string label = TOP_TABS[logicalIndex];
@@ -2383,7 +2529,7 @@ public class CustomInventoryPanel
         int leftW = safeW / 2 - 16;
         int statsFrameX = leftX - 3;
         int statsFrameY = panelY + 232;
-        int statsFrameW = 247;
+        int statsFrameW = 246;
 
         PaintOldPanelBox(g, statsFrameX, statsFrameY, statsFrameW, 65);
         PaintCharacterStats(g, statsFrameX + 18, statsFrameY + 3, statsFrameW - 36);
@@ -2393,7 +2539,7 @@ public class CustomInventoryPanel
     private static void PaintCharacterTab(mGraphics g)
     {
         int safeX = panelX + 24;
-        int safeY = panelY + 42;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
         int safeH = panelH - 82;
         int frameMargin = 2;
@@ -2408,7 +2554,7 @@ public class CustomInventoryPanel
         int infoW = topW;
         int infoH = safeH - topH - frameGap - frameMargin * 2;
         PaintOldPanelBox(g, topX, topY, topW, topH);
-        PaintOldPanelBox(g, infoX, infoY, infoW, infoH - 28);
+        PaintOldPanelBox(g, infoX, infoY, infoW, infoH);
 
         Char me = Char.myCharz();
         if (me == null)
@@ -2428,7 +2574,7 @@ public class CustomInventoryPanel
         int previewY = topY + 104;
 
         mFont.tahoma_7b_dark.drawString(g, me.cName, centerX, topY + 10, mFont.CENTER);
-            PaintCharacterPreview(g, me, centerX, previewY, false);
+        PaintCharacterPreview(g, me, centerX, previewY, false);
 
         for (int i = 0; i < 5; i++)
         {
@@ -2457,12 +2603,11 @@ public class CustomInventoryPanel
         }
 
         mFont.tahoma_7b_dark.drawString(g, "THÔNG TIN NHÂN VẬT", infoX + infoW / 2, infoY + 7, mFont.CENTER);
-        PaintCharacterStatsCompact(g, infoX + 16, infoY + 20, infoW - 32);
+        PaintCharacterStatsCompact(g, me, infoX + 16, infoY + 20, infoW - 32);
     }
 
-    private static void PaintCharacterStatsCompact(mGraphics g, int x, int y, int w)
+    private static void PaintCharacterStatsCompact(mGraphics g, Char c, int x, int y, int w)
     {
-        Char c = Char.myCharz();
         if (c == null)
         {
             return;
@@ -2505,6 +2650,9 @@ public class CustomInventoryPanel
         g.fillRect(x, y, w, h, 5);
         g.setColor(15196114);
         g.fillRect(x + 1, y + 1, w - 2, h - 2, 5);
+        // Viền bóng ở trên (Highlight)
+        g.setColor(0xFFFFFF);
+        g.fillRect(x + 2, y + 2, w - 4, 3, 5);
     }
 
     private static void PaintCharacterStats(mGraphics g, int x, int y, int w)
@@ -2583,16 +2731,15 @@ public class CustomInventoryPanel
         int safeX = panelX + 24;
         int safeW = panelW - 48;
         int rightX = safeX + safeW / 2 + 10;
-        int viewW = 34 * 6 + 4 * 5;
+        int viewW = 246;
         int y = panelY + 66 + (26 * 7 + 4 * 6) + 8;
-        int groupW = viewW / 3;
-        PaintOldPanelBox(g, rightX - 5, y - 4, viewW + 10, 22);
-        int x1 = rightX;
-        int x2 = rightX + groupW + 20;
-        int x3 = rightX + groupW * 2 + 26;
-        DrawCurrency(g, Panel.imgXu, FormatGold(c.xu), x1 + 6, y + 2, 0xD6A000, 17, x2 - x1 - 22);
-        DrawCurrency(g, Panel.imgLuong, FormatStat((long)c.luong), x2 + 1, y + 2, 0x1E9F4B, 18, x3 - x2 - 18);
-        DrawCurrency(g, Panel.imgLuongKhoa, FormatStat((long)c.luongKhoa), x3 + 6, y + 2, 0xD03D7C, 15, panelX + panelW - 24 - x3 - 13);
+        PaintOldPanelBox(g, rightX - 11, y - 4, viewW, 22);
+        int x1 = rightX - 6;
+        int x2 = rightX + 74;
+        int x3 = rightX + 154;
+        DrawCurrency(g, Panel.imgXu, FormatGold(c.xu), x1, y + 2, 0xD6A000, 17, 80);
+        DrawCurrency(g, Panel.imgLuong, FormatStat((long)c.luong), x2, y + 2, 0x1E9F4B, 18, 70);
+        DrawCurrency(g, Panel.imgLuongKhoa, FormatStat((long)c.luongKhoa), x3, y + 2, 0xD03D7C, 15, 70);
     }
 
     private static void DrawCurrency(mGraphics g, Image icon, string text, int x, int y, int fallbackColor, int textOffset, int maxTextW)
@@ -2622,7 +2769,7 @@ public class CustomInventoryPanel
     private static void PaintSkillTab(mGraphics g)
     {
         int safeX = panelX + 24;
-        int safeY = panelY + 42;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
         int listY = panelY + 52;
         int listH = panelY + panelH - 36 - listY;
@@ -2857,9 +3004,9 @@ public class CustomInventoryPanel
         SoundMn.gI().GetStrModFunc();
 
         int safeX = panelX + 24;
-        int safeY = panelY + 52;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
-        int safeH = panelH - 118;
+        int safeH = panelH - 82;
 
 
         int gap = 6;
@@ -2959,6 +3106,16 @@ public class CustomInventoryPanel
         return raw.Trim();
     }
 
+    public static void PaintOldTextCellBridge(mGraphics g, int x, int y, int w, int h, bool selected)
+    {
+        PaintOldTextCell(g, x, y, w, h, selected);
+    }
+
+    private static string GetWorldChatDraft()
+    {
+        return (worldChatTField != null) ? worldChatTField.getText() : string.Empty;
+    }
+
     private static bool TryHandleModClick(bool isFire)
     {
         Panel p = GameCanvas.panel;
@@ -2972,9 +3129,9 @@ public class CustomInventoryPanel
             else return true;
         }
         int safeX = panelX + 24;
-        int safeY = panelY + 52;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
-        int safeH = panelH - 88;
+        int safeH = panelH - 118;
         int gap = 6;
         int catW = 126;
         int listW = safeW - catW - gap;
@@ -3019,7 +3176,7 @@ public class CustomInventoryPanel
         return false;
     }
 
-    private static readonly string[] TOOL_GROUPS = new string[] { "Hệ thống", "Di chuyển", "Giao tiếp", "Tài khoản" };
+    private static readonly string[] TOOL_GROUPS = new string[] { "Hệ thống", "Di chuyển", "Chat thế giới", "Tài khoản" };
 
     private static void PaintToolTab(mGraphics g)
     {
@@ -3035,31 +3192,42 @@ public class CustomInventoryPanel
                 p.setTypeAccount();
         }
         int safeX = panelX + 24;
-        int safeY = panelY + 52;
+        int safeY = panelY + 42;
         int safeW = panelW - 48;
-        int safeH = panelH - 118;
+        int safeH = panelH - 82;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;
         if (selectedToolGroupIndex == 3)
             showDetail = (selectedAccountSubAction == 1 || selectedAccountSubAction == 2);
+        
+        bool fullDetail = selectedToolAction == 100;
         int catW = 108;
-        int detailW = showDetail ? 164 : 0;
-        int listW = safeW - catW - gap - (showDetail ? detailW + gap : 0);
+        int detailW = fullDetail ? (safeW - catW - gap) : (showDetail ? 164 : 0);
+        int listW = fullDetail ? 0 : (safeW - catW - gap - (showDetail ? detailW + gap : 0));
         int catX = safeX;
         int listX = catX + catW + gap;
-        int detailX = listX + listW + gap;
+        int detailX = fullDetail ? listX : (listX + listW + gap);
 
         PaintOldPanelBox(g, catX, safeY, catW, safeH);
-        PaintOldPanelBox(g, listX, safeY, listW, safeH);
-        if (showDetail)
+        if (!fullDetail)
+        {
+            PaintOldPanelBox(g, listX, safeY, listW, safeH);
+        }
+        if (showDetail || fullDetail)
         {
             PaintOldPanelBox(g, detailX, safeY, detailW, safeH);
         }
         mFont.tahoma_7b_dark.drawString(g, "NHÓM", catX + catW / 2, safeY + 6, mFont.CENTER);
-        mFont.tahoma_7b_dark.drawString(g, "CHỨC NĂNG", listX + listW / 2, safeY + 6, mFont.CENTER);
+        if (!fullDetail)
+        {
+            mFont.tahoma_7b_dark.drawString(g, "CHỨC NĂNG", listX + listW / 2, safeY + 6, mFont.CENTER);
+        }
         PaintToolGroups(g, catX + 6, safeY + 24, catW - 12, safeH - 30);
-        PaintToolList(g, listX + 6, safeY + 24, listW - 12, safeH - 30);
-        if (showDetail)
+        if (!fullDetail)
+        {
+            PaintToolList(g, listX + 6, safeY + 24, listW - 12, safeH - 30);
+        }
+        if (showDetail || fullDetail)
         {
             mFont.tahoma_7b_dark.drawString(g, GetToolDetailTitle(), detailX + detailW / 2, safeY + 6, mFont.CENTER);
             PaintToolDetail(g, detailX + 6, safeY + 24, detailW - 12, safeH - 30);
@@ -3293,7 +3461,7 @@ public class CustomInventoryPanel
     private static bool ToolActionHasDetail(int action)
     {
         if (action == 7 && selectedAccountSubAction > 0) return true;
-        return action == 0 || action == 4 || action == 5 || action == 7 || action == 8;
+        return action == 0 || action == 4 || action == 5 || action == 7 || action == 8 || action == 100;
     }
 
     private static string GetToolDetailTitle()
@@ -3308,6 +3476,7 @@ public class CustomInventoryPanel
             return "TÀI KHOẢN";
         }
         if (selectedToolAction == 8) return "CẤU HÌNH";
+        if (selectedToolAction == 100) return GetCommunicationTitle();
         return "CHI TIẾT";
     }
 
@@ -3329,6 +3498,7 @@ public class CustomInventoryPanel
                 PaintStringArrayDetail(g, Panel.strAccount, x, y, w, h);
         }
         else if (selectedToolAction == 8) PaintStringArrayDetail(g, Panel.strCauhinh, x, y, w, h);
+        else if (selectedToolAction == 100) PaintWorldChatDetail(g, x, y, w, h);
     }
 
     private static void PaintFriendEnemyDetail(mGraphics g, int x, int y, int w, int h, MyVector list, int feType)
@@ -3397,6 +3567,166 @@ public class CustomInventoryPanel
 
         g.translate(0, toolDetailScrollY);
         g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+    }
+
+    private static string GetCommunicationTitle()
+    {
+        return "CHAT THẾ GIỚI";
+    }
+
+    private static void PaintWorldChatDetail(mGraphics g, int x, int y, int w, int h)
+    {
+        Panel p = GameCanvas.panel;
+        int inputH = 28;
+        int titleH = 20; // Khoảng cách cho tiêu đề "Chat thế giới"
+        int msgY = y + titleH; 
+        int msgH = h - inputH - titleH - 10; // Tính toán lại vùng tin nhắn để không đè lên input
+        
+        int oldClipX = g.getClipX();
+        int oldClipY = g.getClipY();
+        int oldClipW = g.getClipWidth();
+        int oldClipH = g.getClipHeight();
+
+        if (p == null || p.logChat == null || p.logChat.size() == 0)
+        {
+            mFont.tahoma_7_grey.drawString(g, "Chưa có lịch sử chat thế giới", x + w / 2, y + h / 2 - 10, mFont.CENTER);
+            mFont.tahoma_7_grey.drawString(g, "Nhấn ô bên dưới để gửi tin", x + w / 2, y + h / 2 + 4, mFont.CENTER);
+        }
+        else
+        {
+            MyVector logs = p.logChat;
+            int rowH = 20;
+
+            g.setClip(x, msgY, w, msgH);
+            g.translate(0, -toolDetailScrollY);
+
+            for (int i = 0; i < logs.size(); i++)
+            {
+                InfoItem infoItem = (InfoItem)logs.elementAt(i);
+                int yy = msgY + i * rowH;
+
+                // Culling
+                if (yy + rowH < msgY + toolDetailScrollY || yy > msgY + toolDetailScrollY + msgH) continue;
+
+                int headX = x;
+                int headY = yy;
+                int textX = headX + 26;
+
+                // Vẽ avatar đầu nhân vật
+                if (infoItem.charInfo != null)
+                {
+                    if (infoItem.charInfo.headICON != -1)
+                    {
+                        SmallImage.drawSmallImage(g, infoItem.charInfo.headICON, headX, headY, 0, 0);
+                    }
+                    else
+                    {
+                        Part part = GameScr.parts[infoItem.charInfo.head];
+                        if (part != null && part.pi != null && part.pi.Length > 0)
+                        {
+                            SmallImage.drawSmallImage(g, (int)part.pi[Char.CharInfo[0][0][0]].id, 
+                                headX + (int)part.pi[Char.CharInfo[0][0][0]].dx, 
+                                headY + (int)part.pi[Char.CharInfo[0][0][0]].dy, 0, 0);
+                        }
+                    }
+
+                    // Tên nhân vật
+                    mFont.tahoma_7b_green2.drawString(g, (infoItem.charInfo.isTichXanh ? "     " : string.Empty) + infoItem.charInfo.cName, textX, yy, 0);
+                }
+
+                // Nội dung chat
+                string msg = "";
+                try { 
+                    string[] parts = Res.split(infoItem.s, "|", 0);
+                    msg = (parts.Length > 2) ? parts[2] : infoItem.s; 
+                } catch { msg = infoItem.s; }
+                
+                mFont font = infoItem.isChatServer ? mFont.tahoma_7_red : mFont.tahoma_7_blue;
+                font.drawString(g, TrimText(font, msg, w - 30), textX, yy + 12, 0);
+            }
+
+            g.translate(0, toolDetailScrollY);
+        }
+        g.setClip(oldClipX, oldClipY, oldClipW, oldClipH); // Reset clip trước khi vẽ input
+
+        // Áp dụng pattern giống PaintClanTab cho Chat thế giới
+        g.setClip(x - 2, y - 2, w + 4, h + 4);
+        PaintWorldChatInput(g, x, y + h - inputH - 5, w, inputH);
+        g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+    }
+
+    private static TField worldChatTField;
+    private static void EnsureWorldChatTField()
+    {
+        if (worldChatTField == null)
+        {
+            worldChatTField = new TField();
+            worldChatTField.setIputType(TField.INPUT_TYPE_ANY);
+            worldChatTField.name = "Nhập nội dung...";
+            worldChatTField.isFocus = false;
+        }
+    }
+
+    private static void HandleSendWorldChat()
+    {
+        EnsureWorldChatTField();
+        string text = worldChatTField.getText();
+        if (!string.IsNullOrEmpty(text))
+        {
+            Service.gI().chatGlobal(text);
+            worldChatTField.setText(string.Empty);
+        }
+        worldChatTField.isFocus = false;
+    }
+
+    private static void PaintWorldChatInput(mGraphics g, int x, int y, int w, int h)
+    {
+        EnsureWorldChatTField();
+        int sendW = 50;
+        
+        // Cập nhật hitbox cho việc click
+        worldChatTField.x = x;
+        worldChatTField.y = y;
+        worldChatTField.width = w - sendW - 5;
+        worldChatTField.height = h;
+
+        int oldClipX = g.getClipX();
+        int oldClipY = g.getClipY();
+        int oldClipW = g.getClipWidth();
+        int oldClipH = g.getClipHeight();
+
+        // 1. Vẽ ô nhập liệu
+        // Vẽ khung: Nếu focus thì dùng màu SELECT_BORDER (0x79A96B)
+        g.setColor(worldChatTField.isFocus ? 0x79A96B : 0x9993045);
+        g.fillRect(x, y, w - sendW - 5, h, 4); 
+        g.setColor(0xFFFFFF); // Nền trắng cho ô nhập
+        g.fillRect(x + 1, y + 1, w - sendW - 7, h - 2, 4);
+
+        string draft = GetWorldChatDraft();
+        
+        g.setClip(x + 2, y + 1, w - sendW - 7, h - 2);
+        string displayPlaceholder = "Nhập nội dung...";
+        string displayText = string.IsNullOrEmpty(draft) ? displayPlaceholder : draft;
+        mFont font = string.IsNullOrEmpty(draft) ? mFont.tahoma_7_grey : mFont.tahoma_7b_dark;
+        
+        int textX = x + 12 + worldChatTField.offsetX;
+        font.drawString(g, TrimText(font, displayText, w - sendW - 25), textX, y + h / 2 - 4, mFont.LEFT);
+        
+        // Vẽ con trỏ nhấp nháy nếu đang focus
+        if (worldChatTField.isFocus && (mSystem.currentTimeMillis() / 500) % 2 == 0)
+        {
+            int tw = font.getWidth(string.IsNullOrEmpty(draft) ? "" : draft.Substring(0, worldChatTField.caretPos));
+            g.setColor(0x000000);
+            g.fillRect(textX + tw, y + 5, 1, h - 10);
+        }
+        g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+
+        // 2. Vẽ nút Gửi
+        int btnSendX = x + w - sendW;
+        bool isHoverSend = Hit(GameCanvas.px, GameCanvas.py, btnSendX, y, sendW, h);
+        g.setColor(isHoverSend ? 0x5EB432 : 0x4C9D27);
+        g.fillRect(btnSendX, y, sendW, h, 4);
+        mFont.tahoma_7b_white.drawString(g, "Gửi", btnSendX + sendW / 2, y + h / 2 - 4, mFont.CENTER);
     }
 
     private static void PaintFlagDetail(mGraphics g, int x, int y, int w, int h)
@@ -3635,19 +3965,21 @@ public class CustomInventoryPanel
         }
         SoundMn.gI().getSoundOption();
         int safeX = panelX + 24;
-        int safeY = panelY + 52;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
-        int safeH = panelH - 118;
+        int safeH = panelH - 82;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;
         if (selectedToolGroupIndex == 3)
             showDetail = (selectedAccountSubAction == 1 || selectedAccountSubAction == 2);
+        
+        bool fullDetail = selectedToolAction == 100;
         int catW = 108;
-        int detailW = showDetail ? 164 : 0;
-        int listW = safeW - catW - gap - (showDetail ? detailW + gap : 0);
+        int detailW = fullDetail ? (safeW - catW - gap) : (showDetail ? 164 : 0);
+        int listW = fullDetail ? 0 : (safeW - catW - gap - (showDetail ? detailW + gap : 0));
         int catX = safeX;
         int listX = catX + catW + gap;
-        int detailX = listX + listW + gap;
+        int detailX = fullDetail ? listX : (listX + listW + gap);
 
         if (GameCanvas.px >= catX && GameCanvas.px <= catX + catW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
         {
@@ -3657,7 +3989,7 @@ public class CustomInventoryPanel
                 if (!isFire) return true;
                 selectedToolGroupIndex = row;
                 if (row == 3) p.setTypeAccount();
-                selectedToolAction = -1;
+                selectedToolAction = (row == 2) ? 100 : -1;
                 selectedToolDetailIndex = -1;
                 selectedAccountSubAction = -1;
                 SoundMn.gI().panelClick();
@@ -3785,7 +4117,10 @@ public class CustomInventoryPanel
                 }
                 if (action == 100)
                 {
-                    ChatLogPopup.gI().Toggle();
+                    selectedToolAction = 100;
+                    selectedToolDetailIndex = -1;
+                    toolDetailScrollY = 0;
+                    toolDetailScrollTargetY = 0;
                     SoundMn.gI().panelClick();
                     return true;
                 }
@@ -3797,8 +4132,38 @@ public class CustomInventoryPanel
                 return true;
             }
         }
-        else if (showDetail && GameCanvas.px >= detailX && GameCanvas.px <= detailX + detailW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
+        else if ((showDetail || selectedToolAction == 100) && GameCanvas.px >= detailX && GameCanvas.px <= detailX + detailW && GameCanvas.py >= safeY && GameCanvas.py <= safeY + safeH)
         {
+            if (selectedToolAction == 100)
+            {
+                int inputH = 28;
+                int inputY = safeY + safeH - inputH - 7; // Khớp hoàn toàn với PaintWorldChatDetail (detailY + detailH - inputH - 5)
+                int btnSendW = 50;
+                int btnSendX = detailX + 6 + detailW - 12 - btnSendW;
+
+                if (isFire)
+                {
+                    // Vùng click ô nhập liệu
+                    if (Hit(GameCanvas.px, GameCanvas.py, detailX + 6, inputY, detailW - 12 - btnSendW - 4, inputH))
+                    {
+                        EnsureWorldChatTField();
+                        worldChatTField.setFocusWithKb(true);
+                        SoundMn.gI().panelClick();
+                    }
+                    // Vùng click nút Gửi
+                    else if (Hit(GameCanvas.px, GameCanvas.py, btnSendX, inputY, btnSendW, inputH))
+                    {
+                        HandleSendWorldChat();
+                        SoundMn.gI().panelClick();
+                    }
+                    else
+                    {
+                        if (worldChatTField != null) worldChatTField.isFocus = false;
+                    }
+                }
+                return true;
+            }
+
             int feRowH = (selectedToolAction == 7 && selectedAccountSubAction > 0) ? 28 : 26;
             int scrollOffset = (selectedToolAction == 7 && selectedAccountSubAction > 0) ? toolDetailScrollY : toolDetailScrollY;
             int row = (GameCanvas.py + scrollOffset - (safeY + 24)) / feRowH;
@@ -3922,50 +4287,174 @@ public class CustomInventoryPanel
     private static void PaintClanTab(mGraphics g)
     {
         int safeX = panelX + 24;
-        int safeY = panelY + 52;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
-        int safeH = panelH - 118;
+        int safeH = panelH - 82;
         int gap = 6;
         int msgW = safeW / 2 - gap / 2;
         int logicW = safeW - msgW - gap;
         int msgX = safeX;
         int logicX = msgX + msgW + gap;
+        
+        int inputH = 25;
+        int msgListH = safeH - inputH - 32; 
+        
         PaintOldPanelBox(g, msgX, safeY, msgW, safeH);
         PaintOldPanelBox(g, logicX, safeY, logicW, safeH);
+        
         mFont.tahoma_7b_dark.drawString(g, "TIN NHẮN BANG", msgX + msgW / 2, safeY + 6, mFont.CENTER);
-        PaintClanMessages(g, msgX + 6, safeY + 24, msgW - 12, safeH - 30);
+        
+        // Vẽ danh sách tin nhắn
+        PaintClanMessages(g, msgX + 6, safeY + 24, msgW - 12, msgListH);
+        
+        // Vẽ ô chat ở dưới cùng
+        g.setClip(msgX + 4, safeY + 4, msgW - 8, safeH - 8);
+        PaintClanChatInput(g, msgX + 6, safeY + safeH - inputH - 6, msgW - 12, inputH);
         g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+        
         PaintClanMenu(g, logicX + 6, safeY + 6, logicW - 12, 22);
-        g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
         PaintClanLogic(g, logicX + 6, safeY + 34, logicW - 12, safeH - 40);
+    }
+
+    private static TField clanChatTField;
+    private static void EnsureClanChatTField()
+    {
+        if (clanChatTField == null)
+        {
+            clanChatTField = new TField();
+            clanChatTField.setIputType(TField.INPUT_TYPE_ANY);
+            clanChatTField.name = "Nhập nội dung...";
+            clanChatTField.isFocus = false;
+        }
+    }
+
+    private static void EnsureSloganTField()
+    {
+        if (sloganTField == null)
+        {
+            sloganTField = new TField();
+            sloganTField.setIputType(TField.INPUT_TYPE_ANY);
+            sloganTField.name = "Nhập khẩu hiệu...";
+            sloganTField.isFocus = false;
+            sloganTField.setMaxTextLenght(250);
+        }
+    }
+
+    private static void HandleSaveSlogan()
+    {
+        Char c = Char.myCharz();
+        if (c != null && c.clan != null && sloganTField != null)
+        {
+            string newSlogan = sloganTField.getText();
+            if (!string.IsNullOrEmpty(newSlogan))
+            {
+                Service.gI().getClan(4, (sbyte)c.clan.imgID, newSlogan);
+            }
+        }
+        isEditingSlogan = false;
+    }
+
+    private static void PaintClanChatInput(mGraphics g, int x, int y, int w, int h)
+    {
+        EnsureClanChatTField();
+        int btnAskW = 28;
+        int btnSendW = 28;
+        int gap = 2;
+        int tfW = w - btnAskW - btnSendW - gap * 2;
+        
+        // 1. Vẽ nút Xin đậu (bên trái)
+        int btnAskX = x;
+        bool isHoverAsk = Hit(GameCanvas.px, GameCanvas.py, btnAskX, y, btnAskW, h);
+        g.setColor(isHoverAsk ? 0xFFA500 : 0xCD853F);
+        g.fillRect(btnAskX, y, btnAskW, h, 4);
+        mFont.tahoma_7_white.drawString(g, "Xin", btnAskX + btnAskW / 2, y + 1, mFont.CENTER);
+        mFont.tahoma_7_white.drawString(g, "đậu", btnAskX + btnAskW / 2, y + 10, mFont.CENTER);
+
+        // 2. Vẽ ô nhập liệu (giữa) - Vẽ thủ công để tránh TField.paint lấn chiếm clip
+        clanChatTField.x = x + btnAskW + gap;
+        clanChatTField.y = y;
+        clanChatTField.width = tfW;
+        clanChatTField.height = h;
+        
+        g.setColor(0x000000);
+        g.fillRect(clanChatTField.x, clanChatTField.y, clanChatTField.width, clanChatTField.height, 4);
+        g.setColor(0xFFFFFF);
+        g.fillRect(clanChatTField.x + 1, clanChatTField.y + 1, clanChatTField.width - 2, clanChatTField.height - 2, 4);
+        
+        string text = clanChatTField.getText();
+        int textX = clanChatTField.x + 4 + clanChatTField.offsetX;
+        
+        g.setClip(clanChatTField.x + 2, clanChatTField.y + 1, clanChatTField.width - 4, clanChatTField.height - 2);
+        if (string.IsNullOrEmpty(text))
+        {
+            mFont.tahoma_7_grey.drawString(g, clanChatTField.name, clanChatTField.x + 4, clanChatTField.y + h / 2 - 4, mFont.LEFT);
+        }
+        else
+        {
+            mFont.tahoma_7b_dark.drawString(g, text, textX, clanChatTField.y + h / 2 - 4, mFont.LEFT);
+        }
+        
+        // Vẽ con trỏ nhấp nháy khi focus
+        if (clanChatTField.isFocus && (mSystem.currentTimeMillis() / 500) % 2 == 0)
+        {
+            string textBeforeCaret = text.Substring(0, clanChatTField.caretPos);
+            int tw = mFont.tahoma_7b_dark.getWidth(textBeforeCaret);
+            g.setColor(0x000000);
+            g.fillRect(textX + tw, clanChatTField.y + 4, 1, h - 8);
+        }
         g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+
+        // 3. Vẽ nút Gửi (bên phải)
+        int btnSendX = x + w - btnSendW;
+        bool isHoverSend = Hit(GameCanvas.px, GameCanvas.py, btnSendX, y, btnSendW, h);
+        g.setColor(isHoverSend ? 0x5EB432 : 0x4C9D27);
+        g.fillRect(btnSendX, y, btnSendW, h, 4);
+        mFont.tahoma_7_white.drawString(g, "Gửi", btnSendX + btnSendW / 2, y + h / 2 - 4, mFont.CENTER);
     }
 
     private static void PaintClanMenu(mGraphics g, int x, int y, int w, int h)
     {
         string[] tabs = GetClanMenuLabels();
-        if (tabs == null || tabs.Length == 0)
-        {
-            return;
-        }
-        int tabW = w / tabs.Length;
-        for (int i = 0; i < tabs.Length; i++)
+        if (tabs == null || tabs.Length == 0) return;
+        
+        int nTabs = tabs.Length;
+        int tabW = w / nTabs;
+        for (int i = 0; i < nTabs; i++)
         {
             int xx = x + i * tabW;
-            bool selected = i == selectedClanMenuIndex;
+            // Tab cuối cùng lấy phần còn lại để khớp hoàn toàn với chiều rộng w
+            int currTabW = (i == nTabs - 1) ? (x + w - xx) : tabW;
+            
+            bool selected = (i == selectedClanMenuIndex);
+            
+            // Vẽ nền nút
             g.setColor(selected ? SELECT_BG : 15723751);
-            g.fillRect(xx, y, tabW - 2, h, 5);
-            mFont menuFont = mFont.tahoma_7b_dark;
-            string label = tabs[i];
-            int spaceIndex = label.IndexOf(' ');
-            if (spaceIndex > 0)
+            g.fillRect(xx, y, currTabW - 1, h, 5);
+            
+            // Viền bóng ở trên (Highlight)
+            g.setColor(0xFFFFFF);
+            g.fillRect(xx + 1, y + 1, currTabW - 3, 2, 5);
+            
+            // Vẽ viền nếu không được chọn
+            if (!selected)
             {
-                menuFont.drawString(g, label.Substring(0, spaceIndex), xx + tabW / 2, y + 1, mFont.CENTER);
-                menuFont.drawString(g, label.Substring(spaceIndex + 1), xx + tabW / 2, y + 10, mFont.CENTER);
+                g.setColor(0xCCCCCC);
+                g.drawRect(xx, y, currTabW - 1, h);
+            }
+
+            mFont menuFont = selected ? mFont.tahoma_7b_dark : mFont.tahoma_7_blue;
+            string label = tabs[i];
+            
+            // Vẽ chữ (tự động xuống dòng nếu có dấu cách và tab hẹp)
+            int spaceIndex = label.IndexOf(' ');
+            if (spaceIndex > 0 && currTabW < 50)
+            {
+                menuFont.drawString(g, label.Substring(0, spaceIndex), xx + currTabW / 2, y + 1, mFont.CENTER);
+                menuFont.drawString(g, label.Substring(spaceIndex + 1), xx + currTabW / 2, y + 10, mFont.CENTER);
             }
             else
             {
-                menuFont.drawString(g, label, xx + tabW / 2, y + 5, mFont.CENTER);
+                menuFont.drawString(g, label, xx + currTabW / 2, y + h / 2 - 4, mFont.CENTER);
             }
         }
     }
@@ -3974,7 +4463,7 @@ public class CustomInventoryPanel
     {
         if (HasClanData())
         {
-            return new string[] { "Thành viên", "Khẩu hiệu", "Biểu tượng" };
+            return new string[] { "Thành viên", "Thông tin", "Rời bang" };
         }
         return new string[] { "Tìm bang", "Lập bang" };
     }
@@ -4042,6 +4531,12 @@ public class CustomInventoryPanel
     private static void PaintClanLogic(mGraphics g, int x, int y, int w, int h)
     {
         Panel p = GameCanvas.panel;
+        if (HasClanData() && selectedClanMenuIndex == 1)
+        {
+            PaintClanInfo(g, x, y, w, h);
+            return;
+        }
+
         int oldClipX = g.getClipX();
         int oldClipY = g.getClipY();
         int oldClipW = g.getClipWidth();
@@ -4077,22 +4572,16 @@ public class CustomInventoryPanel
         g.fillRect(x + 24, y, w - 24, h - 4, 5);
         g.setColor(selected ? SELECT_BORDER : 15723751);
         g.fillRect(x, y, 24, h - 4, 5);
+        
         Char c = Char.myCharz();
-        if (c == null)
-        {
-            return;
-        }
+        if (c == null) return;
+        
         if (!HasClanData())
         {
-            if (p == null || p.clans == null || row < 0 || row >= p.clans.Length)
-            {
-                return;
-            }
+            if (p == null || p.clans == null || row < 0 || row >= p.clans.Length) return;
             Clan clan = p.clans[row];
-            if (clan == null)
-            {
-                return;
-            }
+            if (clan == null) return;
+            
             int oldClanClipX = g.getClipX();
             int oldClanClipY = g.getClipY();
             int oldClanClipW = g.getClipWidth();
@@ -4103,6 +4592,7 @@ public class CustomInventoryPanel
                 SmallImage.drawSmallImage(g, ClanImage.getClanImage((short)clan.imgID).idImage[0], x + 12, y + (h - 4) / 2, 0, StaticObj.VCENTER_HCENTER);
             }
             g.setClip(oldClanClipX, oldClanClipY, oldClanClipW, oldClanClipH);
+            
             int clanTextX = x + 36;
             int clanTextW = w - 76;
             string name = (clan.name.Length <= 23) ? clan.name : (clan.name.Substring(0, 23) + "...");
@@ -4111,41 +4601,147 @@ public class CustomInventoryPanel
             mFont.tahoma_7b_dark.drawString(g, clan.currMember + "/" + clan.maxMember, x + w - 8, y + 2, mFont.RIGHT);
             return;
         }
+        
         MyVector members = GetClanMembers(p);
-        if (members == null || row < 0 || row >= members.size())
-        {
-            return;
-        }
+        if (members == null || row < 0 || row >= members.size()) return;
         Member member = (Member)members.elementAt(row);
-        if (member == null)
-        {
-            return;
-        }
+        if (member == null) return;
+        
+        // Vẽ Icon thành viên
+        int iconX = x;
+        int iconY = y + 7; 
         if (member.headICON != -1)
         {
-            SmallImage.drawSmallImage(g, member.headICON, x + 2, y + 9, 0, 0);
+            SmallImage.drawSmallImage(g, member.headICON, iconX, iconY, 0, StaticObj.VCENTER_HCENTER);
         }
-        else if (member.head >= 0 && member.head < GameScr.parts.Length)
+        else if (member.head >= 0)
         {
-            Part part = GameScr.parts[(int)member.head];
-            if (part != null && part.pi != null)
+            Part part = (member.head < GameScr.parts.Length) ? GameScr.parts[(int)member.head] : null;
+            if (part != null && part.pi != null && part.pi.Length > 0)
             {
-                SmallImage.drawSmallImage(g, (int)part.pi[Char.CharInfo[0][0][0]].id, x + 2 + (int)part.pi[Char.CharInfo[0][0][0]].dx, y + 12 + (int)part.pi[Char.CharInfo[0][0][0]].dy, 0, 0);
+                SmallImage.drawSmallImage(g, (int)part.pi[Char.CharInfo[0][0][0]].id, iconX + (int)part.pi[Char.CharInfo[0][0][0]].dx, iconY + (int)part.pi[Char.CharInfo[0][0][0]].dy, 0, 0);
             }
         }
+        
         int textX = x + 32;
         int textW = w - 74;
-        int oldTextClipX = g.getClipX();
-        int oldTextClipY = g.getClipY();
-        int oldTextClipW = g.getClipWidth();
-        int oldTextClipH = g.getClipHeight();
-        g.setClip(textX - 2, y, textW + 4, h - 4);
-        g.setColor(selected ? SELECT_BG : 15723751);
-        g.fillRect(textX - 2, y, textW + 4, h - 4, 5);
-        mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, member.name, textW), textX, y + 2, mFont.LEFT);
-        mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, mResources.power + ": " + member.powerPoint, textW), textX, y + 14, mFont.LEFT);
-        g.setClip(oldTextClipX, oldTextClipY, oldTextClipW, oldTextClipH);
+        
+        mFont nameFont = mFont.tahoma_7b_dark;
+        if (member.role == 0) nameFont = mFont.tahoma_7b_red;
+        else if (member.role == 1) nameFont = mFont.tahoma_7b_blue;
+
+        nameFont.drawString(g, TrimText(nameFont, member.name, textW), textX, y + 2, mFont.LEFT);
+        mFont.tahoma_7_blue.drawString(g, TrimText(mFont.tahoma_7_blue, mResources.power + ": " + member.powerPoint, textW), textX, y + 14, mFont.LEFT);
         mFont.tahoma_7b_dark.drawString(g, member.clanPoint.ToString(), x + w - 8, y + 8, mFont.RIGHT);
+    }
+
+    private static void PaintClanInfo(mGraphics g, int x, int y, int w, int h)
+    {
+        Char c = Char.myCharz();
+        if (c == null || c.clan == null) return;
+        Clan clan = c.clan;
+        
+        int currY = y + 10;
+        int rowH = 18;
+        
+        mFont.tahoma_7b_dark.drawString(g, "Tên bang: " + clan.name, x + 10, currY, mFont.LEFT);
+        currY += rowH;
+        mFont.tahoma_7b_dark.drawString(g, "Thành viên: " + clan.currMember + "/" + clan.maxMember, x + 10, currY, mFont.LEFT);
+        currY += rowH;
+        
+        mFont.tahoma_7b_dark.drawString(g, "Khẩu hiệu:", x + 10, currY, mFont.LEFT);
+        currY += 14;
+        
+        string[] sloganLines = mFont.tahoma_7_blue.splitFontArray(clan.slogan, w - 20);
+        for (int i = 0; i < sloganLines.Length; i++)
+        {
+            mFont.tahoma_7_blue.drawString(g, sloganLines[i], x + 15, currY, mFont.LEFT);
+            currY += 15;
+        }
+        
+        currY += 10;
+        if (Char.myCharz().role == 0) // Chỉ Chủ bang mới có quyền sửa
+        {
+            if (!isEditingSlogan)
+            {
+                int btnW = 85;
+                int btnH = 22;
+                int gap = 10;
+                int totalW = btnW * 2 + gap;
+                int startX = x + (w - totalW) / 2;
+                
+                // Nút Sửa khẩu hiệu
+                bool isHoverSlogan = Hit(GameCanvas.px, GameCanvas.py, startX, currY, btnW, btnH);
+                g.setColor(isHoverSlogan ? 0x5EB432 : 0x4C9D27);
+                g.fillRect(startX, currY, btnW, btnH, 4);
+                mFont.tahoma_7b_white.drawString(g, "Sửa slogan", startX + btnW / 2, currY + btnH / 2 - 4, mFont.CENTER);
+                
+                // Nút Biểu tượng
+                int iconBtnX = startX + btnW + gap;
+                bool isHoverIcon = Hit(GameCanvas.px, GameCanvas.py, iconBtnX, currY, btnW, btnH);
+                g.setColor(isHoverIcon ? 0x5EB432 : 0x4C9D27);
+                g.fillRect(iconBtnX, currY, btnW, btnH, 4);
+                mFont.tahoma_7b_white.drawString(g, "Biểu tượng", iconBtnX + btnW / 2, currY + btnH / 2 - 4, mFont.CENTER);
+            }
+            else
+            {
+                EnsureSloganTField();
+                int btnW = 35;
+                int btnH = 22;
+                int tfW = w - (btnW + 2) * 2 - 10;
+                int tfX = x + 5;
+                
+                sloganTField.x = tfX;
+                sloganTField.y = currY;
+                sloganTField.width = tfW;
+                sloganTField.height = btnH;
+                
+                // Vẽ ô nhập thủ công
+                g.setColor(0x000000);
+                g.fillRect(sloganTField.x, sloganTField.y, sloganTField.width, sloganTField.height, 4);
+                g.setColor(0xFFFFFF);
+                g.fillRect(sloganTField.x + 1, sloganTField.y + 1, sloganTField.width - 2, sloganTField.height - 2, 4);
+                
+                string sloganText = sloganTField.getText();
+                int textX = sloganTField.x + 4 + sloganTField.offsetX;
+                
+                g.setClip(sloganTField.x + 2, sloganTField.y + 1, sloganTField.width - 4, sloganTField.height - 2);
+                
+                // Sử dụng tahoma_8b để đảm bảo hiển thị tiếng Việt tốt nhất
+                if (string.IsNullOrEmpty(sloganText))
+                {
+                    mFont.tahoma_7_grey.drawString(g, sloganTField.name, sloganTField.x + 4, sloganTField.y + btnH / 2 - 4, mFont.LEFT);
+                }
+                else
+                {
+                    mFont.tahoma_8b.drawString(g, sloganText, textX, sloganTField.y + btnH / 2 - 4, mFont.LEFT);
+                }
+                
+                if (sloganTField.isFocus && (mSystem.currentTimeMillis() / 500) % 2 == 0)
+                {
+                    // Tính toán vị trí con trỏ dựa trên số ký tự phía trước
+                    string textBeforeCaret = sloganText.Substring(0, sloganTField.caretPos);
+                    int caretX = mFont.tahoma_8b.getWidth(textBeforeCaret);
+                    g.setColor(0x000000);
+                    g.fillRect(textX + caretX, sloganTField.y + 4, 1, btnH - 8);
+                }
+                g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+                
+                // Nút Lưu
+                int saveBtnX = tfX + tfW + 2;
+                bool isHoverSave = Hit(GameCanvas.px, GameCanvas.py, saveBtnX, currY, btnW, btnH);
+                g.setColor(isHoverSave ? 0x5EB432 : 0x4C9D27);
+                g.fillRect(saveBtnX, currY, btnW, btnH, 4);
+                mFont.tahoma_7_white.drawString(g, "Lưu", saveBtnX + btnW / 2, currY + btnH / 2 - 4, mFont.CENTER);
+                
+                // Nút Đóng
+                int closeBtnX = saveBtnX + btnW + 2;
+                bool isHoverClose = Hit(GameCanvas.px, GameCanvas.py, closeBtnX, currY, btnW, btnH);
+                g.setColor(isHoverClose ? 0xCD5C5C : 0xB22222);
+                g.fillRect(closeBtnX, currY, btnW, btnH, 4);
+                mFont.tahoma_7_white.drawString(g, "Đóng", closeBtnX + btnW / 2, currY + btnH / 2 - 4, mFont.CENTER);
+            }
+        }
     }
 
     private static int GetClanLogicCount(Panel p)
@@ -4206,15 +4802,16 @@ public class CustomInventoryPanel
                 p.isMessage = false;
                 selectedClanLogicIndex = -1;
                 clanLogicScrollY = 0;
+                selectedClanMenuIndex = 0;
             }
             else if (menuIndex == 1)
             {
-                EnsurePanelChatField(p);
-                p.chagenSlogan();
+                selectedClanMenuIndex = 1;
             }
             else if (menuIndex == 2)
             {
-                Service.gI().getClan(3, -1, null);
+                // Rời bang bây giờ là index 2
+                GameCanvas.startYesNoDlg("Bạn có chắc chắn muốn rời bang hội không?", new Command("Có", new LeaveClanAction(), 0, null), new Command("Không", GameCanvas.instance, 8882, null));
             }
             return;
         }
@@ -4385,17 +4982,66 @@ public class CustomInventoryPanel
         }
     }
 
+    private static void OpenClanChatInput()
+    {
+        Panel p = GameCanvas.panel;
+        if (p == null) return;
+        EnsurePanelChatField(p);
+        p.chatTField.strChat = "Chat Bang";
+        p.chatTField.tfChat.name = "Nội dung";
+        p.chatTField.to = string.Empty;
+        p.chatTField.isShow = true;
+        p.chatTField.tfChat.isFocus = true;
+        p.chatTField.tfChat.setIputType(TField.INPUT_TYPE_ANY);
+        if (GameCanvas.isTouch)
+        {
+            p.chatTField.tfChat.doChangeToTextBox();
+        }
+        ClanChatAction action = new ClanChatAction();
+        p.chatTField.center = new Command("Gửi", action, 0, null);
+        p.chatTField.left = new Command(mResources.CLOSE, action, 1, null);
+    }
+
+    private static void HandleSendClanChat()
+    {
+        EnsureClanChatTField();
+        string text = clanChatTField.getText();
+        if (!string.IsNullOrEmpty(text))
+        {
+            Service.gI().clanMessage(0, text, -1);
+            clanChatTField.setText(string.Empty);
+            // reset caret và offset
+            clanChatTField.caretPos = 0;
+            clanChatTField.setOffset(0);
+        }
+        // Giữ focus để người dùng có thể chat tiếp tục, giống như các game hiện đại
+        clanChatTField.isFocus = true;
+    }
+
+    private class ClanChatAction : IActionListener
+    {
+        public void perform(int idAction, object p)
+        {
+            if (idAction == 0) HandleSendClanChat();
+            else if (idAction == 1)
+            {
+                if (GameCanvas.panel != null && GameCanvas.panel.chatTField != null)
+                    GameCanvas.panel.chatTField.isShow = false;
+            }
+        }
+    }
+
     private static bool TryHandleClanClick(bool isFire)
     {
         int safeX = panelX + 24;
-        int safeY = panelY + 52;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
-        int safeH = panelH - 88;
+        int safeH = panelH - 82; // Đồng bộ với PaintClanTab
         int gap = 6;
         int msgW = safeW / 2 - gap / 2;
         int logicW = safeW - msgW - gap;
-        int msgX = safeX + 6;
-        int logicX = safeX + msgW + gap + 6;
+        int msgX = safeX; // Đồng bộ với PaintClanTab
+        int logicX = msgX + msgW + gap; // Đồng bộ với PaintClanTab
         int listY = safeY + 34;
         int listH = safeH - 40;
         int rowH = 32;
@@ -4403,6 +5049,7 @@ public class CustomInventoryPanel
         int menuY = safeY + 6;
         int menuH = 22;
         int logicInnerW = logicW - 12;
+        // 1. Kiểm tra click vào Menu Bang Hội (Thành viên, Khẩu hiệu...)
         if (GameCanvas.px >= logicX && GameCanvas.px <= logicX + logicInnerW && GameCanvas.py >= menuY && GameCanvas.py <= menuY + menuH)
         {
             int tabW = logicInnerW / menuLabels.Length;
@@ -4415,20 +5062,157 @@ public class CustomInventoryPanel
             SoundMn.gI().panelClick();
             return true;
         }
+
+        // 2. Kiểm tra click vào vùng Chat Bang Hội (Dưới cùng cột bên trái)
+        if (GameCanvas.px >= msgX && GameCanvas.px <= msgX + msgW)
+        {
+            int inputH = 25;
+            int inputY = safeY + safeH - inputH - 6;
+            int btnW = 28;
+            int innerGap = 2;
+            int tfX = msgX + 6 + btnW + innerGap;
+            int tfW = msgW - 12 - btnW * 2 - innerGap * 2;
+            int btnSendX = msgX + msgW - btnW - 6;
+
+            if (isFire)
+            {
+                // Click nút Xin đậu
+                if (Hit(GameCanvas.px, GameCanvas.py, msgX + 6, inputY, btnW, inputH))
+                {
+                    Service.gI().clanMessage(1, null, -1);
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                // Click nút Gửi
+                else if (Hit(GameCanvas.px, GameCanvas.py, btnSendX, inputY, btnW, inputH))
+                {
+                    HandleSendClanChat();
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                // Click vào ô nhập liệu
+                else if (Hit(GameCanvas.px, GameCanvas.py, tfX, inputY, tfW, inputH))
+                {
+                    EnsureClanChatTField();
+                    clanChatTField.setFocusWithKb(true);
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
+                else
+                {
+                    // Click ra ngoài ô chat trong vùng msgX
+                    if (clanChatTField != null) clanChatTField.isFocus = false;
+                }
+            }
+            // Block click nếu đang ở trong vùng input (hover)
+            if (GameCanvas.py >= inputY - 2 && GameCanvas.py <= inputY + inputH + 2) return true;
+        }
+
+        // 3. Kiểm tra click vào danh sách (Tin nhắn hoặc Thành viên hoặc Thông tin)
+        if (HasClanData() && selectedClanMenuIndex == 1)
+        {
+            // Đối với tab Thông tin, cho phép click xuống tận cùng vùng an toàn (safeH) để không hụt nút Lưu khi slogan dài
+            if (GameCanvas.px >= logicX && GameCanvas.px <= logicX + logicInnerW && GameCanvas.py >= listY && GameCanvas.py <= safeY + safeH)
+            {
+                Char c = Char.myCharz();
+                if (c != null && c.clan != null)
+                {
+                    string[] sloganLines = mFont.tahoma_7_blue.splitFontArray(c.clan.slogan, logicInnerW - 20);
+                    int btnY = listY + 10 + 18 + 18 + 14 + sloganLines.Length * 15 + 10;
+                    
+                    // Chỉ Chủ bang (role == 0) mới được tương tác với nút sửa
+                    bool isLeader = Char.myCharz().role == 0;
+                    if (isLeader)
+                    {
+                        if (!isEditingSlogan)
+                        {
+                            int btnW = 85;
+                            int btnH = 22;
+                            int btnGap = 10;
+                            int totalW = btnW * 2 + btnGap;
+                            int startX = logicX + (logicInnerW - totalW) / 2;
+                            
+                            if (isFire)
+                            {
+                                // Click Sửa slogan
+                                if (Hit(GameCanvas.px, GameCanvas.py, startX, btnY, btnW, btnH))
+                                {
+                                    SoundMn.gI().panelClick();
+                                    isEditingSlogan = true;
+                                    EnsureSloganTField();
+                                    sloganTField.setText(c.clan.slogan);
+                                    sloganTField.setFocusWithKb(true);
+                                }
+                                // Click Đổi biểu tượng
+                                else if (Hit(GameCanvas.px, GameCanvas.py, startX + btnW + btnGap, btnY, btnW, btnH))
+                                {
+                                    SoundMn.gI().panelClick();
+                                    Service.gI().getClan(3, -1, null);
+                                    if (GameCanvas.panel != null && GameCanvas.panel.tabIcon != null)
+                                    {
+                                        GameCanvas.panel.tabIcon.show(isGetName: false);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            int sBtnW = 35;
+                            int sBtnH = 22;
+                            int tfW = logicInnerW - (sBtnW + 2) * 2 - 10;
+                            int tfX = logicX + 5;
+                            int saveBtnX = tfX + tfW + 2;
+                            int closeBtnX = saveBtnX + sBtnW + 2;
+                            
+                            if (isFire)
+                            {
+                                if (Hit(GameCanvas.px, GameCanvas.py, tfX, btnY, tfW, sBtnH))
+                                {
+                                    sloganTField.setFocusWithKb(true);
+                                }
+                                else if (Hit(GameCanvas.px, GameCanvas.py, saveBtnX, btnY, sBtnW, sBtnH))
+                                {
+                                    HandleSaveSlogan();
+                                    SoundMn.gI().panelClick();
+                                }
+                                else if (Hit(GameCanvas.px, GameCanvas.py, closeBtnX, btnY, sBtnW, sBtnH))
+                                {
+                                    isEditingSlogan = false;
+                                    SoundMn.gI().panelClick();
+                                }
+                                else
+                                {
+                                    if (sloganTField != null) sloganTField.isFocus = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
         if (GameCanvas.py < listY || GameCanvas.py > listY + listH)
         {
             return false;
         }
+
         if (GameCanvas.px >= msgX && GameCanvas.px <= msgX + msgW - 12)
         {
-            int row = (GameCanvas.py - listY + clanMsgScrollY) / rowH;
-            if (row >= 0 && row < ClanMessage.vMessage.size())
+            // Click vào danh sách tin nhắn
+            int inputH = 25;
+            int msgListH = safeH - inputH - 32;
+            if (GameCanvas.py <= listY + msgListH)
             {
-                if (!isFire) return true;
-                selectedClanMsgIndex = row;
-                HandleClanMessageAction(row);
-                SoundMn.gI().panelClick();
-                return true;
+                int row = (GameCanvas.py - listY + clanMsgScrollY) / rowH;
+                if (row >= 0 && row < ClanMessage.vMessage.size())
+                {
+                    if (!isFire) return true;
+                    selectedClanMsgIndex = row;
+                    HandleClanMessageAction(row);
+                    SoundMn.gI().panelClick();
+                    return true;
+                }
             }
         }
         if (GameCanvas.px >= logicX && GameCanvas.px <= logicX + logicW - 12)
@@ -4470,9 +5254,6 @@ public class CustomInventoryPanel
         Char pet = hasPet ? GetPrimaryPet() : null;
         if (pet != null)
         {
-            // Bỏ SyncCharPartsFromItems vì nó ghi đè dữ liệu server gây lỗi lệch bộ phận.
-            // Để server tự cập nhật ngoại hình đệ tử (giống player) sẽ chính xác hơn.
-            
             // Đảm bảo có bộ phận tối thiểu để vẽ nếu server chưa gửi dữ liệu
             if (pet.head == -1 || pet.head == 0) pet.setDefaultPart();
         }
@@ -4483,6 +5264,9 @@ public class CustomInventoryPanel
         int leftW = safeW2 / 2 - 16;
         int rightX2 = safeX2 + safeW2 / 2 + 10;
         int rightW2 = 34 * 6 + 4 * 5;
+
+        // Vẽ khung nền bên phải cho Inventory/Skills đệ tử
+        PaintOldPanelBox(g, rightX2 - 11, panelY + 42, 246, panelH - 30 - (panelY + 42));
 
         PaintPetLeft(g, pet, leftX, leftW);
         PaintPetInfoFrame(g, pet);
@@ -4512,7 +5296,7 @@ public class CustomInventoryPanel
     {
         int leftY = panelY + 42;
         int frameX = leftX - 3;
-        int frameY = leftY + 4;
+        int frameY = leftY;
         int frameW = 246;
         int frameH = 188;
         int centerX = frameX + frameW / 2;
@@ -4905,10 +5689,13 @@ public class CustomInventoryPanel
     {
         Item[] items = (Char.myCharz() != null) ? Char.myCharz().arrItemBag : null;
         int gap = 4;
-        int viewW = 34 * 6 + gap * 5;
-        int viewH = 26 * 7 + gap * 6;
+        int cols = 6;
+        int viewW = 34 * cols + gap * (cols - 1);
+        int viewH = panelH - 66 - (y - panelY);
+        if (viewH < 0) viewH = 0;
+
         int total = (items != null) ? items.Length : 42;
-        int rows = (total + 5) / 6;
+        int rows = (total + (cols - 1)) / cols;
         if (rows < 7)
         {
             rows = 7;
@@ -4916,20 +5703,18 @@ public class CustomInventoryPanel
         g.setClip(x, y, viewW, viewH);
         for (int row = 0; row < rows; row++)
         {
-            for (int col = 0; col < 6; col++)
+            for (int col = 0; col < cols; col++)
             {
-                int index = row * 6 + col;
+                int index = row * cols + col;
                 int xx = x + col * (34 + gap);
-                int yy = y + row * (26 + gap) - bagScrollY;
-                bool isSelected = (selectedBagIndex == index);
-                PaintSlotRect(g, xx, yy, 34, 26, isSelected);
-                PaintItemInSlot(g, GetItem(items, index), xx, yy, 34, 26, isSelected);
+                int yy = y + row * (26 + gap) - bagScrollY + bagElasticY;
                 if (yy + 26 < y || yy > y + viewH)
                 {
                     continue;
                 }
-                PaintSlot(g, xx, yy, 26, selectedBagIndex == index && selectedBodyIndex < 0);
-                PaintItemInSlot(g, GetItem(items, index), xx, yy, 34, 26);
+                bool isSelected = (selectedBagIndex == index && selectedBodyIndex < 0);
+                PaintSlotRect(g, xx, yy, 34, 26, isSelected);
+                PaintItemInSlot(g, GetItem(items, index), xx, yy, 34, 26, isSelected);
             }
         }
         g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
@@ -4958,9 +5743,9 @@ public class CustomInventoryPanel
         int safeX = panelX + 24;
         int leftX = safeX;
         int statsFrameX = leftX - 3;
-        int statsFrameY = panelY + 242;
-        int statsFrameW = 247;
-        PaintOldPanelBox(g, statsFrameX, statsFrameY, statsFrameW, 58);
+        int statsFrameY = panelY + 232;
+        int statsFrameW = 246;
+        PaintOldPanelBox(g, statsFrameX, statsFrameY, statsFrameW, 65);
         if (pet == null)
         {
             mFont.tahoma_7b_dark.drawString(g, "Thông tin đệ tử", statsFrameX + statsFrameW / 2, statsFrameY + 9, mFont.CENTER);
@@ -5084,13 +5869,13 @@ public class CustomInventoryPanel
     private static void PaintTaskTab(mGraphics g)
     {
         int safeX = panelX + 24;
-        int safeY = panelY + 42;
+        int safeY = panelY + 45;
         int safeW = panelW - 48;
         int safeH = panelH - 82;
         Task task = (Char.myCharz() != null) ? Char.myCharz().taskMaint : null;
 
         int gap = 6;
-        int frameY = safeY + 4;
+        int frameY = safeY;
         int frameH = 253;
 
         // Box 1: Thông tin nhiệm vụ (bên trái)
@@ -5329,8 +6114,27 @@ public class CustomInventoryPanel
 
     private static void PaintEmptySlots(mGraphics g)
     {
+        int safeX = panelX + 24;
+        int safeW = panelW - 48;
+        int frameY = panelY + 42;
+        int frameW = 246;
+        int frameH = panelH - 30 - (panelY + 42);
+        
+        // 1. Vẽ 3 khung nền chính
+        PaintOldPanelBox(g, safeX - 3, frameY, frameW, 188); // Box Trang bị (Trái trên)
+        PaintOldPanelBox(g, safeX - 3, panelY + 232, 246, 65); // Box Chỉ số (Trái dưới)
+        PaintOldPanelBox(g, safeX + safeW / 2 + 10 - 11, frameY, frameW, frameH); // Box Hành trang (Phải)
+
+        // 2. Vẽ SubTabs và TitleBars trên nền box
+        PaintSubTabs(g);
+        PaintTitleBars(g);
+
+        // 3. Vẽ nội dung items
         PaintBodySlots(g);
         PaintBagSlots(g);
+        
+        // 4. Vẽ thông tin bổ sung (nằm trên cùng)
+        PaintInventoryCurrency(g);
     }
 
     private static void PaintBodySlots(mGraphics g)
@@ -5341,16 +6145,15 @@ public class CustomInventoryPanel
         int leftY = panelY + 42;
         int leftW = safeW / 2 - 16;
         int frameX = safeX - 3;
-        int frameY = panelY + 46;
+        int frameY = panelY + 42;
         int frameW = 246;
         int centerX = frameX + frameW / 2;
         int bodyLeftX = frameX + 22;
         int bodyRightX = frameX + frameW - 22 - 36;
-        int bodyTopY = frameY + 8;
+        int bodyTopY = frameY + 19;
         int bodyGapY = 27;
         int slot = 26;
         int gapY = 30;
-        PaintOldPanelBox(g, frameX, frameY, frameW, 179);
         Item[] body = (Char.myCharz() != null) ? Char.myCharz().arrItemBody : null;
         for (int i = 0; i < 5; i++)
         {
@@ -5365,9 +6168,9 @@ public class CustomInventoryPanel
         Char me = Char.myCharz();
         if (me != null)
         {
-            PaintCharacterPreview(g, me, centerX, frameY + 121, false);
+            PaintCharacterPreview(g, me, centerX, frameY + 132, false);
         }
-        int bottomY = frameY + 148;
+        int bottomY = frameY + 159;
         int bottomW = 36;
         int bottomH = 24;
         int bottomGap = 2;
@@ -5393,7 +6196,9 @@ public class CustomInventoryPanel
         int selectedIndex = (rightSubTab == 1) ? selectedBoxIndex : ((rightSubTab == 2) ? selectedAutoIndex : selectedBagIndex);
         int count = (items != null) ? items.Length : 0;
         int viewW = 34 * 6 + gap * 5;
-        int viewH = 26 * 7 + gap * 6;
+        int viewH = panelH - 66 - (rightY - panelY); // Dừng trên vùng info (khoảng 198px)
+        if (viewH < 0) viewH = 0;
+
         int oldClipX = g.getClipX();
         int oldClipY = g.getClipY();
         int oldClipW = g.getClipWidth();
@@ -5404,7 +6209,7 @@ public class CustomInventoryPanel
             int col = i % 6;
             int row = i / 6;
             int x = rightX + col * (34 + gap);
-            int y = rightY + row * (slot + gap) - bagScrollY;
+            int y = rightY + row * (slot + gap) - bagScrollY + bagElasticY;
             if (y + slot < rightY || y > rightY + viewH)
             {
                 continue;
@@ -5491,20 +6296,13 @@ public class CustomInventoryPanel
 
     private static void PaintSlotRect(mGraphics g, int x, int y, int w, int h, bool selected)
     {
-        // Viền vàng đậm khi được chọn (giống item bag: 16383818)
         if (selected)
         {
-            g.setColor(16383818);
-            g.fillRect(x - 1, y - 1, w + 2, h + 2, 5);
-            
             g.setColor(SELECT_BG);
-            g.fillRect(x, y, w, h, 5);
+            g.fillRect(x - 1, y - 1, w + 2, h + 2, 3);
         }
-        else
-        {
-            g.setColor(6047789, 0.3f);
-            g.fillRect(x, y, w, h, 5);
-        }
+        g.setColor(6047789, 0.3f);
+        g.fillRect(x, y, w, h, 3);
     }
 
     private static void PaintBagScrollBar(mGraphics g, int x, int y, int h, int maxScroll)
@@ -5736,10 +6534,10 @@ public class CustomInventoryPanel
         {
             return;
         }
-        int oldClipX = g.clipX;
-        int oldClipY = g.clipY;
-        int oldClipW = g.clipW;
-        int oldClipH = g.clipH;
+        int oldClipX = g.getClipX();
+        int oldClipY = g.getClipY();
+        int oldClipW = g.getClipWidth();
+        int oldClipH = g.getClipHeight();
 
         DrawPart(g, img, 0, 0, s, s, x, y, s, s);
         DrawPart(g, img, s * 2, 0, s, s, x + w - s, y, s, s);
@@ -5761,10 +6559,10 @@ public class CustomInventoryPanel
         {
             return;
         }
-        int oldClipX = g.clipX;
-        int oldClipY = g.clipY;
-        int oldClipW = g.clipW;
-        int oldClipH = g.clipH;
+        int oldClipX = g.getClipX();
+        int oldClipY = g.getClipY();
+        int oldClipW = g.getClipWidth();
+        int oldClipH = g.getClipHeight();
         g.setClip(dx, dy, dw, dh);
         for (int yy = dy; yy < dy + dh; yy += sh)
         {
@@ -5778,12 +6576,21 @@ public class CustomInventoryPanel
 
     private static void DrawPart(mGraphics g, Image img, int sx, int sy, int sw, int sh, int dx, int dy, int dw, int dh)
     {
-        int oldClipX = g.clipX;
-        int oldClipY = g.clipY;
-        int oldClipW = g.clipW;
-        int oldClipH = g.clipH;
+        int oldClipX = g.getClipX();
+        int oldClipY = g.getClipY();
+        int oldClipW = g.getClipWidth();
+        int oldClipH = g.getClipHeight();
         g.setClip(dx, dy, dw, dh);
         g.drawRegion(img, sx, sy, sw, sh, 0, dx, dy, 0);
         g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
+    }
+
+    private class LeaveClanAction : IActionListener
+    {
+        public void perform(int idAction, object p)
+        {
+            Service.gI().clanMessage(2, null, -1);
+            GameCanvas.endDlg();
+        }
     }
 }
