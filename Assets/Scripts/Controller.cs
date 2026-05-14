@@ -1410,6 +1410,9 @@ public class Controller : IMessageHandler
 				GameCanvas.panel.itemRequest(itemAction, info, where, index);
 				break;
 			}
+            case -48:
+                SpineMessageHandler.HandleMessage(msg);
+                break;
 			case -59:
 			{
 				sbyte typePK = msg.reader().readByte();

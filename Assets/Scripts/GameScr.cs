@@ -5056,6 +5056,7 @@ public class GameScr : mScreen, IChatable
 		GameCanvas.debug("PA11", 1);
 		GameCanvas.debug("PA13", 1);
 		paintEffect(g);
+		// Spine được vẽ theo từng nhân vật bên trong Char.paintBody
 		paintBgItem(g, 3);
 		for (int num6 = 0; num6 < vNpc.size(); num6++)
 		{

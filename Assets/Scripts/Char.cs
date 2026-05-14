@@ -32,6 +32,12 @@ public class Char : IMapObject
 	public PetFollow petFollow;
 
 	public int rank;
+    
+    // Flag để chuyển đổi giữa hệ thống sprite cũ và Spine
+	public bool useSpine;
+	public bool isPreviewSpine;
+    public int spineId;
+	public int xSpinePreview, ySpinePreview;
 
 	public const sbyte A_STAND = 1;
 
@@ -2846,6 +2852,7 @@ public class Char : IMapObject
 				updEffChar();
 				updateEye();
 				updateFHead();
+				SpineMessageHandler.CheckAndApplySpine(this);
 			}
 		}
 	}
@@ -6026,7 +6033,11 @@ public class Char : IMapObject
 			anchor2 = 0;
 			num2 = 1;
 		}
-		if (statusMe == 14)
+		if (useSpine && isMonkey == 0 && !isFusion && !isPreviewSpine)
+		{
+			SpineCharacterManager.Instance.PaintSpineForChar(g, this);
+		}
+		else if (statusMe == 14)
 		{
 			if (GameCanvas.gameTick % 4 > 0)
 			{

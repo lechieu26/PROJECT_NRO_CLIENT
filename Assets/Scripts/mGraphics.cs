@@ -33,13 +33,12 @@ public class mGraphics
 
 	public int clipH;
 
-	private bool isClip;
+	public bool isClip;
 
 	private bool isTranslate = true;
 
-	private int translateX;
-
-	private int translateY;
+	public int translateX;
+	public int translateY;
 
 	private float translateXf;
 
@@ -442,6 +441,38 @@ public class mGraphics
 		g = (float)num2 / 256f;
 		r = (float)num3 / 256f;
 		a = alpha;
+	}
+
+	public void drawRenderTexture(UnityEngine.RenderTexture rt, int x, int y)
+	{
+		if (rt == null) return;
+		UnityEngine.GUI.color = UnityEngine.Color.white;
+		
+		int tx = x;
+		int ty = y;
+		if (isTranslate)
+		{
+			tx += translateX;
+			ty += translateY;
+		}
+
+		if (isClip)
+		{
+			int cx = clipX;
+			int cy = clipY;
+			if (isTranslate)
+			{
+				cx += clipTX;
+				cy += clipTY;
+			}
+			UnityEngine.GUI.BeginGroup(new UnityEngine.Rect(cx, cy, clipW, clipH));
+			UnityEngine.GUI.DrawTexture(new UnityEngine.Rect(tx - cx, ty - cy, UnityEngine.Screen.width, UnityEngine.Screen.height), rt, UnityEngine.ScaleMode.StretchToFill, true);
+			UnityEngine.GUI.EndGroup();
+		}
+		else
+		{
+			UnityEngine.GUI.DrawTexture(new UnityEngine.Rect(tx, ty, UnityEngine.Screen.width, UnityEngine.Screen.height), rt, UnityEngine.ScaleMode.StretchToFill, true);
+		}
 	}
 
 	private void UpdatePos(int anchor)
