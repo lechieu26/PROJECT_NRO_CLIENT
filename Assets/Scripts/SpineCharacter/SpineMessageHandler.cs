@@ -232,10 +232,17 @@ public static class SpineMessageHandler
     // Hàm này sẽ được gọi từ Char để kiểm tra skin khi nhân vật mới xuất hiện hoặc load map
     public static void CheckAndApplySpine(Char c)
     {
-        if (c == null || c.useSpine) return;
-        if (playerSkinCache.TryGetValue(c.charID, out int skinId))
+        if (c == null) return;
+        
+        // Nếu c.useSpine là true nhưng renderer bị mất (do lỗi map/UI), thì vẫn cần apply lại
+        bool hasRenderer = SpineCharacterManager.Instance.GetRenderer(c.charID) != null;
+        
+        if (!c.useSpine || !hasRenderer)
         {
-            ApplySkinToChar(c, skinId);
+            if (playerSkinCache.TryGetValue(c.charID, out int skinId))
+            {
+                ApplySkinToChar(c, skinId);
+            }
         }
     }
 

@@ -6033,9 +6033,14 @@ public class Char : IMapObject
 			anchor2 = 0;
 			num2 = 1;
 		}
-		if (useSpine && isMonkey == 0 && !isFusion && !isPreviewSpine)
+		if (useSpine && isMonkey == 0 && !isFusion)
 		{
-			SpineCharacterManager.Instance.PaintSpineForChar(g, this);
+			// Nếu đang ở chế độ xem trước trong UI (isPreviewSpine), ta KHÔNG vẽ skin thế giới đè lên.
+			// Skin thế giới chỉ được vẽ khi isPreviewSpine là false (tức là ngoài map).
+			if (!isPreviewSpine)
+			{
+				SpineCharacterManager.Instance.PaintSpineForChar(g, this, cx, cy);
+			}
 		}
 		else if (statusMe == 14)
 		{

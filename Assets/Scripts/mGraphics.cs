@@ -443,13 +443,16 @@ public class mGraphics
 		a = alpha;
 	}
 
-	public void drawRenderTexture(UnityEngine.RenderTexture rt, int x, int y)
+	public void drawRenderTexture(UnityEngine.RenderTexture rt, int x, int y, int w, int h)
 	{
 		if (rt == null) return;
 		UnityEngine.GUI.color = UnityEngine.Color.white;
 		
-		int tx = x;
-		int ty = y;
+		int tx = x * zoomLevel;
+		int ty = y * zoomLevel;
+		int tw = w * zoomLevel;
+		int th = h * zoomLevel;
+
 		if (isTranslate)
 		{
 			tx += translateX;
@@ -466,13 +469,20 @@ public class mGraphics
 				cy += clipTY;
 			}
 			UnityEngine.GUI.BeginGroup(new UnityEngine.Rect(cx, cy, clipW, clipH));
-			UnityEngine.GUI.DrawTexture(new UnityEngine.Rect(tx - cx, ty - cy, UnityEngine.Screen.width, UnityEngine.Screen.height), rt, UnityEngine.ScaleMode.StretchToFill, true);
+			UnityEngine.GUI.DrawTexture(new UnityEngine.Rect(tx - cx, ty - cy, tw, th), rt, UnityEngine.ScaleMode.StretchToFill, true);
 			UnityEngine.GUI.EndGroup();
 		}
 		else
 		{
-			UnityEngine.GUI.DrawTexture(new UnityEngine.Rect(tx, ty, UnityEngine.Screen.width, UnityEngine.Screen.height), rt, UnityEngine.ScaleMode.StretchToFill, true);
+			UnityEngine.GUI.DrawTexture(new UnityEngine.Rect(tx, ty, tw, th), rt, UnityEngine.ScaleMode.StretchToFill, true);
 		}
+	}
+
+	public void drawRenderTexture(UnityEngine.RenderTexture rt, int x, int y)
+	{
+		if (rt == null) return;
+		// Fallback cho texture toàn màn hình (Thế giới)
+		drawRenderTexture(rt, x, y, rt.width / zoomLevel, rt.height / zoomLevel);
 	}
 
 	private void UpdatePos(int anchor)

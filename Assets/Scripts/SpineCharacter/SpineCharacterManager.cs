@@ -68,7 +68,7 @@ public class SpineCharacterManager : MonoBehaviour
     /// Vẽ phần texture Spine tương ứng với vị trí của nhân vật này.
     /// Giúp Spine nhân vật được vẽ đúng thứ tự Z-order với các nhân vật 2D khác.
     /// </summary>
-    public void PaintSpineForChar(mGraphics g, Char c)
+    public void PaintSpineForChar(mGraphics g, Char c, int x, int y)
     {
         if (spinetexture == null || c == null || !c.useSpine) return;
         if (c.isMonkey > 0 || c.isFusion || c.isHide) return;
@@ -78,8 +78,8 @@ public class SpineCharacterManager : MonoBehaviour
         // Vùng clip quanh nhân vật (tọa độ logic mGraphics)
         int drawW = 150; 
         int drawH = 150;
-        int drawX = c.cx - drawW / 2;
-        int drawY = c.cy - drawH + 20;
+        int drawX = x - drawW / 2;
+        int drawY = y - drawH + 20;
 
         // Lưu lại clip cũ
         int oldCX = g.clipX / zoom;
@@ -92,7 +92,8 @@ public class SpineCharacterManager : MonoBehaviour
         g.setClip(drawX, drawY, drawW, drawH);
         
         // Vẽ toàn bộ texture thế giới tại vị trí bù trừ translation của mGraphics (đơn vị pixel)
-        g.drawRenderTexture(spinetexture, -g.translateX, -g.translateY);
+        // Truyền tọa độ LOGIC. drawRenderTexture sẽ tự nhân zoom và cộng translateX pixel.
+        g.drawRenderTexture(spinetexture, -g.translateX / zoom, -g.translateY / zoom);
 
         // Khôi phục clip cũ
         if (oldIsClip) g.setClip(oldCX, oldCY, oldCW, oldCH);
@@ -110,49 +111,18 @@ public class SpineCharacterManager : MonoBehaviour
         if (previewRenderer == null || !previewRenderer.IsVisible()) return;
 
         int zoom = mGraphics.zoomLevel;
-        // Kích thước vẽ trong hệ mGraphics = PREVIEW_TEX_SIZE / zoom
-        int drawSize = PREVIEW_TEX_SIZE / zoom;
-        int drawX = x - drawSize / 2;
-        int drawY = y - drawSize / 2;
+        int pw = PREVIEW_TEX_SIZE;
+        int ph = PREVIEW_TEX_SIZE;
+        
+        // Tọa độ truyền vào x, y là logic trung tâm chân
+        // Chúng ta tính logicX, logicY sao cho tâm chân texture khớp với x, y
+        // drawRenderTexture sẽ tự nhân zoom
+        int logicX = x - (pw / 2) / zoom;
+        int logicY = (y - 70);
+        int logicW = pw / zoom;
+        int logicH = ph / zoom;
 
-        // Áp dụng zoom và translate giống fillRect
-        float px = drawX * zoom;
-        float py = drawY * zoom;
-        float pw = PREVIEW_TEX_SIZE;
-        float ph = PREVIEW_TEX_SIZE;
-
-        int tx = g.getTranslateX() * zoom;
-        int ty = g.getTranslateY() * zoom;
-        px += tx;
-        py += ty;
-
-        // Áp dụng clip giống fillRect / drawLine
-        if (g.isClip)
-        {
-            int cx = g.clipX;
-            int cy = g.clipY;
-            int cw = g.clipW;
-            int ch = g.clipH;
-
-            // clipTX/clipTY được thêm khi có translate tại thời điểm setClip
-            // Nhưng g.clipX/Y đã bao gồm nó qua cách setClip hoạt động
-            // Sử dụng BeginGroup để clip
-            UnityEngine.GUI.BeginGroup(new UnityEngine.Rect(cx, cy, cw, ch));
-            UnityEngine.GUI.color = UnityEngine.Color.white;
-            UnityEngine.GUI.DrawTexture(
-                new UnityEngine.Rect(px - cx, py - cy, pw, ph),
-                previewSpineTexture,
-                UnityEngine.ScaleMode.StretchToFill, true);
-            UnityEngine.GUI.EndGroup();
-        }
-        else
-        {
-            UnityEngine.GUI.color = UnityEngine.Color.white;
-            UnityEngine.GUI.DrawTexture(
-                new UnityEngine.Rect(px, py, pw, ph),
-                previewSpineTexture,
-                UnityEngine.ScaleMode.StretchToFill, true);
-        }
+        g.drawRenderTexture(previewSpineTexture, logicX, logicY, logicW, logicH);
     }
 
     private void EnsureCamera()
@@ -306,7 +276,8 @@ public class SpineCharacterManager : MonoBehaviour
         int zoom = mGraphics.zoomLevel;
 
         bool panelVisible = (GameCanvas.panel != null && GameCanvas.panel.isShow) || 
-                            (GameCanvas.panel2 != null && GameCanvas.panel2.isShow);
+                            (GameCanvas.panel2 != null && GameCanvas.panel2.isShow) ||
+                            CustomInventoryPanel.isShow;
 
         Char previewChar = null;
 
@@ -331,17 +302,22 @@ public class SpineCharacterManager : MonoBehaviour
 
             if (c != null)
             {
+                // Nếu Panel đã đóng, chắc chắn reset biến Preview
+                if (!panelVisible) c.isPreviewSpine = false;
+
                 if (c.isPreviewSpine && panelVisible)
                 {
                     previewChar = c;
                 }
+                else
+                {
+                    // Chỉ cập nhật vị trí WORLD khi không ở chế độ Preview hoặc panel đã đóng
+                    // Việc này tránh skin bị nhảy tọa độ khi OnGUI thay đổi cx, cy
+                    float screenX = (float)(c.cx - GameScr.cmx) * zoom;
+                    float screenY = (float)Screen.height - (float)(c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
+                    renderer.transform.position = new Vector3(screenX, screenY, 0);
+                }
 
-                // x = (cx - cmx) * zoom
-                // y = Screen.height - (cy - cmy + transY) * zoom
-                float screenX = (float)(c.cx - GameScr.cmx) * zoom;
-                float screenY = (float)Screen.height - (float)(c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
-                
-                renderer.transform.position = new Vector3(screenX, screenY, 0);
                 float finalScale = 16.5f * zoom; 
                 renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
 
