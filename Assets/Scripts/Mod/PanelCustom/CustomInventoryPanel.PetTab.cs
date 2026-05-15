@@ -81,7 +81,8 @@ public partial class CustomInventoryPanel
         }
         if (pet != null)
         {
-            PaintCharacterPreview(g, pet, centerX, frameY + 132, true);
+            // Vẽ nhân vật đệ tử. Sử dụng trạng thái thực tế từ map (false) để tránh lỗi tính toán lại bộ phận.
+            PaintCharacterPreview(g, pet, centerX, frameY + 132, false);
         }
         int bottomY = frameY + 159;
         int bottomW = 36;

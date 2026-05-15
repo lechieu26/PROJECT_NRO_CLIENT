@@ -254,7 +254,6 @@ public partial class CustomInventoryPanel
                 }
             }
         }
-        mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, optText, boxW - 54), x + 46, y + 22, mFont.LEFT);
         mFont.tahoma_7_yellow.drawString(g, selectedBagIndex >= 0 ? "Hành trang" : "Trang bị", x + 46, y + 36, mFont.LEFT);
     }
 
@@ -265,44 +264,80 @@ public partial class CustomInventoryPanel
             return;
         }
 
-        ch.useSpine = false;
+        // 1. Xác định ID để tra cứu cache Spine
+        int searchId = ch.charID;
+        Char myPet = Char.myPetz();
+        Char myPet2 = (Char.myCharz() != null) ? Char.MyPet2z() : null;
+        if (ch == myPet || ch == myPet2)
+        {
+            if (Char.myCharz() != null) searchId = -Char.myCharz().charID;
+        }
+
+        // 2. Nhận diện trạng thái Spine
+        bool hasSpineItem = false;
+        int newItemSpineId = -1;
         for (int i = 0; i < ch.arrItemBody.Length; i++)
         {
             Item item = ch.arrItemBody[i];
             if (item != null && item.template != null && item.template.type == 80)
             {
-                ch.useSpine = true;
-                ch.spineId = item.template.part;
+                hasSpineItem = true;
+                newItemSpineId = item.template.part;
                 break;
             }
         }
 
+        Item costume = FindEquippedCostume(ch.arrItemBody);
+
+        if (hasSpineItem)
+        {
+            ch.useSpine = true;
+            ch.spineId = newItemSpineId;
+        }
+        else if (costume != null)
+        {
+            // Nếu đang mặc cải trang thường (type 5), ưu tiên hiển thị dạng legacy
+            ch.useSpine = false;
+        }
+        else
+        {
+            // Nếu không có vật phẩm chỉ định, đồng bộ với trạng thái thế giới (cache)
+            if (SpineMessageHandler.playerSkinCache.TryGetValue(searchId, out int cachedId) && ch.useSpine)
+            {
+                ch.useSpine = true;
+                ch.spineId = cachedId;
+            }
+            else
+            {
+                ch.useSpine = false;
+            }
+        }
+
+        // Nếu là Spine, không cần xử lý bộ phận legacy (head/body/leg)
+        if (ch.useSpine) return;
+
+        // 3. Xử lý bộ phận Legacy
         bool overrideHead = false;
         bool overrideBody = false;
         bool overrideLeg = false;
+        
+        // Khởi tạo từ giá trị hiện tại của nhân vật (giúp giữ đúng ngoại hình server đã set)
         short costumeHead = (short)ch.head;
         short costumeBody = (short)ch.body;
         short costumeLeg = (short)ch.leg;
 
-        // 1. Ưu tiên lấy part từ Cải trang đang trang bị (type tóc/cải trang)
-        Item costume = FindEquippedCostume(ch.arrItemBody);
+        // Ưu tiên Cải trang (type 5)
         if (costume != null)
         {
-            if (costume.headTemp != -1)
-            {
-                costumeHead = (short)costume.headTemp;
-                overrideHead = true;
-            }
-            if (costume.bodyTemp != -1)
-            {
-                costumeBody = (short)costume.bodyTemp;
-                overrideBody = true;
-            }
-            if (costume.legTemp != -1)
-            {
-                costumeLeg = (short)costume.legTemp;
-                overrideLeg = true;
-            }
+            // Một khi đã mặc cải trang, ta coi như toàn bộ ngoại hình bị ghi đè 
+            // để tránh các item áo/quần hiện đè lên (gây lỗi lệch đầu/thân)
+            overrideHead = true;
+            overrideBody = true;
+            overrideLeg = true;
+
+            if (costume.headTemp != -1) costumeHead = (short)costume.headTemp;
+            if (costume.bodyTemp != -1) costumeBody = (short)costume.bodyTemp;
+            if (costume.legTemp != -1) costumeLeg = (short)costume.legTemp;
 
             if (costume.itemOption != null)
             {
@@ -310,31 +345,14 @@ public partial class CustomInventoryPanel
                 {
                     ItemOption opt = costume.itemOption[j];
                     if (opt == null || opt.optionTemplate == null) continue;
-                    if (opt.optionTemplate.id == 127)
-                    {
-                        costumeHead = (short)opt.param;
-                        overrideHead = true;
-                    }
-                    if (opt.optionTemplate.id == 128)
-                    {
-                        costumeBody = (short)opt.param;
-                        overrideBody = true;
-                    }
-                    if (opt.optionTemplate.id == 129)
-                    {
-                        costumeLeg = (short)opt.param;
-                        overrideLeg = true;
-                    }
+                    if (opt.optionTemplate.id == 127) costumeHead = (short)opt.param;
+                    if (opt.optionTemplate.id == 128) costumeBody = (short)opt.param;
+                    if (opt.optionTemplate.id == 129) costumeLeg = (short)opt.param;
                 }
             }
         }
 
-        // 2. Ghi part từ cải trang trước, từng bộ phận độc lập
-        if (overrideHead) ch.head = costumeHead;
-        if (overrideBody) ch.body = costumeBody;
-        if (overrideLeg) ch.leg = costumeLeg;
-
-        // 3. Bộ phận nào không bị cải trang ghi đè thì lấy từ trang bị gốc
+        // Chỉ áp dụng part từ trang bị nếu bộ phận đó CHƯA bị cải trang chiếm dụng
         for (int i = 0; i < ch.arrItemBody.Length; i++)
         {
             Item item = ch.arrItemBody[i];
@@ -344,17 +362,22 @@ public partial class CustomInventoryPanel
             if (part == -1) continue;
 
             if (item.template.type == 0 && !overrideBody)
-                ch.body = (short)part;
+                costumeBody = (short)part;
             else if (item.template.type == 1 && !overrideLeg)
-                ch.leg = (short)part;
+                costumeLeg = (short)part;
             else if ((item.template.type == 2 || item.template.type == 6) && !overrideHead)
-                ch.head = (short)part;
+                costumeHead = (short)part;
         }
 
-        // 4. Fallback để không bị trống
-        if (ch.head == -1) ch.head = 0;
-        if (ch.body == -1) ch.body = 0;
-        if (ch.leg == -1) ch.leg = 0;
+        // Cập nhật lại cho nhân vật
+        ch.head = costumeHead;
+        ch.body = costumeBody;
+        ch.leg = costumeLeg;
+
+        // Fallback để tránh lỗi IndexOutOfRangeException khi vẽ
+        if (ch.head <= -1) ch.head = 0;
+        if (ch.body <= -1) ch.body = 0;
+        if (ch.leg <= -1) ch.leg = 0;
     }
 
     private static Item FindEquippedCostume(Item[] bodyItems)
