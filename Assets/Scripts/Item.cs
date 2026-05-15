@@ -53,6 +53,12 @@ public class Item
 	public const int TYPE_TRAINSUIT = 32;
 
 	public const int TYPE_HAT = 35;
+	
+	public const int TYPE_LINHTHU = 72;
+
+	public const int TYPE_HUYHIEU = 75;
+
+	public const int TYPE_SPINE = 80;
 
 	public const sbyte UI_WEAPON = 2;
 
@@ -351,7 +357,7 @@ public class Item
 
 	public bool isTypeBody()
 	{
-		if ((0 <= template.type && template.type < 6) || template.type == 32 || template.type == 35 || template.type == 11 || template.type == 23)
+		if ((0 <= template.type && template.type < 6) || template.type == 32 || template.type == 35 || template.type == 11 || template.type == 23 || template.type == 72 || template.type == 75 || template.type == 80)
 		{
 			return true;
 		}

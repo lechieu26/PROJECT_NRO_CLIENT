@@ -14,7 +14,7 @@ public class SpineCharacterRenderer : MonoBehaviour
     [Header("State")]
     public string currentSkeletonName = "";
     public string currentSkin = "default";
-    public string currentAnimation = "Idle";
+    public string currentAnimation = "";
     public bool isLoop = true;
     public int direction = 1; // 1 = phải, -1 = trái
     public float timeScale = 0.6f; // Tốc độ animation (mặc định 0.6f cho NRO)
@@ -68,9 +68,11 @@ public class SpineCharacterRenderer : MonoBehaviour
         // Animation event callback
         skeletonAnimation.AnimationState.Complete += OnAnimationComplete;
 
+        // Phải set flag initialized TRƯỚC khi gọi SetAnimation (vì SetAnimation check flag này)
+        isInitialized = true;
+
         // Play Idle by default
         SetAnimation("Idle", true);
-        isInitialized = true;
 
         Debug.Log($"[SpineCharacterRenderer] Initialized with SkeletonAnimation, skin: {skinName}");
     }
@@ -85,27 +87,84 @@ public class SpineCharacterRenderer : MonoBehaviour
 
         if (currentAnimation == animName && isLoop == loop) return;
 
+        // Kiểm tra animation có tồn tại trong skeleton không
+        string resolvedAnim = ResolveAnimationName(animName);
+        if (resolvedAnim == null)
+        {
+            Debug.LogWarning($"[SpineCharacterRenderer] Animation '{animName}' not found in skeleton, skipping");
+            return;
+        }
+
         currentAnimation = animName;
         isLoop = loop;
 
         try
         {
             skeletonAnimation.timeScale = (speed > 0) ? speed : timeScale;
-            skeletonAnimation.AnimationState.SetAnimation(0, animName, loop);
+            skeletonAnimation.AnimationState.SetAnimation(0, resolvedAnim, loop);
         }
         catch (System.Exception e)
         {
-            Debug.LogWarning($"[SpineCharacterRenderer] Animation '{animName}' not found: {e.Message}");
-            if (animName != "Idle")
+            Debug.LogWarning($"[SpineCharacterRenderer] Failed to set animation '{resolvedAnim}': {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Tìm tên animation thực sự trong skeleton data, hỗ trợ case-insensitive và alias.
+    /// </summary>
+    private string ResolveAnimationName(string animName)
+    {
+        if (skeletonAnimation == null || skeletonAnimation.Skeleton == null) return null;
+        
+        var skeletonData = skeletonAnimation.Skeleton.Data;
+        if (skeletonData == null) return null;
+
+        // 1. Thử tên gốc trước
+        if (skeletonData.FindAnimation(animName) != null) return animName;
+
+        // 2. Thử các alias phổ biến
+        string[] aliases = GetAnimationAliases(animName);
+        if (aliases != null)
+        {
+            foreach (string alias in aliases)
             {
-                try
-                {
-                    skeletonAnimation.AnimationState.SetAnimation(0, "Idle", true);
-                    currentAnimation = "Idle";
-                    isLoop = true;
-                }
-                catch { }
+                if (skeletonData.FindAnimation(alias) != null) return alias;
             }
+        }
+
+        // 3. Tìm case-insensitive
+        foreach (var anim in skeletonData.Animations)
+        {
+            if (string.Equals(anim.Name, animName, System.StringComparison.OrdinalIgnoreCase))
+                return anim.Name;
+        }
+
+        // 4. Nếu là Idle mà không tìm thấy, tìm animation đầu tiên (đảm bảo không đứng im)
+        if (animName == "Idle" || animName == "idle")
+        {
+            if (skeletonData.Animations.Count > 0)
+            {
+                string firstAnim = skeletonData.Animations.Items[0].Name;
+                Debug.Log($"[SpineCharacterRenderer] 'Idle' not found, using first animation: '{firstAnim}'");
+                return firstAnim;
+            }
+        }
+
+        return null;
+    }
+
+    private string[] GetAnimationAliases(string animName)
+    {
+        switch (animName)
+        {
+            case "Idle": return new[] { "idle", "IDLE", "stand", "Stand", "animation" };
+            case "Run": return new[] { "run", "RUN", "Walk", "walk", "move" };
+            case "Jump": return new[] { "jump", "JUMP" };
+            case "Fall": return new[] { "fall", "FALL" };
+            case "Fly": return new[] { "fly", "FLY" };
+            case "Die": return new[] { "die", "DIE", "dead", "Dead" };
+            case "Hit": return new[] { "hit", "HIT", "Injured", "injured", "hurt" };
+            default: return null;
         }
     }
 

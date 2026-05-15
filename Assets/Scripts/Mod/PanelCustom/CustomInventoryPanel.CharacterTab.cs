@@ -172,6 +172,9 @@ public partial class CustomInventoryPanel
         short oldHead = (short) ch.head;
         short oldBody = (short) ch.body;
         short oldLeg = (short) ch.leg;
+        bool oldUseSpine = ch.useSpine;
+        int oldSpineId = ch.spineId;
+        bool oldIsPreviewSpine = ch.isPreviewSpine;
         
         int[] effXs, effYs;
         CapturePreviewEffectPositions(ch, out effXs, out effYs);
@@ -223,6 +226,9 @@ public partial class CustomInventoryPanel
             ch.head = oldHead;
             ch.body = oldBody;
             ch.leg = oldLeg;
+            ch.useSpine = oldUseSpine;
+            ch.spineId = oldSpineId;
+            ch.isPreviewSpine = oldIsPreviewSpine;
             RestorePreviewEffectPositions(ch, effXs, effYs);
         }
     }

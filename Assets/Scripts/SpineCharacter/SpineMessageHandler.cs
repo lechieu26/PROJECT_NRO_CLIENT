@@ -237,8 +237,28 @@ public static class SpineMessageHandler
         // Nếu c.useSpine là true nhưng renderer bị mất (do lỗi map/UI), thì vẫn cần apply lại
         bool hasRenderer = SpineCharacterManager.Instance.GetRenderer(c.charID) != null;
         
-        if (!c.useSpine || !hasRenderer)
+        if (c.useSpine && !hasRenderer)
         {
+            // Ưu tiên dùng cache, fallback sang spineId trên Char
+            int skinId = 0;
+            if (playerSkinCache.TryGetValue(c.charID, out int cachedId))
+            {
+                skinId = cachedId;
+            }
+            else if (c.spineId > 0)
+            {
+                skinId = c.spineId;
+                playerSkinCache[c.charID] = skinId; // Populate cache
+            }
+            
+            if (skinId > 0)
+            {
+                ApplySkinToChar(c, skinId);
+            }
+        }
+        else if (!c.useSpine && !hasRenderer)
+        {
+            // Trường hợp useSpine chưa set nhưng cache có (nhân vật khác xuất hiện trong map)
             if (playerSkinCache.TryGetValue(c.charID, out int skinId))
             {
                 ApplySkinToChar(c, skinId);

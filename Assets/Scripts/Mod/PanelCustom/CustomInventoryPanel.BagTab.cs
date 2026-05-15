@@ -265,6 +265,18 @@ public partial class CustomInventoryPanel
             return;
         }
 
+        ch.useSpine = false;
+        for (int i = 0; i < ch.arrItemBody.Length; i++)
+        {
+            Item item = ch.arrItemBody[i];
+            if (item != null && item.template != null && item.template.type == 80)
+            {
+                ch.useSpine = true;
+                ch.spineId = item.template.part;
+                break;
+            }
+        }
+
         bool overrideHead = false;
         bool overrideBody = false;
         bool overrideLeg = false;

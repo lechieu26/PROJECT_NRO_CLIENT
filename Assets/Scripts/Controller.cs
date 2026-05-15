@@ -2185,6 +2185,13 @@ public class Controller : IMessageHandler
 					case 1:
 						Char.myCharz().leg = Char.myCharz().arrItemBody[num266].template.part;
 						break;
+					case 80:
+						Char.myCharz().useSpine = true;
+						Char.myCharz().spineId = Char.myCharz().arrItemBody[num266].template.part;
+						SpineMessageHandler.playerSkinCache[Char.myCharz().charID] = Char.myCharz().spineId;
+						SpineMessageHandler.ApplySkinToChar(Char.myCharz(), Char.myCharz().spineId);
+						Res.outz("[Spine] Login apply: charId=" + Char.myCharz().charID + ", spineId=" + Char.myCharz().spineId);
+						break;
 					}
 				}
 				break;
