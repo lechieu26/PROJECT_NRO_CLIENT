@@ -113,7 +113,7 @@ public partial class CustomInventoryPanel
         Char me = Char.myCharz();
         if (me != null)
         {
-            PaintCharacterPreview(g, me, centerX, frameY + 132, false);
+            PaintCharacterPreview(g, me, centerX, frameY + 132, true);
         }
         int bottomY = frameY + 159;
         int bottomW = 36;

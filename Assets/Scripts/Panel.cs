@@ -4603,7 +4603,15 @@ public class Panel : IActionListener, IChatable
         }
         else if (this.charInfo != null)
         {
-            this.charInfo.paintCharBody(g, num + 5, num2 + 25, 1, 0, true);
+            if (this.charInfo.useSpine)
+            {
+                this.charInfo.isPreviewSpine = true;
+                SpineCharacterManager.Instance.PaintPreviewSpine(g, num + 5, num2 + 25, this.charInfo.charID);
+            }
+            else
+            {
+                this.charInfo.paintCharBody(g, num + 5, num2 + 25, 1, 0, true);
+            }
         }
         else if (this.idIcon != -1)
         {
@@ -7015,7 +7023,16 @@ public class Panel : IActionListener, IChatable
                 // Vẽ nhân vật ở giữa phần trên (không vẽ tilemap)
                 int charX = centerX + centerW / 2;
                 int charY = centerY + centerH / 2;
-                Char.myCharz().paintCharBody(g, charX, charY, 1, Char.myCharz().cf, false);
+                Char me = Char.myCharz();
+                if (me.useSpine)
+                {
+                    me.isPreviewSpine = true;
+                    SpineCharacterManager.Instance.PaintPreviewSpine(g, charX, charY, me.charID);
+                }
+                else
+                {
+                    me.paintCharBody(g, charX, charY, 1, me.cf, false);
+                }
 
                 // === VẼ THÔNG TIN TỔNG HỢP Ở GIỮA ===
                 int infoY = centerY + centerH / 2 + 5;

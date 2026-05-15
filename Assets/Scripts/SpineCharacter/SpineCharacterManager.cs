@@ -38,6 +38,7 @@ public class SpineCharacterManager : MonoBehaviour
     // Renderer riêng cho chế độ xem trước trong UI
     private SpineCharacterRenderer previewRenderer;
     private int currentPreviewCharId = -1;
+    private int currentPreviewCharIdRequested = -1;
     private string lastPreviewSkeleton = "";
     private string lastPreviewSkin = "";
 
@@ -105,8 +106,9 @@ public class SpineCharacterManager : MonoBehaviour
     /// Tọa độ x,y là vị trí trung tâm nhân vật trong hệ tọa độ mGraphics (content space).
     /// Tự động tuân thủ translate và setClip của mGraphics, giống fillRect.
     /// </summary>
-    public void PaintPreviewSpine(mGraphics g, int x, int y)
+    public void PaintPreviewSpine(mGraphics g, int x, int y, int charId)
     {
+        currentPreviewCharIdRequested = charId;
         if (previewSpineTexture == null || previewSpineCamera == null) return;
         if (previewRenderer == null || !previewRenderer.IsVisible()) return;
 
@@ -305,9 +307,10 @@ public class SpineCharacterManager : MonoBehaviour
                 // Nếu Panel đã đóng, chắc chắn reset biến Preview
                 if (!panelVisible) c.isPreviewSpine = false;
 
-                if (c.isPreviewSpine && panelVisible)
+                if ((c.isPreviewSpine || c.charID == currentPreviewCharIdRequested) && panelVisible)
                 {
                     previewChar = c;
+                    currentPreviewCharIdRequested = -1; // Đã nhận diện được nhân vật
                 }
                 else
                 {
@@ -362,9 +365,32 @@ public class SpineCharacterManager : MonoBehaviour
             return;
         }
 
-        // Lấy thông tin từ renderer thế giới của nhân vật đó
+        // Lấy thông tin skeleton và skin
+        string skeletonName = "";
+        string skinName = "default";
+
         SpineCharacterRenderer worldRenderer = GetRenderer(c.charID);
-        if (worldRenderer == null) return;
+        if (worldRenderer != null)
+        {
+            skeletonName = worldRenderer.currentSkeletonName;
+            skinName = worldRenderer.currentSkin;
+        }
+        else
+        {
+            // Nếu không có renderer trong thế giới, thử lấy từ SpineSkinManager dựa trên spineId
+            var skinData = SpineSkinManager.GetSkinData(c.spineId);
+            if (skinData != null)
+            {
+                skeletonName = skinData.skeletonName;
+                skinName = skinData.skinName;
+            }
+        }
+
+        if (string.IsNullOrEmpty(skeletonName))
+        {
+            if (previewRenderer != null) previewRenderer.SetVisible(false);
+            return;
+        }
 
         // Khởi tạo/Cập nhật previewRenderer
         if (previewRenderer == null)
@@ -376,14 +402,14 @@ public class SpineCharacterManager : MonoBehaviour
         }
 
         // Đồng bộ Skeleton và Skin nếu thay đổi
-        if (lastPreviewSkeleton != worldRenderer.currentSkeletonName || lastPreviewSkin != worldRenderer.currentSkin)
+        if (lastPreviewSkeleton != skeletonName || lastPreviewSkin != skinName)
         {
-            SkeletonDataAsset data = LoadSkeletonData(worldRenderer.currentSkeletonName);
+            SkeletonDataAsset data = LoadSkeletonData(skeletonName);
             if (data != null)
             {
-                previewRenderer.Initialize(data, worldRenderer.currentSkeletonName, worldRenderer.currentSkin);
-                lastPreviewSkeleton = worldRenderer.currentSkeletonName;
-                lastPreviewSkin = worldRenderer.currentSkin;
+                previewRenderer.Initialize(data, skeletonName, skinName);
+                lastPreviewSkeleton = skeletonName;
+                lastPreviewSkin = skinName;
                 SetLayerRecursively(previewRenderer.gameObject, PREVIEW_SPINE_LAYER);
             }
         }

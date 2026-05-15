@@ -41,7 +41,7 @@ public partial class CustomInventoryPanel
         int previewY = topY + 104;
 
         mFont.tahoma_7b_dark.drawString(g, me.cName, centerX, topY + 10, mFont.CENTER);
-        PaintCharacterPreview(g, me, centerX, previewY, false);
+        PaintCharacterPreview(g, me, centerX, previewY, true);
 
         for (int i = 0; i < 5; i++)
         {
@@ -200,7 +200,7 @@ public partial class CustomInventoryPanel
             if (ch.useSpine)
             {
                 ch.isPreviewSpine = true;
-                SpineCharacterManager.Instance.PaintPreviewSpine(g, ch.cx, ch.cy);
+                SpineCharacterManager.Instance.PaintPreviewSpine(g, ch.cx, ch.cy, ch.charID);
             }
             else
             {
