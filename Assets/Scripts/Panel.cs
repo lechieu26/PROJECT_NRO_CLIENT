@@ -4605,8 +4605,10 @@ public class Panel : IActionListener, IChatable
         {
             if (this.charInfo.useSpine)
             {
+                bool oldIsPreviewSpine = this.charInfo.isPreviewSpine;
                 this.charInfo.isPreviewSpine = true;
                 SpineCharacterManager.Instance.PaintPreviewSpine(g, num + 5, num2 + 25, this.charInfo.charID);
+                this.charInfo.isPreviewSpine = oldIsPreviewSpine;
             }
             else
             {
@@ -7026,8 +7028,10 @@ public class Panel : IActionListener, IChatable
                 Char me = Char.myCharz();
                 if (me.useSpine)
                 {
+                    bool oldIsPreviewSpine = me.isPreviewSpine;
                     me.isPreviewSpine = true;
                     SpineCharacterManager.Instance.PaintPreviewSpine(g, charX, charY, me.charID);
+                    me.isPreviewSpine = oldIsPreviewSpine;
                 }
                 else
                 {

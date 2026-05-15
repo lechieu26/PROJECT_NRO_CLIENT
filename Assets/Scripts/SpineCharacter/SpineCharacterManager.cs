@@ -272,16 +272,25 @@ public class SpineCharacterManager : MonoBehaviour
 
     private void UpdatePositions()
     {
-        if (spineCharacters.Count == 0) return;
-
-        List<int> toRemove = new List<int>();
         int zoom = mGraphics.zoomLevel;
-
         bool panelVisible = (GameCanvas.panel != null && GameCanvas.panel.isShow) || 
                             (GameCanvas.panel2 != null && GameCanvas.panel2.isShow) ||
                             CustomInventoryPanel.isShow;
 
         Char previewChar = null;
+        if (currentPreviewCharIdRequested != -1 && panelVisible)
+        {
+            previewChar = GetCharById(currentPreviewCharIdRequested);
+        }
+
+        if (spineCharacters.Count == 0) 
+        {
+             UpdatePreviewRenderer(previewChar, panelVisible, zoom);
+             currentPreviewCharIdRequested = -1;
+             return;
+        }
+
+        List<int> toRemove = new List<int>();
 
         foreach (var kvp in spineCharacters)
         {
@@ -304,22 +313,15 @@ public class SpineCharacterManager : MonoBehaviour
 
             if (c != null)
             {
-                // Nếu Panel đã đóng, chắc chắn reset biến Preview
-                if (!panelVisible) c.isPreviewSpine = false;
-
-                if ((c.isPreviewSpine || c.charID == currentPreviewCharIdRequested) && panelVisible)
+                if (previewChar == null && c.isPreviewSpine && panelVisible)
                 {
                     previewChar = c;
-                    currentPreviewCharIdRequested = -1; // Đã nhận diện được nhân vật
                 }
-                else
-                {
-                    // Chỉ cập nhật vị trí WORLD khi không ở chế độ Preview hoặc panel đã đóng
-                    // Việc này tránh skin bị nhảy tọa độ khi OnGUI thay đổi cx, cy
-                    float screenX = (float)(c.cx - GameScr.cmx) * zoom;
-                    float screenY = (float)Screen.height - (float)(c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
-                    renderer.transform.position = new Vector3(screenX, screenY, 0);
-                }
+                
+                // LUÔN cập nhật vị trí WORLD cho renderer này
+                float screenX = (float)(c.cx - GameScr.cmx) * zoom;
+                float screenY = (float)Screen.height - (float)(c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
+                renderer.transform.position = new Vector3(screenX, screenY, 0);
 
                 float finalScale = 16.5f * zoom; 
                 renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
@@ -352,8 +354,36 @@ public class SpineCharacterManager : MonoBehaviour
 
         // Xử lý mô hình xem trước (Preview) riêng biệt
         UpdatePreviewRenderer(previewChar, panelVisible, zoom);
+        currentPreviewCharIdRequested = -1;
+
+        // Reset flag cho tất cả nhân vật sau khi đã xử lý xong frame
+        foreach (var kvp in spineCharacters)
+        {
+            Char cObj = GetCharById(kvp.Key);
+            if (cObj != null) cObj.isPreviewSpine = false;
+        }
+        if (Char.myCharz() != null) Char.myCharz().isPreviewSpine = false;
+        Char myPet = Char.myPetz();
+        if (myPet != null) myPet.isPreviewSpine = false;
 
         foreach (int id in toRemove) RemoveCharacter(id);
+    }
+
+    private Char GetCharById(int id)
+    {
+        Char c = GameScr.findCharInMap(id);
+        if (c != null) return c;
+
+        Char myChar = Char.myCharz();
+        if (myChar != null)
+        {
+            if (id == myChar.charID) return myChar;
+            
+            // Check Pet ID (Thường là -MasterID hoặc ID riêng tùy server)
+            // Trong game này thường dùng -myChar.charID cho đệ tử
+            if (id == -myChar.charID) return Char.myPetz();
+        }
+        return null;
     }
 
     private void UpdatePreviewRenderer(Char c, bool panelVisible, int zoom)
