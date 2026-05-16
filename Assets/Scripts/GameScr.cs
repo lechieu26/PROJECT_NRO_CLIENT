@@ -6500,8 +6500,15 @@ public class GameScr : mScreen, IChatable
 
 	public void actMenu()
 	{
-		GameCanvas.panel.setTypeMain();
-		GameCanvas.panel.show();
+        if (ModFunc.useNewPanel)
+        {
+            CustomInventoryPanel.Toggle();
+        }
+        else
+        {
+            GameCanvas.panel.setTypeMain();
+            GameCanvas.panel.show();
+        }
 	}
 
 	public void openUIZone(Message message)

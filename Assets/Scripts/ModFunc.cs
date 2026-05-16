@@ -287,6 +287,7 @@ public class ModFunc : IActionListener
     public static Image imgBg = null;
 
     public static bool isShortOptionTemp = false;
+    public static bool useNewPanel = false;
 
     public static Image imgMenuChat = null;
 
@@ -580,6 +581,7 @@ public class ModFunc : IActionListener
         AnPlayer = Rms.loadRMSInt("anplayer") == 1;
         isTitleOff = Rms.loadRMSInt("isTitleOff") == 1;
         autoWakeUp = Rms.loadRMSInt("autoWakeUp") == 1;
+        useNewPanel = Rms.loadRMSInt("useNewPanel") == 1;
         if (!ModNotLogo)
         {
             isLogo = Rms.loadRMSInt("logo") == 1;
@@ -2065,6 +2067,7 @@ public class ModFunc : IActionListener
                         menuOthers.addElement(new Command("Tốc độ\nGame", 54));
                         //menuOthers.addElement(new Command("Auto Item", 55));
                         menuOthers.addElement(new Command("Auto\nHồi sinh " + (autoWakeUp ? "[Bật]" : "[Tắt]"), 60));
+                        menuOthers.addElement(new Command("Panel mới " + (useNewPanel ? "[Bật]" : "[Tắt]"), 906));
                         menuOthers.addElement(new Command("Hành trang\nLưới " + (isInventory ? "[Bật]" : "[Tắt]"), 59));
                         menuOthers.addElement(new Command("Load ô\nskill", 57));
                         menuOthers.addElement(new Command("Hiện tên quái " + (showMobName ? "[Bật]" : "[Tắt]"), 999));
@@ -2369,6 +2372,11 @@ public class ModFunc : IActionListener
                 isTitleOff = !isTitleOff;
                 Rms.saveRMSInt("isTitleOff", isTitleOff ? 1 : 0);
                 GameScr.info1.addInfo(strTitleOff + (!isTitleOff ? " [Bật]" : " [Tắt]"), 0);
+                break;
+            case 906:
+                useNewPanel = !useNewPanel;
+                Rms.saveRMSInt("useNewPanel", useNewPanel ? 1 : 0);
+                GameScr.info1.addInfo("Panel mới " + (useNewPanel ? "[Bật]" : "[Tắt]"), 0);
                 break;
             case 901: // Thêm nhạc
                 {
