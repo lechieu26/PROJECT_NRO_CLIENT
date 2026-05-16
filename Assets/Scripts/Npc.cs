@@ -188,8 +188,10 @@ public class Npc : Char
 	{
 		if (!Char.isPaintAura && idAura > -1 && !GameCanvas.panel.isShow)
 		{
+			g.setAlpha(0.4f);
 			FrameImage fraImage = mSystem.getFraImage("aura_" + idAura + "_0");
 			fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, cx, cy, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
+			g.setAlpha(1f);
 		}
 	}
 
@@ -197,8 +199,10 @@ public class Npc : Char
 	{
 		if (Char.isPaintAura && idAura > -1 && !GameCanvas.panel.isShow && !GameCanvas.lowGraphic)
 		{
+			g.setAlpha(0.4f);
 			FrameImage fraImage = mSystem.getFraImage("aura_" + idAura + "_1");
 			fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, cx, cy + 2, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
+			g.setAlpha(1f);
 		}
 	}
 

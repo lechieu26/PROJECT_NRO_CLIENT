@@ -270,7 +270,12 @@ public partial class CustomInventoryPanel
         Char myPet2 = (Char.myCharz() != null) ? Char.MyPet2z() : null;
         if (ch == myPet || ch == myPet2)
         {
-            if (Char.myCharz() != null) searchId = -Char.myCharz().charID;
+            if (Char.myCharz() != null)
+            {
+                searchId = -Char.myCharz().charID;
+                // Đồng bộ ID đệ tử để SpineCharacterManager có thể tìm thấy dữ liệu xem trước
+                ch.charID = searchId;
+            }
         }
 
         // 2. Nhận diện trạng thái Spine

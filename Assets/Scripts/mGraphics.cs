@@ -443,6 +443,11 @@ public class mGraphics
 		a = alpha;
 	}
 
+	public void setAlpha(float alpha)
+	{
+		GUI.color = new Color(1f, 1f, 1f, alpha);
+	}
+
 	public void drawRenderTexture(UnityEngine.RenderTexture rt, int x, int y, int w, int h)
 	{
 		if (rt == null) return;
