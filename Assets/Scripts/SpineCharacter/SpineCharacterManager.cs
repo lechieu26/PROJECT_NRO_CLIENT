@@ -39,6 +39,7 @@ public class SpineCharacterManager : MonoBehaviour
     private SpineCharacterRenderer previewRenderer;
     private int currentPreviewCharId = -1;
     private int currentPreviewCharIdRequested = -1;
+    private float previewDisplayBuffer = 0; // Thời gian giữ hiển thị preview
     private string lastPreviewSkeleton = "";
     private string lastPreviewSkin = "";
 
@@ -158,7 +159,7 @@ public class SpineCharacterManager : MonoBehaviour
             else spineCamera = camObj.GetComponent<Camera>();
         }
 
-        // 2. Khởi tạo Camera UI Preview (texture nhỏ, camera nhìn gốc tọa độ)
+        // 2. Khởi tạo Camera UI Preview
         if (previewSpineCamera == null)
         {
             GameObject pCamObj = GameObject.Find("SpinePreviewCamera");
@@ -169,8 +170,8 @@ public class SpineCharacterManager : MonoBehaviour
                 previewSpineCamera.orthographic = true;
                 previewSpineCamera.clearFlags = CameraClearFlags.SolidColor;
                 previewSpineCamera.backgroundColor = new Color(0, 0, 0, 0);
-                previewSpineCamera.depth = -100; // Không hiển thị trực tiếp lên màn hình
-                previewSpineCamera.cullingMask = 1 << PREVIEW_SPINE_LAYER;
+                previewSpineCamera.depth = -100; 
+                previewSpineCamera.cullingMask = 1 << PREVIEW_SPINE_LAYER; 
                 previewSpineCamera.nearClipPlane = 0.1f;
                 previewSpineCamera.farClipPlane = 100f;
 
@@ -178,29 +179,29 @@ public class SpineCharacterManager : MonoBehaviour
                 previewSpineTexture.Create();
                 previewSpineCamera.targetTexture = previewSpineTexture;
 
-                // Camera nhìn vào gốc (0,0) - nhân vật preview sẽ đặt tại (0,0)
-                pCamObj.transform.position = new UnityEngine.Vector3(0, 0, -10);
-                // orthographicSize = nửa chiều cao texture = PREVIEW_TEX_SIZE / 2
+                // Đặt camera ở một vị trí rất xa để không bị camera chính vô tình nhìn thấy
+                pCamObj.transform.position = new UnityEngine.Vector3(-5000, -5000, -10);
                 previewSpineCamera.orthographicSize = PREVIEW_TEX_SIZE / 2f;
                 DontDestroyOnLoad(pCamObj);
             }
             else previewSpineCamera = pCamObj.GetComponent<Camera>();
         }
 
+        // ĐẢM BẢO CÁC CAMERA KHÁC KHÔNG NHÌN THẤY LAYER SPINE
+        ExcludeSpineLayersFromOtherCameras();
+
         spineCamera.orthographicSize = halfH;
         spineCamera.transform.position = new UnityEngine.Vector3(halfW, halfH, -10);
-        // Preview camera luôn nhìn gốc (0,0) với kích thước cố định
         previewSpineCamera.orthographicSize = PREVIEW_TEX_SIZE / 2f;
-        previewSpineCamera.transform.position = new UnityEngine.Vector3(0, 0, -10);
+        previewSpineCamera.transform.position = new UnityEngine.Vector3(-5000, -5000, -10);
 
-        // Kiểm tra Resize cho World camera
+        // Kiểm tra Resize
         if (spinetexture == null || spinetexture.width != Screen.width || spinetexture.height != Screen.height)
         {
             if (spinetexture != null) spinetexture.Release();
             spinetexture = new UnityEngine.RenderTexture(Screen.width, Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
             spineCamera.targetTexture = spinetexture;
         }
-        // Preview texture luôn cố định PREVIEW_TEX_SIZE x PREVIEW_TEX_SIZE
         if (previewSpineTexture == null)
         {
             previewSpineTexture = new UnityEngine.RenderTexture(PREVIEW_TEX_SIZE, PREVIEW_TEX_SIZE, 24, UnityEngine.RenderTextureFormat.ARGB32);
@@ -208,6 +209,21 @@ public class SpineCharacterManager : MonoBehaviour
             previewSpineCamera.targetTexture = previewSpineTexture;
         }
     }
+
+    private void ExcludeSpineLayersFromOtherCameras()
+    {
+        Camera[] allCameras = Camera.allCameras;
+        int maskToRemove = (1 << SPINE_LAYER) | (1 << PREVIEW_SPINE_LAYER);
+        
+        foreach (Camera cam in allCameras)
+        {
+            if (cam != spineCamera && cam != previewSpineCamera)
+            {
+                cam.cullingMask &= ~maskToRemove;
+            }
+        }
+    }
+
 
     public SpineCharacterRenderer AddOrUpdateCharacter(int charId, string skeletonName, string skinName, Vector2 position)
     {
@@ -388,12 +404,27 @@ public class SpineCharacterManager : MonoBehaviour
 
     private void UpdatePreviewRenderer(Char c, bool panelVisible, int zoom)
     {
-        if (c == null || !panelVisible || !c.useSpine)
+        // Nếu đang yêu cầu vẽ, reset buffer
+        if (c != null && panelVisible && c.useSpine)
+        {
+            previewDisplayBuffer = 0.1f; // Giữ hiển thị trong ít nhất 0.1s (khoảng 6 frames)
+        }
+
+        if (previewDisplayBuffer > 0)
+        {
+            previewDisplayBuffer -= Time.deltaTime;
+        }
+
+        // Chỉ thực sự ẩn khi hết buffer
+        if (previewDisplayBuffer <= 0)
         {
             if (previewRenderer != null) previewRenderer.SetVisible(false);
-            if (c != null && !panelVisible) c.isPreviewSpine = false;
+            if (c != null) c.isPreviewSpine = false;
             return;
         }
+
+        // Nếu buffer còn nhưng nhân vật null thì lấy nhân vật cũ hoặc bỏ qua
+        if (c == null) return;
 
         // Lấy thông tin skeleton và skin
         string skeletonName = "";
@@ -444,14 +475,15 @@ public class SpineCharacterManager : MonoBehaviour
             }
         }
 
-        // Đặt nhân vật preview tại gốc (0,0) — camera preview nhìn vào đây
-        previewRenderer.transform.position = new Vector3(0, 0, 0);
+        // Đặt nhân vật preview tại vị trí của camera preview (vùng cô lập)
+        previewRenderer.transform.position = previewSpineCamera.transform.position + new Vector3(0, 0, 10);
         
         // Scale chuẩn (không âm Y) cho chế độ No-Flip
         float finalScale = 16.5f * zoom;
         previewRenderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
 
         previewRenderer.SetVisible(true);
+
         previewRenderer.SetDirection(1);
         UpdateAnimationByCharState(previewRenderer, c);
     }

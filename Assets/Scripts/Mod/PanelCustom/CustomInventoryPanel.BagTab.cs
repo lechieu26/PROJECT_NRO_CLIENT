@@ -302,7 +302,7 @@ public partial class CustomInventoryPanel
         else
         {
             // Nếu không có vật phẩm chỉ định, đồng bộ với trạng thái thế giới (cache)
-            if (SpineMessageHandler.playerSkinCache.TryGetValue(searchId, out int cachedId) && ch.useSpine)
+            if (SpineMessageHandler.playerSkinCache.TryGetValue(searchId, out int cachedId))
             {
                 ch.useSpine = true;
                 ch.spineId = cachedId;

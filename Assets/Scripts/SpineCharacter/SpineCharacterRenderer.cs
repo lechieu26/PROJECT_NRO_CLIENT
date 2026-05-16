@@ -202,9 +202,16 @@ public class SpineCharacterRenderer : MonoBehaviour
 
     public void SetVisible(bool visible)
     {
-        if (gameObject != null)
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer != null)
         {
-            gameObject.SetActive(visible);
+            meshRenderer.enabled = visible;
+        }
+        
+        // Cũng áp dụng cho các con nếu có (ví dụ các hiệu ứng đính kèm)
+        foreach (var r in GetComponentsInChildren<Renderer>())
+        {
+            r.enabled = visible;
         }
     }
 

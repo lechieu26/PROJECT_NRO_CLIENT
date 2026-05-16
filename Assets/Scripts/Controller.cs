@@ -1957,6 +1957,7 @@ public class Controller : IMessageHandler
 				InfoDlg.hide();
 				Char.myPetz().head = msg.reader().readShort();
 				Char.myPetz().setDefaultPart();
+				Char.myPetz().useSpine = false;
 				int num147 = msg.reader().readUnsignedByte();
 				Char.myPetz().arrItemBody = new Item[num147];
 				for (int num148 = 0; num148 < num147; num148++)
@@ -1995,6 +1996,10 @@ public class Controller : IMessageHandler
 						break;
 					case 1:
 						Char.myPetz().leg = Char.myPetz().arrItemBody[num148].template.part;
+						break;
+					case 80:
+						Char.myPetz().useSpine = true;
+						Char.myPetz().spineId = Char.myPetz().arrItemBody[num148].template.part;
 						break;
 					}
 				}
@@ -2046,6 +2051,7 @@ public class Controller : IMessageHandler
 				InfoDlg.hide();
 				Char.MyPet2z().head = msg.reader().readShort();
 				Char.MyPet2z().setDefaultPart();
+				Char.MyPet2z().useSpine = false;
 				int arrBodySz = msg.reader().readUnsignedByte();
 				Char.MyPet2z().arrItemBody = new Item[arrBodySz];
 				for (int i = 0; i < arrBodySz; i++)
@@ -2084,6 +2090,10 @@ public class Controller : IMessageHandler
 						break;
 					case 1:
 						Char.MyPet2z().leg = Char.MyPet2z().arrItemBody[i].template.part;
+						break;
+					case 80:
+						Char.MyPet2z().useSpine = true;
+						Char.MyPet2z().spineId = Char.MyPet2z().arrItemBody[i].template.part;
 						break;
 					}
 				}
