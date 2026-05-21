@@ -1,0 +1,166 @@
+ship_20.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ship_20a
+  rotate: false
+  xy: 1, 1
+  size: 386, 422
+  orig: 395, 450
+  offset: 5, 11
+  index: -1
+sp18_1 (1)
+  rotate: false
+  xy: 1, 425
+  size: 237, 76
+  orig: 237, 76
+  offset: 0, 0
+  index: -1
+sp18_1 (2)
+  rotate: false
+  xy: 240, 425
+  size: 197, 84
+  orig: 197, 84
+  offset: 0, 0
+  index: -1
+sp18_a (9)
+  rotate: false
+  xy: 814, 50
+  size: 201, 43
+  orig: 231, 54
+  offset: 14, 0
+  index: -1
+sp18_a (1)
+  rotate: false
+  xy: 610, 99
+  size: 210, 41
+  orig: 231, 54
+  offset: 6, 3
+  index: -1
+sp18_a (5)
+  rotate: false
+  xy: 606, 1
+  size: 213, 47
+  orig: 231, 54
+  offset: 13, 0
+  index: -1
+sp18_a (8)
+  rotate: false
+  xy: 389, 52
+  size: 211, 42
+  orig: 231, 54
+  offset: 11, 0
+  index: -1
+sp18_a (11)
+  rotate: false
+  xy: 439, 425
+  size: 224, 54
+  orig: 231, 54
+  offset: 6, 0
+  index: -1
+sp18_a (10)
+  rotate: false
+  xy: 389, 1
+  size: 215, 49
+  orig: 231, 54
+  offset: 10, 0
+  index: -1
+sp18_a (3)
+  rotate: false
+  xy: 389, 144
+  size: 218, 35
+  orig: 231, 54
+  offset: 4, 0
+  index: -1
+sp18_a (4)
+  rotate: false
+  xy: 610, 142
+  size: 206, 41
+  orig: 231, 54
+  offset: 11, 0
+  index: -1
+sp18_a (7)
+  rotate: false
+  xy: 606, 50
+  size: 206, 47
+  orig: 231, 54
+  offset: 13, 0
+  index: -1
+sp18_a (6)
+  rotate: false
+  xy: 665, 425
+  size: 222, 51
+  orig: 231, 54
+  offset: 9, 0
+  index: -1
+sp18_a (2)
+  rotate: false
+  xy: 389, 99
+  size: 219, 43
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp18_b (7)
+  rotate: false
+  xy: 609, 185
+  size: 217, 34
+  orig: 240, 40
+  offset: 12, 4
+  index: -1
+sp18_b (4)
+  rotate: false
+  xy: 439, 481
+  size: 208, 30
+  orig: 240, 40
+  offset: 16, 7
+  index: -1
+sp18_b (3)
+  rotate: false
+  xy: 603, 221
+  size: 208, 30
+  orig: 240, 40
+  offset: 16, 7
+  index: -1
+sp18_b (1)
+  rotate: false
+  xy: 822, 95
+  size: 198, 29
+  orig: 240, 40
+  offset: 20, 8
+  index: -1
+sp18_b (5)
+  rotate: false
+  xy: 389, 218
+  size: 212, 31
+  orig: 240, 40
+  offset: 14, 6
+  index: -1
+sp18_b (8)
+  rotate: false
+  xy: 389, 181
+  size: 218, 35
+  orig: 240, 40
+  offset: 13, 3
+  index: -1
+sp18_b (2)
+  rotate: false
+  xy: 389, 251
+  size: 204, 30
+  orig: 240, 40
+  offset: 17, 7
+  index: -1
+sp18_b (9)
+  rotate: false
+  xy: 818, 142
+  size: 198, 35
+  orig: 240, 40
+  offset: 18, 2
+  index: -1
+sp18_b (6)
+  rotate: false
+  xy: 665, 478
+  size: 214, 32
+  orig: 240, 40
+  offset: 13, 5
+  index: -1

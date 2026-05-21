@@ -1,0 +1,26 @@
+ship_22.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ship_19a
+  rotate: false
+  xy: 1, 1
+  size: 386, 443
+  orig: 386, 443
+  offset: 0, 0
+  index: -1
+sp18_1 (1)
+  rotate: false
+  xy: 660, 1
+  size: 261, 81
+  orig: 261, 81
+  offset: 0, 0
+  index: -1
+sp18_1 (2)
+  rotate: false
+  xy: 389, 1
+  size: 269, 84
+  orig: 297, 84
+  offset: 20, 0
+  index: -1

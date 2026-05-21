@@ -95,6 +95,12 @@ namespace Assets.src.f
 								{
 									Char.myCharz().petFollow = new PetFollow();
 									Char.myCharz().petFollow.smallID = smallID;
+									Char.myCharz().petFollow.ownerId = num15;
+									if (smallID <= -100)
+									{
+										Char.myCharz().petFollow.isSpine = true;
+										Char.myCharz().petFollow.spineId = (-smallID - 100).ToString();
+									}
 									// Khởi tạo vị trí ban đầu tại nhân vật để pet không xuất hiện ở (0,0)
 									int dirOffset = (Char.myCharz().cdir == 1) ? -20 : 20;
 									Char.myCharz().petFollow.cmx = Char.myCharz().cx + dirOffset;
@@ -112,6 +118,12 @@ namespace Assets.src.f
 								{
 									char3.petFollow = new PetFollow();
 									char3.petFollow.smallID = smallID;
+									char3.petFollow.ownerId = num15;
+									if (smallID <= -100)
+									{
+										char3.petFollow.isSpine = true;
+										char3.petFollow.spineId = (-smallID - 100).ToString();
+									}
 									// Khởi tạo vị trí ban đầu tại nhân vật
 									int dirOffset3 = (char3.cdir == 1) ? -20 : 20;
 									char3.petFollow.cmx = char3.cx + dirOffset3;

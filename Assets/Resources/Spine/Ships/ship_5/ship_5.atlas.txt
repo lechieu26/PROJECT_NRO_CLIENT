@@ -1,0 +1,166 @@
+ship_5.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+sh5_1
+  rotate: false
+  xy: 1, 1
+  size: 300, 331
+  orig: 300, 331
+  offset: 0, 0
+  index: -1
+sp5_1 (1)
+  rotate: false
+  xy: 1, 334
+  size: 237, 76
+  orig: 237, 76
+  offset: 0, 0
+  index: -1
+sp5_1a (6)
+  rotate: false
+  xy: 200, 412
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (9)
+  rotate: false
+  xy: 706, 57
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (10)
+  rotate: false
+  xy: 706, 281
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (5)
+  rotate: false
+  xy: 706, 113
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (7)
+  rotate: false
+  xy: 433, 412
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (8)
+  rotate: false
+  xy: 706, 1
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (2)
+  rotate: false
+  xy: 706, 225
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (4)
+  rotate: false
+  xy: 666, 412
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (3)
+  rotate: false
+  xy: 706, 169
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (1)
+  rotate: false
+  xy: 240, 334
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1a (11)
+  rotate: false
+  xy: 473, 334
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp5_1 (2)
+  rotate: false
+  xy: 1, 412
+  size: 197, 84
+  orig: 197, 84
+  offset: 0, 0
+  index: -1
+sp5_b (7)
+  rotate: false
+  xy: 442, 468
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (9)
+  rotate: false
+  xy: 303, 1
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (8)
+  rotate: false
+  xy: 200, 468
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (6)
+  rotate: false
+  xy: 303, 127
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (2)
+  rotate: false
+  xy: 684, 468
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (1)
+  rotate: false
+  xy: 706, 337
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (3)
+  rotate: false
+  xy: 303, 169
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (4)
+  rotate: false
+  xy: 303, 43
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp5_b (5)
+  rotate: false
+  xy: 303, 85
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1

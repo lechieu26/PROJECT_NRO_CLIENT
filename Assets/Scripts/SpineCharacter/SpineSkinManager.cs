@@ -37,6 +37,19 @@ public static class SpineSkinManager
     /// </summary>
     public static string GetResourcePath(string skeletonName)
     {
+        if (skeletonName.StartsWith("ship_"))
+        {
+            string pathShip = $"Spine/Ships/{skeletonName}/{skeletonName}_SkeletonData";
+            if (Resources.Load(pathShip) != null)
+            {
+                return pathShip;
+            }
+            string pathShipFallback = $"Spine/Ships/{skeletonName}/{skeletonName}_41_SkeletonData";
+            if (Resources.Load(pathShipFallback) != null)
+            {
+                return pathShipFallback;
+            }
+        }
         // 1. Kiểm tra trong folder Skins (Mapping tự động theo ID)
         // Cấu trúc: Resources/Spine/Skins/{ID}/{ID}_SkeletonData hoặc Resources/Spine/Skins/{ID}/skin_SkeletonData
         string pathSkins = $"Spine/Skins/{skeletonName}/{skeletonName}_SkeletonData";

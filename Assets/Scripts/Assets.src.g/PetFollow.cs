@@ -4,6 +4,12 @@ namespace Assets.src.g
 	{
 		public short smallID;
 
+		public bool isSpine;
+
+		public string spineId;
+
+		public int ownerId;
+
 		public Info info = new Info();
 
 		public int dir;
@@ -60,6 +66,12 @@ namespace Assets.src.g
 
 		public void paint(mGraphics g)
 		{
+			if (isSpine)
+			{
+				SpineCharacterManager.Instance.AddOrUpdatePetFollow(ownerId, spineId);
+				SpineCharacterManager.Instance.PaintSpineForPetFollow(g, this);
+				return;
+			}
 			int w = 32;
 			int h = 32;
 			int num = ((GameCanvas.gameTick % 10 > 5) ? 1 : 0);
@@ -88,6 +100,10 @@ namespace Assets.src.g
 
 		public void remove()
 		{
+			if (isSpine)
+			{
+				SpineCharacterManager.Instance.RemovePetFollow(ownerId);
+			}
 			ServerEffect.addServerEffect(60, cmx, cmy + 3 + ((GameCanvas.gameTick % 10 > 5) ? 1 : 0), 1);
 		}
 

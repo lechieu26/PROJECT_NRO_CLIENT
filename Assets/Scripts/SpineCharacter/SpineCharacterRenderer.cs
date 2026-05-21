@@ -100,8 +100,29 @@ public class SpineCharacterRenderer : MonoBehaviour
 
         try
         {
-            skeletonAnimation.timeScale = (speed > 0) ? speed : timeScale;
-            skeletonAnimation.AnimationState.SetAnimation(0, resolvedAnim, loop);
+            bool isShip = !string.IsNullOrEmpty(currentSkeletonName) && currentSkeletonName.StartsWith("ship_");
+            if (isShip)
+            {
+                // Reset về SetupPose để tránh hiện tượng giữ trạng thái của animation cũ (bleeding)
+                skeletonAnimation.Skeleton.SetToSetupPose();
+            }
+
+            if (isShip)
+            {
+                // Tăng tốc độ animation của ship (1.2f) để luồng khí bập bùng nhanh và đẹp mắt hơn
+                skeletonAnimation.timeScale = 1.2f;
+            }
+            else
+            {
+                skeletonAnimation.timeScale = (speed > 0) ? speed : timeScale;
+            }
+            var trackEntry = skeletonAnimation.AnimationState.SetAnimation(0, resolvedAnim, loop);
+
+            if (isShip && trackEntry != null)
+            {
+                // Đặt MixDuration = 0 để chuyển đổi ngay lập tức, tránh các thành phần bị nội suy (bay từ ngoài vào)
+                trackEntry.MixDuration = 0f;
+            }
         }
         catch (System.Exception e)
         {
@@ -155,13 +176,24 @@ public class SpineCharacterRenderer : MonoBehaviour
 
     private string[] GetAnimationAliases(string animName)
     {
+        bool isShip = !string.IsNullOrEmpty(currentSkeletonName) && currentSkeletonName.StartsWith("ship_");
         switch (animName)
         {
-            case "Idle": return new[] { "idle", "IDLE", "stand", "Stand", "animation" };
-            case "Run": return new[] { "run", "RUN", "Walk", "walk", "move" };
-            case "Jump": return new[] { "jump", "JUMP" };
-            case "Fall": return new[] { "fall", "FALL" };
-            case "Fly": return new[] { "fly", "FLY" };
+            case "Idle": 
+                if (isShip) return new[] { "action_2", "idle", "stand" };
+                return new[] { "idle", "IDLE", "stand", "Stand", "animation" };
+            case "Run": 
+                if (isShip) return new[] { "action_1", "run", "walk", "move" };
+                return new[] { "run", "RUN", "Walk", "walk", "move" };
+            case "Jump": 
+                if (isShip) return new[] { "action_1", "jump" };
+                return new[] { "jump", "JUMP" };
+            case "Fall": 
+                if (isShip) return new[] { "action_1", "fall" };
+                return new[] { "fall", "FALL" };
+            case "Fly": 
+                if (isShip) return new[] { "action_1", "fly" };
+                return new[] { "fly", "FLY" };
             case "Die": return new[] { "die", "DIE", "dead", "Dead" };
             case "Hit": return new[] { "hit", "HIT", "Injured", "injured", "hurt" };
             default: return null;

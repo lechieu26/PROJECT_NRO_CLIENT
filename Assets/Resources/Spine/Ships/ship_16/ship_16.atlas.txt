@@ -1,0 +1,166 @@
+ship_16.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+sh_16a1
+  rotate: false
+  xy: 1, 1
+  size: 376, 380
+  orig: 376, 380
+  offset: 0, 0
+  index: -1
+sp16_c (1)
+  rotate: false
+  xy: 1, 383
+  size: 237, 76
+  orig: 237, 76
+  offset: 0, 0
+  index: -1
+sp16a (11)
+  rotate: false
+  xy: 672, 113
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (7)
+  rotate: false
+  xy: 379, 1
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (3)
+  rotate: false
+  xy: 379, 113
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (5)
+  rotate: false
+  xy: 672, 1
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (9)
+  rotate: false
+  xy: 379, 169
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (1)
+  rotate: false
+  xy: 379, 57
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (6)
+  rotate: false
+  xy: 672, 169
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (4)
+  rotate: false
+  xy: 439, 439
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (2)
+  rotate: false
+  xy: 439, 383
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (10)
+  rotate: false
+  xy: 672, 225
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16a (8)
+  rotate: false
+  xy: 672, 57
+  size: 231, 54
+  orig: 231, 54
+  offset: 0, 0
+  index: -1
+sp16_c (2)
+  rotate: false
+  xy: 240, 383
+  size: 197, 84
+  orig: 197, 84
+  offset: 0, 0
+  index: -1
+sp16_b (3)
+  rotate: false
+  xy: 621, 323
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (8)
+  rotate: false
+  xy: 1, 469
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (5)
+  rotate: false
+  xy: 621, 281
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (6)
+  rotate: false
+  xy: 379, 267
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (1)
+  rotate: false
+  xy: 379, 225
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (9)
+  rotate: false
+  xy: 672, 407
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (2)
+  rotate: false
+  xy: 672, 365
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (7)
+  rotate: false
+  xy: 379, 309
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1
+sp16_b (4)
+  rotate: false
+  xy: 672, 449
+  size: 240, 40
+  orig: 240, 40
+  offset: 0, 0
+  index: -1

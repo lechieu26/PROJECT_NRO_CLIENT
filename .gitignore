@@ -27,6 +27,8 @@
 *.opendb
 *.VC.db
 .vsconfig
+*.meta
+
 
 # Unity generated files and crash reports
 sysinfo.txt

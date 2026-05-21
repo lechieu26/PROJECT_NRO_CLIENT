@@ -1,0 +1,82 @@
+ship_12.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+sh12_3
+  rotate: false
+  xy: 402, 1
+  size: 96, 174
+  orig: 96, 174
+  offset: 0, 0
+  index: -1
+sh12_2
+  rotate: false
+  xy: 67, 332
+  size: 18, 85
+  orig: 18, 85
+  offset: 0, 0
+  index: -1
+sh12_1
+  rotate: false
+  xy: 1, 1
+  size: 399, 329
+  orig: 399, 329
+  offset: 0, 0
+  index: -1
+sh12_4
+  rotate: false
+  xy: 467, 177
+  size: 37, 120
+  orig: 37, 120
+  offset: 0, 0
+  index: -1
+sh12_5
+  rotate: false
+  xy: 188, 332
+  size: 27, 128
+  orig: 27, 128
+  offset: 0, 0
+  index: -1
+sh12_6
+  rotate: false
+  xy: 473, 299
+  size: 32, 137
+  orig: 32, 137
+  offset: 0, 0
+  index: -1
+sh12_7
+  rotate: false
+  xy: 139, 332
+  size: 47, 133
+  orig: 47, 133
+  offset: 0, 0
+  index: -1
+sh12_8
+  rotate: false
+  xy: 402, 177
+  size: 63, 125
+  orig: 63, 125
+  offset: 0, 0
+  index: -1
+sh12_9
+  rotate: false
+  xy: 402, 304
+  size: 69, 113
+  orig: 69, 113
+  offset: 0, 0
+  index: -1
+sh12_10
+  rotate: false
+  xy: 1, 332
+  size: 64, 105
+  orig: 64, 105
+  offset: 0, 0
+  index: -1
+sh12_11
+  rotate: false
+  xy: 67, 419
+  size: 70, 90
+  orig: 70, 90
+  offset: 0, 0
+  index: -1
