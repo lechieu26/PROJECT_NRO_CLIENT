@@ -29,6 +29,10 @@ public class SpineCharacterManager : MonoBehaviour
         new Dictionary<int, SpineCharacterRenderer>();
     private Dictionary<int, SpineCharacterRenderer> petFollowCharacters =
         new Dictionary<int, SpineCharacterRenderer>();
+    // Kênh Spine độc lập cho Tàu bay (slot 8 - type 95), tách khỏi petFollowCharacters
+    // (slot 11) để hai trang bị có thể hiển thị đồng thời mà không ảnh hưởng nhau.
+    private Dictionary<int, SpineCharacterRenderer> shipFollowCharacters =
+        new Dictionary<int, SpineCharacterRenderer>();
 
     private Camera spineCamera;
     private RenderTexture spinetexture;
@@ -67,6 +71,7 @@ public class SpineCharacterManager : MonoBehaviour
         EnsureCamera();
         UpdatePositions();
         UpdatePetFollowPositions();
+        UpdateShipFollowPositions();
     }
 
     public void PaintSpine(mGraphics g)
@@ -971,6 +976,147 @@ public class SpineCharacterManager : MonoBehaviour
         }
     }
 
+    // ==================== SHIP FOLLOW (Slot 8 - Type 95) ====================
+    // Kênh Spine độc lập cho Tàu bay Spine, song song với petFollow (slot 11).
+
+    public SpineCharacterRenderer AddOrUpdateShipFollow(int playerId, string spineId)
+    {
+        string skeletonName = spineId;
+        if (!spineId.StartsWith("ship_") && !spineId.StartsWith("character_"))
+        {
+            skeletonName = "ship_" + spineId;
+        }
+
+        if (shipFollowCharacters.ContainsKey(playerId))
+        {
+            SpineCharacterRenderer existingRenderer = shipFollowCharacters[playerId];
+            if (existingRenderer != null && existingRenderer.currentSkeletonName != skeletonName)
+            {
+                RemoveShipFollow(playerId);
+            }
+            else
+            {
+                return existingRenderer;
+            }
+        }
+
+        SkeletonDataAsset skeletonData = LoadSkeletonData(skeletonName);
+        if (skeletonData == null)
+            return null;
+
+        GameObject charObj = new GameObject($"SpineShipFollow_{playerId}");
+        SetLayerRecursively(charObj, PET_SPINE_LAYER);
+
+        SpineCharacterRenderer renderer = charObj.AddComponent<SpineCharacterRenderer>();
+        renderer.Initialize(skeletonData, skeletonName, "default");
+
+        SetLayerRecursively(charObj, PET_SPINE_LAYER);
+
+        shipFollowCharacters[playerId] = renderer;
+        Debug.Log(
+            $"[SpineCharacterManager] Created Spine Ship Follow for player {playerId}, ship: {skeletonName}"
+        );
+        return renderer;
+    }
+
+    public void RemoveShipFollow(int playerId)
+    {
+        if (shipFollowCharacters.ContainsKey(playerId))
+        {
+            SpineCharacterRenderer renderer = shipFollowCharacters[playerId];
+            if (renderer != null)
+                Destroy(renderer.gameObject);
+            shipFollowCharacters.Remove(playerId);
+        }
+    }
+
+    public void PaintSpineForShipFollow(mGraphics g, Assets.src.g.PetFollow ship)
+    {
+        if (petSpineTexture == null || ship == null || !ship.isSpine)
+            return;
+
+        int zoom = mGraphics.zoomLevel;
+        int drawW = 100;
+        int drawH = 100;
+        int drawX = ship.cmx - drawW / 2;
+        int drawY = ship.cmy - drawH + 20;
+
+        int oldCX = g.clipX / zoom;
+        int oldCY = g.clipY / zoom;
+        int oldCW = g.clipW / zoom;
+        int oldCH = g.clipH / zoom;
+        bool oldIsClip = g.isClip;
+
+        g.setClip(drawX, drawY, drawW, drawH);
+        g.drawRenderTexture(petSpineTexture, -g.translateX / zoom, -g.translateY / zoom);
+
+        if (oldIsClip)
+            g.setClip(oldCX, oldCY, oldCW, oldCH);
+        else
+            g.isClip = false;
+    }
+
+    private void UpdateShipFollowPositions()
+    {
+        int zoom = mGraphics.zoomLevel;
+        if (shipFollowCharacters.Count == 0)
+            return;
+
+        List<int> toRemove = new List<int>();
+        foreach (var kvp in shipFollowCharacters)
+        {
+            int playerId = kvp.Key;
+            SpineCharacterRenderer renderer = kvp.Value;
+
+            Char c = GetCharById(playerId);
+            if (c != null && c.shipFollow != null && c.shipFollow.isSpine)
+            {
+                float screenX = (float)(c.shipFollow.cmx - GameScr.cmx) * zoom;
+                float screenY =
+                    (float)Screen.height
+                    - (float)(c.shipFollow.cmy - GameScr.cmy + GameCanvas.transY) * zoom;
+
+                if (renderer != null)
+                {
+                    // Tàu bay luôn bay lơ lửng với hiệu ứng dao động sin nhẹ
+                    float floatOffset = Mathf.Sin(Time.time * 4f) * 6f * zoom;
+                    renderer.transform.position = new Vector3(
+                        screenX,
+                        screenY + floatOffset,
+                        0
+                    );
+
+                    float finalScale = 15f * zoom;
+                    renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
+
+                    // Hướng tàu ngược với hướng player giống ship spine cũ
+                    renderer.SetDirection((c.shipFollow.dir != 1) ? 1 : -1);
+
+                    bool isMoving = (
+                        c.statusMe == 2
+                        || c.statusMe == 3
+                        || c.statusMe == 4
+                        || c.statusMe == 9
+                        || c.statusMe == 10
+                    );
+                    string targetAnim = isMoving ? "action_1" : "action_2";
+                    renderer.SetAnimation(targetAnim, true);
+
+                    renderer.SetVisible(true);
+                }
+            }
+            else
+            {
+                toRemove.Add(playerId);
+            }
+        }
+
+        foreach (int id in toRemove)
+        {
+            RemoveShipFollow(id);
+        }
+    }
+
     public void ClearAll()
     {
         foreach (var r in spineCharacters.Values)
@@ -981,6 +1127,10 @@ public class SpineCharacterManager : MonoBehaviour
             if (r != null)
                 Destroy(r.gameObject);
         petFollowCharacters.Clear();
+        foreach (var r in shipFollowCharacters.Values)
+            if (r != null)
+                Destroy(r.gameObject);
+        shipFollowCharacters.Clear();
     }
 
     private SkeletonDataAsset LoadSkeletonData(string skeletonName)

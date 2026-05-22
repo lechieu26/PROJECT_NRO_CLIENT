@@ -31,6 +31,10 @@ public class Char : IMapObject
 
 	public PetFollow petFollow;
 
+	// Tàu bay Spine (slot 8 - type 95) — kênh hiển thị Spine ĐỘC LẬP với petFollow (slot 11).
+	// Cho phép trang bị type 95 và type 96 hiển thị đồng thời, không ảnh hưởng lẫn nhau.
+	public PetFollow shipFollow;
+
 	public int rank;
     
     // Flag để chuyển đổi giữa hệ thống sprite cũ và Spine
@@ -1849,6 +1853,63 @@ public class Char : IMapObject
 				}
 			}
 			petFollow.update();
+		}
+		// Cập nhật vị trí Tàu bay Spine (kênh độc lập với petFollow).
+		// Tàu bay luôn bay lơ lửng phía sau player, không kiểm tra mặt đất.
+		// Đặt ở khoảng cách lớn hơn petFollow để không bị đè lên linh thú khi hiển thị đồng thời.
+		if (shipFollow != null)
+		{
+			if (GameCanvas.gameTick % 3 == 0)
+			{
+				int shipDist = 50;
+				if (statusMe == 1 || statusMe == 6)
+				{
+					if (shipFollow.cmx < cx)
+					{
+						shipFollow.cmtoX = cx - shipDist;
+					}
+					else
+					{
+						shipFollow.cmtoX = cx + shipDist;
+					}
+				}
+				else
+				{
+					if (Math.abs(cx - shipFollow.cmx) >= shipDist)
+					{
+						if (shipFollow.cmx < cx)
+						{
+							shipFollow.cmtoX = cx - shipDist;
+						}
+						else
+						{
+							shipFollow.cmtoX = cx + shipDist;
+						}
+					}
+					else
+					{
+						shipFollow.cmtoX = shipFollow.cmx;
+					}
+				}
+				shipFollow.cmtoY = cy - 60;
+				if (shipFollow.cmx > cx)
+				{
+					shipFollow.dir = -1;
+				}
+				else
+				{
+					shipFollow.dir = 1;
+				}
+				if (shipFollow.cmtoX < 100)
+				{
+					shipFollow.cmtoX = 100;
+				}
+				if (shipFollow.cmtoX > TileMap.pxw - 100)
+				{
+					shipFollow.cmtoX = TileMap.pxw - 100;
+				}
+			}
+			shipFollow.update();
 		}
 		if (!me && cHP <= 0.0 && clanID != -100 && statusMe != 14 && statusMe != 5)
 		{
@@ -5331,6 +5392,10 @@ public class Char : IMapObject
 			if (petFollow != null)
 			{
 				petFollow.paint(g);
+			}
+			if (shipFollow != null)
+			{
+				shipFollow.paint(g);
 			}
 			paintMount1(g);
 			if ((TileMap.isInAirMap() && cy >= TileMap.pxh - 48) || isTeleport)
