@@ -6940,50 +6940,28 @@ public class Panel : IActionListener, IChatable
         Item[] arrItemBody = Char.myCharz().arrItemBody;
         Item[] arrItemBag = Char.myCharz().arrItemBag;
 
-        // === LẤY CHỈ SỐ TRỰC TIẾP TỪ CHAR ===
+        // === LẤY CHỈ SỐ TỪ SERVER (gốc + trang bị + buff) ===
         long totalHP = 0;
         long totalKI = 0;
-        int totalSD = 0;
-        int totalHutHP = 0;
-        int totalHutKI = 0;
-        bool hasKhangChoang = false;
-        bool hasChongLanh = false;
+        long totalSD = 0;
+        long totalDef = 0;
 
-        // Tính HP%, KI% theo công thức thực tế (Hiện tại - Gốc) / Gốc * 100
         if (Char.myCharz().cHPGoc > 0)
             totalHP = (long)((Char.myCharz().cHPFull - Char.myCharz().cHPGoc) * 100 / Char.myCharz().cHPGoc);
 
         if (Char.myCharz().cMPGoc > 0)
             totalKI = (long)((Char.myCharz().cMPFull - Char.myCharz().cMPGoc) * 100 / Char.myCharz().cMPGoc);
 
-        // Tính tổng % Sức đánh và Hút từ item body options
-        for (int idx = 0; idx < arrItemBody.Length; idx++)
-        {
-            Item bodyItem = arrItemBody[idx];
-            if (bodyItem != null && bodyItem.itemOption != null)
-            {
-                for (int opt = 0; opt < bodyItem.itemOption.Length; opt++)
-                {
-                    ItemOption option = bodyItem.itemOption[opt];
-                    if (option != null && option.optionTemplate != null)
-                    {
-                        int optId = option.optionTemplate.id;
-                        int param = option.param;
+        if (Char.myCharz().cDamGoc > 0)
+            totalSD = (long)((Char.myCharz().cDamFull - Char.myCharz().cDamGoc) * 100 / Char.myCharz().cDamGoc);
 
-                        // Sức đánh % (77 = %SD)
-                        if (optId == 77) totalSD += param;
-                        // Hút HP % (id: 95)
-                        else if (optId == 95) totalHutHP += param;
-                        // Hút KI % (id: 96)
-                        else if (optId == 96) totalHutKI += param;
-                        // Kháng choáng (id: 116 = Kháng TDHS)
-                        else if (optId == 116) hasKhangChoang = true;
-                        // Chống lạnh (id: 106)
-                        else if (optId == 106) hasChongLanh = true;
-                    }
-                }
-            }
-        }
+        if (Char.myCharz().cDefGoc > 0)
+            totalDef = (long)((Char.myCharz().cDefull - (double)Char.myCharz().cDefGoc) * 100 / (double)Char.myCharz().cDefGoc);
+
+        int totalHutHP = Char.myCharz().tlHutHp;
+        int totalHutKI = Char.myCharz().tlHutMp;
+        bool hasKhangChoang = Char.myCharz().khangTDHS;
+        bool hasChongLanh = Char.myCharz().isKhongLanh;
 
         // Đảm bảo hiển thị ít nhất 15 ô body
         int numBody = 15;
@@ -7040,32 +7018,32 @@ public class Panel : IActionListener, IChatable
 
                 // === VẼ THÔNG TIN TỔNG HỢP Ở GIỮA ===
                 int infoY = centerY + centerH / 2 + 5;
-                int infoLineHeight = 11;
+                int infoLineHeight = 10;
+                int totalLines = 7;
 
-                // Nền cho thông tin (semi-transparent)
-                //g.setColor(0x000000, 0.65f);
                 g.setColor(6047789, 0.45f);
-                g.fillRect(centerX, infoY - 2, centerW, infoLineHeight * 5 + 3, 4);
+                g.fillRect(centerX, infoY - 2, centerW, infoLineHeight * totalLines + 3, 4);
 
-                // Dòng 1: HP%, KI%
                 string line1 = "HP: " + totalHP + "%, KI: " + totalKI + "%";
                 mFont.tahoma_7_yellow.drawString(g, line1, centerX + 5, infoY, 0);
 
-                // Dòng 2: Sức Đánh%
-                string line2 = "SĐ: " + totalSD + "%";
+                string line2 = "SĐ: " + totalSD + "%, Giáp: " + totalDef + "%";
                 mFont.tahoma_7_yellow.drawString(g, line2, centerX + 5, infoY + infoLineHeight, 0);
 
-                // Dòng 3: Hút HP%, Hút KI%
-                string line3 = "Hút HP: " + totalHutHP + "%, Hút KI: " + totalHutKI + "%";
+                string line3 = "Crit: " + Char.myCharz().cCriticalFull + "%, Né: " + Char.myCharz().tlNeDon + "%";
                 mFont.tahoma_7_yellow.drawString(g, line3, centerX + 5, infoY + infoLineHeight * 2, 0);
 
-                // Dòng 4: Kháng choáng
-                string line4 = "Kháng choáng: " + (hasKhangChoang ? "Có" : "Không");
-                mFont.tahoma_7_white.drawString(g, line4, centerX + 5, infoY + infoLineHeight * 3, 0);
+                string line4 = "Hút HP: " + totalHutHP + "%, Hút KI: " + totalHutKI + "%";
+                mFont.tahoma_7_yellow.drawString(g, line4, centerX + 5, infoY + infoLineHeight * 3, 0);
 
-                // Dòng 5: Chống lạnh
-                string line5 = "Chống lạnh: " + (hasChongLanh ? "Có" : "Không");
-                mFont.tahoma_7_white.drawString(g, line5, centerX + 5, infoY + infoLineHeight * 4, 0);
+                string line5 = "PST: " + Char.myCharz().tlPst + "%, Giảm ST: " + Char.myCharz().tlDef + "%";
+                mFont.tahoma_7_yellow.drawString(g, line5, centerX + 5, infoY + infoLineHeight * 4, 0);
+
+                string line6 = "Kháng choáng: " + (hasKhangChoang ? "Có" : "Không");
+                mFont.tahoma_7_white.drawString(g, line6, centerX + 5, infoY + infoLineHeight * 5, 0);
+
+                string line7 = "Chống lạnh: " + (hasChongLanh ? "Có" : "Không");
+                mFont.tahoma_7_white.drawString(g, line7, centerX + 5, infoY + infoLineHeight * 6, 0);
             }
 
             // === VẼ 15 Ô ITEM BODY ===

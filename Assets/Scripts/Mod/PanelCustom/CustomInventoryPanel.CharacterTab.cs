@@ -88,7 +88,7 @@ public partial class CustomInventoryPanel
             FormatStat(c.cDamFull),
             FormatStat(c.cDefull),
             c.cCriticalFull + "%",
-            c.cMiss + "%",
+            c.tlNeDon + "%",
             Res.formatNumber2(c.cLevelPercent / 100.0) + "%",
             c.khangTDHS ? "Có" : "Không",
             c.isKhongLanh ? "Có" : "Không",
@@ -129,12 +129,12 @@ public partial class CustomInventoryPanel
             FormatStat(c.cDamFull),
             FormatStat(c.cDefull),
             c.cCriticalFull + "%",
-            c.cMiss + "%"
+            c.tlNeDon + "%"
         };
-        string[] rightLabel = new string[] { "TN", "Choáng", "Lạnh", "Hút HP", "Hút KI", "PST" };
+        string[] rightLabel = new string[] { "Giảm ST", "Choáng", "Lạnh", "Hút HP", "Hút KI", "PST" };
         string[] rightValue = new string[]
         {
-            Res.formatNumber2(c.cLevelPercent / 100.0) + "%",
+            c.tlDef + "%",
             c.khangTDHS ? "Có" : "Không",
             c.isKhongLanh ? "Có" : "Không",
             c.tlHutHp + "%",
