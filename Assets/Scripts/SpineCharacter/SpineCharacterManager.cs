@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Spine.Unity;
+using UnityEngine;
 
 /// <summary>
 /// Manager quản lý tất cả SpineCharacterRenderer sử dụng SkeletonAnimation (3D).
@@ -23,10 +23,13 @@ public class SpineCharacterManager : MonoBehaviour
         }
     }
 
-    private Dictionary<string, SkeletonDataAsset> skeletonCache = new Dictionary<string, SkeletonDataAsset>();
-    private Dictionary<int, SpineCharacterRenderer> spineCharacters = new Dictionary<int, SpineCharacterRenderer>();
-    private Dictionary<int, SpineCharacterRenderer> petFollowCharacters = new Dictionary<int, SpineCharacterRenderer>();
-    
+    private Dictionary<string, SkeletonDataAsset> skeletonCache =
+        new Dictionary<string, SkeletonDataAsset>();
+    private Dictionary<int, SpineCharacterRenderer> spineCharacters =
+        new Dictionary<int, SpineCharacterRenderer>();
+    private Dictionary<int, SpineCharacterRenderer> petFollowCharacters =
+        new Dictionary<int, SpineCharacterRenderer>();
+
     private Camera spineCamera;
     private RenderTexture spinetexture;
     private const int SPINE_LAYER = 31; // Lớp dành riêng cho Spine thế giới
@@ -78,13 +81,15 @@ public class SpineCharacterManager : MonoBehaviour
     /// </summary>
     public void PaintSpineForChar(mGraphics g, Char c, int x, int y)
     {
-        if (spinetexture == null || c == null || !c.useSpine) return;
-        if (c.isMonkey > 0 || c.isFusion || c.isHide) return;
+        if (spinetexture == null || c == null || !c.useSpine)
+            return;
+        if (c.isMonkey > 0 || c.isFusion || c.isHide)
+            return;
 
         int zoom = mGraphics.zoomLevel;
-        
+
         // Vùng clip quanh nhân vật (tọa độ logic mGraphics)
-        int drawW = 150; 
+        int drawW = 150;
         int drawH = 150;
         int drawX = x - drawW / 2;
         int drawY = y - drawH + 20;
@@ -98,14 +103,16 @@ public class SpineCharacterManager : MonoBehaviour
 
         // Thiết lập vùng hiển thị cho nhân vật này
         g.setClip(drawX, drawY, drawW, drawH);
-        
+
         // Vẽ toàn bộ texture thế giới tại vị trí bù trừ translation của mGraphics (đơn vị pixel)
         // Truyền tọa độ LOGIC. drawRenderTexture sẽ tự nhân zoom và cộng translateX pixel.
         g.drawRenderTexture(spinetexture, -g.translateX / zoom, -g.translateY / zoom);
 
         // Khôi phục clip cũ
-        if (oldIsClip) g.setClip(oldCX, oldCY, oldCW, oldCH);
-        else g.isClip = false;
+        if (oldIsClip)
+            g.setClip(oldCX, oldCY, oldCW, oldCH);
+        else
+            g.isClip = false;
     }
 
     /// <summary>
@@ -116,13 +123,15 @@ public class SpineCharacterManager : MonoBehaviour
     public void PaintPreviewSpine(mGraphics g, int x, int y, int charId)
     {
         currentPreviewCharIdRequested = charId;
-        if (previewSpineTexture == null || previewSpineCamera == null) return;
-        if (previewRenderer == null || !previewRenderer.IsVisible()) return;
+        if (previewSpineTexture == null || previewSpineCamera == null)
+            return;
+        if (previewRenderer == null || !previewRenderer.IsVisible())
+            return;
 
         int zoom = mGraphics.zoomLevel;
         int pw = PREVIEW_TEX_SIZE;
         int ph = PREVIEW_TEX_SIZE;
-        
+
         // Tọa độ truyền vào x, y là logic trung tâm chân
         // Chúng ta tính logicX, logicY sao cho tâm chân texture khớp với x, y
         // drawRenderTexture sẽ tự nhân zoom
@@ -148,21 +157,27 @@ public class SpineCharacterManager : MonoBehaviour
                 camObj = new GameObject("SpineCamera");
                 spineCamera = camObj.AddComponent<Camera>();
                 spineCamera.orthographic = true;
-                spineCamera.clearFlags = CameraClearFlags.SolidColor; 
-                spineCamera.backgroundColor = new Color(0, 0, 0, 0); 
-                spineCamera.depth = 100; 
+                spineCamera.clearFlags = CameraClearFlags.SolidColor;
+                spineCamera.backgroundColor = new Color(0, 0, 0, 0);
+                spineCamera.depth = 100;
                 spineCamera.cullingMask = 1 << SPINE_LAYER; // Chỉ nhìn thấy layer 31
                 spineCamera.nearClipPlane = 0.1f;
                 spineCamera.farClipPlane = 100f;
-                
-                spinetexture = new UnityEngine.RenderTexture(UnityEngine.Screen.width, UnityEngine.Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
+
+                spinetexture = new UnityEngine.RenderTexture(
+                    UnityEngine.Screen.width,
+                    UnityEngine.Screen.height,
+                    24,
+                    UnityEngine.RenderTextureFormat.ARGB32
+                );
                 spinetexture.Create();
                 spineCamera.targetTexture = spinetexture;
 
                 camObj.transform.position = new UnityEngine.Vector3(halfW, halfH, -10);
                 DontDestroyOnLoad(camObj);
             }
-            else spineCamera = camObj.GetComponent<Camera>();
+            else
+                spineCamera = camObj.GetComponent<Camera>();
         }
 
         // 2. Khởi tạo Camera UI Preview
@@ -176,12 +191,17 @@ public class SpineCharacterManager : MonoBehaviour
                 previewSpineCamera.orthographic = true;
                 previewSpineCamera.clearFlags = CameraClearFlags.SolidColor;
                 previewSpineCamera.backgroundColor = new Color(0, 0, 0, 0);
-                previewSpineCamera.depth = -100; 
-                previewSpineCamera.cullingMask = 1 << PREVIEW_SPINE_LAYER; 
+                previewSpineCamera.depth = -100;
+                previewSpineCamera.cullingMask = 1 << PREVIEW_SPINE_LAYER;
                 previewSpineCamera.nearClipPlane = 0.1f;
                 previewSpineCamera.farClipPlane = 100f;
 
-                previewSpineTexture = new UnityEngine.RenderTexture(PREVIEW_TEX_SIZE, PREVIEW_TEX_SIZE, 24, UnityEngine.RenderTextureFormat.ARGB32);
+                previewSpineTexture = new UnityEngine.RenderTexture(
+                    PREVIEW_TEX_SIZE,
+                    PREVIEW_TEX_SIZE,
+                    24,
+                    UnityEngine.RenderTextureFormat.ARGB32
+                );
                 previewSpineTexture.Create();
                 previewSpineCamera.targetTexture = previewSpineTexture;
 
@@ -190,7 +210,8 @@ public class SpineCharacterManager : MonoBehaviour
                 previewSpineCamera.orthographicSize = PREVIEW_TEX_SIZE / 2f;
                 DontDestroyOnLoad(pCamObj);
             }
-            else previewSpineCamera = pCamObj.GetComponent<Camera>();
+            else
+                previewSpineCamera = pCamObj.GetComponent<Camera>();
         }
 
         // 3. Khởi tạo Camera Pet Follow (tách riêng khỏi spine chính để ship không đè lên player)
@@ -209,18 +230,41 @@ public class SpineCharacterManager : MonoBehaviour
                 petSpineCamera.nearClipPlane = 0.1f;
                 petSpineCamera.farClipPlane = 100f;
 
-                petSpineTexture = new UnityEngine.RenderTexture(UnityEngine.Screen.width, UnityEngine.Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
+                petSpineTexture = new UnityEngine.RenderTexture(
+                    UnityEngine.Screen.width,
+                    UnityEngine.Screen.height,
+                    24,
+                    UnityEngine.RenderTextureFormat.ARGB32
+                );
                 petSpineTexture.Create();
                 petSpineCamera.targetTexture = petSpineTexture;
 
                 petCamObj.transform.position = new UnityEngine.Vector3(halfW, halfH, -10);
                 DontDestroyOnLoad(petCamObj);
             }
-            else petSpineCamera = petCamObj.GetComponent<Camera>();
+            else
+                petSpineCamera = petCamObj.GetComponent<Camera>();
         }
 
         // ĐẢM BẢO CÁC CAMERA KHÁC KHÔNG NHÌN THẤY LAYER SPINE
         ExcludeSpineLayersFromOtherCameras();
+
+        // Luôn đảm bảo camera có nền trong suốt
+        if (spineCamera != null)
+        {
+            spineCamera.clearFlags = CameraClearFlags.SolidColor;
+            spineCamera.backgroundColor = new Color(0, 0, 0, 0);
+        }
+        if (petSpineCamera != null)
+        {
+            petSpineCamera.clearFlags = CameraClearFlags.SolidColor;
+            petSpineCamera.backgroundColor = new Color(0, 0, 0, 0);
+        }
+        if (previewSpineCamera != null)
+        {
+            previewSpineCamera.clearFlags = CameraClearFlags.SolidColor;
+            previewSpineCamera.backgroundColor = new Color(0, 0, 0, 0);
+        }
 
         spineCamera.orthographicSize = halfH;
         spineCamera.transform.position = new UnityEngine.Vector3(halfW, halfH, -10);
@@ -230,21 +274,48 @@ public class SpineCharacterManager : MonoBehaviour
         previewSpineCamera.transform.position = new UnityEngine.Vector3(-5000, -5000, -10);
 
         // Kiểm tra Resize
-        if (spinetexture == null || spinetexture.width != Screen.width || spinetexture.height != Screen.height)
+        if (
+            spinetexture == null
+            || spinetexture.width != Screen.width
+            || spinetexture.height != Screen.height
+        )
         {
-            if (spinetexture != null) spinetexture.Release();
-            spinetexture = new UnityEngine.RenderTexture(Screen.width, Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
+            if (spinetexture != null)
+                spinetexture.Release();
+            spinetexture = new UnityEngine.RenderTexture(
+                Screen.width,
+                Screen.height,
+                24,
+                UnityEngine.RenderTextureFormat.ARGB32
+            );
+            spinetexture.Create();
             spineCamera.targetTexture = spinetexture;
         }
-        if (petSpineTexture == null || petSpineTexture.width != Screen.width || petSpineTexture.height != Screen.height)
+        if (
+            petSpineTexture == null
+            || petSpineTexture.width != Screen.width
+            || petSpineTexture.height != Screen.height
+        )
         {
-            if (petSpineTexture != null) petSpineTexture.Release();
-            petSpineTexture = new UnityEngine.RenderTexture(Screen.width, Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
+            if (petSpineTexture != null)
+                petSpineTexture.Release();
+            petSpineTexture = new UnityEngine.RenderTexture(
+                Screen.width,
+                Screen.height,
+                24,
+                UnityEngine.RenderTextureFormat.ARGB32
+            );
+            petSpineTexture.Create();
             petSpineCamera.targetTexture = petSpineTexture;
         }
         if (previewSpineTexture == null)
         {
-            previewSpineTexture = new UnityEngine.RenderTexture(PREVIEW_TEX_SIZE, PREVIEW_TEX_SIZE, 24, UnityEngine.RenderTextureFormat.ARGB32);
+            previewSpineTexture = new UnityEngine.RenderTexture(
+                PREVIEW_TEX_SIZE,
+                PREVIEW_TEX_SIZE,
+                24,
+                UnityEngine.RenderTextureFormat.ARGB32
+            );
             previewSpineTexture.Create();
             previewSpineCamera.targetTexture = previewSpineTexture;
         }
@@ -254,7 +325,7 @@ public class SpineCharacterManager : MonoBehaviour
     {
         Camera[] allCameras = Camera.allCameras;
         int maskToRemove = (1 << SPINE_LAYER) | (1 << PET_SPINE_LAYER) | (1 << PREVIEW_SPINE_LAYER);
-        
+
         foreach (Camera cam in allCameras)
         {
             if (cam != spineCamera && cam != petSpineCamera && cam != previewSpineCamera)
@@ -264,8 +335,12 @@ public class SpineCharacterManager : MonoBehaviour
         }
     }
 
-
-    public SpineCharacterRenderer AddOrUpdateCharacter(int charId, string skeletonName, string skinName, Vector2 position)
+    public SpineCharacterRenderer AddOrUpdateCharacter(
+        int charId,
+        string skeletonName,
+        string skinName,
+        Vector2 position
+    )
     {
         if (spineCharacters.ContainsKey(charId))
         {
@@ -278,14 +353,15 @@ public class SpineCharacterManager : MonoBehaviour
         }
 
         SkeletonDataAsset skeletonData = LoadSkeletonData(skeletonName);
-        if (skeletonData == null) return null;
+        if (skeletonData == null)
+            return null;
 
         GameObject charObj = new GameObject($"SpineChar_{charId}");
         SetLayerRecursively(charObj, SPINE_LAYER);
 
         SpineCharacterRenderer renderer = charObj.AddComponent<SpineCharacterRenderer>();
         renderer.Initialize(skeletonData, skeletonName, skinName);
-        
+
         // Luôn đảm bảo renderers con cũng đúng layer
         SetLayerRecursively(charObj, SPINE_LAYER);
 
@@ -296,7 +372,8 @@ public class SpineCharacterManager : MonoBehaviour
 
     private void SetLayerRecursively(GameObject obj, int newLayer)
     {
-        if (obj == null) return;
+        if (obj == null)
+            return;
         obj.layer = newLayer;
         foreach (Transform child in obj.transform)
         {
@@ -309,7 +386,8 @@ public class SpineCharacterManager : MonoBehaviour
         if (spineCharacters.ContainsKey(charId))
         {
             SpineCharacterRenderer renderer = spineCharacters[charId];
-            if (renderer != null) Destroy(renderer.gameObject);
+            if (renderer != null)
+                Destroy(renderer.gameObject);
             spineCharacters.Remove(charId);
         }
     }
@@ -323,15 +401,17 @@ public class SpineCharacterManager : MonoBehaviour
     public void SetCharacterAnimation(int charId, string animation, bool loop)
     {
         SpineCharacterRenderer renderer = GetRenderer(charId);
-        if (renderer != null) renderer.SetAnimation(animation, loop);
+        if (renderer != null)
+            renderer.SetAnimation(animation, loop);
     }
 
     private void UpdatePositions()
     {
         int zoom = mGraphics.zoomLevel;
-        bool panelVisible = (GameCanvas.panel != null && GameCanvas.panel.isShow) || 
-                            (GameCanvas.panel2 != null && GameCanvas.panel2.isShow) ||
-                            CustomInventoryPanel.isShow;
+        bool panelVisible =
+            (GameCanvas.panel != null && GameCanvas.panel.isShow)
+            || (GameCanvas.panel2 != null && GameCanvas.panel2.isShow)
+            || CustomInventoryPanel.isShow;
 
         Char previewChar = null;
         if (currentPreviewCharIdRequested != -1 && panelVisible)
@@ -339,11 +419,11 @@ public class SpineCharacterManager : MonoBehaviour
             previewChar = GetCharById(currentPreviewCharIdRequested);
         }
 
-        if (spineCharacters.Count == 0) 
+        if (spineCharacters.Count == 0)
         {
-             UpdatePreviewRenderer(previewChar, panelVisible, zoom);
-             currentPreviewCharIdRequested = -1;
-             return;
+            UpdatePreviewRenderer(previewChar, panelVisible, zoom);
+            currentPreviewCharIdRequested = -1;
+            return;
         }
 
         List<int> toRemove = new List<int>();
@@ -373,36 +453,42 @@ public class SpineCharacterManager : MonoBehaviour
                 {
                     previewChar = c;
                 }
-                
+
                 // LUÔN cập nhật vị trí WORLD cho renderer này
                 float screenX = (float)(c.cx - GameScr.cmx) * zoom;
-                float screenY = (float)Screen.height - (float)(c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
-                
+                float screenY =
+                    (float)Screen.height - (float)(c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
+
                 // Thêm hiệu ứng dao động bập bềnh hình sin cho ship của player
                 float floatOffset = 0f;
-                if (!string.IsNullOrEmpty(renderer.currentSkeletonName) && renderer.currentSkeletonName.StartsWith("ship_"))
+                if (
+                    !string.IsNullOrEmpty(renderer.currentSkeletonName)
+                    && renderer.currentSkeletonName.StartsWith("ship_")
+                )
                 {
                     floatOffset = Mathf.Sin(Time.time * 4f) * 6f * zoom;
                 }
                 renderer.transform.position = new Vector3(screenX, screenY + floatOffset, 0);
 
-                float finalScale = 16.5f * zoom; 
+                float finalScale = 16.5f * zoom;
                 renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
 
                 renderer.SetDirection(c.cdir);
                 UpdateAnimationByCharState(renderer, c);
-                
+
                 // Ẩn Spine nếu đang biến hình (Khỉ) hoặc Hợp thể hoặc bị ẩn hoàn toàn
                 bool shouldShowSpine = (c.isMonkey == 0 && !c.isFusion && !c.isHide);
                 renderer.SetVisible(shouldShowSpine);
-                
+
                 // Xử lý độ trong suốt cho Tàng hình
                 if (shouldShowSpine && renderer.skeletonAnimation != null)
                 {
                     float alpha = 1.0f;
-                    if (c.me && c.isTanHinh) alpha = 0.4f; // Player tự nhìn mình mờ mờ
-                    else if (c.isTanHinh) alpha = 0f;      // Đối thủ không nhìn thấy (hoặc mờ tùy server)
-                    
+                    if (c.me && c.isTanHinh)
+                        alpha = 0.4f; // Player tự nhìn mình mờ mờ
+                    else if (c.isTanHinh)
+                        alpha = 0f; // Đối thủ không nhìn thấy (hoặc mờ tùy server)
+
                     if (renderer.skeletonAnimation.skeleton != null)
                     {
                         renderer.skeletonAnimation.skeleton.A = alpha;
@@ -423,28 +509,35 @@ public class SpineCharacterManager : MonoBehaviour
         foreach (var kvp in spineCharacters)
         {
             Char cObj = GetCharById(kvp.Key);
-            if (cObj != null) cObj.isPreviewSpine = false;
+            if (cObj != null)
+                cObj.isPreviewSpine = false;
         }
-        if (Char.myCharz() != null) Char.myCharz().isPreviewSpine = false;
+        if (Char.myCharz() != null)
+            Char.myCharz().isPreviewSpine = false;
         Char myPet = Char.myPetz();
-        if (myPet != null) myPet.isPreviewSpine = false;
+        if (myPet != null)
+            myPet.isPreviewSpine = false;
 
-        foreach (int id in toRemove) RemoveCharacter(id);
+        foreach (int id in toRemove)
+            RemoveCharacter(id);
     }
 
     private Char GetCharById(int id)
     {
         Char c = GameScr.findCharInMap(id);
-        if (c != null) return c;
+        if (c != null)
+            return c;
 
         Char myChar = Char.myCharz();
         if (myChar != null)
         {
-            if (id == myChar.charID) return myChar;
-            
+            if (id == myChar.charID)
+                return myChar;
+
             // Check Pet ID (Thường là -MasterID hoặc ID riêng tùy server)
             // Trong game này thường dùng -myChar.charID cho đệ tử
-            if (id == -myChar.charID) return Char.myPetz();
+            if (id == -myChar.charID)
+                return Char.myPetz();
         }
         return null;
     }
@@ -465,13 +558,16 @@ public class SpineCharacterManager : MonoBehaviour
         // Chỉ thực sự ẩn khi hết buffer
         if (previewDisplayBuffer <= 0)
         {
-            if (previewRenderer != null) previewRenderer.SetVisible(false);
-            if (c != null) c.isPreviewSpine = false;
+            if (previewRenderer != null)
+                previewRenderer.SetVisible(false);
+            if (c != null)
+                c.isPreviewSpine = false;
             return;
         }
 
         // Nếu buffer còn nhưng nhân vật null thì lấy nhân vật cũ hoặc bỏ qua
-        if (c == null) return;
+        if (c == null)
+            return;
 
         // Lấy thông tin skeleton và skin
         string skeletonName = "";
@@ -496,7 +592,8 @@ public class SpineCharacterManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(skeletonName))
         {
-            if (previewRenderer != null) previewRenderer.SetVisible(false);
+            if (previewRenderer != null)
+                previewRenderer.SetVisible(false);
             return;
         }
 
@@ -523,8 +620,9 @@ public class SpineCharacterManager : MonoBehaviour
         }
 
         // Đặt nhân vật preview tại vị trí của camera preview (vùng cô lập)
-        previewRenderer.transform.position = previewSpineCamera.transform.position + new Vector3(0, 0, 10);
-        
+        previewRenderer.transform.position =
+            previewSpineCamera.transform.position + new Vector3(0, 0, 10);
+
         // Scale chuẩn (không âm Y) cho chế độ No-Flip
         float finalScale = 16.5f * zoom;
         previewRenderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
@@ -542,13 +640,13 @@ public class SpineCharacterManager : MonoBehaviour
         float animSpeed = 1.0f; // Mặc định tốc độ là 1.0f
 
         // 1. Chết hoặc Bất động (Ưu tiên cao nhất)
-        if (c.statusMe == 14 || c.statusMe == 5 || c.cf == 23) 
-        { 
-            targetAnim = "Die"; 
-            loop = false; 
+        if (c.statusMe == 14 || c.statusMe == 5 || c.cf == 23)
+        {
+            targetAnim = "Die";
+            loop = false;
         }
         // 2. Chạy (Run)
-        else if (c.statusMe == 2) 
+        else if (c.statusMe == 2)
         {
             targetAnim = "Run";
             loop = true;
@@ -574,22 +672,33 @@ public class SpineCharacterManager : MonoBehaviour
         // 6. Gồng năng lượng (Charge)
         else if (c.isCharge || c.isStandAndCharge || c.isFlyAndCharge || c.cf == 17)
         {
-            targetAnim = "Skill5_5"; 
+            targetAnim = "Skill5_5";
             loop = true;
             animSpeed = 1.0f; // Gồng năng lượng dùng tốc độ gốc
         }
         // 7. Tấn công / Skill (Dựa trên skillPaint và status)
-        else if (c.isAttack || c.statusMe == 7 || c.isAttFly || c.skillPaint != null ||
-                 c.cf == 9 || c.cf == 10 || c.cf == 11 || 
-                 c.cf == 7 || c.cf == 12 || c.cf == 13 || c.statusMe == 12 || c.statusMe == 13)
+        else if (
+            c.isAttack
+            || c.statusMe == 7
+            || c.isAttFly
+            || c.skillPaint != null
+            || c.cf == 9
+            || c.cf == 10
+            || c.cf == 11
+            || c.cf == 7
+            || c.cf == 12
+            || c.cf == 13
+            || c.statusMe == 12
+            || c.statusMe == 13
+        )
         {
             targetAnim = GetAttackAnimationName(c);
             loop = false;
-            
+
             // Nếu là chiêu bắn chưởng, giảm tốc độ (0.5f) theo yêu cầu
-            if (targetAnim.StartsWith("Skill2_")) 
+            if (targetAnim.StartsWith("Skill2_"))
             {
-                animSpeed = 0.5f; 
+                animSpeed = 0.5f;
             }
             else if (targetAnim.StartsWith("Combo"))
             {
@@ -614,7 +723,7 @@ public class SpineCharacterManager : MonoBehaviour
         if (c.skillPaint != null)
         {
             int id = c.skillPaint.id;
-            
+
             // 0. Biến khỉ / Hóa hình (Ưu tiên cao nhất)
             if ((id >= 35 && id <= 41) || id == 105 || id == 165 || c.isWaitMonkey)
             {
@@ -622,22 +731,27 @@ public class SpineCharacterManager : MonoBehaviour
             }
 
             // 1. Nhóm đấm cận chiến (Cố định Combo1)
-            bool isMelee = (id >= 0 && id <= 6) || (id >= 14 && id <= 20) || 
-                          (id >= 28 && id <= 34) || (id >= 63 && id <= 69) ||
-                          (id >= 107 && id <= 109) || id == 164;
+            bool isMelee =
+                (id >= 0 && id <= 6)
+                || (id >= 14 && id <= 20)
+                || (id >= 28 && id <= 34)
+                || (id >= 63 && id <= 69)
+                || (id >= 107 && id <= 109)
+                || id == 164;
 
             if (isMelee)
             {
-                return "Combo1"; 
+                return "Combo1";
             }
 
             // 2. Nhóm bắn chưởng (Theo yêu cầu: cấp 1-5 là Skill2_4, cấp 6-7 là Skill2_1)
-            if (skillLevel >= 6) return "Skill2_1";
+            if (skillLevel >= 6)
+                return "Skill2_1";
             return "Skill2_4";
         }
 
         // 3. Fallback cho frame bắn chưởng cơ bản (cf 12, 13)
-        if (c.cf == 12 || c.cf == 13) 
+        if (c.cf == 12 || c.cf == 13)
         {
             return (skillLevel >= 6) ? "Skill2_1" : "Skill2_4";
         }
@@ -648,15 +762,21 @@ public class SpineCharacterManager : MonoBehaviour
             return "Combo1";
         }
 
-        return "Combo1"; 
+        return "Combo1";
     }
 
     public SpineCharacterRenderer AddOrUpdatePetFollow(int playerId, string spineId)
     {
+        string skeletonName = spineId;
+        if (!spineId.StartsWith("character_") && !spineId.StartsWith("ship_"))
+        {
+            skeletonName = "ship_" + spineId;
+        }
+
         if (petFollowCharacters.ContainsKey(playerId))
         {
             SpineCharacterRenderer existingRenderer = petFollowCharacters[playerId];
-            if (existingRenderer != null && existingRenderer.currentSkeletonName != "ship_" + spineId)
+            if (existingRenderer != null && existingRenderer.currentSkeletonName != skeletonName)
             {
                 RemovePetFollow(playerId);
             }
@@ -666,20 +786,22 @@ public class SpineCharacterManager : MonoBehaviour
             }
         }
 
-        string skeletonName = "ship_" + spineId;
         SkeletonDataAsset skeletonData = LoadSkeletonData(skeletonName);
-        if (skeletonData == null) return null;
+        if (skeletonData == null)
+            return null;
 
         GameObject charObj = new GameObject($"SpinePetFollow_{playerId}");
         SetLayerRecursively(charObj, PET_SPINE_LAYER);
 
         SpineCharacterRenderer renderer = charObj.AddComponent<SpineCharacterRenderer>();
         renderer.Initialize(skeletonData, skeletonName, "default");
-        
+
         SetLayerRecursively(charObj, PET_SPINE_LAYER);
 
         petFollowCharacters[playerId] = renderer;
-        Debug.Log($"[SpineCharacterManager] Created Spine Pet Follow for player {playerId}, ship: {spineId}");
+        Debug.Log(
+            $"[SpineCharacterManager] Created Spine Pet Follow for player {playerId}, pet: {skeletonName}"
+        );
         return renderer;
     }
 
@@ -688,14 +810,16 @@ public class SpineCharacterManager : MonoBehaviour
         if (petFollowCharacters.ContainsKey(playerId))
         {
             SpineCharacterRenderer renderer = petFollowCharacters[playerId];
-            if (renderer != null) Destroy(renderer.gameObject);
+            if (renderer != null)
+                Destroy(renderer.gameObject);
             petFollowCharacters.Remove(playerId);
         }
     }
 
     public void PaintSpineForPetFollow(mGraphics g, Assets.src.g.PetFollow pet)
     {
-        if (petSpineTexture == null || pet == null || !pet.isSpine) return;
+        if (petSpineTexture == null || pet == null || !pet.isSpine)
+            return;
 
         int zoom = mGraphics.zoomLevel;
         int drawW = 100;
@@ -712,14 +836,17 @@ public class SpineCharacterManager : MonoBehaviour
         g.setClip(drawX, drawY, drawW, drawH);
         g.drawRenderTexture(petSpineTexture, -g.translateX / zoom, -g.translateY / zoom);
 
-        if (oldIsClip) g.setClip(oldCX, oldCY, oldCW, oldCH);
-        else g.isClip = false;
+        if (oldIsClip)
+            g.setClip(oldCX, oldCY, oldCW, oldCH);
+        else
+            g.isClip = false;
     }
 
     private void UpdatePetFollowPositions()
     {
         int zoom = mGraphics.zoomLevel;
-        if (petFollowCharacters.Count == 0) return;
+        if (petFollowCharacters.Count == 0)
+            return;
 
         List<int> toRemove = new List<int>();
         foreach (var kvp in petFollowCharacters)
@@ -731,24 +858,103 @@ public class SpineCharacterManager : MonoBehaviour
             if (c != null && c.petFollow != null && c.petFollow.isSpine)
             {
                 float screenX = (float)(c.petFollow.cmx - GameScr.cmx) * zoom;
-                float screenY = (float)Screen.height - (float)(c.petFollow.cmy - GameScr.cmy + GameCanvas.transY) * zoom;
-                
+                float screenY =
+                    (float)Screen.height
+                    - (float)(c.petFollow.cmy - GameScr.cmy + GameCanvas.transY) * zoom;
+
                 if (renderer != null)
                 {
-                    // Thêm hiệu ứng dao động bập bềnh hình sin giúp tàu bay lơ lửng sinh động
-                    float floatOffset = Mathf.Sin(Time.time * 4f) * 6f * zoom;
-                    renderer.transform.position = new Vector3(screenX, screenY + floatOffset, 0);
+                    bool isGroundPet =
+                        !string.IsNullOrEmpty(renderer.currentSkeletonName)
+                        && renderer.currentSkeletonName.StartsWith("character_");
 
-                    float finalScale = 15f * zoom;
-                    renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
+                    if (isGroundPet)
+                    {
+                        // Linh thú chạy dưới đất: Không bập bềnh hình sin, không lệch Y, đứng vững trên đất
+                        renderer.transform.position = new Vector3(screenX, screenY, 0);
 
-                    // Đảo ngược hướng lật vì hướng của ship Spine đang ngược với player
-                    renderer.SetDirection((c.petFollow.dir != 1) ? 1 : -1);
+                        float finalScale = 35f * zoom;
+                        renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
 
-                    // Khi player di chuyển (Run, Fly, Jump, Fall, JumpFly) thì chạy action_1, đứng im chạy action_2
-                    bool isMoving = (c.statusMe == 2 || c.statusMe == 3 || c.statusMe == 4 || c.statusMe == 9 || c.statusMe == 10);
-                    string targetAnim = isMoving ? "action_1" : "action_2";
-                    renderer.SetAnimation(targetAnim, true);
+                        // Hướng lật cùng hướng di chuyển của player (không bị ngược như ship)
+                        renderer.SetDirection(c.petFollow.dir);
+
+                        // Cập nhật hoạt ảnh cho linh thú đất:
+                        // 1. Chết (Die)
+                        // 2. Di chuyển (Walk)
+                        // 3. Đứng yên: luân phiên standby (Idle) và win (Win) sau mỗi vài giây
+                        bool isDead = (
+                            c.statusMe == 14
+                            || c.statusMe == 5
+                            || c.meDead
+                            || (c.cHP <= 0 && c.cHP != -1)
+                        );
+
+                        if (isDead)
+                        {
+                            renderer.SetAnimation("Die", true);
+                        }
+                        else
+                        {
+                            bool isMoving = (
+                                c.statusMe == 2
+                                || c.statusMe == 3
+                                || c.statusMe == 4
+                                || c.statusMe == 9
+                                || c.statusMe == 10
+                            );
+                            if (isMoving)
+                            {
+                                renderer.SetAnimation("Walk", true);
+                            }
+                            else
+                            {
+                                string idStr = renderer.currentSkeletonName.Replace("character_", "");
+                                int.TryParse(idStr, out int spineId);
+                                int baseId = 1000 + spineId;
+
+                                // Luân phiên các hành động (tổng chu kỳ 18 giây)
+                                // Thêm offset playerId để các pet không diễn cùng một lúc
+                                float cycleTime = (Time.time + (playerId % 10)) % 18f;
+                                string idleAnim = "Idle";
+
+                                if (cycleTime < 6f) idleAnim = "Idle";
+                                else if (cycleTime < 9f) idleAnim = "Win";
+                                else if (cycleTime < 12f) idleAnim = $"skill_{baseId}00";
+                                else if (cycleTime < 15f) idleAnim = $"skill_{baseId}01";
+                                else idleAnim = $"skill_{baseId}02";
+
+                                renderer.SetAnimation(idleAnim, true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Đối với phi thuyền Spine bay lơ lửng (Ship)
+                        float floatOffset = Mathf.Sin(Time.time * 4f) * 6f * zoom;
+                        renderer.transform.position = new Vector3(
+                            screenX,
+                            screenY + floatOffset,
+                            0
+                        );
+
+                        float finalScale = 15f * zoom;
+                        renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
+
+                        // Đảo ngược hướng lật vì hướng của ship Spine đang ngược với player
+                        renderer.SetDirection((c.petFollow.dir != 1) ? 1 : -1);
+
+                        // Khi player di chuyển (Run, Fly, Jump, Fall, JumpFly) thì chạy action_1, đứng im chạy action_2
+                        bool isMoving = (
+                            c.statusMe == 2
+                            || c.statusMe == 3
+                            || c.statusMe == 4
+                            || c.statusMe == 9
+                            || c.statusMe == 10
+                        );
+                        string targetAnim = isMoving ? "action_1" : "action_2";
+                        renderer.SetAnimation(targetAnim, true);
+                    }
 
                     renderer.SetVisible(true);
                 }
@@ -767,23 +973,30 @@ public class SpineCharacterManager : MonoBehaviour
 
     public void ClearAll()
     {
-        foreach (var r in spineCharacters.Values) if (r != null) Destroy(r.gameObject);
+        foreach (var r in spineCharacters.Values)
+            if (r != null)
+                Destroy(r.gameObject);
         spineCharacters.Clear();
-        foreach (var r in petFollowCharacters.Values) if (r != null) Destroy(r.gameObject);
+        foreach (var r in petFollowCharacters.Values)
+            if (r != null)
+                Destroy(r.gameObject);
         petFollowCharacters.Clear();
     }
 
     private SkeletonDataAsset LoadSkeletonData(string skeletonName)
     {
-        if (skeletonCache.ContainsKey(skeletonName)) return skeletonCache[skeletonName];
-        
+        if (skeletonCache.ContainsKey(skeletonName))
+            return skeletonCache[skeletonName];
+
         // Sử dụng SpineSkinManager để tìm path linh hoạt
         string path = SpineSkinManager.GetResourcePath(skeletonName);
         SkeletonDataAsset asset = Resources.Load<SkeletonDataAsset>(path);
-        
-        if (asset != null) skeletonCache[skeletonName] = asset;
-        else Debug.LogError($"[Spine] Failed to load SkeletonData at: {path}");
-        
+
+        if (asset != null)
+            skeletonCache[skeletonName] = asset;
+        else
+            Debug.LogError($"[Spine] Failed to load SkeletonData at: {path}");
+
         return asset;
     }
 }

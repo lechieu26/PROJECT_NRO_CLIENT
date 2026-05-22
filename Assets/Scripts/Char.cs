@@ -1753,15 +1753,84 @@ public class Char : IMapObject
 		{
 			if (GameCanvas.gameTick % 3 == 0)
 			{
-				if (myCharz().cdir == 1)
+				int dist = 20;
+				bool isGroundPet = petFollow.isSpine && petFollow.spineId != null && petFollow.spineId.StartsWith("character_");
+				if (isGroundPet)
 				{
-					petFollow.cmtoX = cx - 20;
+					dist = 50; // Đứng xa hơn một chút
+					
+					// Linh hoạt đi đứng loanh quanh khi player đứng im (status = 1 là đứng yên trên đất)
+					if (statusMe == 1)
+					{
+						long currentTime = mSystem.currentTimeMillis();
+						if (currentTime - petFollow.lastIdleTime > 3000)
+						{
+							if (Res.random(0, 10) > 3) // 60% thay đổi vị trí đi loanh quanh
+							{
+								petFollow.idleOffsetX = Res.random(-50, 50);
+							}
+							petFollow.lastIdleTime = currentTime;
+						}
+					}
+					else
+					{
+						petFollow.idleOffsetX = 10; // Khi di chuyển, quay về khoảng cách cố định
+					}
+					dist += petFollow.idleOffsetX;
 				}
-				if (myCharz().cdir == -1)
+
+				if (statusMe == 1 || statusMe == 6)
 				{
-					petFollow.cmtoX = cx + 20;
+					if (petFollow.cmx < cx)
+					{
+						petFollow.cmtoX = cx - dist;
+					}
+					else
+					{
+						petFollow.cmtoX = cx + dist;
+					}
 				}
-				petFollow.cmtoY = cy - 40;
+				else
+				{
+					if (Math.abs(cx - petFollow.cmx) >= dist)
+					{
+						if (petFollow.cmx < cx)
+						{
+							petFollow.cmtoX = cx - dist;
+						}
+						else
+						{
+							petFollow.cmtoX = cx + dist;
+						}
+					}
+					else
+					{
+						petFollow.cmtoX = petFollow.cmx;
+					}
+				}
+				if (isGroundPet)
+				{
+					int ty = cy - 24;
+					bool foundGround = false;
+					for (int i = 0; i < 30; i++)
+					{
+						if ((TileMap.tileTypeAtPixel(petFollow.cmtoX, ty) & 2) == 2)
+						{
+							petFollow.cmtoY = TileMap.tileYofPixel(ty);
+							foundGround = true;
+							break;
+						}
+						ty += 12;
+					}
+					if (!foundGround)
+					{
+						petFollow.cmtoY = cy;
+					}
+				}
+				else
+				{
+					petFollow.cmtoY = cy - 40;
+				}
 				if (petFollow.cmx > cx)
 				{
 					petFollow.dir = -1;

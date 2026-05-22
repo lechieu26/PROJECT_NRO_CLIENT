@@ -48,6 +48,9 @@ public class SpineCharacterRenderer : MonoBehaviour
             meshRenderer.sortingOrder = 32767; // Ưu tiên hiển thị
         }
 
+        // Đăng ký sự kiện để ghi đè các material bị lỗi (thiếu texture) thành trong suốt
+        skeletonAnimation.OnMeshAndMaterialsUpdated += OnMeshAndMaterialsUpdated;
+
         skeletonAnimation.Initialize(true);
 
         // Set skin nếu có
@@ -181,8 +184,9 @@ public class SpineCharacterRenderer : MonoBehaviour
         {
             case "Idle": 
                 if (isShip) return new[] { "action_2", "idle", "stand" };
-                return new[] { "idle", "IDLE", "stand", "Stand", "animation" };
+                return new[] { "idle", "IDLE", "standby", "stand", "Stand", "animation" };
             case "Run": 
+            case "Walk":
                 if (isShip) return new[] { "action_1", "run", "walk", "move" };
                 return new[] { "run", "RUN", "Walk", "walk", "move" };
             case "Jump": 
@@ -194,8 +198,11 @@ public class SpineCharacterRenderer : MonoBehaviour
             case "Fly": 
                 if (isShip) return new[] { "action_1", "fly" };
                 return new[] { "fly", "FLY" };
-            case "Die": return new[] { "die", "DIE", "dead", "Dead" };
+            case "Die": 
+            case "Death":
+                return new[] { "die", "DIE", "dead", "Dead", "death" };
             case "Hit": return new[] { "hit", "HIT", "Injured", "injured", "hurt" };
+            case "Win": return new[] { "win", "WIN", "victory", "Victory" };
             default: return null;
         }
     }
@@ -260,11 +267,49 @@ public class SpineCharacterRenderer : MonoBehaviour
         }
     }
 
+    private Material transparentMaterialFallback;
+
+    private void OnMeshAndMaterialsUpdated(SkeletonRenderer skeletonRenderer)
+    {
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer != null)
+        {
+            Material[] mats = meshRenderer.sharedMaterials;
+            bool changed = false;
+            for (int i = 0; i < mats.Length; i++)
+            {
+                Material mat = mats[i];
+                if (mat == null || mat.mainTexture == null || (mat.shader != null && mat.shader.name.Contains("Error")))
+                {
+                    if (transparentMaterialFallback == null)
+                    {
+                        Shader shader = Shader.Find("Spine/Skeleton");
+                        if (shader == null) shader = Shader.Find("Sprites/Default");
+                        if (shader == null) shader = Shader.Find("Unlit/Transparent");
+                        
+                        transparentMaterialFallback = new Material(shader);
+                        transparentMaterialFallback.color = new Color(0, 0, 0, 0); // Trong suốt
+                    }
+                    mats[i] = transparentMaterialFallback;
+                    changed = true;
+                }
+            }
+            if (changed)
+            {
+                meshRenderer.sharedMaterials = mats;
+            }
+        }
+    }
+
     private void OnDestroy()
     {
-        if (skeletonAnimation != null && skeletonAnimation.AnimationState != null)
+        if (skeletonAnimation != null)
         {
-            skeletonAnimation.AnimationState.Complete -= OnAnimationComplete;
+            if (skeletonAnimation.AnimationState != null)
+            {
+                skeletonAnimation.AnimationState.Complete -= OnAnimationComplete;
+            }
+            skeletonAnimation.OnMeshAndMaterialsUpdated -= OnMeshAndMaterialsUpdated;
         }
     }
 

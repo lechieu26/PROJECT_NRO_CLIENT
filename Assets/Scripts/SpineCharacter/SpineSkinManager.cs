@@ -50,6 +50,19 @@ public static class SpineSkinManager
                 return pathShipFallback;
             }
         }
+        if (skeletonName.StartsWith("character_"))
+        {
+            string pathChar = $"Spine/CharactersOnePiece/{skeletonName}/{skeletonName}_SkeletonData";
+            if (Resources.Load(pathChar) != null)
+            {
+                return pathChar;
+            }
+            string pathCharFallback = $"Spine/CharactersOnePiece/{skeletonName}/{skeletonName}_41_SkeletonData";
+            if (Resources.Load(pathCharFallback) != null)
+            {
+                return pathCharFallback;
+            }
+        }
         // 1. Kiểm tra trong folder Skins (Mapping tự động theo ID)
         // Cấu trúc: Resources/Spine/Skins/{ID}/{ID}_SkeletonData hoặc Resources/Spine/Skins/{ID}/skin_SkeletonData
         string pathSkins = $"Spine/Skins/{skeletonName}/{skeletonName}_SkeletonData";

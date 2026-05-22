@@ -1066,7 +1066,10 @@ namespace Spine {
 							while (originalIndex != slotIndex)
 								unchanged[unchangedIndex++] = originalIndex++;
 							// Set changed items.
-							int index = originalIndex + (int)(float)offsetMap["offset"];
+							int rawOffset = (int)(float)offsetMap["offset"];
+							int index = originalIndex + rawOffset;
+							if (index < 0) index = 0;
+							if (index >= slotCount) index = slotCount - 1;
 							drawOrder[index] = originalIndex++;
 						}
 						// Collect remaining unchanged items.

@@ -8,6 +8,10 @@ namespace Assets.src.g
 
 		public string spineId;
 
+		public int idleOffsetX;
+
+		public long lastIdleTime;
+
 		public int ownerId;
 
 		public Info info = new Info();
