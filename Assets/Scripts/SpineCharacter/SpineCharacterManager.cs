@@ -30,7 +30,11 @@ public class SpineCharacterManager : MonoBehaviour
     private Camera spineCamera;
     private RenderTexture spinetexture;
     private const int SPINE_LAYER = 31; // Lớp dành riêng cho Spine thế giới
+    private const int PET_SPINE_LAYER = 29; // Lớp dành riêng cho Spine pet follow (ship)
     private const int PREVIEW_SPINE_LAYER = 30; // Lớp dành riêng cho Spine xem trước (UI)
+
+    private Camera petSpineCamera;
+    private RenderTexture petSpineTexture;
 
     private Camera previewSpineCamera;
     private RenderTexture previewSpineTexture;
@@ -189,11 +193,39 @@ public class SpineCharacterManager : MonoBehaviour
             else previewSpineCamera = pCamObj.GetComponent<Camera>();
         }
 
+        // 3. Khởi tạo Camera Pet Follow (tách riêng khỏi spine chính để ship không đè lên player)
+        if (petSpineCamera == null)
+        {
+            GameObject petCamObj = GameObject.Find("SpinePetCamera");
+            if (petCamObj == null)
+            {
+                petCamObj = new GameObject("SpinePetCamera");
+                petSpineCamera = petCamObj.AddComponent<Camera>();
+                petSpineCamera.orthographic = true;
+                petSpineCamera.clearFlags = CameraClearFlags.SolidColor;
+                petSpineCamera.backgroundColor = new Color(0, 0, 0, 0);
+                petSpineCamera.depth = 99;
+                petSpineCamera.cullingMask = 1 << PET_SPINE_LAYER;
+                petSpineCamera.nearClipPlane = 0.1f;
+                petSpineCamera.farClipPlane = 100f;
+
+                petSpineTexture = new UnityEngine.RenderTexture(UnityEngine.Screen.width, UnityEngine.Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
+                petSpineTexture.Create();
+                petSpineCamera.targetTexture = petSpineTexture;
+
+                petCamObj.transform.position = new UnityEngine.Vector3(halfW, halfH, -10);
+                DontDestroyOnLoad(petCamObj);
+            }
+            else petSpineCamera = petCamObj.GetComponent<Camera>();
+        }
+
         // ĐẢM BẢO CÁC CAMERA KHÁC KHÔNG NHÌN THẤY LAYER SPINE
         ExcludeSpineLayersFromOtherCameras();
 
         spineCamera.orthographicSize = halfH;
         spineCamera.transform.position = new UnityEngine.Vector3(halfW, halfH, -10);
+        petSpineCamera.orthographicSize = halfH;
+        petSpineCamera.transform.position = new UnityEngine.Vector3(halfW, halfH, -10);
         previewSpineCamera.orthographicSize = PREVIEW_TEX_SIZE / 2f;
         previewSpineCamera.transform.position = new UnityEngine.Vector3(-5000, -5000, -10);
 
@@ -203,6 +235,12 @@ public class SpineCharacterManager : MonoBehaviour
             if (spinetexture != null) spinetexture.Release();
             spinetexture = new UnityEngine.RenderTexture(Screen.width, Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
             spineCamera.targetTexture = spinetexture;
+        }
+        if (petSpineTexture == null || petSpineTexture.width != Screen.width || petSpineTexture.height != Screen.height)
+        {
+            if (petSpineTexture != null) petSpineTexture.Release();
+            petSpineTexture = new UnityEngine.RenderTexture(Screen.width, Screen.height, 24, UnityEngine.RenderTextureFormat.ARGB32);
+            petSpineCamera.targetTexture = petSpineTexture;
         }
         if (previewSpineTexture == null)
         {
@@ -215,11 +253,11 @@ public class SpineCharacterManager : MonoBehaviour
     private void ExcludeSpineLayersFromOtherCameras()
     {
         Camera[] allCameras = Camera.allCameras;
-        int maskToRemove = (1 << SPINE_LAYER) | (1 << PREVIEW_SPINE_LAYER);
+        int maskToRemove = (1 << SPINE_LAYER) | (1 << PET_SPINE_LAYER) | (1 << PREVIEW_SPINE_LAYER);
         
         foreach (Camera cam in allCameras)
         {
-            if (cam != spineCamera && cam != previewSpineCamera)
+            if (cam != spineCamera && cam != petSpineCamera && cam != previewSpineCamera)
             {
                 cam.cullingMask &= ~maskToRemove;
             }
@@ -633,12 +671,12 @@ public class SpineCharacterManager : MonoBehaviour
         if (skeletonData == null) return null;
 
         GameObject charObj = new GameObject($"SpinePetFollow_{playerId}");
-        SetLayerRecursively(charObj, SPINE_LAYER);
+        SetLayerRecursively(charObj, PET_SPINE_LAYER);
 
         SpineCharacterRenderer renderer = charObj.AddComponent<SpineCharacterRenderer>();
         renderer.Initialize(skeletonData, skeletonName, "default");
         
-        SetLayerRecursively(charObj, SPINE_LAYER);
+        SetLayerRecursively(charObj, PET_SPINE_LAYER);
 
         petFollowCharacters[playerId] = renderer;
         Debug.Log($"[SpineCharacterManager] Created Spine Pet Follow for player {playerId}, ship: {spineId}");
@@ -657,7 +695,7 @@ public class SpineCharacterManager : MonoBehaviour
 
     public void PaintSpineForPetFollow(mGraphics g, Assets.src.g.PetFollow pet)
     {
-        if (spinetexture == null || pet == null || !pet.isSpine) return;
+        if (petSpineTexture == null || pet == null || !pet.isSpine) return;
 
         int zoom = mGraphics.zoomLevel;
         int drawW = 100;
@@ -672,7 +710,7 @@ public class SpineCharacterManager : MonoBehaviour
         bool oldIsClip = g.isClip;
 
         g.setClip(drawX, drawY, drawW, drawH);
-        g.drawRenderTexture(spinetexture, -g.translateX / zoom, -g.translateY / zoom);
+        g.drawRenderTexture(petSpineTexture, -g.translateX / zoom, -g.translateY / zoom);
 
         if (oldIsClip) g.setClip(oldCX, oldCY, oldCW, oldCH);
         else g.isClip = false;
