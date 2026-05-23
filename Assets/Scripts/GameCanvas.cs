@@ -472,8 +472,8 @@ public class GameCanvas : IActionListener
 		Panel.graphics = Rms.loadRMSInt("lowGraphic");
 		lowGraphic = Rms.loadRMSInt("lowGraphic") == 1;
 		GameScr.isPaintChatVip = Rms.loadRMSInt("serverchat") != 1;
-		Char.isPaintAura = Rms.loadRMSInt("isPaintAura") == 1;
-		Char.isPaintAura2 = Rms.loadRMSInt("isPaintAura2") == 1;
+		Char.isPaintAura = Rms.loadRMSInt("isPaintAura") != 0;
+		Char.isPaintAura2 = Rms.loadRMSInt("isPaintAura2") != 0;
 		Res.init();
 		SmallImage.loadBigImage();
 		Panel.WIDTH_PANEL = 176;

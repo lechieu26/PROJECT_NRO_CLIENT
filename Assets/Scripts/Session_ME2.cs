@@ -12,9 +12,12 @@ public class Session_ME2 : ISession
 	{
 		public List<Message> sendingMessage;
 
-		public Sender()
+		private TcpClient sc;
+
+		public Sender(TcpClient sc)
 		{
 			sendingMessage = new List<Message>();
+			this.sc = sc;
 		}
 
 		public void AddMessage(Message message)
@@ -24,7 +27,7 @@ public class Session_ME2 : ISession
 
 		public void run()
 		{
-			while (connected)
+			while (connected && Session_ME2.sc == this.sc)
 			{
 				try
 				{
@@ -55,11 +58,21 @@ public class Session_ME2 : ISession
 
 	private class MessageCollector
 	{
+		private TcpClient sc;
+
+		private BinaryReader dis;
+
+		public MessageCollector(TcpClient sc, BinaryReader dis)
+		{
+			this.sc = sc;
+			this.dis = dis;
+		}
+
 		public void run()
 		{
 			try
 			{
-				while (connected)
+				while (connected && Session_ME2.sc == this.sc)
 				{
 					Message message = readMessage();
 					if (message == null)
@@ -96,6 +109,10 @@ public class Session_ME2 : ISession
 				Debug.Log("error read message!");
 				Debug.Log(ex3.Message.ToString());
 			}
+			if (Session_ME2.sc != this.sc)
+			{
+				return;
+			}
 			if (!connected)
 			{
 				return;
@@ -111,7 +128,7 @@ public class Session_ME2 : ISession
 					messageHandler.onConnectionFail(isMainSession);
 				}
 			}
-			if (sc != null)
+			if (Session_ME2.sc != null)
 			{
 				cleanNetwork();
 			}
@@ -232,7 +249,7 @@ public class Session_ME2 : ISession
 
 	public static bool connecting;
 
-	private static Sender sender = new Sender();
+	private static Sender sender = new Sender(null);
 
 	public static Thread initThread;
 
@@ -337,9 +354,10 @@ public class Session_ME2 : ISession
 		dataStream = sc.GetStream();
 		dis = new BinaryReader(dataStream, new UTF8Encoding());
 		dos = new BinaryWriter(dataStream, new UTF8Encoding());
+		sender = new Sender(sc);
 		sendThread = new Thread(sender.run);
 		sendThread.Start();
-		MessageCollector @object = new MessageCollector();
+		MessageCollector @object = new MessageCollector(sc, dis);
 		Cout.LogError("new -----");
 		collectorThread = new Thread(@object.run);
 		collectorThread.Start();

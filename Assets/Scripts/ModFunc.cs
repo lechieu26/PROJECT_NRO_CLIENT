@@ -260,6 +260,8 @@ public class ModFunc : IActionListener
 
     public static bool AnPlayer = false;
 
+    public static bool isSpineSkinOff = false;
+
     public bool isHighFps;
     
     public bool isBgm;
@@ -367,6 +369,8 @@ public class ModFunc : IActionListener
 
     public static string strShowButton = "Hiện Nút Trợ Năng";
 
+    public static string strSpineSkinOff = "Tắt Spine Skin";
+
     public static string strIntroOff = "Tắt Intro";
 
     public static string strInventoryOFF = "Hiện Hành Trang Lưới";
@@ -399,6 +403,10 @@ public class ModFunc : IActionListener
     public static string strVietnamese = "Gõ Tiếng Việt";
 
     public static string strShowMenuChat = "Thông Tin Lệnh Chat";
+
+    public static string strShowMobName = "Hiện tên quái";
+
+    public static string strShowNewPanel = "Dùng Panel Mới";
 
     public static List<string> listItems = new List<string>() { "Bổ Huyết", "Cuồng Nộ", "Giáp Xên", "Bổ Khí", "Capsule Kì Bí", "Khẩu Trang", };
     public static bool[] useItem = new bool[10];
@@ -560,6 +568,7 @@ public class ModFunc : IActionListener
     public static void toggleMobName()
     {
         showMobName = !showMobName;
+        Rms.saveRMSInt("showMobName", showMobName ? 1 : 0);
         GameScr.info1.addInfo("Hiển thị tên quái: " + (showMobName ? "Bật" : "Tắt"), 0);
     }
 
@@ -582,6 +591,8 @@ public class ModFunc : IActionListener
         isTitleOff = Rms.loadRMSInt("isTitleOff") == 1;
         autoWakeUp = Rms.loadRMSInt("autoWakeUp") == 1;
         useNewPanel = Rms.loadRMSInt("useNewPanel") == 1;
+        isSpineSkinOff = Rms.loadRMSInt("isSpineSkinOff") == 1;
+        showMobName = Rms.loadRMSInt("showMobName") != 0;
         if (!ModNotLogo)
         {
             isLogo = Rms.loadRMSInt("logo") == 1;
@@ -2068,6 +2079,7 @@ public class ModFunc : IActionListener
                         //menuOthers.addElement(new Command("Auto Item", 55));
                         menuOthers.addElement(new Command("Auto\nHồi sinh " + (autoWakeUp ? "[Bật]" : "[Tắt]"), 60));
                         menuOthers.addElement(new Command("Panel mới " + (useNewPanel ? "[Bật]" : "[Tắt]"), 906));
+                        menuOthers.addElement(new Command("Spine Skin" + (isSpineSkinOff ? " [Tắt]" : " [Bật]"), 907));
                         menuOthers.addElement(new Command("Hành trang\nLưới " + (isInventory ? "[Bật]" : "[Tắt]"), 59));
                         menuOthers.addElement(new Command("Load ô\nskill", 57));
                         menuOthers.addElement(new Command("Hiện tên quái " + (showMobName ? "[Bật]" : "[Tắt]"), 999));
@@ -2377,6 +2389,11 @@ public class ModFunc : IActionListener
                 useNewPanel = !useNewPanel;
                 Rms.saveRMSInt("useNewPanel", useNewPanel ? 1 : 0);
                 GameScr.info1.addInfo("Panel mới " + (useNewPanel ? "[Bật]" : "[Tắt]"), 0);
+                break;
+            case 907:
+                isSpineSkinOff = !isSpineSkinOff;
+                Rms.saveRMSInt("isSpineSkinOff", isSpineSkinOff ? 1 : 0);
+                GameScr.info1.addInfo("Spine Skin: " + (isSpineSkinOff ? "Tắt" : "Bật"), 0);
                 break;
             case 901: // Thêm nhạc
                 {

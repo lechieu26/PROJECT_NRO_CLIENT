@@ -86,7 +86,7 @@ public class SpineCharacterManager : MonoBehaviour
     /// </summary>
     public void PaintSpineForChar(mGraphics g, Char c, int x, int y)
     {
-        if (spinetexture == null || c == null || !c.useSpine)
+        if (spinetexture == null || c == null || !c.useSpine || ModFunc.isSpineSkinOff)
             return;
         if (c.isMonkey > 0 || c.isFusion || c.isHide)
             return;
@@ -128,7 +128,7 @@ public class SpineCharacterManager : MonoBehaviour
     public void PaintPreviewSpine(mGraphics g, int x, int y, int charId)
     {
         currentPreviewCharIdRequested = charId;
-        if (previewSpineTexture == null || previewSpineCamera == null)
+        if (previewSpineTexture == null || previewSpineCamera == null || ModFunc.isSpineSkinOff)
             return;
         if (previewRenderer == null || !previewRenderer.IsVisible())
             return;
@@ -482,7 +482,7 @@ public class SpineCharacterManager : MonoBehaviour
                 UpdateAnimationByCharState(renderer, c);
 
                 // Ẩn Spine nếu đang biến hình (Khỉ) hoặc Hợp thể hoặc bị ẩn hoàn toàn
-                bool shouldShowSpine = (c.isMonkey == 0 && !c.isFusion && !c.isHide);
+                bool shouldShowSpine = (c.isMonkey == 0 && !c.isFusion && !c.isHide && !ModFunc.isSpineSkinOff);
                 renderer.SetVisible(shouldShowSpine);
 
                 // Xử lý độ trong suốt cho Tàng hình
@@ -550,7 +550,7 @@ public class SpineCharacterManager : MonoBehaviour
     private void UpdatePreviewRenderer(Char c, bool panelVisible, int zoom)
     {
         // Nếu đang yêu cầu vẽ, reset buffer
-        if (c != null && panelVisible && c.useSpine)
+        if (c != null && panelVisible && c.useSpine && !ModFunc.isSpineSkinOff)
         {
             previewDisplayBuffer = 0.1f; // Giữ hiển thị trong ít nhất 0.1s (khoảng 6 frames)
         }
@@ -839,7 +839,7 @@ public class SpineCharacterManager : MonoBehaviour
     // Mảng animation cận chiến để random
     private static readonly string[] meleeAnimations = new string[]
     {
-        "Combo1", "Combo5", "Combo5", "Skill1_1", "Skill1_2", "Skill1_3"
+        "Combo1", "Combo2", "Combo3", "Combo4", "Combo5"
     };
 
     // Mảng animation chưởng để random

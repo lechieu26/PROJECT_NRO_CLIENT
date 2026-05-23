@@ -4603,7 +4603,7 @@ public class Panel : IActionListener, IChatable
         }
         else if (this.charInfo != null)
         {
-            if (this.charInfo.useSpine)
+            if (this.charInfo.useSpine && !ModFunc.isSpineSkinOff)
             {
                 bool oldIsPreviewSpine = this.charInfo.isPreviewSpine;
                 this.charInfo.isPreviewSpine = true;
@@ -7026,7 +7026,7 @@ public class Panel : IActionListener, IChatable
                 int charX = centerX + centerW / 2;
                 int charY = centerY + centerH / 2;
                 Char me = Char.myCharz();
-                if (me.useSpine)
+                if (me.useSpine && !ModFunc.isSpineSkinOff)
                 {
                     bool oldIsPreviewSpine = me.isPreviewSpine;
                     me.isPreviewSpine = true;
@@ -13218,6 +13218,19 @@ public class Panel : IActionListener, IChatable
                         {
                             GameScr.info1.addInfo("Hiển thị nút không hỗ trợ trên PC", 0);
                         }
+                        break;
+                    case 5:
+                        ModFunc.isSpineSkinOff = !ModFunc.isSpineSkinOff;
+                        Rms.saveRMSInt("isSpineSkinOff", ModFunc.isSpineSkinOff ? 1 : 0);
+                        GameScr.info1.addInfo("Spine Skin: " + (ModFunc.isSpineSkinOff ? "Tắt" : "Bật"), 0);
+                        break;
+                    case 6:
+                        ModFunc.toggleMobName();
+                        break;
+                    case 7:
+                        ModFunc.useNewPanel = !ModFunc.useNewPanel;
+                        Rms.saveRMSInt("useNewPanel", ModFunc.useNewPanel ? 1 : 0);
+                        GameScr.info1.addInfo(ModFunc.strShowNewPanel + ": " + (ModFunc.useNewPanel ? "Bật" : "Tắt"), 0);
                         break;
                 }
                 break;

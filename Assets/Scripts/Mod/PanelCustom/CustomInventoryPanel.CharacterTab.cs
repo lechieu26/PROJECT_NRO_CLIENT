@@ -198,7 +198,7 @@ public partial class CustomInventoryPanel
             PaintPreviewCharBoundEffects(g, ch, 0);
             PaintPreviewMobMe(g, ch);
             
-            if (ch.useSpine)
+            if (ch.useSpine && !ModFunc.isSpineSkinOff)
             {
                 ch.isPreviewSpine = true;
                 SpineCharacterManager.Instance.PaintPreviewSpine(g, ch.cx, ch.cy, ch.charID);

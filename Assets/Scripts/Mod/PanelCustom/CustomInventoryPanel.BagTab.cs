@@ -296,7 +296,7 @@ public partial class CustomInventoryPanel
 
         if (hasSpineItem)
         {
-            ch.useSpine = true;
+            ch.useSpine = !ModFunc.isSpineSkinOff;
             ch.spineId = newItemSpineId;
         }
         else if (costume != null)
@@ -307,7 +307,7 @@ public partial class CustomInventoryPanel
         else
         {
             // Nếu không có vật phẩm chỉ định, đồng bộ với trạng thái thế giới (cache)
-            if (SpineMessageHandler.playerSkinCache.TryGetValue(searchId, out int cachedId))
+            if (SpineMessageHandler.playerSkinCache.TryGetValue(searchId, out int cachedId) && !ModFunc.isSpineSkinOff)
             {
                 ch.useSpine = true;
                 ch.spineId = cachedId;

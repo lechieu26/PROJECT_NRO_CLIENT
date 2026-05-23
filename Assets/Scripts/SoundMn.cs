@@ -281,7 +281,10 @@ public class SoundMn
                 new ValueTuple<bool, string>(ModFunc.GI().isUpdateZones, ModFunc.strUpdateZones),
                 new ValueTuple<bool, string>(ModFunc.GI().showCharsInMap, ModFunc.strCharsInMap),
                 new ValueTuple<bool, string>(ModFunc.GI().showInfoMe, ModFunc.strInfoMe),
-                new ValueTuple<bool, string>(ModFunc.GI().isShowButton, ModFunc.strShowButton)
+                new ValueTuple<bool, string>(ModFunc.GI().isShowButton, ModFunc.strShowButton),
+                new ValueTuple<bool, string>(ModFunc.useNewPanel, ModFunc.strShowNewPanel),
+                new ValueTuple<bool, string>(ModFunc.isSpineSkinOff, ModFunc.strSpineSkinOff),
+                new ValueTuple<bool, string>(ModFunc.showMobName, ModFunc.strShowMobName)
             },
             new ValueTuple<bool, string>[]
             {

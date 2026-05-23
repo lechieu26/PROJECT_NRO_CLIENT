@@ -15,9 +15,12 @@ public class Session_ME : ISession
 	{
 		public List<Message> sendingMessage;
 
-		public Sender()
+		private TcpClient sc;
+
+		public Sender(TcpClient sc)
 		{
 			sendingMessage = new List<Message>();
+			this.sc = sc;
 		}
 
 		public void AddMessage(Message message)
@@ -27,7 +30,7 @@ public class Session_ME : ISession
 
 		public void run()
 		{
-			while (connected)
+			while (connected && Session_ME.sc == this.sc)
 			{
 				try
 				{
@@ -58,11 +61,21 @@ public class Session_ME : ISession
 
 	private class MessageCollector
 	{
+		private TcpClient sc;
+
+		private BinaryReader dis;
+
+		public MessageCollector(TcpClient sc, BinaryReader dis)
+		{
+			this.sc = sc;
+			this.dis = dis;
+		}
+
 		public void run()
 		{
 			try
 			{
-				while (connected)
+				while (connected && Session_ME.sc == this.sc)
 				{
 					Message message = readMessage();
 					if (message == null)
@@ -98,6 +111,10 @@ public class Session_ME : ISession
 			{
 				Debug.Log(ex3.Message.ToString());
 			}
+			if (Session_ME.sc != this.sc)
+			{
+				return;
+			}
 			if (!connected)
 			{
 				return;
@@ -113,7 +130,7 @@ public class Session_ME : ISession
 					messageHandler.onConnectionFail(isMainSession);
 				}
 			}
-			if (sc != null)
+			if (Session_ME.sc != null)
 			{
 				cleanNetwork();
 			}
@@ -238,7 +255,7 @@ public class Session_ME : ISession
 
 	public static bool connecting;
 
-	private static Sender sender = new Sender();
+	private static Sender sender = new Sender(null);
 
 	public static Thread initThread;
 
@@ -321,7 +338,7 @@ public class Session_ME : ISession
 		}
 	}
 
-    private async void NetworkInit()
+    private void NetworkInit()
     {
         isCancel = false;
         connecting = true;
@@ -349,9 +366,10 @@ public class Session_ME : ISession
         dataStream = sc.GetStream();
         dis = new BinaryReader(dataStream, new UTF8Encoding());
         dos = new BinaryWriter(dataStream, new UTF8Encoding());
+        sender = new Sender(sc);
         sendThread = new Thread(sender.run);
         sendThread.Start();
-        collectorThread = new Thread(new MessageCollector().run);
+        collectorThread = new Thread(new MessageCollector(sc, dis).run);
         collectorThread.Start();
         timeConnected = currentTimeMillis();
         connecting = false;
@@ -426,7 +444,6 @@ public class Session_ME : ISession
 		catch (Exception ex)
 		{
 			Debug.Log(ex.StackTrace);
-			dos.Flush();
 		}
 	}
 
