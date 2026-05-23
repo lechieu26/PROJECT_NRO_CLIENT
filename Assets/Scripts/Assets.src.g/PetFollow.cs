@@ -6,6 +6,11 @@ namespace Assets.src.g
 
 		public bool isSpine;
 
+		// Đánh dấu instance này là Tàu bay Spine (slot 8 - type 95) thay vì
+		// linh thú slot 11. Khi true, vẽ qua kênh ShipFollow độc lập trong
+		// SpineCharacterManager để hiển thị đồng thời với petFollow.
+		public bool isShipFollow;
+
 		public string spineId;
 
 		public int idleOffsetX;
@@ -72,8 +77,16 @@ namespace Assets.src.g
 		{
 			if (isSpine)
 			{
-				SpineCharacterManager.Instance.AddOrUpdatePetFollow(ownerId, spineId);
-				SpineCharacterManager.Instance.PaintSpineForPetFollow(g, this);
+				if (isShipFollow)
+				{
+					SpineCharacterManager.Instance.AddOrUpdateShipFollow(ownerId, spineId);
+					SpineCharacterManager.Instance.PaintSpineForShipFollow(g, this);
+				}
+				else
+				{
+					SpineCharacterManager.Instance.AddOrUpdatePetFollow(ownerId, spineId);
+					SpineCharacterManager.Instance.PaintSpineForPetFollow(g, this);
+				}
 				return;
 			}
 			int w = 32;
@@ -106,7 +119,14 @@ namespace Assets.src.g
 		{
 			if (isSpine)
 			{
-				SpineCharacterManager.Instance.RemovePetFollow(ownerId);
+				if (isShipFollow)
+				{
+					SpineCharacterManager.Instance.RemoveShipFollow(ownerId);
+				}
+				else
+				{
+					SpineCharacterManager.Instance.RemovePetFollow(ownerId);
+				}
 			}
 			ServerEffect.addServerEffect(60, cmx, cmy + 3 + ((GameCanvas.gameTick % 10 > 5) ? 1 : 0), 1);
 		}

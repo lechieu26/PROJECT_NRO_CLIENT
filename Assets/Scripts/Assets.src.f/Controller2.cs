@@ -169,6 +169,43 @@ namespace Assets.src.f
 							}
 							break;
 						}
+					case 34:
+						{
+							// Tàu bay Spine (slot 8 - type 95) — kênh ship follow ĐỘC LẬP
+							// với petFollow (slot 11), cho phép cả hai hiển thị đồng thời.
+							int shipOwnerId = msg.reader().readInt();
+							short shipSpineId = msg.reader().readShort();
+							Char shipOwner = (shipOwnerId == Char.myCharz().charID)
+								? Char.myCharz()
+								: GameScr.findCharInMap(shipOwnerId);
+							if (shipOwner == null)
+							{
+								break;
+							}
+							if (shipSpineId < 0)
+							{
+								if (shipOwner.shipFollow != null)
+								{
+									shipOwner.shipFollow.remove();
+									shipOwner.shipFollow = null;
+								}
+							}
+							else
+							{
+								shipOwner.shipFollow = new PetFollow();
+								shipOwner.shipFollow.smallID = shipSpineId;
+								shipOwner.shipFollow.ownerId = shipOwnerId;
+								shipOwner.shipFollow.isSpine = true;
+								shipOwner.shipFollow.isShipFollow = true;
+								shipOwner.shipFollow.spineId = shipSpineId.ToString();
+								int shipDirOffset = (shipOwner.cdir == 1) ? -50 : 50;
+								shipOwner.shipFollow.cmx = shipOwner.cx + shipDirOffset;
+								shipOwner.shipFollow.cmy = shipOwner.cy - 60;
+								shipOwner.shipFollow.cmtoX = shipOwner.shipFollow.cmx;
+								shipOwner.shipFollow.cmtoY = shipOwner.shipFollow.cmy;
+							}
+							break;
+						}
 					case -89:
 						GameCanvas.open3Hour = msg.reader().readByte() == 1;
 						break;
