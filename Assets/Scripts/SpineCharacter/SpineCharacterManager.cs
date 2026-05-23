@@ -643,6 +643,7 @@ public class SpineCharacterManager : MonoBehaviour
         string targetAnim = "Idle";
         bool loop = true;
         float animSpeed = 1.0f; // Mặc định tốc độ là 1.0f
+        bool isCurrentlyAttacking = false;
 
         // 1. Chết hoặc Bất động (Ưu tiên cao nhất)
         if (c.statusMe == 14 || c.statusMe == 5 || c.cf == 23)
@@ -681,7 +682,14 @@ public class SpineCharacterManager : MonoBehaviour
             loop = true;
             animSpeed = 1.0f; // Gồng năng lượng dùng tốc độ gốc
         }
-        // 7. Tấn công / Skill (Dựa trên skillPaint và status)
+        // 6.5. Trói - Đang giữ dây trói (holder)
+        else if (c.holder)
+        {
+            targetAnim = "ZSkill5";
+            loop = true;
+            animSpeed = 1.0f;
+        }
+        // 7. Tấn công / Skill (Dựa trên skillPaint, status và skill đặc biệt)
         else if (
             c.isAttack
             || c.statusMe == 7
@@ -695,19 +703,84 @@ public class SpineCharacterManager : MonoBehaviour
             || c.cf == 13
             || c.statusMe == 12
             || c.statusMe == 13
+            || c.isPaintNewSkill
         )
         {
-            targetAnim = GetAttackAnimationName(c);
-            loop = false;
+            isCurrentlyAttacking = true;
 
-            // Nếu là chiêu bắn chưởng, giảm tốc độ (0.5f) theo yêu cầu
-            if (targetAnim.StartsWith("Skill2_"))
+            // Kiểm tra xem đây có phải frame đầu tiên của đợt tấn công mới không
+            bool wasPreviouslyAttacking = false;
+            wasAttacking.TryGetValue(c.charID, out wasPreviouslyAttacking);
+            bool isNewAttack = !wasPreviouslyAttacking;
+
+            // Nếu là skill đặc biệt mới
+            if (c.isPaintNewSkill)
             {
-                animSpeed = 0.5f;
+                if (c.idskillPaint == 24) // Super Kamejoko
+                {
+                    targetAnim = "ZSkill1";
+                    if (c.stt == 0) // Gồng (chỉ 1 loop, thời gian kéo dài)
+                    {
+                        loop = false;
+                        animSpeed = 0.25f;
+                    }
+                    else // Ra chiêu (stt == 1 hoặc 2)
+                    {
+                        loop = false;
+                        animSpeed = 1.0f;
+                    }
+                }
+                else if (c.idskillPaint == 25) // Cađíc liên hoàn chưởng
+                {
+                    if (c.stt == 0) // Gồng (chỉ 1 loop, thời gian kéo dài)
+                    {
+                        targetAnim = "Skill2_4";
+                        loop = false;
+                        animSpeed = 0.25f;
+                    }
+                    else // Ra chiêu (stt == 1 hoặc 2)
+                    {
+                        // Ra chiêu Cađíc liên hoàn chưởng, random Skill2_4 hoặc Skill2_5
+                        targetAnim = PickCachedRandom(c.charID, cadicAnimations, isNewAttack);
+                        loop = false;
+                        animSpeed = 1.0f;
+                    }
+                }
+                else if (c.idskillPaint == 26) // Ma phong ba
+                {
+                    targetAnim = "ZSkill11";
+                    if (c.stt == 0) // Gồng (loop liên tục)
+                    {
+                        loop = true;
+                        animSpeed = 1.0f;
+                    }
+                    else // Ra chiêu (stt == 1 hoặc 2)
+                    {
+                        loop = false;
+                        animSpeed = 1.0f;
+                    }
+                }
+                else
+                {
+                    targetAnim = GetAttackAnimationName(c, isNewAttack);
+                    loop = false;
+                }
             }
-            else if (targetAnim.StartsWith("Combo"))
+            else
             {
-                animSpeed = 1.0f; // Đấm cận chiến dùng tốc độ gốc
+                // Skill bình thường
+                targetAnim = GetAttackAnimationName(c, isNewAttack);
+                loop = false;
+
+                // Điều chỉnh tốc độ animation theo loại skill
+                if (targetAnim.StartsWith("Skill2_"))
+                {
+                    animSpeed = 0.5f; // Bắn chưởng giảm tốc độ
+                }
+                else
+                {
+                    animSpeed = 1.0f; // Tất cả animation khác dùng tốc độ gốc
+                }
             }
         }
         // 8. Bị thương (Hit)
@@ -717,57 +790,160 @@ public class SpineCharacterManager : MonoBehaviour
             loop = false;
         }
 
+        // Cập nhật trạng thái tấn công cho frame tiếp theo
+        wasAttacking[c.charID] = isCurrentlyAttacking;
+        // Xóa cache khi không còn tấn công (để lần tấn công sau random mới)
+        if (!isCurrentlyAttacking)
+        {
+            cachedAttackAnim.Remove(c.charID);
+        }
+
         renderer.SetAnimation(targetAnim, loop, animSpeed);
     }
 
-    private string GetAttackAnimationName(Char c)
-    {
-        // Lấy cấp độ kỹ năng hiện tại (mặc định 1 nếu không rõ)
-        int skillLevel = (c.myskill != null) ? c.myskill.point : 1;
 
+    // Cache animation tấn công đã chọn cho mỗi nhân vật (tránh random mỗi frame)
+    private Dictionary<int, string> cachedAttackAnim = new Dictionary<int, string>();
+    // Theo dõi trạng thái tấn công frame trước để biết khi nào bắt đầu tấn công mới
+    private Dictionary<int, bool> wasAttacking = new Dictionary<int, bool>();
+
+    // Mảng animation cận chiến để random
+    private static readonly string[] meleeAnimations = new string[]
+    {
+        "Combo1", "Combo5", "Combo5", "Skill1_1", "Skill1_2", "Skill1_3"
+    };
+
+    // Mảng animation chưởng để random
+    private static readonly string[] kiBlastAnimations = new string[]
+    {
+        "Skill2_1", "Skill2_2"
+    };
+
+    // Mảng animation Cađíc liên hoàn chưởng để random
+    private static readonly string[] cadicAnimations = new string[]
+    {
+        "Skill2_4", "Skill2_5"
+    };
+
+    /// <summary>
+    /// Chọn random animation từ mảng, nhưng cache kết quả cho charId.
+    /// Chỉ chọn mới khi chuyển từ non-attack sang attack (isNewAttack = true).
+    /// </summary>
+    private string PickCachedRandom(int charId, string[] pool, bool isNewAttack)
+    {
+        if (isNewAttack || !cachedAttackAnim.ContainsKey(charId))
+        {
+            string picked = pool[Random.Range(0, pool.Length)];
+            cachedAttackAnim[charId] = picked;
+            return picked;
+        }
+        return cachedAttackAnim[charId];
+    }
+
+    private string GetAttackAnimationName(Char c, bool isNewAttack)
+    {
+        int charId = c.charID;
+
+        // Lấy skill template ID từ myskill (nếu có)
+        int skillTemplateId = -1;
+        if (c.myskill != null && c.myskill.template != null)
+        {
+            skillTemplateId = c.myskill.template.id;
+        }
+
+        // 0. Biến khỉ / Hóa hình / Biến hình (Ưu tiên cao nhất)
+        if (c.isWaitMonkey)
+        {
+            return "ZSkill7";
+        }
+        if (c.skillPaint != null)
+        {
+            int id = c.skillPaint.id;
+            if ((id >= 35 && id <= 41) || id == 105 || id == 165)
+            {
+                return "ZSkill7";
+            }
+        }
+
+        // 1. Kiểm tra các skill đặc biệt dựa trên myskill.template.id
+        switch (skillTemplateId)
+        {
+            case 6:  // Thái dương hạ san
+                return "Skill5_1";
+
+            case 7:  // Trị thương
+                return "Skill5_4";
+
+            case 8:  // Tái tạo năng lượng
+                return "ZSkill7";
+
+            case 10: // Quả cầu kênh khí
+                return "ZSkill6";
+
+            case 11: // Makankosappo
+                return "ZSkill8";
+
+            case 13: // Biến Khỉ
+                return "ZSkill7";
+
+            case 14: // Tự phát nổ
+                return "ZSkill7";
+
+            case 19: // Khiên
+                return "ZSkill7";
+
+            case 20: // Dịch chuyển tức thời
+                return "ZSkill9";
+
+            case 23: // Trói
+                return "ZSkill5";
+
+            case 24: // Cađíc liên hoàn chưởng
+                return PickCachedRandom(charId, cadicAnimations, isNewAttack);
+
+            case 26: // Ma phong ba
+                return "ZSkill11";
+        }
+
+        // 2. Nếu không phải skill đặc biệt, phân biệt melee vs chưởng theo skillPaint
         if (c.skillPaint != null)
         {
             int id = c.skillPaint.id;
 
-            // 0. Biến khỉ / Hóa hình (Ưu tiên cao nhất)
-            if ((id >= 35 && id <= 41) || id == 105 || id == 165 || c.isWaitMonkey)
-            {
-                return "ZSkill7";
-            }
-
-            // 1. Nhóm đấm cận chiến (Cố định Combo1)
+            // Nhóm đấm cận chiến
             bool isMelee =
                 (id >= 0 && id <= 6)
                 || (id >= 14 && id <= 20)
                 || (id >= 28 && id <= 34)
                 || (id >= 63 && id <= 69)
                 || (id >= 107 && id <= 109)
-                || id == 164;
+                || id == 164
+                || id == 183
+                || id == 186
+                || id == 192;
 
             if (isMelee)
             {
-                return "Combo1";
+                return PickCachedRandom(charId, meleeAnimations, isNewAttack);
             }
 
-            // 2. Nhóm bắn chưởng (Theo yêu cầu: cấp 1-5 là Skill2_4, cấp 6-7 là Skill2_1)
-            if (skillLevel >= 6)
-                return "Skill2_1";
-            return "Skill2_4";
+            // Nhóm bắn chưởng (mặc định)
+            return PickCachedRandom(charId, kiBlastAnimations, isNewAttack);
         }
 
         // 3. Fallback cho frame bắn chưởng cơ bản (cf 12, 13)
         if (c.cf == 12 || c.cf == 13)
         {
-            return (skillLevel >= 6) ? "Skill2_1" : "Skill2_4";
+            return PickCachedRandom(charId, kiBlastAnimations, isNewAttack);
         }
 
         // 4. Fallback cho frame đấm cận chiến
         if (c.cf == 9 || c.cf == 10 || c.cf == 11)
         {
-            return "Combo1";
+            return PickCachedRandom(charId, meleeAnimations, isNewAttack);
         }
 
-        return "Combo1";
+        return PickCachedRandom(charId, meleeAnimations, isNewAttack);
     }
 
     public SpineCharacterRenderer AddOrUpdatePetFollow(int playerId, string spineId)
@@ -878,7 +1054,8 @@ public class SpineCharacterManager : MonoBehaviour
                         // Linh thú chạy dưới đất: Không bập bềnh hình sin, không lệch Y, đứng vững trên đất
                         renderer.transform.position = new Vector3(screenX, screenY, 0);
 
-                        float finalScale = 35f * zoom;
+                        // Size pet spine
+                        float finalScale = 40f * zoom;
                         renderer.transform.localScale = new Vector3(finalScale, finalScale, 1);
 
                         // Hướng lật cùng hướng di chuyển của player (không bị ngược như ship)

@@ -1238,7 +1238,7 @@ public class Char : IMapObject
 
 	private sbyte typeFrame;
 
-	private short idskillPaint;
+	public short idskillPaint;
 
 	private byte[] fr_start;
 
@@ -1248,7 +1248,7 @@ public class Char : IMapObject
 
 	private int count_NEW;
 
-	private int stt;
+	public int stt;
 
 	private short rangeDame;
 
@@ -5976,7 +5976,10 @@ public class Char : IMapObject
 			}
 			if (me && isTanHinh)
 			{
+				Color colorBackup = GUI.color;
+				GUI.color = new Color(1f, 1f, 1f, 0.4f);
 				paintCharBody(g, cx, cy + fy, cdir, cf, isPaintBag: true);
+				GUI.color = colorBackup;
 			}
 			else if (isInvisiblez)
 			{
