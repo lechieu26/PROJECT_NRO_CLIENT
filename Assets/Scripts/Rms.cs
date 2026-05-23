@@ -196,10 +196,40 @@ public class Rms
 	public static void clearAll()
 	{
 		Cout.LogError3("clean rms");
-		FileInfo[] files = new DirectoryInfo(GetiPhoneDocumentsPath() + "/").GetFiles();
-		for (int i = 0; i < files.Length; i++)
+		try
 		{
-			files[i].Delete();
+			DirectoryInfo directoryInfo = new DirectoryInfo(GetiPhoneDocumentsPath() + "/");
+			if (directoryInfo.Exists)
+			{
+				FileInfo[] files = directoryInfo.GetFiles();
+				for (int i = 0; i < files.Length; i++)
+				{
+					try
+					{
+						files[i].Delete();
+					}
+					catch (Exception ex)
+					{
+						Cout.LogError3("Error deleting file: " + files[i].Name + " - " + ex.Message);
+					}
+				}
+				DirectoryInfo[] directories = directoryInfo.GetDirectories();
+				for (int j = 0; j < directories.Length; j++)
+				{
+					try
+					{
+						directories[j].Delete(true);
+					}
+					catch (Exception ex2)
+					{
+						Cout.LogError3("Error deleting directory: " + directories[j].Name + " - " + ex2.Message);
+					}
+				}
+			}
+		}
+		catch (Exception ex3)
+		{
+			Cout.LogError3("Error clearing all RMS: " + ex3.Message);
 		}
 	}
 

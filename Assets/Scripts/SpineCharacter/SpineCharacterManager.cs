@@ -651,36 +651,66 @@ public class SpineCharacterManager : MonoBehaviour
             targetAnim = "Die";
             loop = false;
         }
-        // 2. Chạy (Run)
+        // 2. Gồng năng lượng (Charge)
+        else if (c.isCharge || c.isStandAndCharge || c.isFlyAndCharge || c.cf == 17)
+        {
+            int skillId = -1;
+            if (c.myskill != null && c.myskill.template != null)
+            {
+                skillId = c.myskill.template.id;
+            }
+            else
+            {
+                skillId = c.skillTemplateId;
+            }
+
+            loop = true;
+            animSpeed = 1.0f; // Mặc định tốc độ là 1.0f
+
+            if (skillId == 10) // Quả cầu kênh khí
+            {
+                if (c.posDisY <= 20)
+                {
+                    targetAnim = "Skill5_5";
+                }
+                else
+                {
+                    targetAnim = "ZSkill6";
+                    animSpeed = 0.25f; // Giảm tốc độ để kéo dài thời gian chạy hoạt ảnh thêm 1s
+                }
+            }
+            else if (skillId == 11) // Makankosappo
+            {
+                targetAnim = "ZSkill8";
+            }
+            else
+            {
+                targetAnim = "Skill5_5";
+            }
+        }
+        // 3. Chạy (Run)
         else if (c.statusMe == 2)
         {
             targetAnim = "Run";
             loop = true;
         }
-        // 3. Nhảy (Jump)
+        // 4. Nhảy (Jump)
         else if (c.statusMe == 3 || c.statusMe == 9)
         {
             targetAnim = "Jump";
             loop = false;
         }
-        // 4. Rơi (Fall)
+        // 5. Rơi (Fall)
         else if (c.statusMe == 4)
         {
             targetAnim = c.isFlyUp ? "Fly" : "Fall";
             loop = !c.isFlyUp;
         }
-        // 5. Bay (Fly)
+        // 6. Bay (Fly)
         else if (c.statusMe == 10)
         {
             targetAnim = "Fly";
             loop = true;
-        }
-        // 6. Gồng năng lượng (Charge)
-        else if (c.isCharge || c.isStandAndCharge || c.isFlyAndCharge || c.cf == 17)
-        {
-            targetAnim = "Skill5_5";
-            loop = true;
-            animSpeed = 1.0f; // Gồng năng lượng dùng tốc độ gốc
         }
         // 6.5. Trói - Đang giữ dây trói (holder)
         else if (c.holder)
@@ -740,8 +770,7 @@ public class SpineCharacterManager : MonoBehaviour
                     }
                     else // Ra chiêu (stt == 1 hoặc 2)
                     {
-                        // Ra chiêu Cađíc liên hoàn chưởng, random Skill2_4 hoặc Skill2_5
-                        targetAnim = PickCachedRandom(c.charID, cadicAnimations, isNewAttack);
+                        targetAnim = "Skill2_3";
                         loop = false;
                         animSpeed = 1.0f;
                     }
