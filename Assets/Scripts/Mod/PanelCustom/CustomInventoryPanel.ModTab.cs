@@ -4,6 +4,86 @@ using UnityEngine;
 
 public partial class CustomInventoryPanel
 {
+    private static int modScrollY;
+    private static int modScrollTargetY;
+    private static int modScrollRun;
+    private static bool modDragged;
+    private static int modDragStartY;
+    private static int modScrollYBeforeDrag;
+
+    public static void UpdateModScroll()
+    {
+        if (topTab != 6) return;
+
+        int safeY = panelY + 45;
+        int safeH = panelH - 82;
+        int listH = safeH - 30;
+
+        int safeX = panelX + 24;
+        int safeW = panelW - 48;
+        int gap = 6;
+        int catW = 126;
+        int listW = safeW - catW - gap;
+        int listX = safeX + catW + gap + 6;
+
+        int rowH = 26;
+        int count = (Panel.strModFunc != null) ? Panel.strModFunc.Length : 0;
+        int totalH = count * rowH;
+        int maxScroll = totalH - listH;
+        if (maxScroll < 0) maxScroll = 0;
+
+        // Xử lý lăn chuột
+        if (GameCanvas.pXYScrollMouse != 0)
+        {
+            modScrollTargetY -= GameCanvas.pXYScrollMouse * 20;
+            GameCanvas.pXYScrollMouse = 0;
+        }
+
+        bool inside = GameCanvas.px >= listX && GameCanvas.px <= listX + listW - 12 && GameCanvas.py >= safeY + 24 && GameCanvas.py <= safeY + safeH;
+
+        if (GameCanvas.isPointerDown)
+        {
+            if (!modDragged)
+            {
+                if (inside)
+                {
+                    modDragged = true;
+                    modDragStartY = GameCanvas.py;
+                    modScrollYBeforeDrag = modScrollY;
+                    modScrollRun = 0;
+                }
+            }
+            else
+            {
+                int dy = modDragStartY - GameCanvas.py;
+                if (abs(dy) > 5) globalDragged = true;
+                modScrollTargetY = modScrollYBeforeDrag + dy;
+            }
+        }
+        else if (GameCanvas.isPointerJustRelease && modDragged)
+        {
+            int releaseDelta = GameCanvas.py - dragLastY[0];
+            GameCanvas.isPointerJustRelease = false;
+            if (System.Math.Abs(releaseDelta) < 20 && System.Math.Abs(GameCanvas.py - modDragStartY) < 20)
+            {
+                pendingSelectionClick = true;
+                modScrollRun = 0;
+            }
+            modDragged = false;
+            GameCanvas.isPointerJustRelease = false;
+        }
+
+        if (modScrollTargetY < 0) modScrollTargetY = 0;
+        if (modScrollTargetY > maxScroll) modScrollTargetY = maxScroll;
+
+        if (!modDragged && modScrollY != modScrollTargetY)
+        {
+            modScrollRun = (modScrollTargetY - modScrollY) >> 2;
+            if (modScrollRun == 0) modScrollRun = (modScrollTargetY > modScrollY) ? 1 : -1;
+            modScrollY += modScrollRun;
+        }
+    }
+
     private static void PaintModTab(mGraphics g)
     {
         Panel p = GameCanvas.panel;
@@ -21,7 +101,6 @@ public partial class CustomInventoryPanel
         int safeY = panelY + 45;
         int safeW = panelW - 48;
         int safeH = panelH - 82;
-
 
         int gap = 6;
         int catW = 126;
@@ -67,6 +146,7 @@ public partial class CustomInventoryPanel
         int oldClipH = g.getClipHeight();
         g.setClip(x, y, w, h);
         int rowH = 26;
+        g.translate(0, -modScrollY);
         if (Panel.strModFunc == null || Panel.strModFunc.Length == 0)
         {
             mFont.tahoma_7_grey.drawString(g, "Chưa có chức năng", x + w / 2, y + 35, mFont.CENTER);
@@ -76,18 +156,18 @@ public partial class CustomInventoryPanel
             for (int i = 0; i < Panel.strModFunc.Length; i++)
             {
                 int yy = y + i * rowH;
-                if (yy > y + h)
+                if (yy + rowH >= y + modScrollY && yy <= y + modScrollY + h)
                 {
-                    break;
+                    string raw = Panel.strModFunc[i];
+                    bool enabled = raw != null && raw.StartsWith("[x]");
+                    string label = CleanModLabel(raw);
+                    PaintOldTextCell(g, x, yy, w, rowH - 4, i == selectedAutoIndex);
+                    PaintModToggle(g, x + 7, yy + 6, enabled);
+                    mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, w - 48), x + 32, yy + 6, mFont.LEFT);
                 }
-                string raw = Panel.strModFunc[i];
-                bool enabled = raw != null && raw.StartsWith("[x]");
-                string label = CleanModLabel(raw);
-                PaintOldTextCell(g, x, yy, w, rowH - 4, i == selectedAutoIndex);
-                PaintModToggle(g, x + 7, yy + 6, enabled);
-                mFont.tahoma_7b_dark.drawString(g, TrimText(mFont.tahoma_7b_dark, label, w - 48), x + 32, yy + 6, mFont.LEFT);
             }
         }
+        g.translate(0, modScrollY);
         g.setClip(oldClipX, oldClipY, oldClipW, oldClipH);
     }
 
@@ -114,7 +194,7 @@ public partial class CustomInventoryPanel
         int safeX = panelX + 24;
         int safeY = panelY + 45;
         int safeW = panelW - 48;
-        int safeH = panelH - 118;
+        int safeH = panelH - 82; // Đồng bộ với PaintModTab
         int gap = 6;
         int catW = 126;
         int listW = safeW - catW - gap;
@@ -135,6 +215,9 @@ public partial class CustomInventoryPanel
                 p.currentTabIndex = row;
                 p.selected = GameCanvas.isTouch ? -1 : 0;
                 selectedAutoIndex = -1;
+                modScrollY = 0;
+                modScrollTargetY = 0;
+                modScrollRun = 0;
                 SoundMn.gI().GetStrModFunc();
                 SoundMn.gI().panelClick();
                 return true;
@@ -143,7 +226,7 @@ public partial class CustomInventoryPanel
 
         if (GameCanvas.px >= listX && GameCanvas.px <= listX + listInnerW && GameCanvas.py >= listY && GameCanvas.py <= listY + innerH)
         {
-            int row = (GameCanvas.py - listY) / 26;
+            int row = (GameCanvas.py - listY + modScrollY) / 26;
             if (Panel.strModFunc != null && row >= 0 && row < Panel.strModFunc.Length)
             {
                 selectedAutoIndex = row;
@@ -158,5 +241,4 @@ public partial class CustomInventoryPanel
         }
         return false;
     }
-
 }

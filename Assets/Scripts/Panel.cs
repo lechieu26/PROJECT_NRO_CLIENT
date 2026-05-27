@@ -13220,17 +13220,17 @@ public class Panel : IActionListener, IChatable
                         }
                         break;
                     case 5:
+                        ModFunc.useNewPanel = !ModFunc.useNewPanel;
+                        Rms.saveRMSInt("useNewPanel", ModFunc.useNewPanel ? 1 : 0);
+                        GameScr.info1.addInfo(ModFunc.strShowNewPanel + ": " + (ModFunc.useNewPanel ? "Bật" : "Tắt"), 0);
+                        break;
+                    case 6:
                         ModFunc.isSpineSkinOff = !ModFunc.isSpineSkinOff;
                         Rms.saveRMSInt("isSpineSkinOff", ModFunc.isSpineSkinOff ? 1 : 0);
                         GameScr.info1.addInfo("Spine Skin: " + (ModFunc.isSpineSkinOff ? "Tắt" : "Bật"), 0);
                         break;
-                    case 6:
-                        ModFunc.toggleMobName();
-                        break;
                     case 7:
-                        ModFunc.useNewPanel = !ModFunc.useNewPanel;
-                        Rms.saveRMSInt("useNewPanel", ModFunc.useNewPanel ? 1 : 0);
-                        GameScr.info1.addInfo(ModFunc.strShowNewPanel + ": " + (ModFunc.useNewPanel ? "Bật" : "Tắt"), 0);
+                        ModFunc.toggleMobName();
                         break;
                 }
                 break;

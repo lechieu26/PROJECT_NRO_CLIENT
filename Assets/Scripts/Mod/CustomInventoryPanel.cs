@@ -348,6 +348,10 @@ public partial class CustomInventoryPanel
             {
                 UpdateToolDetailScroll();
             }
+            if (topTab == 6)
+            {
+                UpdateModScroll();
+            }
             if (ShouldAutoClosePanel())
             {
                 ClosePanelState(false);

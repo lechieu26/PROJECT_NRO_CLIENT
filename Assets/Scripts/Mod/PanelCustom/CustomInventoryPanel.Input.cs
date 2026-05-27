@@ -462,6 +462,9 @@ public partial class CustomInventoryPanel
                 skillScrollRun = 0;
                 skillScrollCmdy = 0;
                 skillScrollCmvy = 0;
+                modScrollY = 0;
+                modScrollTargetY = 0;
+                modScrollRun = 0;
                 draggingSkill = false;
                 downWhenRunning = false;
                 selectedBagIndex = -1;
