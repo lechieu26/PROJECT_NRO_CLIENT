@@ -4898,7 +4898,14 @@ public class GameScr : mScreen, IChatable
 				return;
 			}
 		}
-		GameCanvas.paintBGGameScr(g);
+		if (TileMap.isMap7VNR)
+		{
+			NewMapRenderer.gI().paintMap(g);
+		}
+		else
+		{
+			GameCanvas.paintBGGameScr(g);
+		}
 		paint_ios_bg(g);
 		if ((isRongThanXuatHien || isFireWorks) && TileMap.bgID != 3)
 		{
@@ -4921,8 +4928,11 @@ public class GameScr : mScreen, IChatable
 		}
 		BackgroudEffect.paintBehindTileAll(g);
 		EffecMn.paintLayer1(g);
-		TileMap.paintTilemap(g);
-		TileMap.paintOutTilemap(g);
+		if (!TileMap.isMap7VNR)
+		{
+			TileMap.paintTilemap(g);
+			TileMap.paintOutTilemap(g);
+		}
 		for (int i = 0; i < vCharInMap.size(); i++)
 		{
 			Char @char = (Char)vCharInMap.elementAt(i);

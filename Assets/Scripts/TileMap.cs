@@ -42,6 +42,8 @@ public class TileMap
 
 	public static bool isMapDouble = false;
 
+	public static bool isMap7VNR = false;
+
 	public static string mapName = string.Empty;
 
 	public static sbyte versionMap = 1;
@@ -538,6 +540,15 @@ public class TileMap
 	{
 		try
 		{
+			if (isMap7VNR)
+			{
+				int px = x * size;
+				int py = y * size;
+				int groundY = NewMapRenderer.gI().getGroundY(px);
+				if (py >= groundY && py <= groundY + size)
+					return 2;
+				return 0;
+			}
 			return types[y * tmw + x];
 		}
 		catch (Exception)
@@ -550,6 +561,13 @@ public class TileMap
 	{
 		try
 		{
+			if (isMap7VNR)
+			{
+				int groundY = NewMapRenderer.gI().getGroundY(px);
+				if (py >= groundY && py <= groundY + size)
+					return 2;
+				return 0;
+			}
 			return types[py / size * tmw + px / size];
 		}
 		catch (Exception)
@@ -562,6 +580,13 @@ public class TileMap
 	{
 		try
 		{
+			if (isMap7VNR)
+			{
+				int groundY = NewMapRenderer.gI().getGroundY(px);
+				if (t == 2)
+					return py >= groundY && py <= groundY + size;
+				return false;
+			}
 			return (types[py / size * tmw + px / size] & t) == t;
 		}
 		catch (Exception)
