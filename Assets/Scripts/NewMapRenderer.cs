@@ -28,6 +28,9 @@ public class NewMapRenderer
 	public bool isLoaded = false;
 	private Image[] bgLayerImages;
 
+	private List<DecorationInstance> decorations = new List<DecorationInstance>();
+	private Dictionary<string, Image> decorationImageCache = new Dictionary<string, Image>();
+
 	/// <summary>
 	/// Parse map config JSON tu server va load assets.
 	/// </summary>
@@ -36,6 +39,8 @@ public class NewMapRenderer
 		isLoaded = false;
 		groundPoints.Clear();
 		platforms.Clear();
+		decorations.Clear();
+		decorationImageCache.Clear();
 		bgLayerImages = null;
 
 		try
@@ -89,7 +94,29 @@ public class NewMapRenderer
 			TileMap.maps = new int[TileMap.tmw * TileMap.tmh];
 			TileMap.types = new int[TileMap.tmw * TileMap.tmh];
 
+			if (config.decorations != null)
+			{
+				for (int i = 0; i < config.decorations.Length; i++)
+				{
+					DecorationConfig dc = config.decorations[i];
+					decorations.Add(new DecorationInstance
+					{
+						imageName = dc.image,
+						x = dc.x,
+						y = dc.y,
+						width = dc.width,
+						height = dc.height,
+						order = dc.order,
+						flipX = dc.flipX,
+						flipY = dc.flipY,
+						layer = dc.layer
+					});
+				}
+				decorations.Sort((a, b) => a.order.CompareTo(b.order));
+			}
+
 			loadBackgroundImages();
+			loadDecorationImages();
 			isLoaded = true;
 		}
 		catch (Exception)
@@ -128,6 +155,7 @@ public class NewMapRenderer
 			return;
 
 		paintBackgroundLayers(g);
+		paintDecorations(g);
 	}
 
 	private void paintBackgroundLayers(mGraphics g)
@@ -185,11 +213,63 @@ public class NewMapRenderer
 		return startPy;
 	}
 
+	private void loadDecorationImages()
+	{
+		foreach (DecorationInstance deco in decorations)
+		{
+			if (string.IsNullOrEmpty(deco.imageName) || decorationImageCache.ContainsKey(deco.imageName))
+				continue;
+			try
+			{
+				Image img = GameCanvas.loadImage("/newmap/" + deco.imageName);
+				decorationImageCache[deco.imageName] = img;
+			}
+			catch (Exception)
+			{
+				decorationImageCache[deco.imageName] = null;
+			}
+		}
+	}
+
+	private void paintDecorations(mGraphics g)
+	{
+		int screenW = GameCanvas.w;
+		int screenH = GameCanvas.h;
+
+		foreach (DecorationInstance deco in decorations)
+		{
+			Image img;
+			if (!decorationImageCache.TryGetValue(deco.imageName, out img) || img == null)
+				continue;
+
+			int drawX = deco.x - GameScr.cmx;
+			int drawY = deco.y - GameScr.cmy;
+
+			if (drawX + deco.width < 0 || drawX > screenW ||
+				drawY + deco.height < 0 || drawY > screenH)
+				continue;
+
+			if (deco.flipX || deco.flipY)
+			{
+				int trans = 0;
+				if (deco.flipX) trans = mGraphics.TRANS_MIRROR;
+				g.drawRegion(img, 0, 0, deco.width, deco.height,
+					trans, drawX, drawY, 0);
+			}
+			else
+			{
+				g.drawImage(img, drawX, drawY, 0);
+			}
+		}
+	}
+
 	public void reset()
 	{
 		isLoaded = false;
 		groundPoints.Clear();
 		platforms.Clear();
+		decorations.Clear();
+		decorationImageCache.Clear();
 		bgLayerImages = null;
 		mapWidth = 0;
 		mapHeight = 0;
@@ -205,6 +285,16 @@ public class NewMapRenderer
 		public int x1, y1, x2, y2;
 	}
 
+	public class DecorationInstance
+	{
+		public string imageName;
+		public int x, y;
+		public int width, height;
+		public int order;
+		public bool flipX, flipY;
+		public string layer;
+	}
+
 	[Serializable]
 	public class MapConfig
 	{
@@ -214,6 +304,7 @@ public class NewMapRenderer
 		public Vec2Int[] groundPoints;
 		public PlatformData[] platforms;
 		public CameraBound cameraBounds;
+		public DecorationConfig[] decorations;
 	}
 
 	[Serializable]
@@ -232,5 +323,16 @@ public class NewMapRenderer
 	public class CameraBound
 	{
 		public int top, bottom, left, right;
+	}
+
+	[Serializable]
+	public class DecorationConfig
+	{
+		public string image;
+		public int x, y;
+		public int width, height;
+		public int order;
+		public bool flipX, flipY;
+		public string layer;
 	}
 }
