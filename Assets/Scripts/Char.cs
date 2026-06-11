@@ -1066,6 +1066,10 @@ public class Char : IMapObject
 
 	public bool isWaitMonkey;
 
+	public bool isWaitBienHinh;
+
+	public long lastWaitBienHinh;
+
 	private bool isFeetEff;
 
 	public bool meDead;
@@ -2125,6 +2129,25 @@ public class Char : IMapObject
 				if (chargeCount == 500)
 				{
 					isWaitMonkey = false;
+					isLockMove = false;
+				}
+				return;
+			}
+			if (isWaitBienHinh)
+			{
+				isLockMove = true;
+				cf = 17;
+				// if (GameCanvas.gameTick % 5 == 0)
+				// {
+				// 	ServerEffect.addServerEffect(154, cx, cy - 10, 2);
+				// }
+				// if (GameCanvas.gameTick % 5 == 0)
+				// {
+				// 	ServerEffect.addServerEffect(1, cx, cy + 10, 1);
+				// }
+				if (mSystem.currentTimeMillis() - lastWaitBienHinh >= 4000)
+				{
+					isWaitBienHinh = false;
 					isLockMove = false;
 				}
 				return;
@@ -4966,6 +4989,17 @@ public class Char : IMapObject
 				}
 				return;
 			}
+			if (myskill.template.id == 28)
+			{
+				if (!isWaitBienHinh)
+				{
+					SoundMn.gI().gong();
+					lastWaitBienHinh = mSystem.currentTimeMillis();
+					isWaitBienHinh = true;
+					isLockMove = true;
+				}
+				return;
+			}
 			if (myskill.template.id == 14)
 			{
 				SoundMn.gI().gong();
@@ -6179,53 +6213,57 @@ public class Char : IMapObject
 				SpineCharacterManager.Instance.PaintSpineForChar(g, this, cx, cy);
 			}
 		}
-		else if (statusMe == 14)
+		bool isPlayingSkillEffect = SpineSkillEffectController.activeEffects.ContainsKey(charID);
+		if (!isPlayingSkillEffect)
 		{
-			if (GameCanvas.gameTick % 4 > 0)
+			if (statusMe == 14)
 			{
-				g.drawImage(ItemMap.imageFlare, cx, cy - ch - 11, mGraphics.HCENTER | mGraphics.VCENTER);
-			}
-			int num3 = 0;
-			if (head == 89 || head == 457 || head == 460 || head == 461 || head == 462 || head == 463 || head == 464 || head == 465 || head == 466)
-			{
-				num3 = 15;
-			}
-			SmallImage.drawSmallImage(g, 834, cx, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy - 2 + num3, num, StaticObj.TOP_CENTER);
-			SmallImage.drawSmallImage(g, 79, cx, cy - ch - 8, 0, mGraphics.HCENTER | mGraphics.BOTTOM);
-			SmallImage.drawSmallImage(g, ph.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
-			paintHat_behind(g, cf, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy);
-			if (isHead_2Fr(head))
-			{
-				Part part = GameScr.parts[getFHead(head)];
-				SmallImage.drawSmallImage(g, part.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + part.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + part.pi[CharInfo[cf][0][0]].dy, num, anchor);
+				if (GameCanvas.gameTick % 4 > 0)
+				{
+					g.drawImage(ItemMap.imageFlare, cx, cy - ch - 11, mGraphics.HCENTER | mGraphics.VCENTER);
+				}
+				int num3 = 0;
+				if (head == 89 || head == 457 || head == 460 || head == 461 || head == 462 || head == 463 || head == 464 || head == 465 || head == 466)
+				{
+					num3 = 15;
+				}
+				SmallImage.drawSmallImage(g, 834, cx, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy - 2 + num3, num, StaticObj.TOP_CENTER);
+				SmallImage.drawSmallImage(g, 79, cx, cy - ch - 8, 0, mGraphics.HCENTER | mGraphics.BOTTOM);
+				SmallImage.drawSmallImage(g, ph.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
+				paintHat_behind(g, cf, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy);
+				if (isHead_2Fr(head))
+				{
+					Part part = GameScr.parts[getFHead(head)];
+					SmallImage.drawSmallImage(g, part.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + part.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + part.pi[CharInfo[cf][0][0]].dy, num, anchor);
+				}
+				else
+				{
+					SmallImage.drawSmallImage(g, ph.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
+				}
+				paintHat_front(g, cf, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy);
+				paintRedEye(g, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
 			}
 			else
 			{
-				SmallImage.drawSmallImage(g, ph.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
+				paintHat_behind(g, cf, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy);
+				if (isHead_2Fr(head))
+				{
+					Part part2 = GameScr.parts[getFHead(head)];
+					SmallImage.drawSmallImage(g, part2.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + part2.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + part2.pi[CharInfo[cf][0][0]].dy, num, anchor);
+				}
+				else
+				{
+					SmallImage.drawSmallImage(g, ph.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
+				}
+				SmallImage.drawSmallImage(g, pl.pi[CharInfo[cf][1][0]].id, cx + (CharInfo[cf][1][1] + pl.pi[CharInfo[cf][1][0]].dx) * num2, cy - CharInfo[cf][1][2] + pl.pi[CharInfo[cf][1][0]].dy, num, anchor);
+				SmallImage.drawSmallImage(g, pb.pi[CharInfo[cf][2][0]].id, cx + (CharInfo[cf][2][1] + pb.pi[CharInfo[cf][2][0]].dx) * num2, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy, num, anchor);
+				paintRedEye(g, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
 			}
-			paintHat_front(g, cf, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy);
-			paintRedEye(g, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
-		}
-		else
-		{
-			paintHat_behind(g, cf, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy);
-			if (isHead_2Fr(head))
-			{
-				Part part2 = GameScr.parts[getFHead(head)];
-				SmallImage.drawSmallImage(g, part2.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + part2.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + part2.pi[CharInfo[cf][0][0]].dy, num, anchor);
-			}
-			else
-			{
-				SmallImage.drawSmallImage(g, ph.pi[CharInfo[cf][0][0]].id, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
-			}
-			SmallImage.drawSmallImage(g, pl.pi[CharInfo[cf][1][0]].id, cx + (CharInfo[cf][1][1] + pl.pi[CharInfo[cf][1][0]].dx) * num2, cy - CharInfo[cf][1][2] + pl.pi[CharInfo[cf][1][0]].dy, num, anchor);
-			SmallImage.drawSmallImage(g, pb.pi[CharInfo[cf][2][0]].id, cx + (CharInfo[cf][2][1] + pb.pi[CharInfo[cf][2][0]].dx) * num2, cy - CharInfo[cf][2][2] + pb.pi[CharInfo[cf][2][0]].dy, num, anchor);
-			paintRedEye(g, cx + (CharInfo[cf][0][1] + ph.pi[CharInfo[cf][0][0]].dx) * num2, cy - CharInfo[cf][0][2] + ph.pi[CharInfo[cf][0][0]].dy, num, anchor);
 		}
 		ch = ((isMonkey != 1 && !isFusion) ? (CharInfo[0][0][2] + ph.pi[CharInfo[0][0][0]].dy + 10) : 60);
 		int num4 = ((Res.abs(ph.pi[CharInfo[cf][0][0]].dy) < 22) ? ph.pi[CharInfo[cf][0][0]].dy : ((ph.pi[CharInfo[cf][0][0]].dy >= 0) ? (ph.pi[CharInfo[cf][0][0]].dy - 5) : (ph.pi[CharInfo[cf][0][0]].dy + 5)));
 		cH_new = cy - CharInfo[cf][0][2] + num4;
-		if (statusMe == 1 && charID > 0 && !isMask && !isUseChargeSkill() && !isWaitMonkey && skillPaint == null && cf != 23 && bag < 0 && ((GameCanvas.gameTick + charID) % 30 == 0 || isFreez))
+		if (!isPlayingSkillEffect && statusMe == 1 && charID > 0 && !isMask && !isUseChargeSkill() && !isWaitMonkey && !isWaitBienHinh && skillPaint == null && cf != 23 && bag < 0 && ((GameCanvas.gameTick + charID) % 30 == 0 || isFreez))
 		{
 			g.drawImage((cgender != 1) ? eyeTraiDat : eyeNamek, cx + -((cgender != 1) ? 2 : 2) * num2, cy - 32 + ((cgender != 1) ? 11 : 10) - cf, anchor2);
 		}
@@ -6238,6 +6276,14 @@ public class Char : IMapObject
 			eDanhHieu.paint(g);
 		}
 		paintPKFlag(g);
+
+		if (!useSpine && SpineSkillEffectController.activeEffects.ContainsKey(charID) && !ModFunc.isSpineSkinOff && isMonkey == 0 && !isFusion)
+		{
+			if (!isPreviewSpine)
+			{
+				SpineCharacterManager.Instance.PaintSpineForChar(g, this, cx, cy);
+			}
+		}
 	}
 
 	public void paintCharWithSkill(mGraphics g)
@@ -7046,6 +7092,7 @@ public class Char : IMapObject
 	{
 		isMonkey = 0;
 		isWaitMonkey = false;
+		isWaitBienHinh = false;
 		if (me && isDie)
 		{
 			return;

@@ -54,6 +54,9 @@ public static class SpineMessageHandler
                 case SpineCommand.SPINE_CHANGE_SKIN:
                     HandleSpineChangeSkin(message);
                     break;
+                case SpineCommand.SPINE_SKILL_EFFECT:
+                    HandleSpineSkillEffect(message);
+                    break;
                 default:
                     Debug.LogWarning("[SpineMessageHandler] Unknown Spine sub-type: " + subType);
                     break;
@@ -276,6 +279,17 @@ public static class SpineMessageHandler
 
         Char c = GetChar(playerId);
         ApplySkinToChar(c, skinId);
+    }
+
+    private static void HandleSpineSkillEffect(Message msg)
+    {
+        int playerId = msg.reader().readInt();
+        string skeletonPath = msg.reader().readUTF();
+        string animation = msg.reader().readUTF();
+        short durationMs = msg.reader().readShort();
+
+        Res.outz($"[Spine] SkillEffect: player={playerId}, skeleton={skeletonPath}, anim={animation}, duration={durationMs}");
+        SpineSkillEffectController.Play(playerId, skeletonPath, animation, durationMs);
     }
 
     private static Char GetChar(int playerId)

@@ -25,6 +25,7 @@ public static class SpineCommand
     public const int SPINE_DIE = 6;
     public const int SPINE_TOGGLE = 7;
     public const int SPINE_CHANGE_SKIN = 8;
+    public const int SPINE_SKILL_EFFECT = 9;
 
     // --- Client → Server ---
     public const int SPINE_REQUEST_ACTIVATE = 10;

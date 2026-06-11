@@ -3891,7 +3891,7 @@ public class GameScr : mScreen, IChatable
 
 	public bool isCharging()
 	{
-		if (Char.myCharz().isFlyAndCharge || Char.myCharz().isUseSkillAfterCharge || Char.myCharz().isStandAndCharge || Char.myCharz().isWaitMonkey || isSuperPower || Char.myCharz().isFreez)
+		if (Char.myCharz().isFlyAndCharge || Char.myCharz().isUseSkillAfterCharge || Char.myCharz().isStandAndCharge || Char.myCharz().isWaitMonkey || Char.myCharz().isWaitBienHinh || isSuperPower || Char.myCharz().isFreez)
 		{
 			return true;
 		}
@@ -4503,6 +4503,7 @@ public class GameScr : mScreen, IChatable
 		RongThanSpineController.UpdateGameCameraFocus();
 		RongThanNamekSpineController.Update();
 		RongThanNamekSpineController.UpdateGameCameraFocus();
+		SpineSkillEffectController.Update();
 		if (isAutoMercenary && GameCanvas.gameTick % 20 == 0 && !Char.ischangingMap && !Char.isLoadingMap)
 		{
 			if (!isHaveCloneOrMercenary())

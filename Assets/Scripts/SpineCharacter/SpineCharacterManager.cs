@@ -86,8 +86,13 @@ public class SpineCharacterManager : MonoBehaviour
     /// </summary>
     public void PaintSpineForChar(mGraphics g, Char c, int x, int y)
     {
-        if (spinetexture == null || c == null || !c.useSpine || ModFunc.isSpineSkinOff)
+        if (spinetexture == null || c == null || ModFunc.isSpineSkinOff)
             return;
+            
+        bool hasSkillEffect = SpineSkillEffectController.activeEffects.ContainsKey(c.charID);
+        if (!c.useSpine && !hasSkillEffect)
+            return;
+
         if (c.isMonkey > 0 || c.isFusion || c.isHide)
             return;
 
@@ -96,6 +101,13 @@ public class SpineCharacterManager : MonoBehaviour
         // Vùng clip quanh nhân vật (tọa độ logic mGraphics)
         int drawW = 150;
         int drawH = 150;
+        
+        if (hasSkillEffect)
+        {
+            drawW = 400; // Mở rộng vùng vẽ để không cắt mất effect SpineSkill
+            drawH = 400;
+        }
+
         int drawX = x - drawW / 2;
         int drawY = y - drawH + 20;
 
@@ -481,8 +493,9 @@ public class SpineCharacterManager : MonoBehaviour
                 renderer.SetDirection(c.cdir);
                 UpdateAnimationByCharState(renderer, c);
 
-                // Ẩn Spine nếu đang biến hình (Khỉ) hoặc Hợp thể hoặc bị ẩn hoàn toàn
-                bool shouldShowSpine = (c.isMonkey == 0 && !c.isFusion && !c.isHide && !ModFunc.isSpineSkinOff);
+                // Ẩn Spine nếu đang biến hình (Khỉ) hoặc Hợp thể hoặc bị ẩn hoàn toàn, hoặc đang chạy skill effect Spine
+                bool isPlayingSkillEffect = SpineSkillEffectController.activeEffects.ContainsKey(c.charID);
+                bool shouldShowSpine = (c.isMonkey == 0 && !c.isFusion && !c.isHide && !ModFunc.isSpineSkinOff && !isPlayingSkillEffect);
                 renderer.SetVisible(shouldShowSpine);
 
                 // Xử lý độ trong suốt cho Tàng hình
@@ -881,7 +894,7 @@ public class SpineCharacterManager : MonoBehaviour
         }
 
         // 0. Biến khỉ / Hóa hình / Biến hình (Ưu tiên cao nhất)
-        if (c.isWaitMonkey)
+        if (c.isWaitMonkey || c.isWaitBienHinh)
         {
             return "ZSkill7";
         }
@@ -913,6 +926,9 @@ public class SpineCharacterManager : MonoBehaviour
                 return "ZSkill8";
 
             case 13: // Biến Khỉ
+                return "ZSkill7";
+
+            case 28: // Biến hình Super
                 return "ZSkill7";
 
             case 14: // Tự phát nổ
