@@ -21,13 +21,11 @@ public partial class CustomInventoryPanel
             return;
         }
 
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
+        int rightX = layoutRightX;
         int rightY = panelY + 66;
         int gap = 4;
-        int cols = 6;
-        int viewW = 34 * cols + gap * (cols - 1);
+        int cols = layoutBagCols;
+        int viewW = layoutBagGridW;
         int viewH = panelH - 132;
         int maxScroll = GetBagMaxScroll(viewH);
         
@@ -133,17 +131,11 @@ public partial class CustomInventoryPanel
             {
                 bagScrollTargetY = 0;
                 bagScrollRun = 0;
-                bagScrollCmdy = 0;
-                bagScrollCmvy = 0;
-                bagScrollY = 0;
             }
             else if (bagScrollTargetY > maxScroll)
             {
                 bagScrollTargetY = maxScroll;
                 bagScrollRun = 0;
-                bagScrollCmdy = 0;
-                bagScrollCmvy = 0;
-                bagScrollY = maxScroll;
             }
             else
             {
@@ -280,8 +272,8 @@ public partial class CustomInventoryPanel
         int detailH = safeH - 30;
 
         // Recalculate detail area for hit testing
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
+        int safeX = layoutSafeX;
+        int safeW = layoutSafeW;
         int gap = 6;
         int catW = 108;
         int detailW = 164;
@@ -441,9 +433,11 @@ public partial class CustomInventoryPanel
     private static bool TryHandleTopTabClick(bool isFire)
     {
         int[] visibleTabs = GetVisibleTabs();
-        int tabW = 60;
-        int tabH = 18;
         int gap = 2;
+        int maxTabW = (panelW - 20 - (visibleTabs.Length - 1) * gap) / visibleTabs.Length;
+        int tabW = (maxTabW > 60) ? 60 : maxTabW;
+        if (tabW < 36) tabW = 36;
+        int tabH = 18;
         int totalTabsW = visibleTabs.Length * tabW + (visibleTabs.Length - 1) * gap;
         int tabX = panelX + (panelW - totalTabsW) / 2;
         int tabY = panelY + 22;
@@ -492,11 +486,9 @@ public partial class CustomInventoryPanel
 
     private static bool TryHandleRightSubTabClick(bool isFire)
     {
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
+        int rightX = layoutRightX;
         int y = panelY + 44;
-        int gridW = 34 * 6 + 4 * 5;
+        int gridW = layoutBagGridW;
         int tw = gridW / RIGHT_TABS.Length;
         for (int i = 0; i < RIGHT_TABS.Length; i++)
         {
@@ -599,43 +591,42 @@ public partial class CustomInventoryPanel
             return;
         }
 
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
+        int rightX = layoutRightX;
         int rightY = panelY + 66;
         int gap = 4;
+        int cols = layoutBagCols;
         int newY = -1;
 
         if (topTab == 4)
         {
             if (rightSubTab == 0 && selectedBagIndex >= 0)
             {
-                int col = selectedBagIndex % 6;
-                int row = selectedBagIndex / 6;
+            int col = selectedBagIndex % cols;
+            int row = selectedBagIndex / cols;
                 selectedItemX = rightX + col * (34 + gap);
                 newY = rightY + row * (26 + gap) - bagScrollY;
             }
             else if (rightSubTab == 1 && selectedBoxIndex >= 0)
             {
-                int col = selectedBoxIndex % 6;
-                int row = selectedBoxIndex / 6;
+                int col = selectedBoxIndex % cols;
+                int row = selectedBoxIndex / cols;
                 selectedItemX = rightX + col * (34 + gap);
                 newY = rightY + row * (26 + gap) - bagScrollY;
             }
             else if (rightSubTab == 2 && selectedAutoIndex >= 0)
             {
-                int col = selectedAutoIndex % 6;
-                int row = selectedAutoIndex / 6;
+                int col = selectedAutoIndex % cols;
+                int row = selectedAutoIndex / cols;
                 selectedItemX = rightX + col * (34 + gap);
                 newY = rightY + row * (26 + gap) - bagScrollY;
             }
         }
         else if (topTab == 3 && selectedSkillIndex >= 0)
         {
-            int colW = (safeW - 6) / 3;
+            int colW = (layoutSafeW - 6) / 3;
             int col = selectedSkillIndex / 6;
             int row = selectedSkillIndex % 6;
-            selectedItemX = safeX + col * (colW + 3) + 3;
+            selectedItemX = layoutSafeX + col * (colW + 3) + 3;
             newY = panelY + 52 + row * 40 - skillScrollY;
         }
 
@@ -731,12 +722,11 @@ public partial class CustomInventoryPanel
         Item[] body = (Char.myCharz() != null) ? Char.myCharz().arrItemBody : null;
         Item[] box = (Char.myCharz() != null) ? Char.myCharz().arrItemBox : null;
         Item[] rightItems = (rightSubTab == 1) ? box : bag;
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
+        int rightX = layoutRightX;
         int rightY = panelY + 66;
         int gap = 4;
-        int bagViewW = 34 * 6 + gap * 5;
+        int cols = layoutBagCols;
+        int bagViewW = layoutBagGridW;
         int bagViewH = panelH - 132;
         if (GameCanvas.px >= rightX && GameCanvas.px <= rightX + bagViewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + bagViewH)
         {
@@ -744,9 +734,9 @@ public partial class CustomInventoryPanel
             int localY = GameCanvas.py - rightY + bagScrollY;
             int col = localX / (34 + gap);
             int row = localY / (26 + gap);
-            if (col >= 0 && col < 6 && localX % (34 + gap) < 34)
+            if (col >= 0 && col < cols && localX % (34 + gap) < 34)
             {
-                int index = row * 6 + col;
+                int index = row * cols + col;
                 Item clicked = GetItem(rightItems, index);
                 
                 selectedBagIndex = (rightSubTab == 0) ? index : -1;
@@ -789,12 +779,12 @@ public partial class CustomInventoryPanel
                 return;
             }
         }
-        int leftX = safeX;
+        int leftX = layoutSafeX;
         int leftY = panelY + 42;
-        int leftW = safeW / 2 - 16;
-        int frameX = safeX - 3;
+        int leftW = layoutLeftFrameW;
+        int frameX = layoutLeftFrameX;
         int frameY = panelY + 42;
-        int frameW = 246;
+        int frameW = layoutLeftFrameW;
         int centerX = frameX + frameW / 2;
         int bodyLeftX = frameX + 22;
         int bodyRightX = frameX + frameW - 22 - 36;

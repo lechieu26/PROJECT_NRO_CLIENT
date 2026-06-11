@@ -6,9 +6,9 @@ public partial class CustomInventoryPanel
 {
     private static void PaintSkillTab(mGraphics g)
     {
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int listY = panelY + 52;
         int listH = panelY + panelH - 36 - listY;
         int oldClipX = g.getClipX();
@@ -204,8 +204,8 @@ public partial class CustomInventoryPanel
             return;
         }
 
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
+        int safeX = layoutSafeX;
+        int safeW = layoutSafeW;
         int listY = panelY + 47;
         int listH = panelY + panelH - 36 - listY;
         int maxScroll = GetSkillMaxScroll(listH);
@@ -279,9 +279,9 @@ public partial class CustomInventoryPanel
         {
             return false;
         }
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int listY = panelY + 52;
         int listH = panelY + panelH - 36 - listY;
         int colGap = 3;

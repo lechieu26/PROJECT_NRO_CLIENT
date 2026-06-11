@@ -19,8 +19,8 @@ public partial class CustomInventoryPanel
         int safeH = panelH - 82;
         int listH = safeH - 30;
 
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
+        int safeX = layoutSafeX;
+        int safeW = layoutSafeW;
         int gap = 6;
         int catW = 126;
         int listW = safeW - catW - gap;
@@ -97,9 +97,9 @@ public partial class CustomInventoryPanel
         }
         SoundMn.gI().GetStrModFunc();
 
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82;
 
         int gap = 6;
@@ -191,9 +191,9 @@ public partial class CustomInventoryPanel
             if (isFire) p.SetTypeModFunc();
             else return true;
         }
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82; // Đồng bộ với PaintModTab
         int gap = 6;
         int catW = 126;

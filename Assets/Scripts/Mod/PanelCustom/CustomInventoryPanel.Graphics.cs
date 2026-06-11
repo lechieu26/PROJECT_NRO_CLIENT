@@ -7,9 +7,9 @@ public partial class CustomInventoryPanel
 
     private static void PaintTheme(mGraphics g)
     {
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 18;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 36;
         int splitX = safeX + safeW / 2;
         int bodyY = safeY + 54;
@@ -30,9 +30,12 @@ public partial class CustomInventoryPanel
     private static void PaintTopTabs(mGraphics g)
     {
         int[] visibleTabs = GetVisibleTabs();
-        int tabW = 60;
-        int tabH = 18;
+        // Dynamically size tabs to fit panel width
         int gap = 2;
+        int maxTabW = (panelW - 20 - (visibleTabs.Length - 1) * gap) / visibleTabs.Length;
+        int tabW = (maxTabW > 60) ? 60 : maxTabW;
+        if (tabW < 36) tabW = 36;
+        int tabH = 18;
         int totalTabsW = visibleTabs.Length * tabW + (visibleTabs.Length - 1) * gap;
         int tabX = panelX + (panelW - totalTabsW) / 2;
         int tabY = panelY + 22;
@@ -70,13 +73,9 @@ public partial class CustomInventoryPanel
 
     private static void PaintSubTabs(mGraphics g)
     {
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
+        int rightX = layoutRightX;
         int y = panelY + 44;
-        int slot = 26;
-        int gap = 4;
-        int gridW = 34 * 6 + gap * 5;
+        int gridW = layoutBagGridW;
         int tw = gridW / RIGHT_TABS.Length;
         for (int i = 0; i < RIGHT_TABS.Length; i++)
         {
@@ -99,13 +98,9 @@ public partial class CustomInventoryPanel
 
     private static void PaintTitleBars(mGraphics g)
     {
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int leftX = safeX;
-        int leftW = safeW / 2 - 16;
-        int statsFrameX = leftX - 3;
-        int statsFrameY = panelY + 232;
-        int statsFrameW = 246;
+        int statsFrameX = layoutLeftFrameX;
+        int statsFrameY = panelY + panelH - 95;
+        int statsFrameW = layoutLeftFrameW;
 
         PaintOldPanelBox(g, statsFrameX, statsFrameY, statsFrameW, 65);
         PaintCharacterStats(g, statsFrameX + 18, statsFrameY + 3, statsFrameW - 36);
@@ -151,18 +146,20 @@ public partial class CustomInventoryPanel
         {
             return;
         }
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
-        int viewW = 246;
+        int rightX = layoutRightX;
+        int viewW = layoutRightFrameW;
         int y = panelY + panelH - 50;
-        PaintOldPanelBox(g, rightX - 11, y - 4, viewW, 22);
-        int x1 = rightX - 6;
-        int x2 = rightX + 74;
-        int x3 = rightX + 154;
-        DrawCurrency(g, Panel.imgXu, FormatGold(c.xu), x1, y + 2, 0xD6A000, 17, 80);
-        DrawCurrency(g, Panel.imgLuong, FormatStat((long)c.luong), x2, y + 2, 0x1E9F4B, 18, 70);
-        DrawCurrency(g, Panel.imgLuongKhoa, FormatStat((long)c.luongKhoa), x3, y + 2, 0xD03D7C, 15, 70);
+        PaintOldPanelBox(g, layoutRightFrameX, y - 4, viewW, 22);
+        // Distribute 3 currency sections evenly across available width
+        int currencyInnerW = viewW - 12;
+        int sectionW = currencyInnerW / 3;
+        int x1 = layoutRightFrameX + 5;
+        int x2 = x1 + sectionW;
+        int x3 = x2 + sectionW;
+        int maxTextW = sectionW - 20;
+        DrawCurrency(g, Panel.imgXu, FormatGold(c.xu), x1, y + 2, 0xD6A000, 17, maxTextW);
+        DrawCurrency(g, Panel.imgLuong, FormatStat((long)c.luong), x2, y + 2, 0x1E9F4B, 18, maxTextW);
+        DrawCurrency(g, Panel.imgLuongKhoa, FormatStat((long)c.luongKhoa), x3, y + 2, 0xD03D7C, 15, maxTextW);
     }
 
     private static void DrawCurrency(mGraphics g, Image icon, string text, int x, int y, int fallbackColor, int textOffset, int maxTextW)

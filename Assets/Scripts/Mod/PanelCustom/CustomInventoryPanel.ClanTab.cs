@@ -6,9 +6,9 @@ public partial class CustomInventoryPanel
 {
     private static void PaintClanTab(mGraphics g)
     {
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82;
         int gap = 6;
         int msgW = safeW / 2 - gap / 2;
@@ -399,9 +399,9 @@ public partial class CustomInventoryPanel
 
     private static bool TryHandleClanClick(bool isFire)
     {
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82; // Đồng bộ với PaintClanTab
         int gap = 6;
         int msgW = safeW / 2 - gap / 2;
@@ -795,7 +795,7 @@ public partial class CustomInventoryPanel
             MyVector cmds = new MyVector();
             cmds.addElement(new Command(mResources.CLOSE, p, 8000, msg));
             int menuY = panelY + 68 + row * 32 - clanMsgScrollY;
-            GameCanvas.menu.startAt(cmds, panelX + 24, menuY);
+            GameCanvas.menu.startAt(cmds, layoutSafeX, menuY);
             p.addMessageDetail(msg);
         }
         else if (msg.type == 1)
@@ -814,7 +814,7 @@ public partial class CustomInventoryPanel
                 cmds.addElement(new Command(msg.option[1], new ClanJoinMessageCommand(msg.id, 0), 1, null));
             }
             int menuY = panelY + 68 + row * 32 - clanMsgScrollY;
-            GameCanvas.menu.startAt(cmds, panelX + 24, menuY);
+            GameCanvas.menu.startAt(cmds, layoutSafeX, menuY);
         }
     }
 

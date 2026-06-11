@@ -17,9 +17,9 @@ public partial class CustomInventoryPanel
             if (selectedToolGroupIndex == 3 && (Panel.strAccount == null || Panel.strAccount.Length == 0))
                 p.setTypeAccount();
         }
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 42;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;
@@ -522,9 +522,9 @@ public partial class CustomInventoryPanel
             return false;
         }
         SoundMn.gI().getSoundOption();
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82;
         int gap = 6;
         bool showDetail = selectedToolAction >= 0;

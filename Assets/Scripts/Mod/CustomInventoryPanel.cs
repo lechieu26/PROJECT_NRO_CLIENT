@@ -36,6 +36,17 @@ public partial class CustomInventoryPanel
     private static int panelY;
     private static int panelW;
     private static int panelH;
+
+    // --- Computed layout fields (recalculated every frame in ComputeLayout) ---
+    private static int layoutSafeX;      // panelX + margin
+    private static int layoutSafeW;      // panelW - margin*2
+    private static int layoutLeftFrameX; // Left column frame X
+    private static int layoutLeftFrameW; // Left column frame width
+    private static int layoutRightX;     // Right column content X
+    private static int layoutRightFrameX;// Right column frame X
+    private static int layoutRightFrameW;// Right column frame width
+    private static int layoutBagCols;    // Number of bag grid columns (5 or 6)
+    private static int layoutBagGridW;   // Total bag grid pixel width
     private static int bagScrollY;
     private static int bagScrollTargetY;
     private static int bagScrollRun;
@@ -590,22 +601,53 @@ public partial class CustomInventoryPanel
 
     private static void ComputeLayout()
     {
-        panelW = (GameCanvas.w - 28 < 540) ? (GameCanvas.w - 28) : 540;
-        panelH = (GameCanvas.h - 24 < 330) ? (GameCanvas.h - 24) : 330;
-        if (panelW < 420)
-        {
-            panelW = 420;
-        }
-        if (panelH < 290)
-        {
-            panelH = 290;
-        }
+        // --- Panel size: fill available space, cap at 540×330 ---
+        panelW = (GameCanvas.w - 16 < 540) ? (GameCanvas.w - 16) : 540;
+        panelH = (GameCanvas.h - 16 < 330) ? (GameCanvas.h - 16) : 330;
+        if (panelW < 280) panelW = 280;
+        if (panelH < 220) panelH = 220;
         panelX = (GameCanvas.w - panelW) / 2;
         panelY = (GameCanvas.h - panelH) / 2;
-        if (panelY < 6)
+        if (panelY < 4) panelY = 4;
+        if (panelX < 2) panelX = 2;
+
+        // --- Computed sub-layout ---
+        int margin = (panelW >= 400) ? 24 : (panelW >= 320 ? 16 : 10);
+        layoutSafeX = panelX + margin;
+        layoutSafeW = panelW - margin * 2;
+
+        int halfW = layoutSafeW / 2;
+        int colGap = 6;
+
+        // Right column: determine frame size first to fill remaining space
+        layoutRightFrameX = layoutSafeX + halfW + colGap / 2;
+        layoutRightFrameW = layoutSafeW - halfW - colGap / 2;
+
+        int slotW = 34;
+        int slotGap = 4;
+        
+        // Luôn giữ 6 cột (hoặc 5 nếu cực kỳ hẹp)
+        int tryGridW6 = slotW * 6 + slotGap * 5; // 224
+        int tryGridW5 = slotW * 5 + slotGap * 4; // 186
+        
+        if (layoutRightFrameW >= tryGridW6 + 10)
         {
-            panelY = 6;
+            layoutBagCols = 6;
+            layoutBagGridW = tryGridW6;
         }
+        else
+        {
+            layoutBagCols = 5;
+            layoutBagGridW = tryGridW5;
+        }
+
+        // Center the grid inside the right frame
+        layoutRightX = layoutRightFrameX + (layoutRightFrameW - layoutBagGridW) / 2;
+
+        // Left column: fill remaining space on the left, but respect margin
+        layoutLeftFrameX = layoutSafeX;
+        layoutLeftFrameW = layoutRightFrameX - layoutLeftFrameX - colGap;
+        if (layoutLeftFrameW < 140) layoutLeftFrameW = 140;
     }
 
     private static Item[] GetRightTabItems()

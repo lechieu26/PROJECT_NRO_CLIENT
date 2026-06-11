@@ -21,15 +21,15 @@ public partial class CustomInventoryPanel
             if (pet.head == -1 || pet.head == 0) pet.setDefaultPart();
         }
 
-        int safeX2 = panelX + 24;
-        int safeW2 = panelW - 48;
+        int safeX2 = layoutSafeX;
+        int safeW2 = layoutSafeW;
         int leftX = safeX2;
         int leftW = safeW2 / 2 - 16;
-        int rightX2 = safeX2 + safeW2 / 2 + 10;
-        int rightW2 = 34 * 6 + 4 * 5;
+        int rightX2 = layoutRightX;
+        int rightW2 = layoutBagGridW;
 
         // Vẽ khung nền bên phải cho Inventory/Skills đệ tử
-        PaintOldPanelBox(g, rightX2 - 11, panelY + 42, 246, panelH - 30 - (panelY + 42));
+        PaintOldPanelBox(g, layoutRightFrameX, panelY + 42, layoutRightFrameW, panelH - 30 - (panelY + 42));
 
         PaintPetLeft(g, pet, leftX, leftW);
         PaintPetInfoFrame(g, pet);
@@ -60,7 +60,7 @@ public partial class CustomInventoryPanel
         int leftY = panelY + 42;
         int frameX = leftX - 3;
         int frameY = leftY;
-        int frameW = 246;
+        int frameW = layoutLeftFrameW;
         int frameH = 188;
         int centerX = frameX + frameW / 2;
         int bodyLeftX = frameX + 22;
@@ -195,8 +195,8 @@ public partial class CustomInventoryPanel
     {
         Item[] items = (Char.myCharz() != null) ? Char.myCharz().arrItemBag : null;
         int gap = 4;
-        int cols = 6;
-        int viewW = 34 * cols + gap * (cols - 1);
+        int cols = layoutBagCols;
+        int viewW = layoutBagGridW;
         int viewH = panelH - 66 - (y - panelY);
         if (viewH < 0) viewH = 0;
 
@@ -246,11 +246,9 @@ public partial class CustomInventoryPanel
 
     private static void PaintPetInfoFrame(mGraphics g, Char pet)
     {
-        int safeX = panelX + 24;
-        int leftX = safeX;
-        int statsFrameX = leftX - 3;
-        int statsFrameY = panelY + 232;
-        int statsFrameW = 246;
+        int statsFrameX = layoutLeftFrameX;
+        int statsFrameY = panelY + panelH - 95;
+        int statsFrameW = layoutLeftFrameW;
         PaintOldPanelBox(g, statsFrameX, statsFrameY, statsFrameW, 65);
         if (pet == null)
         {
@@ -354,10 +352,8 @@ public partial class CustomInventoryPanel
 
     private static bool TryHandlePetSubTabClick(bool isFire)
     {
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
-        int rightW = 34 * 6 + 4 * 5;
+        int rightX = layoutRightX;
+        int rightW = layoutBagGridW;
         int y = panelY + 44;
         int tw = rightW / PET_TABS.Length;
         for (int i = 0; i < PET_TABS.Length; i++)
@@ -381,10 +377,8 @@ public partial class CustomInventoryPanel
         {
             return false;
         }
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
-        int rightW = 34 * 6 + 4 * 5;
+        int rightX = layoutRightX;
+        int rightW = layoutBagGridW;
         int contentY = panelY + 66;
         string[] options = GetPetStatusOptions();
         int rowX;
@@ -445,12 +439,11 @@ public partial class CustomInventoryPanel
         Item[] masterBag = (master != null) ? master.arrItemBag : null;
         Item[] masterBody = (master != null) ? master.arrItemBody : null;
         Item[] petBody = (pet != null) ? pet.arrItemBody : null;
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
+        int rightX = layoutRightX;
         int rightY = panelY + 66;
         int gap = 4;
-        int bagViewW = 34 * 6 + gap * 5;
+        int cols = layoutBagCols;
+        int bagViewW = layoutBagGridW;
         int bagViewH = panelH - 132;
         if (GameCanvas.px >= rightX && GameCanvas.px <= rightX + bagViewW && GameCanvas.py >= rightY && GameCanvas.py <= rightY + bagViewH)
         {
@@ -458,9 +451,9 @@ public partial class CustomInventoryPanel
             int localY = GameCanvas.py - rightY + bagScrollY;
             int col = localX / (34 + gap);
             int row = localY / (26 + gap);
-            if (col >= 0 && col < 6 && localX % (34 + gap) < 34)
+            if (col >= 0 && col < cols && localX % (34 + gap) < 34)
             {
-                int index = row * 6 + col;
+                int index = row * cols + col;
                 Item clicked = GetItem(masterBag, index);
                 
                 selectedBagIndex = index;
@@ -491,11 +484,11 @@ public partial class CustomInventoryPanel
                 return;
             }
         }
-        int leftX = safeX;
+        int leftX = layoutSafeX;
         int leftY = panelY + 42;
         int frameX = leftX - 3;
         int frameY = leftY;
-        int frameW = 246;
+        int frameW = layoutLeftFrameW;
         int frameH = 188;
         int centerX = frameX + frameW / 2;
         int bodyLeftX = frameX + 22;

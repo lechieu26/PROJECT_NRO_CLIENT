@@ -6,9 +6,9 @@ public partial class CustomInventoryPanel
 {
     private static void PaintCharacterTab(mGraphics g)
     {
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82;
         int frameMargin = 2;
         int frameGap = 2;
@@ -239,9 +239,9 @@ public partial class CustomInventoryPanel
     {
         Char me = Char.myCharz();
         Item[] body = (me != null) ? me.arrItemBody : null;
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int frameMargin = 2;
         int topX = safeX + frameMargin;
         int topY = safeY;

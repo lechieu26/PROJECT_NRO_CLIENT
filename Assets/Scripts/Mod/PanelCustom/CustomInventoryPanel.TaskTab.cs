@@ -6,9 +6,9 @@ public partial class CustomInventoryPanel
 {
     private static void PaintTaskTab(mGraphics g)
     {
-        int safeX = panelX + 24;
+        int safeX = layoutSafeX;
         int safeY = panelY + 45;
-        int safeW = panelW - 48;
+        int safeW = layoutSafeW;
         int safeH = panelH - 82;
         Task task = (Char.myCharz() != null) ? Char.myCharz().taskMaint : null;
 

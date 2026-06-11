@@ -9,7 +9,8 @@ public partial class CustomInventoryPanel
     {
         Item[] items = GetRightTabItems();
         int count = (items != null) ? items.Length : 0;
-        int rows = count / 6 + ((count % 6 != 0) ? 1 : 0);
+        int cols = layoutBagCols;
+        int rows = count / cols + ((count % cols != 0) ? 1 : 0);
         int contentH = rows * (26 + 4);
         int max = contentH - viewH;
         return (max > 0) ? max : 0;
@@ -17,19 +18,18 @@ public partial class CustomInventoryPanel
 
     private static void PaintBagSlots(mGraphics g)
     {
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int rightX = safeX + safeW / 2 + 10;
+        int rightX = layoutRightX;
         int rightY = panelY + 66;
         int slot = 26;
         int gap = 4;
+        int cols = layoutBagCols;
         Item[] bag = (Char.myCharz() != null) ? Char.myCharz().arrItemBag : null;
         Item[] box = (Char.myCharz() != null) ? Char.myCharz().arrItemBox : null;
         Item[] items = (rightSubTab == 1) ? box : bag;
         int selectedIndex = (rightSubTab == 1) ? selectedBoxIndex : ((rightSubTab == 2) ? selectedAutoIndex : selectedBagIndex);
         int count = (items != null) ? items.Length : 0;
-        int viewW = 34 * 6 + gap * 5;
-        int viewH = panelH - 66 - (rightY - panelY); // Dừng trên vùng info (khoảng 198px)
+        int viewW = layoutBagGridW;
+        int viewH = panelH - 66 - (rightY - panelY);
         if (viewH < 0) viewH = 0;
 
         int oldClipX = g.getClipX();
@@ -39,8 +39,8 @@ public partial class CustomInventoryPanel
         g.setClip(rightX, rightY, viewW, viewH);
         for (int i = 0; i < count; i++)
         {
-            int col = i % 6;
-            int row = i / 6;
+            int col = i % cols;
+            int row = i / cols;
             int x = rightX + col * (34 + gap);
             int y = rightY + row * (slot + gap) - bagScrollY + bagElasticY;
             if (y + slot < rightY || y > rightY + viewH)
@@ -60,16 +60,15 @@ public partial class CustomInventoryPanel
 
     private static void PaintEmptySlots(mGraphics g)
     {
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
         int frameY = panelY + 42;
-        int frameW = 246;
         int frameH = panelH - 30 - (panelY + 42);
         
         // 1. Vẽ 3 khung nền chính
-        PaintOldPanelBox(g, safeX - 3, frameY, frameW, 188); // Box Trang bị (Trái trên)
-        PaintOldPanelBox(g, safeX - 3, panelY + 232, 246, 65); // Box Chỉ số (Trái dưới)
-        PaintOldPanelBox(g, safeX + safeW / 2 + 10 - 11, frameY, frameW, frameH); // Box Hành trang (Phải)
+        int equipBoxH = panelH - 142;
+        int statsBoxY = panelY + panelH - 95;
+        PaintOldPanelBox(g, layoutLeftFrameX, frameY, layoutLeftFrameW, equipBoxH); // Box Trang bị (Trái trên)
+        PaintOldPanelBox(g, layoutLeftFrameX, statsBoxY, layoutLeftFrameW, 65); // Box Chỉ số (Trái dưới)
+        PaintOldPanelBox(g, layoutRightFrameX, frameY, layoutRightFrameW, frameH); // Box Hành trang (Phải)
 
         // 2. Vẽ SubTabs và TitleBars trên nền box
         PaintSubTabs(g);
@@ -78,20 +77,13 @@ public partial class CustomInventoryPanel
         // 3. Vẽ nội dung items
         PaintBodySlots(g);
         PaintBagSlots(g);
-        
-
     }
 
     private static void PaintBodySlots(mGraphics g)
     {
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int leftX = safeX;
-        int leftY = panelY + 42;
-        int leftW = safeW / 2 - 16;
-        int frameX = safeX - 3;
+        int frameX = layoutLeftFrameX;
         int frameY = panelY + 42;
-        int frameW = 246;
+        int frameW = layoutLeftFrameW;
         int centerX = frameX + frameW / 2;
         int bodyLeftX = frameX + 22;
         int bodyRightX = frameX + frameW - 22 - 36;
@@ -213,14 +205,10 @@ public partial class CustomInventoryPanel
         {
             return;
         }
-        int safeX = panelX + 24;
-        int safeW = panelW - 48;
-        int leftX = safeX;
-        int leftY = panelY + 42;
-        int leftW = safeW / 2 - 16;
+        int leftW = layoutLeftFrameW;
         int boxW = leftW - 4;
         int boxH = 52;
-        int x = leftX + 2;
+        int x = layoutLeftFrameX + 2;
         int y = panelY + panelH - boxH - 14;
         Fill(g, x, y, boxW, boxH, 0xFFF1CF);
         g.setColor(0x7B4D1F);
