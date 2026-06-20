@@ -341,6 +341,10 @@ public class GameScr : mScreen, IChatable
 
 	public static Image imgMercOff;
 
+	public static Image imgSidebar;
+
+	public static Image imgSidebarOn;
+
 	public static bool isAutoMercenary;
 	public static int tickAutoMercenaryMissing;
 	public static long lastTimeClickAutoMercenary;
@@ -619,9 +623,9 @@ public class GameScr : mScreen, IChatable
 
 	public static int yHP;
 
-	private static int xTG;
+	public static int xTG;
 
-	private static int yTG;
+	public static int yTG;
 
 	public static int[] xS;
 
@@ -901,6 +905,8 @@ public class GameScr : mScreen, IChatable
 			imgHP4 = GameCanvas.loadImage("/mainImage/myTexture2dPea3.png");
 			imgMercOn = GameCanvas.loadImage("/mainImage/Merc_on.png");
 			imgMercOff = GameCanvas.loadImage("/mainImage/Merc_off.png");
+			imgSidebar = GameCanvas.loadImage("/mainImage/icon_side_bar.png");
+			imgSidebarOn = GameCanvas.loadImage("/mainImage/icon_side_bar_on.png");
 			imgFire0 = GameCanvas.loadImage("/mainImage/myTexture2dfirebtn0.png");
 			imgFire1 = GameCanvas.loadImage("/mainImage/myTexture2dfirebtn1.png");
 			imgModFunc = GameCanvas.loadImage("/mainImage/imgModFuc.png");
@@ -4224,39 +4230,6 @@ public class GameScr : mScreen, IChatable
 				GameCanvas.clearAllPointerEvent();
 				flareFindFocus = true;
 				flareTime = 5;
-				return;
-			}
-			int xMerc = (!Main.isIPhone ? xHP + 10 : xSkill + 6 * wSkill + 5);
-			int yMerc = (!Main.isIPhone ? yHP - 40 : ySkill - wSkill - 2);
-			if (GameCanvas.isPointerHoldIn(xMerc, yMerc, 40, 40) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
-			{
-				if (mSystem.currentTimeMillis() - lastTimeClickAutoMercenary < 5000)
-				{
-					info1.addInfo("Vui lòng đợi 5s để thực hiện tiếp!", 0);
-					GameCanvas.clearAllPointerEvent();
-					return;
-				}
-				lastTimeClickAutoMercenary = mSystem.currentTimeMillis();
-				if (!isAutoMercenary)
-				{
-					if (!isHaveCloneOrMercenary())
-					{
-						info1.addInfo("Không có Lính đánh thuê hoặc Phân thân!", 0);
-						isAutoMercenary = false;
-					}
-					else
-					{
-						isAutoMercenary = true;
-						info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Bật", 0);
-						Service.gI().sendAutoMercenaryCommand(true);
-					}
-				}
-				else
-				{
-					isAutoMercenary = false;
-					info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Tắt", 0);
-					Service.gI().sendAutoMercenaryCommand(false);
-				}
 				GameCanvas.clearAllPointerEvent();
 				return;
 			}
@@ -6003,12 +5976,7 @@ public class GameScr : mScreen, IChatable
 					mFont.tahoma_7_green2.drawString(g, string.Empty + hpPotion, xHP + 20, yHP + 11, 2);
 				}
 			}
-			if (imgMercOn != null && imgMercOff != null)
-			{
-				int xMerc2 = (!Main.isIPhone ? xHP + 20 : xSkill + 6 * wSkill + 25);
-				int yMerc2 = (!Main.isIPhone ? yHP - 30 : ySkill - wSkill + 18);
-				g.drawImage(isAutoMercenary ? imgMercOn : imgMercOff, xMerc2, yMerc2, mGraphics.HCENTER | mGraphics.VCENTER);
-			}
+			// Nút Mercenary đã được chuyển sang Sidebar
 			if (isHaveSelectSkill)
 			{
 				Skill[] array = (Main.isPC ? keySkill : ((!GameCanvas.isTouch) ? keySkill : onScreenSkill));
@@ -6054,6 +6022,7 @@ public class GameScr : mScreen, IChatable
 				}
 			}
 			paintGamePad(g);
+			ModFunc.GI().PaintSidebar(g);
 		}
 	}
 

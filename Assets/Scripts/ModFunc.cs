@@ -415,35 +415,17 @@ public class ModFunc : IActionListener
     public static long timeUse;
     public static AutoItem autoItem = new AutoItem();
 
+    public static bool isSidebarOpen = false;
+    public static float sidebarAnimX = 0f;
+    private static readonly string[] sidebarButtons = new string[] {
+        "Capsule", "Fusion", "ShowBoss", "MapLeft", "MapCenter", "MapRight"
+    };
+
     private static readonly Dictionary<string, Point> defaultButtonPositions = new Dictionary<string, Point>
     {
         {
-            "Capsule",
-            new Point(20, -26)
-        },
-        {
-            "Fusion",
-            new Point(-21, 21)
-        },
-        {
             "Zone",
             new Point(-66, 62)
-        },
-        {
-            "MapLeft",
-            new Point(-106, 62)
-        },
-        {
-            "MapCenter",
-            new Point(-66, 21)
-        },
-        {
-            "MapRight",
-            new Point(-21, -26)
-        },
-        {
-            "ShowBoss",
-            new Point(20, -60)
         }
     };
 
@@ -1201,27 +1183,9 @@ public class ModFunc : IActionListener
             {
                 switch (kvp2.Key)
                 {
-                    case "Capsule":
-                        UseItem(194);
-                        break;
-                    case "Fusion":
-                        UsePorata();
-                        break;
                     case "Zone":
                         userOpenZones = true;
                         Service.gI().openUIZone();
-                        break;
-                    case "MapLeft":
-                        ManualXmap.GI().LoadMapLeft();
-                        break;
-                    case "MapCenter":
-                        ManualXmap.GI().LoadMapCenter();
-                        break;
-                    case "MapRight":
-                        ManualXmap.GI().LoadMapRight();
-                        break;
-                    case "ShowBoss":
-                        UseItem(idRadaDoBoss);
                         break;
                 }
                 GameCanvas.clearAllPointerEvent();
@@ -1374,6 +1338,7 @@ public class ModFunc : IActionListener
     {
         AutoItem.mAutoItem.autoUseItemsFunc();
         UpdateTouch();
+        UpdateSidebarTouch();
         long currentTime = mSystem.currentTimeMillis();
         if (isPeanPet && currentTime - lastPeanPet >= 3000)
         {
@@ -1467,53 +1432,11 @@ public class ModFunc : IActionListener
             int buttonY = yAnchor + pos.y;
             switch (buttonName)
             {
-                case "Capsule":
-                    g.drawImage(GameScr.imgCapsule, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    if (GameCanvas.isPointerHoldIn(buttonX - 15, buttonY - 15, 30, 30))
-                    {
-                        g.drawImage(GameScr.imgCapsuleF, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    }
-                    break;
-                case "Fusion":
-                    g.drawImage(GameScr.imgFusion, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    if (GameCanvas.isPointerHoldIn(buttonX - 15, buttonY - 15, 30, 30))
-                    {
-                        g.drawImage(GameScr.imgFusionF, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    }
-                    break;
                 case "Zone":
                     g.drawImage(GameScr.imgChangeZone, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
                     if (GameCanvas.isPointerHoldIn(buttonX - 15, buttonY - 15, 30, 30))
                     {
                         g.drawImage(GameScr.imgChangeZoneF, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    }
-                    break;
-                case "MapLeft":
-                    g.drawImage(GameScr.imgNextLeft, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    if (GameCanvas.isPointerHoldIn(buttonX - 15, buttonY - 15, 30, 30))
-                    {
-                        g.drawImage(GameScr.imgNextLeftF, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    }
-                    break;
-                case "MapCenter":
-                    g.drawImage(GameScr.imgNextCenter, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    if (GameCanvas.isPointerHoldIn(buttonX - 15, buttonY - 15, 30, 30))
-                    {
-                        g.drawImage(GameScr.imgNextCenterF, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    }
-                    break;
-                case "MapRight":
-                    g.drawImage(GameScr.imgNextRight, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    if (GameCanvas.isPointerHoldIn(buttonX - 15, buttonY - 15, 30, 30))
-                    {
-                        g.drawImage(GameScr.imgNextRightF, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    }
-                    break;
-                case "ShowBoss":
-                    g.drawImage(GameScr.imgShowboss, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
-                    if (GameCanvas.isPointerHoldIn(buttonX - 15, buttonY - 15, 30, 30))
-                    {
-                        g.drawImage(GameScr.imgShowbossF, buttonX, buttonY, mGraphics.HCENTER | mGraphics.VCENTER);
                     }
                     break;
             }
@@ -4126,6 +4049,266 @@ public class ModFunc : IActionListener
             if (currentPage < totalPages - 1 && GameCanvas.isPointerHoldIn(menuChatX + imgMenuChat.getWidth() - 80, menuChatY + imgMenuChat.getHeight() - 30, 80, 20))
             {
                 currentPage++;
+            }
+        }
+    }
+
+    public void PaintSidebar(mGraphics g)
+    {
+        PaintMercenary(g);
+
+        if (!isShowButton || GameCanvas.currentDialog != null || ChatPopup.currChatPopup != null || GameCanvas.menu.showMenu || GameScr.gI().isPaintPopup() || GameCanvas.panel.isShow || Char.myCharz().taskMaint.taskId == 0 || ChatTextField.gI().isShow || GameCanvas.currentScreen == MoneyCharge.instance)
+        {
+            return;
+        }
+
+        float targetAnim = isSidebarOpen ? 1f : 0f;
+        if (sidebarAnimX != targetAnim)
+        {
+            sidebarAnimX += (targetAnim - sidebarAnimX) * 0.3f;
+            if (System.Math.Abs(sidebarAnimX - targetAnim) < 0.01f) sidebarAnimX = targetAnim;
+        }
+
+        int iconSize = 30;
+        int spacing = 5;
+        int btnCount = sidebarButtons.Length;
+        int cols = 3;
+        int rows = (btnCount + cols - 1) / cols;
+        int totalHeight = rows * iconSize + (rows - 1) * spacing;
+        int startX, toggleY;
+        GetSidebarPos(out startX, out toggleY);
+
+        if (!isSidebarOpen && GameScr.imgSidebarOn != null)
+        {
+            g.drawImage(GameScr.imgSidebarOn, startX, toggleY, mGraphics.HCENTER | mGraphics.VCENTER);
+        }
+        else if (isSidebarOpen && GameScr.imgSidebar != null)
+        {
+            g.drawImage(GameScr.imgSidebar, startX, toggleY, mGraphics.HCENTER | mGraphics.VCENTER);
+        }
+
+        if (sidebarAnimX > 0.01f)
+        {
+            int maxOffset = 110;
+            int panelStartX = startX - maxOffset; // Khu vực bắt đầu của icon con (bên trái nút toggle)
+            int animOffsetX = (int)((1f - sidebarAnimX) * maxOffset);
+            int startY = toggleY - (totalHeight / 2);
+
+            for (int i = 0; i < btnCount; i++)
+            {
+                int col = i % cols;
+                int row = i / cols;
+                int btnX = panelStartX + animOffsetX + (col * (iconSize + spacing));
+                int currentY = startY + (row * (iconSize + spacing));
+
+                if (btnX > GameCanvas.w) continue;
+                string btnName = sidebarButtons[i];
+                switch (btnName)
+                {
+                    case "Capsule":
+                        if (GameScr.imgCapsule != null)
+                        {
+                            g.drawImage(GameScr.imgCapsule, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                            if (GameCanvas.isPointerHoldIn(btnX - 15, currentY - 15, 30, 30) && GameScr.imgCapsuleF != null)
+                                g.drawImage(GameScr.imgCapsuleF, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                        }
+                        break;
+                    case "Fusion":
+                        if (GameScr.imgFusion != null)
+                        {
+                            g.drawImage(GameScr.imgFusion, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                            if (GameCanvas.isPointerHoldIn(btnX - 15, currentY - 15, 30, 30) && GameScr.imgFusionF != null)
+                                g.drawImage(GameScr.imgFusionF, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                        }
+                        break;
+                    case "ShowBoss":
+                        if (GameScr.imgShowboss != null)
+                        {
+                            g.drawImage(GameScr.imgShowboss, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                            if (GameCanvas.isPointerHoldIn(btnX - 15, currentY - 15, 30, 30) && GameScr.imgShowbossF != null)
+                                g.drawImage(GameScr.imgShowbossF, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                        }
+                        break;
+                    case "MapLeft":
+                        if (GameScr.imgNextLeft != null)
+                        {
+                            g.drawImage(GameScr.imgNextLeft, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                            if (GameCanvas.isPointerHoldIn(btnX - 15, currentY - 15, 30, 30) && GameScr.imgNextLeftF != null)
+                                g.drawImage(GameScr.imgNextLeftF, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                        }
+                        break;
+                    case "MapCenter":
+                        if (GameScr.imgNextCenter != null)
+                        {
+                            g.drawImage(GameScr.imgNextCenter, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                            if (GameCanvas.isPointerHoldIn(btnX - 15, currentY - 15, 30, 30) && GameScr.imgNextCenterF != null)
+                                g.drawImage(GameScr.imgNextCenterF, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                        }
+                        break;
+                    case "MapRight":
+                        if (GameScr.imgNextRight != null)
+                        {
+                            g.drawImage(GameScr.imgNextRight, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                            if (GameCanvas.isPointerHoldIn(btnX - 15, currentY - 15, 30, 30) && GameScr.imgNextRightF != null)
+                                g.drawImage(GameScr.imgNextRightF, btnX, currentY, mGraphics.HCENTER | mGraphics.VCENTER);
+                        }
+                        break;
+            }
+        }
+    }
+}
+
+    private void GetSidebarPos(out int startX, out int toggleY)
+    {
+        startX = GameScr.xHP + 20;
+        toggleY = GameScr.yHP - 25; // Đặt trên hạt đậu
+    }
+
+    private void GetMercenaryPos(out int x, out int y)
+    {
+        if (!Main.isIPhone)
+        {
+            // PC: Nằm phía trên icon sidebar
+            int startX, toggleY;
+            GetSidebarPos(out startX, out toggleY);
+            x = startX;
+            y = toggleY - 40;
+        }
+        else
+        {
+            // Mobile: Nằm bên cạnh trái icon Zone
+            InitButtonPositions();
+            Point pos = buttonPositions.ContainsKey("Zone") ? buttonPositions["Zone"] : new Point(-66, 62);
+            int xtg = modKeyPosX > 0 ? modKeyPosX : (GameScr.xTG > 0 ? GameScr.xTG : GameCanvas.w - 45);
+            int ytg = modKeyPosY > 0 ? modKeyPosY : (GameScr.yTG > 0 ? GameScr.yTG : GameCanvas.h - 90);
+            x = xtg + pos.x - 45;
+            y = ytg + pos.y;
+        }
+    }
+
+    public void PaintMercenary(mGraphics g)
+    {
+        if (!isShowButton || GameCanvas.currentDialog != null || ChatPopup.currChatPopup != null || GameCanvas.menu.showMenu || GameScr.gI().isPaintPopup() || GameCanvas.panel.isShow || Char.myCharz().taskMaint.taskId == 0 || ChatTextField.gI().isShow || GameCanvas.currentScreen == MoneyCharge.instance)
+        {
+            return;
+        }
+
+        if (GameScr.imgMercOn != null && GameScr.imgMercOff != null)
+        {
+            int x, y;
+            GetMercenaryPos(out x, out y);
+            g.drawImage(GameScr.isAutoMercenary ? GameScr.imgMercOn : GameScr.imgMercOff, x, y, mGraphics.HCENTER | mGraphics.VCENTER);
+        }
+    }
+
+    public void UpdateMercenaryTouch()
+    {
+        if (!isShowButton || GameCanvas.currentDialog != null || ChatPopup.currChatPopup != null || GameCanvas.menu.showMenu || GameScr.gI().isPaintPopup() || GameCanvas.panel.isShow || Char.myCharz().taskMaint.taskId == 0 || ChatTextField.gI().isShow || GameCanvas.currentScreen == MoneyCharge.instance)
+        {
+            return;
+        }
+
+        int mercX, mercY;
+        GetMercenaryPos(out mercX, out mercY);
+        if (GameCanvas.isPointerHoldIn(mercX - 15, mercY - 15, 30, 30) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
+        {
+            if (mSystem.currentTimeMillis() - GameScr.lastTimeClickAutoMercenary < 5000)
+            {
+                GameScr.info1.addInfo("Vui lòng đợi 5s để thực hiện tiếp!", 0);
+            }
+            else
+            {
+                GameScr.lastTimeClickAutoMercenary = mSystem.currentTimeMillis();
+                if (!GameScr.isAutoMercenary)
+                {
+                    if (!GameScr.isHaveCloneOrMercenary())
+                    {
+                        GameScr.info1.addInfo("Không có Lính đánh thuê hoặc Phân thân!", 0);
+                        GameScr.isAutoMercenary = false;
+                    }
+                    else
+                    {
+                        GameScr.isAutoMercenary = true;
+                        GameScr.info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Bật", 0);
+                        Service.gI().sendAutoMercenaryCommand(true);
+                    }
+                }
+                else
+                {
+                    GameScr.isAutoMercenary = false;
+                    GameScr.info1.addInfo("Lính đánh thuê/ Phân thân \nTự đánh: Tắt", 0);
+                    Service.gI().sendAutoMercenaryCommand(false);
+                }
+            }
+            GameCanvas.clearAllPointerEvent();
+        }
+    }
+
+    public void UpdateSidebarTouch()
+    {
+        UpdateMercenaryTouch();
+
+        if (!isShowButton || GameCanvas.currentDialog != null || ChatPopup.currChatPopup != null || GameCanvas.menu.showMenu || GameScr.gI().isPaintPopup() || GameCanvas.panel.isShow || Char.myCharz().taskMaint.taskId == 0 || ChatTextField.gI().isShow || GameCanvas.currentScreen == MoneyCharge.instance)
+        {
+            return;
+        }
+
+        int startX, toggleY;
+        GetSidebarPos(out startX, out toggleY);
+
+        if (GameCanvas.isPointerHoldIn(startX - 15, toggleY - 15, 30, 30) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
+        {
+            isSidebarOpen = !isSidebarOpen;
+            SoundMn.gI().buttonClick();
+            GameCanvas.clearAllPointerEvent();
+            return;
+        }
+
+        if (isSidebarOpen && sidebarAnimX > 0.5f)
+        {
+            int iconSize = 30;
+            int spacing = 5;
+            int btnCount = sidebarButtons.Length;
+            int cols = 3;
+            int rows = (btnCount + cols - 1) / cols;
+            int totalHeight = rows * iconSize + (rows - 1) * spacing;
+            int startY = toggleY - (totalHeight / 2);
+            int panelStartX = startX - 110;
+
+            for (int i = 0; i < btnCount; i++)
+            {
+                int col = i % cols;
+                int row = i / cols;
+                int btnX = panelStartX + (col * (iconSize + spacing));
+                int currentY = startY + (row * (iconSize + spacing));
+
+                if (GameCanvas.isPointerHoldIn(btnX - 15, currentY - 15, 30, 30) && GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
+                {
+                    string btnName = sidebarButtons[i];
+                    switch (btnName)
+                    {
+                        case "Capsule":
+                            UseItem(194);
+                            break;
+                        case "Fusion":
+                            UsePorata();
+                            break;
+                        case "ShowBoss":
+                            UseItem(idRadaDoBoss);
+                            break;
+                        case "MapLeft":
+                            ManualXmap.GI().LoadMapLeft();
+                            break;
+                        case "MapCenter":
+                            ManualXmap.GI().LoadMapCenter();
+                            break;
+                        case "MapRight":
+                            ManualXmap.GI().LoadMapRight();
+                            break;
+                    }
+                    GameCanvas.clearAllPointerEvent();
+                    return;
+                }
             }
         }
     }
