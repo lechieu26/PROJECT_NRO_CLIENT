@@ -14,6 +14,7 @@ public static class SpineSkillEffectController
         public int charId;
         public GameObject go;
         public long endTime;
+        public int oldHead;
     }
 
     public static readonly Dictionary<int, ActiveEffect> activeEffects = new Dictionary<int, ActiveEffect>();
@@ -61,14 +62,16 @@ public static class SpineSkillEffectController
             meshRenderer.sortingOrder = 32766;
         }
 
+        Char c = GetChar(charId);
+
         activeEffects[charId] = new ActiveEffect
         {
             charId = charId,
             go = go,
-            endTime = mSystem.currentTimeMillis() + durationMs
+            endTime = mSystem.currentTimeMillis() + durationMs + 2000, // Thêm 2 giây chờ server phản hồi skin mới
+            oldHead = c != null ? c.head : -1
         };
 
-        Char c = GetChar(charId);
         if (c != null)
         {
             c.isWaitBienHinh = true;
@@ -97,12 +100,18 @@ public static class SpineSkillEffectController
                 toRemove.Add(kvp.Key);
                 continue;
             }
+            // Chỉ kiểm tra thay đổi skin khi effect đã chạy gần xong (tránh lỗi ngắt sớm)
+            if (c.head != effect.oldHead && effect.oldHead != -1 && now > (effect.endTime - 2000 - 1000))
+            {
+                toRemove.Add(kvp.Key);
+                continue;
+            }
 
-            float screenX = (c.cx - GameScr.cmx) * zoom;
+            float screenX = (c.cx - GameScr.cmx - 3) * zoom;
             float screenY = Screen.height - (c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
             effect.go.transform.position = new Vector3(screenX, screenY, 0f);
             // kích thước spine skill
-            float scale = 8f * zoom; // Cập nhật lại kích thước (trước đây là 22f)
+            float scale = 8.5f * zoom; // Cập nhật lại kích thước (trước đây là 22f)
             effect.go.transform.localScale = new Vector3(scale * c.cdir, scale, 1f);
         }
 

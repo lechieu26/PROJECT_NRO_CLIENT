@@ -2137,14 +2137,17 @@ public class Char : IMapObject
 			{
 				isLockMove = true;
 				cf = 17;
-				// if (GameCanvas.gameTick % 5 == 0)
-				// {
-				// 	ServerEffect.addServerEffect(154, cx, cy - 10, 2);
-				// }
-				// if (GameCanvas.gameTick % 5 == 0)
-				// {
-				// 	ServerEffect.addServerEffect(1, cx, cy + 10, 1);
-				// }
+				if (!SpineSkillEffectController.activeEffects.ContainsKey(charID))
+				{
+					if (GameCanvas.gameTick % 5 == 0)
+					{
+						ServerEffect.addServerEffect(154, cx, cy - 10, 2);
+					}
+					if (GameCanvas.gameTick % 5 == 0)
+					{
+						ServerEffect.addServerEffect(1, cx, cy + 10, 1);
+					}
+				}
 				if (mSystem.currentTimeMillis() - lastWaitBienHinh >= 4000)
 				{
 					isWaitBienHinh = false;
@@ -7681,7 +7684,7 @@ public class Char : IMapObject
 	public void paintAuraBehind(mGraphics g)
 	{
 		if (!ModFunc.GiamDungLuong && (!me || !isPaintAura) && idAuraEff > -1 && (statusMe == 1 || statusMe == 6) && !GameCanvas.panel.isShow && mSystem.currentTimeMillis() - timeBlue > 0)
-		{
+		{ // Độ trong suốt của aura
 			g.setAlpha(0.6f);
 			FrameImage fraImage = mSystem.getFraImage(strEffAura + idAuraEff + "_0");
 			fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, cx, cy, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
