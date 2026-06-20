@@ -1719,7 +1719,7 @@ public class GameScr : mScreen, IChatable
 		int rowSize = array.Length > 5 ? array.Length / 2 : array.Length;
 		if (GameCanvas.isTouchControlSmallScreen && isUseTouch)
 		{
-			xSkill = 23;
+			xSkill = 53;
 			ySkill = 52;
 			padSkill = 5;
 			wSkill = 25 + padSkill;
@@ -1742,12 +1742,12 @@ public class GameScr : mScreen, IChatable
 			if (GameCanvas.w <= 320)
 			{
 				ySkill = gH - wSkill - 6;
-				xSkill = gW2 - rowSize * wSkill / 2 - 25;
+				xSkill = gW2 - rowSize * wSkill / 2 + 5;
 			}
 			else
 			{
 				wSkill = 40;
-				xSkill = 10;
+				xSkill = 40;
 				ySkill = GameCanvas.h - wSkill + 7;
 			}
 			for (int j = 0; j < xS.Length; j++)
@@ -1767,7 +1767,7 @@ public class GameScr : mScreen, IChatable
 		{
 			return;
 		}
-		xSkill = 85;
+		xSkill = 115;
 		ySkill = GameCanvas.h - 42;
 		if (gamePad.isSmallGamePad && isAnalog == 1)
 		{
@@ -6884,7 +6884,7 @@ public class GameScr : mScreen, IChatable
 			xTG = (xF = GameCanvas.w - 45);
 			if (gamePad.isLargeGamePad)
 			{
-				xSkill = 85;
+				xSkill = 115;
 				wSkill = 35;
 				xHP = xF - 45;
 			}
