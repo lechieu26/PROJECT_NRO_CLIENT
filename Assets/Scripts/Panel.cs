@@ -347,17 +347,16 @@ public class Panel : IActionListener, IChatable
         if (this.vFarmSeeds.size() == 0)
         {
             GameScr.info1.addInfo("Bạn không có hạt giống nào!", 0);
-            this.hide();
-            return;
         }
-        // Tính số hàng: tối thiểu 5 hàng (25 ô), nếu > 25 hạt thì tính động
-        int minRows = 5; // Tối thiểu 5 hàng = 25 ô
-        int calculatedRows = this.vFarmSeeds.size() / 5 + ((this.vFarmSeeds.size() % 5 > 0) ? 1 : 0);
+        // Vẽ đủ 60 ô như kho item, kể cả ô trống; nếu nhiều hơn thì mở rộng thêm hàng.
+        int minRows = FARM_SEED_MIN_SLOT_COUNT / FARM_SEED_COLS;
+        int calculatedRows = this.vFarmSeeds.size() / FARM_SEED_COLS + ((this.vFarmSeeds.size() % FARM_SEED_COLS > 0) ? 1 : 0);
         this.currentListLength = (calculatedRows > minRows) ? calculatedRows : minRows;
-        this.ITEM_HEIGHT = 36;
+        this.ITEM_HEIGHT = FARM_SEED_ROW_H;
         this.selected = -1;
         this.currItem = null;
         this.pointerIsDowning = false;
+        this.farmSeedDragged = false;
         Debug.Log("setTypeFarmSeed: selected reset to -1");
         if (this.lastSelect != null)
         {
@@ -366,7 +365,7 @@ public class Panel : IActionListener, IChatable
                 this.lastSelect[j] = -1;
             }
         }
-        this.cmyLim = this.currentListLength * this.ITEM_HEIGHT - this.hScroll;
+        this.cmyLim = this.currentListLength * FARM_SEED_ROW_H - this.hScroll;
         if (this.cmyLim < 0) this.cmyLim = 0;
         this.cmy = (this.cmtoY = 0);
     }
@@ -375,11 +374,14 @@ public class Panel : IActionListener, IChatable
     private void paintFarmSeed(mGraphics g)
     {
         g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
+        g.translate(0, -this.cmy);
 
-        int slotW = 34;
-        int slotH = 34;
+        int slotW = FARM_SEED_SLOT_W;
+        int slotH = FARM_SEED_SLOT_H;
+        int cellW = FARM_SEED_ROW_W;
+        int cellH = FARM_SEED_ROW_H;
 
-        int col = 5;
+        int col = FARM_SEED_COLS;
         // Tính số ô cần vẽ dựa trên số lượng hạt giống thực tế (làm tròn lên để đủ hàng)
         int rows = this.currentListLength; // Đã được tính trong setTypeFarmSeed()
         int maxSlot = rows * col; // Số ô động dựa trên số hàng thực tế
@@ -389,8 +391,8 @@ public class Panel : IActionListener, IChatable
             int row = i / col;
             int c = i % col;
 
-            int x = this.xScroll + c * (slotW + 2);
-            int y = this.yScroll + row * (slotH + 2) - this.cmy;
+            int x = this.xScroll + c * cellW;
+            int y = this.yScroll + row * cellH;
 
             // ===== Vẽ nền ô =====
             if (i == this.selected)
@@ -399,34 +401,47 @@ public class Panel : IActionListener, IChatable
                 g.fillRect(x - 1, y - 1, slotW + 2, slotH + 2, 5);
             }
 
-            g.setColor(6047789, 0.3f);
+            Item item = (i < this.vFarmSeeds.size()) ? (Item)this.vFarmSeeds.elementAt(i) : null;
+            int itemColor = 6047789;
+            float itemAlpha = 0.2f;
+            if (item != null && item.itemOption != null)
+            {
+                for (int opt = 0; opt < item.itemOption.Length; opt++)
+                {
+                    if (item.itemOption[opt].optionTemplate.id == 72 && item.itemOption[opt].param > 0)
+                    {
+                        byte id = (byte)Panel.GetColor_Item_Upgrade(item.itemOption[opt].param);
+                        if (Panel.GetColor_ItemBg((int)id) != -1)
+                        {
+                            itemColor = Panel.GetColor_ItemBg((int)id);
+                            itemAlpha = 0.3f;
+                        }
+                    }
+                }
+            }
+            g.setColor(itemColor, itemAlpha);
             g.fillRect(x, y, slotW, slotH, 5);
+            this.paintEffectItem(g, item, x, y, slotW, slotH);
 
             // ===== Nếu có item =====
-            if (i < this.vFarmSeeds.size())
+            if (item != null)
             {
-                Item item = (Item)this.vFarmSeeds.elementAt(i);
-                if (item != null)
+                float offset = (i == this.selected) ?
+                    ((float)System.Math.Sin((float)GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+
+                // ✅ Vẽ icon chính giữa ô
+                SmallImage.drawSmallImage(g, (int)item.template.iconID,
+                    x + slotW / 2,
+                    y + slotH / 2 + (int)offset,
+                    0, 3);
+
+                // ===== Vẽ số lượng =====
+                if (item.quantity > 1)
                 {
-                    this.paintEffectItem(g, item, x, y, slotW, slotH);
-
-                    float offset = (i == this.selected) ?
-                        ((float)System.Math.Sin((float)GameCanvas.gameTick * 0.2f) * 2f) : 0f;
-
-                    // ✅ Vẽ icon chính giữa ô
-                    SmallImage.drawSmallImage(g, (int)item.template.iconID,
-                        x + slotW / 2,
-                        y + slotH / 2 + (int)offset,
-                        0, 3);
-
-                    // ===== Vẽ số lượng =====
-                    if (item.quantity > 1)
-                    {
-                        mFont.tahoma_7_yellow.drawString(g, "" + item.quantity,
-                            x + slotW - 1,
-                            y + slotH - mFont.tahoma_7_yellow.getHeight(),
-                            mFont.RIGHT);
-                    }
+                    mFont.tahoma_7_yellow.drawString(g, "" + item.quantity,
+                        x + slotW - 1,
+                        y + slotH - mFont.tahoma_7_yellow.getHeight(),
+                        mFont.RIGHT);
                 }
             }
         }
@@ -444,7 +459,28 @@ public class Panel : IActionListener, IChatable
             if (GameCanvas.isPointer(this.xScroll, this.yScroll, this.wScroll, this.hScroll))
             {
                 this.pointerDownFirstY = GameCanvas.py;
+                this.pointerDownLastY = GameCanvas.py;
                 this.pointerIsDowning = true;
+                this.farmSeedDragged = false;
+                this.cmRun = 0;
+            }
+        }
+
+        if (GameCanvas.isPointerDown && this.pointerIsDowning)
+        {
+            int dy = GameCanvas.py - this.pointerDownLastY;
+            if (dy != 0)
+            {
+                if (Res.abs(GameCanvas.py - this.pointerDownFirstY) > 5)
+                {
+                    this.farmSeedDragged = true;
+                    this.selected = -1;
+                }
+                this.cmy -= dy;
+                if (this.cmy < 0) this.cmy = 0;
+                if (this.cmy > this.cmyLim) this.cmy = this.cmyLim;
+                this.cmtoY = this.cmy;
+                this.pointerDownLastY = GameCanvas.py;
             }
         }
 
@@ -452,23 +488,35 @@ public class Panel : IActionListener, IChatable
         if (GameCanvas.isPointerJustRelease && this.pointerIsDowning)
         {
             // Nếu không kéo nhiều thì coi như click
-            if (Res.abs(GameCanvas.py - this.pointerDownFirstY) < 20)
+            if (!this.farmSeedDragged && Res.abs(GameCanvas.py - this.pointerDownFirstY) < 20)
             {
                 int x = GameCanvas.px - this.xScroll;
                 int y = GameCanvas.py - this.yScroll + this.cmy;
 
-                int slotW = 36; // 34 + 2 spacing
-                int slotH = this.ITEM_HEIGHT; // 35
+                int slotW = FARM_SEED_SLOT_W;
+                int slotH = FARM_SEED_SLOT_H;
+                int cellW = FARM_SEED_ROW_W;
+                int cellH = FARM_SEED_ROW_H;
 
-                int col = x / slotW;
-                int row = y / slotH;
+                int col = x / cellW;
+                int row = y / cellH;
 
-                if (col >= 0 && col < 5 && row >= 0)
+                if (col >= 0 && col < FARM_SEED_COLS && row >= 0)
                 {
-                    int index = row * 5 + col;
+                    int localX = x - col * cellW;
+                    int localY = y - row * cellH;
+                    if (localX < 0 || localX >= slotW || localY < 0 || localY >= slotH)
+                    {
+                        this.pointerIsDowning = false;
+                        GameCanvas.isPointerJustRelease = false;
+                        this.moveCamera();
+                        return;
+                    }
+
+                    int index = row * FARM_SEED_COLS + col;
                     // Tính maxSlot dựa trên số hàng thực tế (giống paintFarmSeed)
                     int maxRows = this.currentListLength;
-                    int maxSlot = maxRows * 5;
+                    int maxSlot = maxRows * FARM_SEED_COLS;
                     // Cho phép chọn bất kỳ ô nào trong grid động, kể cả ô trống
                     if (index >= 0 && index < maxSlot)
                     {
@@ -481,6 +529,7 @@ public class Panel : IActionListener, IChatable
                 }
             }
             this.pointerIsDowning = false;
+            this.farmSeedDragged = false;
             GameCanvas.isPointerJustRelease = false;
         }
 
@@ -489,12 +538,14 @@ public class Panel : IActionListener, IChatable
     }
 
     private int pointerDownFirstY; // Thêm field để track vị trí pointer down
+    private int pointerDownLastY;
+    private bool farmSeedDragged;
 
     private void doFireFarmSeed()
     {
         // Tính maxSlot dựa trên số hàng thực tế
         int maxRows = this.currentListLength;
-        int maxSlot = maxRows * 5;
+        int maxSlot = maxRows * FARM_SEED_COLS;
         if (this.selected < 0 || this.selected >= maxSlot) return;
 
         if (this.selected >= this.vFarmSeeds.size())
@@ -517,8 +568,8 @@ public class Panel : IActionListener, IChatable
         myVector.addElement(new Command("Vứt", this, 2003, item));
 
         // Tính vị trí menu giống inventory: dựa trên row của item
-        int row = this.selected / 5;
-        int menuY = (row + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll;
+        int row = this.selected / FARM_SEED_COLS;
+        int menuY = (row + 1) * FARM_SEED_ROW_H - this.cmy + this.yScroll;
 
         GameCanvas.menu.startAt(myVector, this.X, menuY);
 
@@ -3255,6 +3306,17 @@ public class Panel : IActionListener, IChatable
                 }
                 this.pointerDownLastX[0] = GameCanvas.py;
                 this.cmtoY -= num;
+                if (this.isTabBox() && ModFunc.isInventory)
+                {
+                    if (this.cmtoY < 0)
+                    {
+                        this.cmtoY = 0;
+                    }
+                    if (this.cmtoY > this.cmyLim)
+                    {
+                        this.cmtoY = this.cmyLim;
+                    }
+                }
                 if (this.cmtoY < 0)
                 {
                     this.cmtoY = 0;
@@ -3268,6 +3330,17 @@ public class Panel : IActionListener, IChatable
                     num /= 2;
                 }
                 this.cmy -= num;
+                if (this.isTabBox() && ModFunc.isInventory)
+                {
+                    if (this.cmy < 0)
+                    {
+                        this.cmy = 0;
+                    }
+                    if (this.cmy > this.cmyLim)
+                    {
+                        this.cmy = this.cmyLim;
+                    }
+                }
                 if (this.cmy < -(GameCanvas.h / 3))
                 {
                     this.wantUpdateList = true;
@@ -3507,6 +3580,10 @@ public class Panel : IActionListener, IChatable
                     {
                         this.selected = this.GetInventorySelectedFromPosition(GameCanvas.px, GameCanvas.py);
                     }
+                    else if (this.isTabBox() && ModFunc.isInventory)
+                    {
+                        this.selected = this.GetBoxSelectedFromPosition(GameCanvas.px, GameCanvas.py);
+                    }
                     else
                     {
                         int row = (this.cmtoY + GameCanvas.py - this.yScroll) / this.ITEM_HEIGHT;
@@ -3546,6 +3623,17 @@ public class Panel : IActionListener, IChatable
                 }
                 this.pointerDownLastX[0] = GameCanvas.py;
                 this.cmtoY -= num;
+                if (this.isTabBox() && ModFunc.isInventory)
+                {
+                    if (this.cmtoY < 0)
+                    {
+                        this.cmtoY = 0;
+                    }
+                    if (this.cmtoY > this.cmyLim)
+                    {
+                        this.cmtoY = this.cmyLim;
+                    }
+                }
                 if (this.cmtoY < 0)
                 {
                     this.cmtoY = 0;
@@ -3559,6 +3647,17 @@ public class Panel : IActionListener, IChatable
                     num /= 2;
                 }
                 this.cmy -= num;
+                if (this.isTabBox() && ModFunc.isInventory)
+                {
+                    if (this.cmy < 0)
+                    {
+                        this.cmy = 0;
+                    }
+                    if (this.cmy > this.cmyLim)
+                    {
+                        this.cmy = this.cmyLim;
+                    }
+                }
                 if (this.cmy < -(GameCanvas.h / 3))
                 {
                     this.wantUpdateList = true;
@@ -3585,6 +3684,10 @@ public class Panel : IActionListener, IChatable
             if (this.isTabInven() && ModFunc.isInventory)
             {
                 this.selected = this.GetInventorySelectedFromPosition(GameCanvas.px, GameCanvas.py);
+            }
+            else if (this.isTabBox() && ModFunc.isInventory)
+            {
+                this.selected = this.GetBoxSelectedFromPosition(GameCanvas.px, GameCanvas.py);
             }
             else
             {
@@ -4304,12 +4407,13 @@ public class Panel : IActionListener, IChatable
             this.selected = (GameCanvas.isTouch ? -1 : 0);
             return;
         }
-        this.currentListLength = this.checkCurrentListLengthNew(Char.myCharz().arrItemBox.Length / 5);
+        int boxRowCount = this.getBoxRowCount(Char.myCharz().arrItemBox.Length);
+        this.currentListLength = Char.myCharz().arrItemBox.Length;
         this.ITEM_HEIGHT = 25;
-        this.cmyLim = this.currentListLength * this.ITEM_HEIGHT - this.hScroll + 8;
+        this.cmyLim = boxRowCount * this.ITEM_HEIGHT - this.hScroll;
         if (this.cmyLim < 0)
         {
-            this.cmyLim = 9;
+            this.cmyLim = 0;
         }
         this.cmy = (this.cmtoY = this.cmyLast[this.currentTabIndex]);
         if (this.cmy < 0)
@@ -6091,11 +6195,19 @@ public class Panel : IActionListener, IChatable
             }
             else
             {
+                if (this.cmy < 0)
+                {
+                    this.cmy = 0;
+                }
+                if (this.cmy > this.cmyLim)
+                {
+                    this.cmy = this.cmyLim;
+                }
                 g.setColor(16711680);
                 g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
                 g.translate(0, -this.cmy);
                 Item[] arrItemBox = Char.myCharz().arrItemBox;
-                this.currentListLength = this.checkCurrentListLengthNew(arrItemBox.Length / 5);
+                this.currentListLength = arrItemBox.Length;
                 this.TAB_W_NEW = 1;
                 int columns = 5;
                 int itemWidth = 35;
@@ -11482,8 +11594,12 @@ public class Panel : IActionListener, IChatable
                 this.setNewSelected(Char.myCharz().arrItemBox.Length, false);
                 return;
             }
-            sbyte b = (sbyte)this.GetInventorySelect_body(this.selected, this.newSelected);
-            Item item = Char.myCharz().arrItemBox[(int)b];
+            int boxIndex = this.selected;
+            if (!ModFunc.isInventory)
+            {
+                boxIndex = this.GetInventorySelect_body(this.selected, this.newSelected);
+            }
+            Item item = (boxIndex >= 0 && boxIndex < Char.myCharz().arrItemBox.Length) ? Char.myCharz().arrItemBox[boxIndex] : null;
             if (item != null)
             {
                 if (this.isBoxClan)
@@ -11545,7 +11661,10 @@ public class Panel : IActionListener, IChatable
             {
                 myVector.addElement(new Command(mResources.MOVEOUT, this, 2011, this.currItem));
             }
-            GameCanvas.menu.startAt(myVector, this.X, (this.selected + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll);
+            int menuY = (this.currentTabIndex == 0 && ModFunc.isInventory)
+                ? ((this.selected / this.CountBoxInRow + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll)
+                : ((this.selected + 1) * this.ITEM_HEIGHT - this.cmy + this.yScroll);
+            GameCanvas.menu.startAt(myVector, this.X, menuY);
             this.addItemDetail(this.currItem);
         }
         else
@@ -14108,6 +14227,56 @@ public class Panel : IActionListener, IChatable
         return -1; // Không click vào item nào
     }
 
+    private int GetBoxSelectedFromPosition(int px, int py)
+    {
+        if (!ModFunc.isInventory)
+        {
+            return -1;
+        }
+
+        Item[] arrItemBox = Char.myCharz().arrItemBox;
+        if (arrItemBox == null || arrItemBox.Length == 0)
+        {
+            return -1;
+        }
+
+        int itemWidth = 35;
+        int itemHeight = this.ITEM_HEIGHT;
+        int relX = px - this.xScroll;
+        int relY = py + this.cmy - this.yScroll;
+        if (relX < 0 || relY < 0)
+        {
+            return -1;
+        }
+
+        int col = relX / (itemWidth + 1);
+        if (col < 0 || col >= this.CountBoxInRow)
+        {
+            return -1;
+        }
+        if (relX % (itemWidth + 1) >= itemWidth)
+        {
+            return -1;
+        }
+
+        int row = relY / itemHeight;
+        int index = row * this.CountBoxInRow + col;
+        if (index < 0 || index >= arrItemBox.Length)
+        {
+            return -1;
+        }
+        return index;
+    }
+
+    private int getBoxRowCount(int itemCount)
+    {
+        if (itemCount <= 0)
+        {
+            return 0;
+        }
+        return itemCount / this.CountBoxInRow + ((itemCount % this.CountBoxInRow > 0) ? 1 : 0);
+    }
+
     private bool isTabBox()
     {
         return this.type == 2 && this.currentTabIndex == 0;
@@ -15032,6 +15201,13 @@ public class Panel : IActionListener, IChatable
     public const int TYPE_SPEACIALSKILL = 25;
 
     public const int TYPE_FARM_SEED = 29;
+    private const int FARM_SEED_COLS = 5;
+    private const int FARM_SEED_MIN_SLOT_COUNT = 60;
+    private const int FARM_SEED_SLOT_W = 34;
+    private const int FARM_SEED_SLOT_H = 24;
+    private const int FARM_SEED_CELL_GAP = 2;
+    private const int FARM_SEED_ROW_W = FARM_SEED_SLOT_W + FARM_SEED_CELL_GAP;
+    private const int FARM_SEED_ROW_H = 25;
 
     private int pointerDownTime;
 
