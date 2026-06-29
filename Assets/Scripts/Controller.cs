@@ -6394,6 +6394,10 @@ public static int JavaHashCode(string str)
 
     private void useSkill(Skill skill)
     {
+        if (skill == null || skill.template == null)
+        {
+            return;
+        }
         if (Char.myCharz().myskill == null)
         {
             Char.myCharz().myskill = skill;

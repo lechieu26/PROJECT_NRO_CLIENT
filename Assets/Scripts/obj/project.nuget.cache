@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xNiI3PV1VKo=",
+  "dgSpecHash": "3SAmoveYkd0=",
   "success": true,
-  "projectFilePath": "E:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj",
+  "projectFilePath": "D:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lechi\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
     "C:\\Users\\lechi\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net40\\1.0.3\\microsoft.netframework.referenceassemblies.net40.1.0.3.nupkg.sha512"

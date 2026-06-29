@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj": {}
+    "D:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj": {}
   },
   "projects": {
-    "E:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj": {
+    "D:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj",
+        "projectUniqueName": "D:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj",
         "projectName": "Assembly-CSharp",
-        "projectPath": "E:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj",
+        "projectPath": "D:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\Assembly-CSharp.csproj",
         "packagesPath": "C:\\Users\\lechi\\.nuget\\packages\\",
-        "outputPath": "E:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\obj\\",
+        "outputPath": "D:\\NRO\\SourceCode\\PROJECT_NRO_240_mod\\Assets\\Scripts\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\lechi\\AppData\\Roaming\\NuGet\\NuGet.Config"
