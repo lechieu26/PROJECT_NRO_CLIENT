@@ -3730,23 +3730,49 @@ public class Controller : IMessageHandler
 				TileMap.typeMap = msg.reader().readByte();
 				TileMap.mapName = msg.reader().readUTF();
 				TileMap.zoneID = msg.reader().readByte();
-				try
+				if (TileMap.typeMap == 20)
 				{
-					TileMap.loadMapFromResource(TileMap.mapID);
+					TileMap.isMap7VNR = true;
+					TileMap.isMapDouble = false;
+					loadInfoMap(msg);
+					try
+					{
+						TileMap.isMapDouble = ((msg.reader().readByte() != 0) ? true : false);
+					}
+					catch (Exception)
+					{
+					}
+					try
+					{
+						string mapConfigJson = msg.reader().readUTF();
+						NewMapRenderer.gI().loadMap7VNR(mapConfigJson);
+					}
+					catch (Exception)
+					{
+					}
 				}
-				catch (Exception)
+				else
 				{
-					Service.gI().requestMaptemplate(TileMap.mapID);
-					messWait = msg;
-					return;
-				}
-				loadInfoMap(msg);
-				try
-				{
-					TileMap.isMapDouble = ((msg.reader().readByte() != 0) ? true : false);
-				}
-				catch (Exception)
-				{
+					TileMap.isMap7VNR = false;
+					NewMapRenderer.gI().reset();
+					try
+					{
+						TileMap.loadMapFromResource(TileMap.mapID);
+					}
+					catch (Exception)
+					{
+						Service.gI().requestMaptemplate(TileMap.mapID);
+						messWait = msg;
+						return;
+					}
+					loadInfoMap(msg);
+					try
+					{
+						TileMap.isMapDouble = ((msg.reader().readByte() != 0) ? true : false);
+					}
+					catch (Exception)
+					{
+					}
 				}
 				GameScr.cmx = GameScr.cmtoX;
 				GameScr.cmy = GameScr.cmtoY;
@@ -4981,8 +5007,11 @@ public static int JavaHashCode(string str)
 			GameScr.gI().initSelectChar();
 		}
 		GameScr.loadCamera(fullmScreen: false, (teleport3 != 1) ? (-1) : Char.myCharz().cx, (teleport3 == 0) ? (-1) : 0);
-		TileMap.loadMainTile();
-		TileMap.loadMap(TileMap.tileID);
+		if (!TileMap.isMap7VNR)
+		{
+			TileMap.loadMainTile();
+			TileMap.loadMap(TileMap.tileID);
+		}
 		Char.myCharz().cvx = 0;
 		Char.myCharz().statusMe = 4;
 		Char.myCharz().currentMovePoint = null;
